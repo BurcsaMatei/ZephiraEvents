@@ -1,0 +1,10 @@
+# .eslintingnore
+
+# ==============================
+# Ignore patterns
+# ==============================
+.next
+node_modules
+lib/gallery.data.ts
+next-env.d.ts
+.next/types

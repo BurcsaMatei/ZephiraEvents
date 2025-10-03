@@ -1,0 +1,187 @@
+/* --------------
+ * GENERATED FILE — DO NOT EDIT.
+ * Run: npm run gallery:build
+ * -------------- */
+
+export const GALLERY_DATA = [
+  {
+    "id": "d94b647a84",
+    "src": "/images/gallery/g-001.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "134bb77195",
+    "src": "/images/gallery/g-002.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "9ee20dd99f",
+    "src": "/images/gallery/g-003.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "6aa3126633",
+    "src": "/images/gallery/g-004.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "c37bdaa5a3",
+    "src": "/images/gallery/g-005.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "76d438e9a6",
+    "src": "/images/gallery/g-006.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "33286ab85b",
+    "src": "/images/gallery/g-007.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "80df355470",
+    "src": "/images/gallery/g-008.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "fc5079396b",
+    "src": "/images/gallery/g-009.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "267035fa45",
+    "src": "/images/gallery/g-010.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "6ab331a586",
+    "src": "/images/gallery/g-011.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "cd7119ee5a",
+    "src": "/images/gallery/g-012.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "7c153c5be9",
+    "src": "/images/gallery/g-013.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "d765352a7a",
+    "src": "/images/gallery/g-014.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "0896775327",
+    "src": "/images/gallery/g-015.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "012026859b",
+    "src": "/images/gallery/g-016.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "e242907ce3",
+    "src": "/images/gallery/g-017.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "e6dd5e2bb6",
+    "src": "/images/gallery/g-018.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "ede9955716",
+    "src": "/images/gallery/g-019.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "5270bdd8bc",
+    "src": "/images/gallery/g-020.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "499b8d239e",
+    "src": "/images/gallery/g-021.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "f75410b85f",
+    "src": "/images/gallery/g-022.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "259a506461",
+    "src": "/images/gallery/g-023.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "b21298d38a",
+    "src": "/images/gallery/g-024.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "e6d9e9ac1a",
+    "src": "/images/gallery/g-025.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "a042c8968e",
+    "src": "/images/gallery/g-026.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "d150d611bd",
+    "src": "/images/gallery/g-027.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "900c796b1a",
+    "src": "/images/gallery/g-028.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "4db1085efb",
+    "src": "/images/gallery/g-029.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  },
+  {
+    "id": "8a896bbf17",
+    "src": "/images/gallery/g-030.jpg",
+    "alt": "Galerie",
+    "caption": "Galerie"
+  }
+] as const;

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>KonceptID — Blog</title>
+    <link>http://localhost:3000/blog</link>
+    <description>Articole și ghiduri.</description>
+    <language>ro-RO</language>
+    <lastBuildDate>Fri, 03 Oct 2025 22:08:47 GMT</lastBuildDate>
+    <item>
+      <title>Tendințe de design 2025 pentru site-uri de prezentare</title>
+      <link>http://localhost:3000/blog/tendinte-design-2025</link>
+      <guid>http://localhost:3000/blog/tendinte-design-2025</guid>
+      <pubDate>Tue, 12 Aug 2025 09:00:00 GMT</pubDate>
+      <description><![CDATA[Minimalism, viteză și mesaje clare. Ce funcționează acum pentru conversii pe site-urile de tip prezentare.]]></description>
+    </item>
+    <item>
+      <title>Ghid rapid: organizarea unui eveniment reușit</title>
+      <link>http://localhost:3000/blog/ghid-organizare-eveniment</link>
+      <guid>http://localhost:3000/blog/ghid-organizare-eveniment</guid>
+      <pubDate>Sun, 10 Aug 2025 09:00:00 GMT</pubDate>
+      <description><![CDATA[Pașii esențiali pentru a-ți planifica evenimentul fără stres: buget, locație, furnizori și timeline clar.]]></description>
+    </item>
+    <item>
+      <title>Viteza site-ului și Core Web Vitals: ce contează în 2025</title>
+      <link>http://localhost:3000/blog/viteza-site-core-web-vitals</link>
+      <guid>http://localhost:3000/blog/viteza-site-core-web-vitals</guid>
+      <pubDate>Tue, 05 Aug 2025 08:30:00 GMT</pubDate>
+      <description><![CDATA[CLS, LCP și INP influențează direct SEO și conversiile. Iată cum optimizezi imaginile, fonturile și scripturile pentru rezultate reale.]]></description>
+    </item>
+    <item>
+      <title>Structurarea conținutului pentru SEO: ghid scurt</title>
+      <link>http://localhost:3000/blog/structurare-continut-seo</link>
+      <guid>http://localhost:3000/blog/structurare-continut-seo</guid>
+      <pubDate>Fri, 01 Aug 2025 10:00:00 GMT</pubDate>
+      <description><![CDATA[Titluri clare, paragrafe scurte și intertitluri relevante. Cum scrii pagini care răspund intenției de căutare și cresc rata de conversie.]]></description>
+    </item>
+    <item>
+      <title>Next.js: SSG vs SSR — ce alegi pentru site-ul tău?</title>
+      <link>http://localhost:3000/blog/nextjs-ssg-vs-ssr-alegere</link>
+      <guid>http://localhost:3000/blog/nextjs-ssg-vs-ssr-alegere</guid>
+      <pubDate>Sun, 20 Jul 2025 09:15:00 GMT</pubDate>
+      <description><![CDATA[Pagini rapide și sigure cu SSG sau date proaspete la fiecare cerere cu SSR? Un ghid pragmatic pentru site-uri de prezentare.]]></description>
+    </item>
+    <item>
+      <title>Imagini eficiente: WebP și AVIF pentru un site mai rapid</title>
+      <link>http://localhost:3000/blog/imagini-eficiente-webp-avif</link>
+      <guid>http://localhost:3000/blog/imagini-eficiente-webp-avif</guid>
+      <pubDate>Thu, 10 Jul 2025 07:45:00 GMT</pubDate>
+      <description><![CDATA[Conversia la WebP/AVIF reduce dimensiunea fără pierderi vizibile. Vezi cum setezi <code>next/image</code> și fallback pentru compatibilitate.]]></description>
+    </item>
+    <item>
+      <title>Microcopy și CTA: mici texte, impact mare în conversii</title>
+      <link>http://localhost:3000/blog/microcopy-cta-conversii</link>
+      <guid>http://localhost:3000/blog/microcopy-cta-conversii</guid>
+      <pubDate>Sat, 28 Jun 2025 11:10:00 GMT</pubDate>
+      <description><![CDATA[Butonul și mesajul din jurul lui contează. Testează variante, scoate jargonul și explică beneficiul în 6–10 cuvinte.]]></description>
+    </item>
+    <item>
+      <title>Audit SEO rapid: checklist pentru site-uri mici</title>
+      <link>http://localhost:3000/blog/audit-seo-rapid-checklist</link>
+      <guid>http://localhost:3000/blog/audit-seo-rapid-checklist</guid>
+      <pubDate>Sun, 15 Jun 2025 08:00:00 GMT</pubDate>
+      <description><![CDATA[Titluri unice, descrieri clare, sitemap valid, viteza bună și conținut util. Un control rapid care oferă rezultate vizibile.]]></description>
+    </item>
+  </channel>
+</rss>

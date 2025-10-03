@@ -1,0 +1,56 @@
+{
+  "name": "konceptid-base-template",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "prebuild": "npm run gallery:build",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "type-check": "npm run typecheck",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "check": "npm run typecheck && npm run lint --if-present",
+    "docs:export": "node scripts/export-docs.mjs",
+    "docs:export:components": "node scripts/export-components-combined.mjs",
+    "docs:site": "node scripts/build-docsite.mjs",
+    "preview": "next dev -p 3002",
+    "gallery:build": "node scripts/build-gallery.mjs",
+    "rss:build": "tsx scripts/build-rss.ts",
+    "postbuild": "npm run rss:build",
+    "check:all": "npm run typecheck && npm run lint"
+  },
+  "dependencies": {
+    "@vanilla-extract/css": "^1.17.4",
+    "@vanilla-extract/next-plugin": "^2.4.14",
+    "framer-motion": "^12.23.12",
+    "next": "^15.4.6",
+    "next-pwa": "^5.6.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "yet-another-react-lightbox": "^3.25.0",
+    "zod": "^4.0.17"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.11",
+    "@types/react": "^18.3.23",
+    "@types/react-dom": "^18.3.7",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "critters": "^0.0.23",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.5.0",
+    "eslint-config-prettier": "^9.1.2",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^3.2.0",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.5.4"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

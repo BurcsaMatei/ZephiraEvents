@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- /public/masks/hero-arc-up.svg -->
+<!-- White = VIZIBIL, Transparent = TĂIAT -->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 100 100"
+     preserveAspectRatio="none">
+  <!-- formă albă pe toată lățimea; baza are un arc în sus (~22%) -->
+  <path fill="#fff" d="M0 0 H100 V100 C75 78 25 78 0 100 Z"/>
+</svg>

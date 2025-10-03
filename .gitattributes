@@ -1,0 +1,26 @@
+# .gitattributes
+
+# ==============================
+# Defaults
+# ==============================
+* text=auto eol=lf
+
+# ==============================
+# Windows scripts (CRLF)
+# ==============================
+*.bat eol=crlf
+*.cmd eol=crlf
+*.ps1 eol=crlf
+
+# ==============================
+# Binary assets
+# ==============================
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+
+# ==============================
+# SVG (text)
+# ==============================
+*.svg text
