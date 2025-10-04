@@ -1,255 +1,195 @@
-KonceptID — Base Template
+# ZephiraEvents
 
-Template Next.js + TypeScript strict + Vanilla Extract (doar importuri relative), optimizat pentru site-uri corporate mici/medii. Gândit să fie clonat și personalizat rapid (texte, imagini, date companie), fără modificări de arhitectură.
+> Website de evenimente construit pe **KonceptID Base Template** (Next.js + TypeScript strict + Vanilla Extract).  
+> Repo conectat la **Vercel** – fiecare PR generează automat un **Preview**.
 
-Cuprins
+## TL;DR
+- Lucrăm **branch-per-issue** + **PR** cu verificări (lint, typecheck, build) și link de **Vercel Preview**.
+- README descrie modul nostru de lucru, setup local, personalizare, SEO/JSON-LD, PWA, QA & troubleshooting.
+- Proiectul clădește pe _KonceptID Base Template_ fără a schimba arhitectura; pentru ZephiraEvents adaptăm strict conținutul.
 
-Caracteristici
+---
 
-Cerințe
+## Conținut
+- [Stack & capabilități](#stack--capabilități)
+- [Cum lucrăm (proces)](#cum-lucrăm-proces)
+- [Setup local](#setup-local)
+- [Scripturi utile](#scripturi-utile)
+- [Variabile de mediu (.env)](#variabile-de-mediu-env)
+- [Structura proiectului](#structura-proiectului)
+- [Personalizare rapidă pentru ZephiraEvents](#personalizare-rapidă-pentru-zephiraevents)
+- [SEO & JSON-LD](#seo--json-ld)
+- [PWA & Offline](#pwa--offline)
+- [Accesibilitate & performanță](#accesibilitate--performanță)
+- [Deploy pe Vercel](#deploy-pe-vercel)
+- [QA minim (Definition of Done)](#qa-minim-definition-of-done)
+- [Troubleshooting](#troubleshooting)
+- [Licență & uz intern](#licență--uz-intern)
 
-Instalare & rulare
+---
 
-Configurare (.env)
+## Stack & capabilități
+- **Next.js** (15.x) + **TypeScript strict**  
+- **Vanilla Extract** pentru stilizare (fără framework CSS global)  
+- **SEO centralizat**: `lib/config.ts` + componentă `<Seo />`  
+- **JSON-LD** (BlogPosting, Organization, FAQPage etc., după secțiuni)  
+- **PWA**: service worker doar în producție, pagină `_offline`  
+- **Galerie** din date (JSON) + imagini optimizate (`next/image`)  
+- **Accesibilitate**: Skip-link, focus states vizibile, a11y pe navigație  
+- **CI/Preview**: PR → build automat pe **Vercel Preview**
 
-Personalizare pentru client
+---
 
-SEO & JSON-LD
+## Cum lucrăm (proces)
+**Model: branch-per-issue**. Un issue = un branch = un PR.
 
-Sitemap & robots
+**Naming branch**
+- `feat/ZE-<nr>-scurt-titlu`
+- `fix/ZE-<nr>-…`
+- `docs/ZE-<nr>-…`
+- `chore/ZE-<nr>-…`
+- `refactor/ZE-<nr>-…`
 
-PWA & Offline
+**Conventional Commits**
+- `feat`, `fix`, `docs`, `refactor`, `chore`, `perf`, `test`, `ci`, `build`.
 
-Cookie consent
+**Exemple**
+- Commit: `docs(readme): actualizează ghidul pentru ZephiraEvents (ZE-11)`
+- PR title: `[ZE-11] Update README pentru ZephiraEvents`
+- PR body: include `Closes #11`
 
-Galerie (generator)
+**Checks PR (minim)**
+1. `npm run lint`
+2. `npm run typecheck`
+3. `npm run build`
+4. Link **Vercel Preview** + screenshot dacă e modificare UI
 
-Navigație centralizată
+**Merge**
+- recomandat **Squash & merge**  
+- autoinchidere issue cu `Closes #<nr>`
 
-Accesibilitate
+---
 
-Structură proiect
+## Setup local
+**Cerințe**
+- Node **LTS 20+**
+- npm (sau pnpm/yarn – dacă echipa standardizează alt manager, îl specificăm în issues)
 
-Comenzi utile (QA)
-
-Deploy
-
-Troubleshooting
-
-Licență
-
-Caracteristici
-
-Next.js + TypeScript (strict)
-
-Vanilla Extract pentru stiluri (fără CSS global intruziv); temă și tokens în styles/theme.css.ts.
-
-SEO centralizat: seo.config.ts, componente Seo.tsx și JsonLd.tsx.
-
-Sitemap & robots generate on-the-fly: pages/sitemap.xml.ts, pages/robots.txt.ts.
-
-PWA: manifest, SW minimal, pagină \_offline, CTA de instalare (PwaInstallCta), SW înregistrat doar în producție.
-
-Cookie banner & setări (consimțământ granular, “Setări cookie” în footer), gating pentru viitoare scripturi terțe.
-
-Galerie generată din script (thumbs + meta din fișierele data/…).
-
-Navigație & Social centralizate în lib/nav.ts.
-
-Accesibilitate: SkipLink, focus-trap în meniul mobil, aria-current, contrast OK.
-
-Doar importuri relative (politică de proiect).
-
-Cerințe
-
-Node LTS (recomandat 18+)
-
-npm / pnpm / yarn (exemplele folosesc npm)
-
-Instalare & rulare
+**Pași**
+```bash
 npm install
-cp .env.example .env.local # editează valorile pentru proiectul curent
 npm run dev
+# http://localhost:3000
+Scripturi utile
+bash
+Copiază codul
+npm run dev         # dev server
+npm run build       # build producție
+npm run start       # rulează build-ul
+npm run lint        # ESLint
+npm run typecheck   # TypeScript - noEmit
+npm run format      # Prettier (dacă este definit în package.json)
+Variabile de mediu (.env)
+Folosește .env.local (nu se comite în git). Exemple comune (opționale – adaptează după nevoie):
 
-Build de producție:
+env
+Copiază codul
+NEXT_PUBLIC_SITE_URL=https://zephiraevents.example.com
+NEXT_ENABLE_PWA=1
+# GA / Tag Manager (dacă se folosește)
+NEXT_PUBLIC_GA_ID=
+# Hărți, formulare, etc. (dacă există integrare)
+NEXT_PUBLIC_MAPS_KEY=
+În Vercel, setează aceleași chei în Project Settings → Environment Variables.
+NEXT_ENABLE_PWA=1 activează SW doar în producție.
 
-npm run build
-npm run start
+Structura proiectului
+(sumar orientativ – poate varia în timp)
 
-Configurare (.env)
+bash
+Copiază codul
+/public
+  /images           # branding, og, favicon, icons
+/data               # surse pentru galerii/faq/etc.
+/lib
+  config.ts         # SEO/site config centralizat
+  nav.ts            # navigație + social centralizat
+  ...               # utilitare, hooks
+/components         # componente UI
+/sections           # secțiuni de pagină
+/pages              # rute Next.js, inclusiv _offline
+/styles             # Vanilla Extract theming + CSS modules
+Personalizare rapidă pentru ZephiraEvents
+Branding & imaginile: /public/images (logo, og-image, favicons, splash)
 
-Editează .env.local (vezi și .env.example):
+SEO/site: lib/config.ts (siteName, titleTemplate, description, ogImage)
 
-NEXT_PUBLIC_SITE_URL=https://exemplu.ro
-NEXT_PUBLIC_SITE_NAME=Exemplu
-NEXT_PUBLIC_SITE_TITLE_TEMPLATE=%s — Exemplu
-NEXT_PUBLIC_DEFAULT_TITLE=Exemplu
-NEXT_PUBLIC_SITE_DESC=Servicii X pentru Y.
-NEXT_PUBLIC_OG_IMAGE=/images/og-image.jpg
-NEXT_PUBLIC_TWITTER_HANDLE=
-NEXT_PUBLIC_LOCALE=ro_RO
+Navigație & social: lib/nav.ts
 
-# Contact (doar afișare; formularul NU trimite mesaje)
+Conținut: texte/pagini în /pages, listări/galerii în /data (unde e cazul)
 
-NEXT_PUBLIC_CONTACT_ENABLED=false
-NEXT_PUBLIC_CONTACT_EMAIL=contact@exemplu.ro
-NEXT_PUBLIC_CONTACT_PHONE=+407xxxxxxxx
-NEXT_PUBLIC_CONTACT_STREET=Strada Exemplu 1
-NEXT_PUBLIC_CONTACT_CITY=Oraș
-NEXT_PUBLIC_CONTACT_REGION=Județ
-NEXT_PUBLIC_CONTACT_POSTAL=000000
-NEXT_PUBLIC_CONTACT_COUNTRY=RO
-NEXT_PUBLIC_CONTACT_MAP_EMBED= # iframe Google Maps (opțional)
+Culori, radius, spacing: tokens în stilurile Vanilla Extract
 
-NEXT_PUBLIC_SITE_TITLE_TEMPLATE trebuie să conțină %s (ex: %s — Exemplu), altfel titlul paginii nu se compune corect.
-
-Personalizare pentru client
-
-Ce schimbi doar prin conținut, fără a atinge arhitectura:
-
-Brand & meta — .env.local (nume site, descriere, OG, locale, date contact).
-
-Logo & imagini — în public/ (ex: /logo.svg, /images/og-image.jpg).
-
-Meniu & Social — lib/nav.ts (liste simple).
-
-Texte — pagini din pages/, componente din components/sections.
-
-Galerie — vezi secțiunea de mai jos (titluri/descrieri în JSON, imagini în public/images/gallery).
-
-Blog — articole în pages/blog/ (sau sursa pe care o folosește template-ul tău).
+Scopul este adaptarea conținutului la ZephiraEvents, fără a schimba arhitectura de bază.
 
 SEO & JSON-LD
+SEO centralizat în lib/config.ts și componenta <Seo />.
 
-Config global în seo.config.ts: seoDefaults, absoluteUrl, buildTitle.
+JSON-LD: adăugăm tipurile relevante per pagină/sectțiune (ex. Organization, BreadcrumbList, FAQPage, BlogPosting).
 
-Pe pagini, folosește <Seo … />:
-
-<Seo
-title="Titlu pagină"
-description="Descriere…"
-image="/images/og.jpg"
-url="/ruta"
-structuredData={{ "@context":"https://schema.org", "@type":"BreadcrumbList", … }}
-/>
-
-BreadcrumbList sau alte tipuri: prin prop-ul structuredData.
-
-Sitemap & robots
-
-pages/robots.txt.ts și pages/sitemap.xml.ts se generează la request, cu URL-uri absolute pe baza NEXT_PUBLIC_SITE_URL.
-
-Cache headers setate corect (CDN friendly).
+Canonical, robots, sitemap: generate/servite conform setărilor din proiect.
 
 PWA & Offline
+PWA activabil cu NEXT_ENABLE_PWA=1.
 
-Manifest în public/site.webmanifest.
+Service Worker doar în producție.
 
-Service Worker înregistrat doar în producție (components/ServiceWorkerRegister.tsx).
+Pagină fallback: /_offline.
 
-Pagină offline: pages/\_offline.tsx.
+Iconuri PWA (inclusiv maskable) în /public.
 
-CTA instalare: components/PwaInstallCta.tsx (se ascunde aproape de footer; include hint iOS).
+Accesibilitate & performanță
+Skip-link, aria corect pe nav, focus vizibil, citire corectă pentru screen readers.
 
-Cookie consent
+LCP controlat (imaginea LCP optimizată, priority doar unde e necesar).
 
-Context + banner + dialog în components/cookies/ (CookieProvider și CookieBanner).
+CLS ~0: spații rezervate, imagini cu dimensiuni declarate.
 
-Setări cookie sunt accesibile din footer.
+Respectă prefers-reduced-motion.
 
-Gating pentru scripturi viitoare:
+Țintă: scoruri Lighthouse ~95–100.
 
-const { hasConsent } = useCookieConsent();
-if (hasConsent("analytics")) {
-// injectează analytics aici
-}
+Deploy pe Vercel
+Repo conectat la Vercel → fiecare PR generează Preview.
 
-Galerie (generator)
+main → Production după merge.
 
-Imaginile: public/images/gallery/…
+Env sincronizat între local și Vercel.
 
-Date (titluri/caption): fișiere JSON din data/ (ex: gallery.json, galleryCaptions.json).
+Verifică CSP (dacă sunt iframe/hărți) și domeniile permise în imagini.
 
-Scriptul de build regenerează indexul galeriei (și/opțional thumbnails).
+QA minim (Definition of Done)
+Documentație/feature descris în issue + urmărit pe branch dedicat
 
-Rulează scriptul din scripts/ conform setup-ului din proiect (ex: un script npm gallery:build sau direct node scripts/build-gallery.\*).
+Lint/Typecheck/Build OK
 
-Folosește fișierul existent în repo (nu adăugăm dependențe noi).
+Vercel Preview verificat (UI + Console)
 
-Navigație centralizată
+Screenshots înainte/după (dacă e UI)
 
-lib/nav.ts:
-
-export const NAV = [
-{ href: "/", label: "Acasă" },
-{ href: "/galerie", label: "Galerie" },
-{ href: "/services", label: "Servicii" },
-{ href: "/blog", label: "Blog" },
-{ href: "/contact", label: "Contact" },
-];
-
-export const SOCIAL = [
-{ href: "https://facebook.com/", label: "Facebook", kind: "facebook" },
-{ href: "https://instagram.com/", label: "Instagram", kind: "instagram" },
-{ href: "https://tiktok.com/", label: "TikTok", kind: "tiktok" },
-];
-
-Header și Footer citesc de aici și mapează kind → icon.
-
-Accesibilitate
-
-SkipLink la începutul layout-ului (target <main id="main">).
-
-Meniu mobil cu focus-trap, închidere pe Esc/overlay, aria-current pentru ruta activă.
-
-Componente interactive au focus vizibil (:focus-visible).
-
-Structură proiect
-components/
-cookies/
-sections/
-ui/
-Header.tsx, Footer.tsx, SmartLink.tsx, SkipLink.tsx, PwaInstallCta.tsx, ServiceWorkerRegister.tsx
-pages/
-\_app.tsx, \_document.tsx, \_offline.tsx
-index.tsx, galerie.tsx, contact.tsx, ...
-404.tsx, 500.tsx
-robots.txt.ts, sitemap.xml.ts
-styles/
-_.css.ts (Vanilla Extract), theme.css.ts
-lib/
-nav.ts, cookies.ts, ...
-data/
-gallery_.json, ...
-public/
-images/, icons/, logo.svg, site.webmanifest
-
-Comenzi utile (QA)
-
-# format + lint + typecheck
-
-npx prettier . --write
-npm run lint # eslint .
-npm run typecheck # tsc --noEmit
-npm run build && npm run start
-
-Deploy
-
-Vercel: importă repo; setările implicite funcționează.
-Setează variabilele .env la Project Settings → Environment Variables.
-
-Node server: npm run build && npm run start pe un host Node LTS.
-
-CSP: configurat în next.config.mjs să permită Google Maps (frame-src).
+PR include Closes #<nr> + scurt rezumat Problemă/Soluție/Impact/QA
 
 Troubleshooting
+Build eșuat: rulează local npm run lint && npm run typecheck && npm run build, verifică mesajele.
 
-Map iframe “refused to connect”: verifică NEXT_PUBLIC_CONTACT_MAP_EMBED și că CSP include frame-src https://www.google.com https://\*.google.com.
+Imagini lipsă / OG: confirmă prezența în /public/images și path-urile corecte.
 
-OG image nu apare: confirmă că imaginea există în public/images/ și că NEXT_PUBLIC_OG_IMAGE indică path-ul corect.
+CSP/Maps/Embeds: actualizează directivele (ex. frame-src) dacă integrezi hărți/iframe.
 
-Galeria nu se actualizează: rulează scriptul de build al galeriei după ce schimbi imaginile/JSON-ul din data/.
+PWA: dacă nu dorești SW, omite NEXT_ENABLE_PWA sau pune 0.
 
-Licență
+404 pe asset în Preview: verifică withBase/path-urile relative dacă există utilitare de bază similare în proiect.
 
-Proiect intern KonceptID — folosit ca sablon pentru proiecte client. Distribuirea în afara companiei se face doar cu acordul titularului.
+Licență & uz intern
+Acest repository este parte din ecosistemul KonceptID și este utilizat intern pentru proiectul ZephiraEvents.
+© 2025 KonceptID. Toate drepturile rezervate.
