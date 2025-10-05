@@ -4,6 +4,7 @@
 > Repo conectat la **Vercel** – fiecare PR generează automat un **Preview**.
 
 ## TL;DR
+
 - Lucrăm **branch-per-issue** + **PR** cu verificări (lint, typecheck, build) și link de **Vercel Preview**.
 - README descrie modul nostru de lucru, setup local, personalizare, SEO/JSON-LD, PWA, QA & troubleshooting.
 - Proiectul clădește pe _KonceptID Base Template_ fără a schimba arhitectura; pentru ZephiraEvents adaptăm strict conținutul.
@@ -11,6 +12,7 @@
 ---
 
 ## Conținut
+
 - [Stack & capabilități](#stack--capabilități)
 - [Cum lucrăm (proces)](#cum-lucrăm-proces)
 - [Setup local](#setup-local)
@@ -29,21 +31,24 @@
 ---
 
 ## Stack & capabilități
-- **Next.js** (15.x) + **TypeScript strict**  
-- **Vanilla Extract** pentru stilizare (fără framework CSS global)  
-- **SEO centralizat**: `lib/config.ts` + componentă `<Seo />`  
-- **JSON-LD** (BlogPosting, Organization, FAQPage etc., după secțiuni)  
-- **PWA**: service worker doar în producție, pagină `_offline`  
-- **Galerie** din date (JSON) + imagini optimizate (`next/image`)  
-- **Accesibilitate**: Skip-link, focus states vizibile, a11y pe navigație  
+
+- **Next.js** (15.x) + **TypeScript strict**
+- **Vanilla Extract** pentru stilizare (fără framework CSS global)
+- **SEO centralizat**: `lib/config.ts` + componentă `<Seo />`
+- **JSON-LD** (BlogPosting, Organization, FAQPage etc., după secțiuni)
+- **PWA**: service worker doar în producție, pagină `_offline`
+- **Galerie** din date (JSON) + imagini optimizate (`next/image`)
+- **Accesibilitate**: Skip-link, focus states vizibile, a11y pe navigație
 - **CI/Preview**: PR → build automat pe **Vercel Preview**
 
 ---
 
 ## Cum lucrăm (proces)
+
 **Model: branch-per-issue**. Un issue = un branch = un PR.
 
 **Naming branch**
+
 - `feat/ZE-<nr>-scurt-titlu`
 - `fix/ZE-<nr>-…`
 - `docs/ZE-<nr>-…`
@@ -51,31 +56,38 @@
 - `refactor/ZE-<nr>-…`
 
 **Conventional Commits**
+
 - `feat`, `fix`, `docs`, `refactor`, `chore`, `perf`, `test`, `ci`, `build`.
 
 **Exemple**
+
 - Commit: `docs(readme): actualizează ghidul pentru ZephiraEvents (ZE-11)`
 - PR title: `[ZE-11] Update README pentru ZephiraEvents`
 - PR body: include `Closes #11`
 
 **Checks PR (minim)**
+
 1. `npm run lint`
 2. `npm run typecheck`
 3. `npm run build`
 4. Link **Vercel Preview** + screenshot dacă e modificare UI
 
 **Merge**
-- recomandat **Squash & merge**  
+
+- recomandat **Squash & merge**
 - autoinchidere issue cu `Closes #<nr>`
 
 ---
 
 ## Setup local
+
 **Cerințe**
+
 - Node **LTS 20+**
 - npm (sau pnpm/yarn – dacă echipa standardizează alt manager, îl specificăm în issues)
 
 **Pași**
+
 ```bash
 npm install
 npm run dev
@@ -193,3 +205,4 @@ PWA: dacă nu dorești SW, omite NEXT_ENABLE_PWA sau pune 0.
 Licență & uz intern
 Acest repository este parte din ecosistemul KonceptID și este utilizat intern pentru proiectul ZephiraEvents.
 © 2025 KonceptID. Toate drepturile rezervate.
+```
