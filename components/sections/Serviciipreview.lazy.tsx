@@ -36,30 +36,31 @@ export type ServiciipreviewProps = {
 // ==============================
 const DEFAULT_PREVIEW: PreviewItem[] = [
   {
-    id: "web-design",
-    title: "Web Design",
-    description: "Design modern, responsive.",
+    id: "organizare-nunta",
+    title: "Organizare Nuntă",
+    description: "Planificare completă, decor, muzică, coordonare.",
     iconSrc: "/icons/servicii/service1.svg",
   },
   {
-    id: "nextjs-dev",
-    title: "Dezvoltare Next.js",
-    description: "Rapid, accesibil, scalabil.",
+    id: "botez-cununie",
+    title: "Botez & Cununie",
+    description: "Pachet complet, candy bar, photo corner.",
     iconSrc: "/icons/servicii/service2.svg",
   },
   {
-    id: "seo",
-    title: "Optimizare & SEO",
-    description: "CWV, OG, schema, sitemap.",
+    id: "corporate-team-building",
+    title: "Corporate & Team Building",
+    description: "Logistică, scenă, sonorizare, agendă clară.",
     iconSrc: "/icons/servicii/service3.svg",
   },
   {
-    id: "content",
-    title: "Conținut & Blog",
-    description: "Arhitectură & articole.",
+    id: "petreceri-private-majorate",
+    title: "Petreceri Private & Majorate",
+    description: "DJ, lumini, bar, momente speciale.",
     iconSrc: "/icons/servicii/service4.svg",
   },
 ];
+
 
 // ==============================
 // Component
