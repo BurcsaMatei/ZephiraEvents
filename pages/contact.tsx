@@ -1,5 +1,5 @@
 // pages/contact.tsx
-
+//
 // ==============================
 // Imports
 // ==============================
@@ -14,7 +14,7 @@ import FormContact from "../components/sections/contact/FormContact";
 import Hero from "../components/sections/Hero";
 import IntroSection from "../components/sections/IntroSection";
 import MotivationCards from "../components/sections/MotivationCards";
-import Outro from "../components/sections/Outro";
+import OutroContact from "../components/sections/OutroContact";
 import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
@@ -63,6 +63,14 @@ const addressLine = [
 ]
   .filter(Boolean)
   .join(", ");
+
+// ==============================
+// Breadcrumbs
+// ==============================
+const crumbs: Crumb[] = [
+  { name: "Acasă", href: "/" },
+  { name: "Contact", current: true },
+];
 
 // ==============================
 // Helpers locale (JSON-LD)
@@ -120,16 +128,11 @@ const contactJsonLd: Json = {
 // ==============================
 // Page
 // ==============================
-const crumbs: Crumb[] = [
-  { name: "Acasă", href: "/" },
-  { name: "Contact", current: true },
-];
-
 const ContactPage: NextPage = () => (
   <>
     <Seo
-      title="Contact"
-      description={SITE.description || "Contactează-ne pentru detalii și ofertă."}
+      title="Contact — sală de evenimente în Focșani, Vrancea"
+      description="Contactează ZephiraEvents pentru organizarea de nunți, botezuri, majorate și evenimente corporate în Focșani, județul Vrancea. Verifică disponibilitatea sălii, solicită ofertă personalizată și beneficiezi de servicii impecabile, coordonare A-Z și răspuns rapid."
       url={contactData.url}
       image="/images/og-contact.jpg"
       structuredData={[breadcrumbList, contactJsonLd]}
@@ -142,9 +145,12 @@ const ContactPage: NextPage = () => (
       <div className="container">
         <Appear>
           <Hero
-            title="Contact"
-            subtitle="Scrie-ne — revenim rapid."
-            image={{ src: "/images/current/hero-contact.jpg", alt: "Hero contact" }}
+            title="Contact ZephiraEvents"
+            subtitle="Sală de evenimente în Focșani, Vrancea — scrie-ne pentru nuntă, botez, majorat sau corporate. Îți răspundem rapid cu disponibilitatea sălii și o ofertă adaptată."
+            image={{
+              src: "/images/current/hero-contact.jpg",
+              alt: "Contact sală de evenimente ZephiraEvents, Focșani",
+            }}
             height="md"
           />
         </Appear>
@@ -159,9 +165,9 @@ const ContactPage: NextPage = () => (
         <div className="container">
           <Appear>
             <IntroSection
-              eyebrow="Hai să vorbim"
+              eyebrow="Contact — Focșani, Vrancea"
               title={`Contact ${contactData.businessName}`}
-              lede="Completează formularul sau folosește datele de mai jos."
+              lede="Completează formularul pentru a rezerva sala de evenimente sau folosește datele de mai jos. Spune-ne tipul evenimentului (nuntă, botez, majorat sau corporate) și numărul estimativ de invitați — revenim rapid cu oferta și pașii următori."
             />
           </Appear>
         </div>
@@ -213,27 +219,43 @@ const ContactPage: NextPage = () => (
 
       <Separator />
 
-      {/* Cards + Outro */}
+      {/* Cards + OutroContact */}
       <section className="section">
         <div className="container">
           <Appear>
             <MotivationCards
               items={[
                 {
-                  title: "Procesul nostru",
-                  points: ["Brief & plan clar", "Sprinturi transparente", "QA riguros"],
+                  title: "Rezervare & organizare",
+                  points: [
+                    "Disponibilitate sală pentru Focșani, Vrancea",
+                    "Plan dedicat pentru nuntă, botez, majorat",
+                    "Coordonare A-Z în ziua evenimentului",
+                  ],
                 },
                 {
-                  title: "Consultanță & PR",
-                  points: ["Arhitectură & strategie", "SEO & performanță", "Mentorat tehnic"],
+                  title: "Servicii impecabile",
+                  points: [
+                    "Meniu personalizat & servire atentă",
+                    "Parteneri DJ, foto-video & decor",
+                    "Setup clasic, modern sau corporate",
+                  ],
                 },
                 {
-                  title: "Clienți mulțumiți",
-                  points: ["SLA răspuns rapid", "Tracking transparent", "Îmbunătățiri continue"],
+                  title: "Confort pentru invitați",
+                  points: [
+                    "Flow de sală gândit pentru experiență",
+                    "Zone foto & momente memorabile",
+                    "Acces facil, parcare, semnalistică",
+                  ],
                 },
                 {
-                  title: "Suport maxim",
-                  points: ["Monitorizare post-lansare", "Patch-uri rapide", "Optimizări periodice"],
+                  title: "Transparență & siguranță",
+                  points: [
+                    "Ofertă clară, fără costuri ascunse",
+                    "Timeline asumat și check-listuri",
+                    "Suport prompt înainte/după eveniment",
+                  ],
                 },
               ]}
             />
@@ -244,12 +266,7 @@ const ContactPage: NextPage = () => (
       <section className="section">
         <div className="container">
           <Appear>
-            <Outro
-              eyebrow="Vrei să intri în contact direct cu noi?"
-              title="Hai să discutăm proiectul tău"
-              lead="Spune-ne ce ai în minte și revenim rapid cu pașii următori."
-              cta={{ label: "Contact", href: "/contact" }}
-            />
+            <OutroContact />
           </Appear>
         </div>
       </section>

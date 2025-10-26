@@ -209,11 +209,11 @@ function GaleriePage() {
         <div className="container">
           <Appear>
             <Hero
-              title="Portofoliu concret"
-              subtitle="Selecție vizuală din proiecte — imagini optimizate, grilă responsivă, lightbox accesibil."
+              title="Galerie ZephiraEvents — sală de evenimente în Focșani, Vrancea"
+              subtitle="Nunți, botezuri, majorate și evenimente corporate realizate în sala noastră de evenimente din Focșani — servicii impecabile, decoruri atent alese și momente care rămân."
               image={{
                 src: "/images/current/hero-gallery.jpg",
-                alt: "Colaj de imagini din proiecte",
+                alt: "Colaj de imagini din evenimente organizate la ZephiraEvents, Focșani",
               }}
               height="md"
             />
@@ -227,9 +227,9 @@ function GaleriePage() {
         <div className="container">
           <Appear>
             <IntroSection
-              eyebrow="Portofoliu vizual"
-              title="Proiecte prezentate pe scurt"
-              lede="Navighează prin imagini — click pentru zoom și detalii. Poți extinde automat pe măsură ce derulezi."
+              eyebrow="Galerie sală de evenimente — Focșani, Vrancea"
+              title="Nunți, botezuri, majorate & corporate"
+              lede="Vezi selecții din evenimente reale organizate la ZephiraEvents — sala noastră de evenimente din Focșani, județul Vrancea. Navighează prin imagini (click pentru zoom) și inspiră-te pentru organizarea nunții, botezului, majoratului sau a unui eveniment corporate cu servicii impecabile."
               maxWidth="narrow"
             />
           </Appear>
@@ -281,23 +281,35 @@ function GaleriePage() {
               <MotivationCards
                 items={[
                   {
-                    title: "Ruxi e cea mai cea",
-                    points: ["Brief & plan clar", "Sprinturi transparente", "QA riguros"],
-                  },
-                  {
-                    title: "Consultanță & PR",
-                    points: ["Arhitectură & strategie", "SEO & performanță", "Mentorat tehnic"],
-                  },
-                  {
-                    title: "Clienți mulțumiți",
-                    points: ["SLA răspuns rapid", "Tracking transparent", "Îmbunătățiri continue"],
-                  },
-                  {
-                    title: "Suport maxim",
+                    title: "Nunți în Focșani, Vrancea",
                     points: [
-                      "Monitorizare post-lansare",
-                      "Patch-uri rapide",
-                      "Optimizări periodice",
+                      "Plan complet pentru ceremonia și petrecerea de nuntă",
+                      "Decor, foto-video & DJ din rețeaua noastră de parteneri",
+                      "Servicii de ospitalitate impecabile pentru invitați",
+                    ],
+                  },
+                  {
+                    title: "Botezuri & majorate",
+                    points: [
+                      "Concept personalizat pentru botezuri și majorate",
+                      "Meniu adaptat și program flexibil pentru familie",
+                      "Scenografie foto și momente speciale incluse",
+                    ],
+                  },
+                  {
+                    title: "Evenimente corporate",
+                    points: [
+                      "Setup sală pentru conferințe, traininguri, gale",
+                      "Logistică, tehnic & protocol la standarde înalte",
+                      "Acces facil în Focșani, parcare și semnalistică",
+                    ],
+                  },
+                  {
+                    title: "Sală de evenimente & servicii",
+                    points: [
+                      "Spațiu versatil în județul Vrancea",
+                      "Ofertă clară, fără costuri ascunse",
+                      "Coordonare A-Z și suport înainte/după eveniment",
                     ],
                   },
                 ]}
@@ -310,10 +322,10 @@ function GaleriePage() {
           <div className="container">
             <Appear>
               <Outro
-                eyebrow="Suntem la un mesaj distanță"
-                title="Vrei să discutăm pe concret?"
-                lead="Îți răspundem rapid și propunem pașii următori."
-                cta={{ label: "Hai pe /contact", href: "/contact" }}
+                eyebrow="Rezervă sala în Focșani"
+                title="Verifică disponibilitatea pentru data ta"
+                lead="Spune-ne tipul de eveniment — nuntă, botez, majorat sau corporate — și numărul estimativ de invitați. Îți răspundem rapid cu oferta pentru sală și calendarul disponibil."
+                cta={{ label: "Solicită ofertă", href: "/contact" }}
               />
             </Appear>
           </div>

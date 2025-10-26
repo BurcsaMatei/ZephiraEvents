@@ -94,9 +94,9 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
           <div className="container">
             <Appear>
               <IntroSection
-                eyebrow="Despre noi"
-                title="Calitate. Claritate. Viteză."
-                lede="Template-ul de bază pentru proiecte scalabile."
+                eyebrow="Sală de evenimente în Focșani, Vrancea"
+                title="Evenimente impecabile. Fără stres."
+                lede="ZephiraEvents — sală de evenimente în Focșani, județul Vrancea — pentru nunți, botezuri, majorate și evenimente corporate. Organizare cap-coadă, servicii impecabile și atenție la detalii pentru tine și invitații tăi."
               />
             </Appear>
           </div>
@@ -144,23 +144,35 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
               <MotivationCards
                 items={[
                   {
-                    title: "Procesul nostru",
-                    points: ["Brief & plan clar", "Sprinturi transparente", "QA riguros"],
-                  },
-                  {
-                    title: "Consultanță & PR",
-                    points: ["Arhitectură & strategie", "SEO & performanță", "Mentorat tehnic"],
-                  },
-                  {
-                    title: "Clienți mulțumiți",
-                    points: ["SLA răspuns rapid", "Tracking transparent", "Îmbunătățiri continue"],
-                  },
-                  {
-                    title: "Suport maxim",
+                    title: "Organizare & logistică",
                     points: [
-                      "Monitorizare post-lansare",
-                      "Patch-uri rapide",
-                      "Optimizări periodice",
+                      "Plan dedicat pentru nuntă, botez, majorat",
+                      "Coordonare A-Z în ziua evenimentului",
+                      "Parteneri de încredere: DJ, foto-video, decor",
+                    ],
+                  },
+                  {
+                    title: "Locație & servicii",
+                    points: [
+                      "Sală de evenimente în Focșani, Vrancea",
+                      "Meniu personalizat & servire impecabilă",
+                      "Setup flexibil: clasic, modern, corporate",
+                    ],
+                  },
+                  {
+                    title: "Experiență pentru invitați",
+                    points: [
+                      "Flow de sală gândit pentru confort",
+                      "Scenografie foto & momente speciale",
+                      "Acces facil, parcare, indicatoare",
+                    ],
+                  },
+                  {
+                    title: "Transparență & siguranță",
+                    points: [
+                      "Ofertă clară, fără costuri ascunse",
+                      "Timeline asumat și check-listuri",
+                      "Suport prompt înainte și după eveniment",
                     ],
                   },
                 ]}
@@ -176,10 +188,10 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
           <div className="container">
             <Appear>
               <Outro
-                eyebrow="Vrei să ne cunoaștem?"
-                title="Hai să discutăm proiectul tău"
-                lead="Spune-ne ce ai în minte și revenim rapid cu pașii următori."
-                cta={{ label: "Contact", href: "/contact" }}
+                eyebrow="Rezervă-ți data"
+                title="Hai să-ți planificăm evenimentul în Focșani"
+                lead="Spune-ne tipul de eveniment (nuntă, botez, majorat sau corporate) și numărul estimativ de invitați. Îți răspundem rapid cu disponibilitatea sălii și o ofertă adaptată."
+                cta={{ label: "Verifică disponibilitatea", href: "/contact" }}
               />
             </Appear>
           </div>
