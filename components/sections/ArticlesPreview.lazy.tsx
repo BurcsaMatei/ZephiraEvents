@@ -75,7 +75,8 @@ export default function ArticlesPreview({
         <div className={emptyClass}>Nu avem încă articole publice. Revino curând.</div>
       ) : (
         <>
-          <Grid cols={{ base: 2, md: 2, lg: 4 }} gap="20px" className={gridClass}>
+          {/* base=1 (mobil), md=2 (tabletă), lg=4 (desktop) */}
+          <Grid cols={{ base: 1, md: 2, lg: 4 }} gap="20px" className={gridClass}>
             {postsAsFull.map((post, i) => (
               <Appear as="div" key={post.slug} className={cardWrap} delay={0.1 * i}>
                 <BlogCard post={post} />
