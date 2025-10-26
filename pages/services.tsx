@@ -78,8 +78,8 @@ const ServicesPage: NextPage = () => {
   return (
     <>
       <Seo
-        title="Servicii"
-        description="Servicii web: design modern, dezvoltare Next.js, optimizare & SEO, conținut & blog."
+        title="Servicii — sală de evenimente în Focșani, Vrancea"
+        description="ZephiraEvents oferă organizare completă pentru nunți, botezuri, majorate și evenimente corporate în Focșani, județul Vrancea — sală de evenimente, meniu personalizat, decor, foto-video, DJ, coordonare A-Z și servicii impecabile."
         url={pagePath}
         image="/images/og-services.jpg"
         structuredData={[breadcrumbList, servicesItemList]}
@@ -92,9 +92,12 @@ const ServicesPage: NextPage = () => {
         <div className="container">
           <Appear>
             <Hero
-              title="Servicii"
-              subtitle="Tot ce ai nevoie pentru un site rapid și scalabil."
-              image={{ src: "/images/current/hero-services.jpg", alt: "Hero servicii" }}
+              title="Servicii ZephiraEvents"
+              subtitle="Sală de evenimente în Focșani, Vrancea — organizare completă pentru nunți, botezuri, majorate și corporate, cu servicii impecabile și coordonare A-Z."
+              image={{
+                src: "/images/current/hero-services.jpg",
+                alt: "Sală de evenimente ZephiraEvents din Focșani",
+              }}
               height="md"
             />
           </Appear>
@@ -109,9 +112,9 @@ const ServicesPage: NextPage = () => {
           <div className="container">
             <Appear>
               <IntroSection
-                eyebrow="Ce facem"
-                title="Servicii web end-to-end"
-                lede="Design UI/UX, dezvoltare Next.js, optimizare performanță & SEO tehnic, conținut și blog — integrate într-un flux clar."
+                eyebrow="Ce oferim în Focșani, Vrancea"
+                title="Servicii complete pentru evenimente reușite"
+                lede="De la planificare și design de sală la meniu, decor, foto-video, DJ și coordonare în ziua evenimentului — soluții end-to-end pentru nuntă, botez, majorat sau corporate, cu servicii impecabile și atenție la detalii."
               />
             </Appear>
           </div>
@@ -136,23 +139,35 @@ const ServicesPage: NextPage = () => {
               <MotivationCards
                 items={[
                   {
-                    title: "Procesul nostru",
-                    points: ["Brief & plan clar", "Sprinturi transparente", "QA riguros"],
-                  },
-                  {
-                    title: "Consultanță & PR",
-                    points: ["Arhitectură & strategie", "SEO & performanță", "Mentorat tehnic"],
-                  },
-                  {
-                    title: "Clienți mulțumiți",
-                    points: ["SLA răspuns rapid", "Tracking transparent", "Îmbunătățiri continue"],
-                  },
-                  {
-                    title: "Suport maxim",
+                    title: "Organizare & logistică",
                     points: [
-                      "Monitorizare post-lansare",
-                      "Patch-uri rapide",
-                      "Optimizări periodice",
+                      "Plan dedicat pentru nuntă, botez, majorat",
+                      "Coordonare A-Z în ziua evenimentului",
+                      "Parteneri: DJ, foto-video, decor",
+                    ],
+                  },
+                  {
+                    title: "Locație & meniu",
+                    points: [
+                      "Sală de evenimente în Focșani, Vrancea",
+                      "Meniu personalizat & servire impecabilă",
+                      "Setup flexibil: clasic, modern, corporate",
+                    ],
+                  },
+                  {
+                    title: "Experiența invitaților",
+                    points: [
+                      "Flow de sală pentru confort",
+                      "Zone foto & momente speciale",
+                      "Acces facil, parcare, semnalistică",
+                    ],
+                  },
+                  {
+                    title: "Transparență & siguranță",
+                    points: [
+                      "Ofertă clară, fără costuri ascunse",
+                      "Timeline asumat și check-listuri",
+                      "Suport prompt înainte și după eveniment",
                     ],
                   },
                 ]}
@@ -165,10 +180,10 @@ const ServicesPage: NextPage = () => {
           <div className="container">
             <Appear>
               <Outro
-                eyebrow="Vrei să intri în contact direct cu noi?"
-                title="Hai să discutăm proiectul tău"
-                lead="Spune-ne ce ai în minte și revenim rapid cu pașii următori."
-                cta={{ label: "Contact", href: "/contact" }}
+                eyebrow="Rezervă sala — Focșani"
+                title="Spune-ne data și tipul evenimentului"
+                lead="Trimite detalii despre nuntă, botez, majorat sau corporate (număr invitați, preferințe). Îți răspundem rapid cu disponibilitatea și oferta personalizată."
+                cta={{ label: "Solicită ofertă", href: "/contact" }}
               />
             </Appear>
           </div>

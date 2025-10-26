@@ -5,183 +5,183 @@
 
 export const GALLERY_DATA = [
   {
-    "id": "d94b647a84",
-    "src": "/images/gallery/g-001.jpg",
-    "alt": "Alee nupțială cu petale și scaune roz",
-    "caption": "Moment de Nunta în aer liber, cu alee decorată cu petale."
+    id: "d94b647a84",
+    src: "/images/gallery/g-001.jpg",
+    alt: "Alee nupțială cu petale și scaune roz",
+    caption: "Moment de Nunta în aer liber, cu alee decorată cu petale.",
   },
   {
-    "id": "134bb77195",
-    "src": "/images/gallery/g-002.jpg",
-    "alt": "Cuplu la altar în decor verde elegant",
-    "caption": "Cadru Glamour cu decor rafinat și coloană florală."
+    id: "134bb77195",
+    src: "/images/gallery/g-002.jpg",
+    alt: "Cuplu la altar în decor verde elegant",
+    caption: "Cadru Glamour cu decor rafinat și coloană florală.",
   },
   {
-    "id": "9ee20dd99f",
-    "src": "/images/gallery/g-003.jpg",
-    "alt": "Mese rotunde albe pregătite pentru oaspeți",
-    "caption": "Aranjament de sală cu accent pe Meniu și servire impecabilă."
+    id: "9ee20dd99f",
+    src: "/images/gallery/g-003.jpg",
+    alt: "Mese rotunde albe pregătite pentru oaspeți",
+    caption: "Aranjament de sală cu accent pe Meniu și servire impecabilă.",
   },
   {
-    "id": "6aa3126633",
-    "src": "/images/gallery/g-004.jpg",
-    "alt": "Buchete pastel fixate pe rândul scaunelor",
-    "caption": "Accente romantice pentru ceremonie în Focsani."
+    id: "6aa3126633",
+    src: "/images/gallery/g-004.jpg",
+    alt: "Buchete pastel fixate pe rândul scaunelor",
+    caption: "Accente romantice pentru ceremonie în Focsani.",
   },
   {
-    "id": "c37bdaa5a3",
-    "src": "/images/gallery/g-005.jpg",
-    "alt": "Scaune albe și aranjamente florale pe gazon",
-    "caption": "Cadru potrivit pentru Evenimente in aer liber."
+    id: "c37bdaa5a3",
+    src: "/images/gallery/g-005.jpg",
+    alt: "Scaune albe și aranjamente florale pe gazon",
+    caption: "Cadru potrivit pentru Evenimente in aer liber.",
   },
   {
-    "id": "76d438e9a6",
-    "src": "/images/gallery/g-006.jpg",
-    "alt": "Buchet pastel prins de spătarul scaunului",
-    "caption": "Detaliu elegant cu spațiu dedicat pentru Formatie live."
+    id: "76d438e9a6",
+    src: "/images/gallery/g-006.jpg",
+    alt: "Buchet pastel prins de spătarul scaunului",
+    caption: "Detaliu elegant cu spațiu dedicat pentru Formatie live.",
   },
   {
-    "id": "33286ab85b",
-    "src": "/images/gallery/g-007.jpg",
-    "alt": "Terasa cu mese aranjate și pahare colorate",
-    "caption": "Ambianță de Petrecere cu setup complet pentru invitați."
+    id: "33286ab85b",
+    src: "/images/gallery/g-007.jpg",
+    alt: "Terasa cu mese aranjate și pahare colorate",
+    caption: "Ambianță de Petrecere cu setup complet pentru invitați.",
   },
   {
-    "id": "80df355470",
-    "src": "/images/gallery/g-008.jpg",
-    "alt": "Scaune albe cu voaluri, decor natural",
-    "caption": "Decor potrivit pentru Botez sau cununie în aer liber."
+    id: "80df355470",
+    src: "/images/gallery/g-008.jpg",
+    alt: "Scaune albe cu voaluri, decor natural",
+    caption: "Decor potrivit pentru Botez sau cununie în aer liber.",
   },
   {
-    "id": "fc5079396b",
-    "src": "/images/gallery/g-009.jpg",
-    "alt": "Scaune argentii cu voal și iederă",
-    "caption": "Decor de Sala de Evenimete cu accente fresh."
+    id: "fc5079396b",
+    src: "/images/gallery/g-009.jpg",
+    alt: "Scaune argentii cu voal și iederă",
+    caption: "Decor de Sala de Evenimete cu accente fresh.",
   },
   {
-    "id": "267035fa45",
-    "src": "/images/gallery/g-010.jpg",
-    "alt": "Masă festivă cu tacâmuri și gustări",
-    "caption": "Prezentare de Meniu Complet pentru invitați."
+    id: "267035fa45",
+    src: "/images/gallery/g-010.jpg",
+    alt: "Masă festivă cu tacâmuri și gustări",
+    caption: "Prezentare de Meniu Complet pentru invitați.",
   },
   {
-    "id": "6ab331a586",
-    "src": "/images/gallery/g-011.jpg",
-    "alt": "Masă rotundă cu meniuri tipărite, lumânări și aranjament floral",
-    "caption": "Setup elegant de Sala de Evenimete by ZephiraEvents."
+    id: "6ab331a586",
+    src: "/images/gallery/g-011.jpg",
+    alt: "Masă rotundă cu meniuri tipărite, lumânări și aranjament floral",
+    caption: "Setup elegant de Sala de Evenimete by ZephiraEvents.",
   },
   {
-    "id": "cd7119ee5a",
-    "src": "/images/gallery/g-012.jpg",
-    "alt": "Masa albă cu șervete pliate verzi și sfeșnice argintii",
-    "caption": "Cadru luminos, ideal pentru Botez sau Nunta."
+    id: "cd7119ee5a",
+    src: "/images/gallery/g-012.jpg",
+    alt: "Masa albă cu șervete pliate verzi și sfeșnice argintii",
+    caption: "Cadru luminos, ideal pentru Botez sau Nunta.",
   },
   {
-    "id": "7c153c5be9",
-    "src": "/images/gallery/g-013.jpg",
-    "alt": "Farfurie degustare cu aperitive variate și tacâmuri aurii",
-    "caption": "Selecție de startere pentru Meniu Complet."
+    id: "7c153c5be9",
+    src: "/images/gallery/g-013.jpg",
+    alt: "Farfurie degustare cu aperitive variate și tacâmuri aurii",
+    caption: "Selecție de startere pentru Meniu Complet.",
   },
   {
-    "id": "d765352a7a",
-    "src": "/images/gallery/g-014.jpg",
-    "alt": "Aperitive fine cu mini burger și decor modern",
-    "caption": "Detaliu culinar Glamour pentru Petrecere."
+    id: "d765352a7a",
+    src: "/images/gallery/g-014.jpg",
+    alt: "Aperitive fine cu mini burger și decor modern",
+    caption: "Detaliu culinar Glamour pentru Petrecere.",
   },
   {
-    "id": "0896775327",
-    "src": "/images/gallery/g-015.jpg",
-    "alt": "Somon aburit glazurat cu ulei, efect de fum pe farfurie",
-    "caption": "Plating spectaculos cu note Glamour."
+    id: "0896775327",
+    src: "/images/gallery/g-015.jpg",
+    alt: "Somon aburit glazurat cu ulei, efect de fum pe farfurie",
+    caption: "Plating spectaculos cu note Glamour.",
   },
   {
-    "id": "012026859b",
-    "src": "/images/gallery/g-016.jpg",
-    "alt": "Platou rece colorat cu selecție variată de gustări",
-    "caption": "Asortiment perfect pentru început de Nunta."
+    id: "012026859b",
+    src: "/images/gallery/g-016.jpg",
+    alt: "Platou rece colorat cu selecție variată de gustări",
+    caption: "Asortiment perfect pentru început de Nunta.",
   },
   {
-    "id": "e242907ce3",
-    "src": "/images/gallery/g-017.jpg",
-    "alt": "Somon cu cremă fină, chips crocant și felie de portocală",
-    "caption": "Fel principal elegant pentru invitați."
+    id: "e242907ce3",
+    src: "/images/gallery/g-017.jpg",
+    alt: "Somon cu cremă fină, chips crocant și felie de portocală",
+    caption: "Fel principal elegant pentru invitați.",
   },
   {
-    "id": "e6dd5e2bb6",
-    "src": "/images/gallery/g-018.jpg",
-    "alt": "Miri taie tortul de nuntă decorat cu flori pastel",
-    "caption": "Tradiție de Nunta surprinsă delicat."
+    id: "e6dd5e2bb6",
+    src: "/images/gallery/g-018.jpg",
+    alt: "Miri taie tortul de nuntă decorat cu flori pastel",
+    caption: "Tradiție de Nunta surprinsă delicat.",
   },
   {
-    "id": "ede9955716",
-    "src": "/images/gallery/g-019.jpg",
-    "alt": "Platouri calde cu pește și legume pregătite pentru servire",
-    "caption": "Ritm de bucătărie pentru Meniu Complet."
+    id: "ede9955716",
+    src: "/images/gallery/g-019.jpg",
+    alt: "Platouri calde cu pește și legume pregătite pentru servire",
+    caption: "Ritm de bucătărie pentru Meniu Complet.",
   },
   {
-    "id": "5270bdd8bc",
-    "src": "/images/gallery/g-020.jpg",
-    "alt": "Antreu festiv cu pere glazurate, mezeluri și creme",
-    "caption": "Asortiment rece pentru început de Petrecere."
+    id: "5270bdd8bc",
+    src: "/images/gallery/g-020.jpg",
+    alt: "Antreu festiv cu pere glazurate, mezeluri și creme",
+    caption: "Asortiment rece pentru început de Petrecere.",
   },
   {
-    "id": "499b8d239e",
-    "src": "/images/gallery/g-021.jpg",
-    "alt": "Fel principal cu ruladă, gratin și salată pe platouri",
-    "caption": "Ritm impecabil pentru Meniu Complet."
+    id: "499b8d239e",
+    src: "/images/gallery/g-021.jpg",
+    alt: "Fel principal cu ruladă, gratin și salată pe platouri",
+    caption: "Ritm impecabil pentru Meniu Complet.",
   },
   {
-    "id": "f75410b85f",
-    "src": "/images/gallery/g-022.jpg",
-    "alt": "Platou aperitive cu mini burger negru și selecție variată",
-    "caption": "Start perfect pentru Nunta."
+    id: "f75410b85f",
+    src: "/images/gallery/g-022.jpg",
+    alt: "Platou aperitive cu mini burger negru și selecție variată",
+    caption: "Start perfect pentru Nunta.",
   },
   {
-    "id": "259a506461",
-    "src": "/images/gallery/g-023.jpg",
-    "alt": "Platouri reci colorate aranjate pentru servire",
-    "caption": "Potrivite pentru Botez sau Petrecere."
+    id: "259a506461",
+    src: "/images/gallery/g-023.jpg",
+    alt: "Platouri reci colorate aranjate pentru servire",
+    caption: "Potrivite pentru Botez sau Petrecere.",
   },
   {
-    "id": "b21298d38a",
-    "src": "/images/gallery/g-024.jpg",
-    "alt": "Bite-uri verzi stratificate cu cremă și microplante",
-    "caption": "Detaliu culinar pentru Nunta Galmour."
+    id: "b21298d38a",
+    src: "/images/gallery/g-024.jpg",
+    alt: "Bite-uri verzi stratificate cu cremă și microplante",
+    caption: "Detaliu culinar pentru Nunta Galmour.",
   },
   {
-    "id": "e6d9e9ac1a",
-    "src": "/images/gallery/g-025.jpg",
-    "alt": "Indicator romantic în grădină la apus",
-    "caption": "Cadru pentru Evenimente in aer liber."
+    id: "e6d9e9ac1a",
+    src: "/images/gallery/g-025.jpg",
+    alt: "Indicator romantic în grădină la apus",
+    caption: "Cadru pentru Evenimente in aer liber.",
   },
   {
-    "id": "a042c8968e",
-    "src": "/images/gallery/g-026.jpg",
-    "alt": "Sală decorată cu aranjamente florale și șervete galbene",
-    "caption": "Mese aranjate, Bautura inclusa."
+    id: "a042c8968e",
+    src: "/images/gallery/g-026.jpg",
+    alt: "Sală decorată cu aranjamente florale și șervete galbene",
+    caption: "Mese aranjate, Bautura inclusa.",
   },
   {
-    "id": "d150d611bd",
-    "src": "/images/gallery/g-027.jpg",
-    "alt": "Mireasă în ie cu broderie roșie, zâmbind",
-    "caption": "Atmosferă caldă, Miri fericiti."
+    id: "d150d611bd",
+    src: "/images/gallery/g-027.jpg",
+    alt: "Mireasă în ie cu broderie roșie, zâmbind",
+    caption: "Atmosferă caldă, Miri fericiti.",
   },
   {
-    "id": "900c796b1a",
-    "src": "/images/gallery/g-028.jpg",
-    "alt": "Dansul mirilor în fum, alb-negru, sala plină",
-    "caption": "Nunta cu accente Glamour."
+    id: "900c796b1a",
+    src: "/images/gallery/g-028.jpg",
+    alt: "Dansul mirilor în fum, alb-negru, sala plină",
+    caption: "Nunta cu accente Glamour.",
   },
   {
-    "id": "4db1085efb",
-    "src": "/images/gallery/g-029.jpg",
-    "alt": "Mirele ridică mireasa sub confetti aurii",
-    "caption": "Petrecere la superlativ by ZephiraEvents."
+    id: "4db1085efb",
+    src: "/images/gallery/g-029.jpg",
+    alt: "Mirele ridică mireasa sub confetti aurii",
+    caption: "Petrecere la superlativ by ZephiraEvents.",
   },
   {
-    "id": "8a896bbf17",
-    "src": "/images/gallery/g-030.jpg",
-    "alt": "Sărutul mirilor afară, printre invitați și petale",
-    "caption": "Evenimente in aer liber, vibe de Poveste."
-  }
+    id: "8a896bbf17",
+    src: "/images/gallery/g-030.jpg",
+    alt: "Sărutul mirilor afară, printre invitați și petale",
+    caption: "Evenimente in aer liber, vibe de Poveste.",
+  },
 ] as const;

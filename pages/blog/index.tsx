@@ -49,8 +49,8 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
   return (
     <>
       <Seo
-        title="Blog"
-        description="Noutăți, sfaturi și resurse pentru un web mai bun."
+        title="Blog — sală de evenimente în Focșani, Vrancea"
+        description="Sfaturi și idei pentru organizarea de nunți, botezuri, majorate și evenimente corporate în Focșani, județul Vrancea — inspirație pentru sală, decor, meniu și servicii impecabile."
         url={absoluteUrl("/blog")}
         image={absoluteUrl("/images/og-blog.jpg")}
         structuredData={[breadcrumbList]}
@@ -63,9 +63,12 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
         <div className="container">
           <Appear>
             <Hero
-              title="Blog"
-              subtitle="Noutăți, sfaturi practice și idei aplicabile despre Next.js, performanță și SEO."
-              image={{ src: "/images/current/hero-index-blog.jpg", alt: "Hero blog" }}
+              title="Blog ZephiraEvents"
+              subtitle="Ghiduri, liste de verificare și inspirație pentru nunți, botezuri, majorate și corporate în Focșani, Vrancea — sală de evenimente, organizare A-Z și servicii impecabile."
+              image={{
+                src: "/images/current/hero-index-blog.jpg",
+                alt: "Blog ZephiraEvents — idei pentru evenimente în Focșani",
+              }}
               height="md"
             />
           </Appear>
@@ -81,9 +84,9 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
           <div className="container">
             <Appear>
               <IntroSection
-                eyebrow="Articole"
-                title="Noutăți, sfaturi și resurse"
-                lede="Selectăm idei care te ajută să iei decizii mai bune pentru site-ul tău: performanță, UX, SEO și arhitectură."
+                eyebrow="Articole pentru organizarea evenimentelor"
+                title="Sfaturi, inspirație & resurse practice"
+                lede="Scriem despre planificarea evenimentelor în Focșani, județul Vrancea: cum alegi sala de evenimente, idei de decor, meniu, program și coordonare pentru nunți, botezuri, majorate sau corporate — ca totul să iasă impecabil."
                 maxWidth="narrow"
               />
             </Appear>
@@ -115,23 +118,35 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
               <MotivationCards
                 items={[
                   {
-                    title: "Procesul nostru",
-                    points: ["Brief & plan clar", "Sprinturi transparente", "QA riguros"],
-                  },
-                  {
-                    title: "Consultanță & PR",
-                    points: ["Arhitectură & strategie", "SEO & performanță", "Mentorat tehnic"],
-                  },
-                  {
-                    title: "Clienți mulțumiți",
-                    points: ["SLA răspuns rapid", "Tracking transparent", "Îmbunătățiri continue"],
-                  },
-                  {
-                    title: "Suport maxim",
+                    title: "Planificare & logistică",
                     points: [
-                      "Monitorizare post-lansare",
-                      "Patch-uri rapide",
-                      "Optimizări periodice",
+                      "Checklist pentru nuntă, botez, majorat",
+                      "Timeline A-Z pentru ziua evenimentului",
+                      "Parteneri de încredere: DJ, foto-video, decor",
+                    ],
+                  },
+                  {
+                    title: "Sală & servicii",
+                    points: [
+                      "Sală de evenimente în Focșani, Vrancea",
+                      "Meniu personalizat & servire impecabilă",
+                      "Setup clasic, modern sau corporate",
+                    ],
+                  },
+                  {
+                    title: "Experiența invitaților",
+                    points: [
+                      "Flow de sală gândit pentru confort",
+                      "Zone foto & momente memorabile",
+                      "Acces facil, parcare, semnalistică",
+                    ],
+                  },
+                  {
+                    title: "Transparență & siguranță",
+                    points: [
+                      "Ofertă clară, fără costuri ascunse",
+                      "Comunicare rapidă și transparentă",
+                      "Suport înainte și după eveniment",
                     ],
                   },
                 ]}
@@ -144,10 +159,10 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
           <div className="container">
             <Appear>
               <Outro
-                eyebrow="Vrei să intri în contact direct cu noi?"
-                title="Hai să discutăm proiectul tău"
-                lead="Spune-ne ce ai în minte și revenim rapid cu pașii următori."
-                cta={{ label: "Contact", href: "/contact" }}
+                eyebrow="Ai un eveniment în Focșani?"
+                title="Întreabă-ne orice — îți răspundem rapid"
+                lead="Spune-ne tipul de eveniment (nuntă, botez, majorat sau corporate) și numărul estimativ de invitați. Îți trimitem disponibilitatea sălii și o ofertă adaptată."
+                cta={{ label: "Contactează-ne", href: "/contact" }}
               />
             </Appear>
           </div>
