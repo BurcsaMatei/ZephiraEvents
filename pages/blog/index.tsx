@@ -98,8 +98,8 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
         {/* Grid articole */}
         <section className="section">
           <div className="container">
-            {/* Lăsăm containerul grilei neschimbat; animăm cardurile individual */}
-            <Grid mobileCols={2} desktopCols={4} gap="16px" align="stretch" justify="stretch">
+            {/* base=1 (mobil), md=2 (tabletă portret), lg=4 (desktop) */}
+            <Grid cols={{ base: 1, md: 2, lg: 4 }} gap="16px" align="stretch" justify="stretch">
               {posts.map((post, i) => (
                 <Appear as="div" key={post.slug} style={{ height: "100%" }} delay={0.1 * i}>
                   <BlogCard post={post} />
