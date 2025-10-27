@@ -10,6 +10,7 @@ import { SITE, withBase } from "../lib/config";
 import Footer from "./Footer";
 import Header from "./Header";
 import SkipLink from "./SkipLink";
+import BackToTop from "./ui/BackToTop";
 
 // ==============================
 // Types
@@ -59,6 +60,9 @@ function Layout({ children }: LayoutProps) {
       </main>
 
       <Footer />
+
+      {/* UI: Back to Top (fixed; apare după pragul de scroll) */}
+      <BackToTop />
     </div>
   );
 }
