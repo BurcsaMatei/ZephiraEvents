@@ -18,7 +18,7 @@ const cardBase = {
   borderRadius: vars.radius.lg,
   boxShadow: vars.shadow.sm,
   padding: vars.space.lg,
-  transition: `transform ${vars.motion.normal} ${vars.motion.easing}, box-shadow ${vars.motion.normal} ${vars.motion.easing}, border-color ${vars.motion.normal} ${vars.motion.easing}, background ${vars.motion.normal} ${vars.motion.easing}`,
+  transition: `border-color ${vars.motion.normal} ${vars.motion.easing}, background ${vars.motion.normal} ${vars.motion.easing}`,
 } as const;
 
 // Layout
@@ -48,14 +48,7 @@ export const infoCol = style({
 export const formBox = style({
   ...cardBase,
   flex: 1,
-  selectors: {
-    "&:hover": {
-      transform: "translateY(-2px)",
-      boxShadow: vars.shadow.md,
-      borderColor: vars.color.primary,
-      background: vars.color.surfaceHover,
-    },
-  },
+  selectors: { "&:hover": { borderColor: vars.color.primary } },
   "@media": { "(prefers-reduced-motion: reduce)": { transition: "none" } },
 });
 
@@ -65,14 +58,7 @@ export const infoCard = style({
   display: "flex",
   flexDirection: "column",
   gap: vars.space.md,
-  selectors: {
-    "&:hover": {
-      transform: "translateY(-2px)",
-      boxShadow: vars.shadow.md,
-      borderColor: vars.color.primary,
-      background: vars.color.surfaceHover,
-    },
-  },
+  selectors: { "&:hover": { borderColor: vars.color.primary } },
   "@media": { "(prefers-reduced-motion: reduce)": { transition: "none" } },
 });
 
@@ -125,15 +111,30 @@ export const actionsRow = style({
   flexWrap: "wrap",
 });
 
-/* ── NOU: câmpurile formularului (înlocuiește style={{ display:'grid', gap:12 }}) */
+/* ── NOU: câmpurile formularului */
 export const formFields = style({
   display: "grid",
   gap: 12,
 });
 
-/* ── NOU: câmpuri full-width (înlocuiește style={{ width:'100%' }}) */
-export const input = style({ width: "100%" });
-export const textarea = style({ width: "100%" });
+/* Focus curat pentru input/textarea: fără outline extern, doar border verde + tranziție */
+export const input = style({
+  width: "100%",
+  transition: `border-color ${vars.motion.normal} ${vars.motion.easing}`,
+  selectors: {
+    "&:focus": { outline: "none", boxShadow: "none", borderColor: vars.color.primary },
+    "&:focus-visible": { outline: "none", boxShadow: "none", borderColor: vars.color.primary },
+  },
+});
 
-/* ── NOU: rând pentru Submit (înlocuiește style={{ marginTop: 12 }}) */
+export const textarea = style({
+  width: "100%",
+  transition: `border-color ${vars.motion.normal} ${vars.motion.easing}`,
+  selectors: {
+    "&:focus": { outline: "none", boxShadow: "none", borderColor: vars.color.primary },
+    "&:focus-visible": { outline: "none", boxShadow: "none", borderColor: vars.color.primary },
+  },
+});
+
+/* Submit */
 export const submitRow = style({ marginTop: 12 });
