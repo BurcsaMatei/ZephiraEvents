@@ -2,9 +2,10 @@
 // ==============================
 // Imports
 // ==============================
-import { useEffect, useRef, useState, useCallback } from "react";
-import { button, icon, hidden, visible } from "../../styles/ui/backToTop.css"
+import { useCallback, useEffect, useRef, useState } from "react";
+
 import { vars } from "../../styles/theme.css";
+import { button, hidden, icon, visible } from "../../styles/ui/backToTop.css";
 
 // ==============================
 // Utils (SSR-safety + prefers-reduced-motion)
@@ -87,4 +88,3 @@ export default function BackToTop(): JSX.Element | null {
     </button>
   );
 }
-

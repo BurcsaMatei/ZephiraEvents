@@ -52,7 +52,13 @@ export function middleware(req: NextRequest) {
   ];
 
   const styleSrc: string[] = ["'self'", "'unsafe-inline'"];
-  const imgSrc: string[] = ["'self'", "https:", "data:", "blob:", ...(ASSET_ORIGIN ? [ASSET_ORIGIN] : [])];
+  const imgSrc: string[] = [
+    "'self'",
+    "https:",
+    "data:",
+    "blob:",
+    ...(ASSET_ORIGIN ? [ASSET_ORIGIN] : []),
+  ];
   const fontSrc: string[] = ["'self'", "https:", "data:"];
   const connectSrc: string[] = [
     "'self'",

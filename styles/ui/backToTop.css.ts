@@ -3,7 +3,8 @@
 // Imports
 // ==============================
 import { style } from "@vanilla-extract/css";
-import { vars, mq } from "../theme.css";
+
+import { mq, vars } from "../theme.css";
 
 // ==============================
 // Base button
@@ -68,4 +69,3 @@ export const visible = style({
   transform: "translateY(0)",
   pointerEvents: "auto",
 });
-

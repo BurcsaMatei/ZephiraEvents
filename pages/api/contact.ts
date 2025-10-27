@@ -6,7 +6,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import nodemailer from "nodemailer";
 
-
 type Ok = { ok: true };
 type Fail = { ok: false; message: string };
 type Resp = Ok | Fail;
@@ -15,6 +14,17 @@ type EmailProvider = "resend" | "smtp";
 
 const RATE_LIMIT = parseRateLimit(process.env.CONTACT_RATE_LIMIT || "5:600"); // 5 req / 600s
 const rateStore = new Map<string, number[]>();
+
+// ==============================
+// Types
+// ==============================
+interface ContactBody {
+  name?: string;
+  email?: string;
+  message?: string;
+  recaptchaToken?: string;
+  _hpt?: string;
+}
 
 // ==============================
 // Utils
@@ -35,13 +45,14 @@ function isEmail(v: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
 }
 
-function validateBody(b: any) {
+function validateBody(b: unknown) {
+  const body = (b ?? {}) as ContactBody;
   const errs: string[] = [];
-  const name = String(b?.name || "").trim();
-  const email = String(b?.email || "").trim();
-  const message = String(b?.message || "").trim();
-  const token = String(b?.recaptchaToken || "").trim();
-  const hpt = String(b?._hpt || "");
+  const name = String(body.name || "").trim();
+  const email = String(body.email || "").trim();
+  const message = String(body.message || "").trim();
+  const token = String(body.recaptchaToken || "").trim();
+  const hpt = String(body._hpt || "");
 
   if (!name) errs.push("Nume lipsă.");
   if (!email || !isEmail(email)) errs.push("Email invalid.");
@@ -192,7 +203,10 @@ async function sendAutoReply(to: string, from: string, originalName: string) {
 }
 
 function escapeHtml(s: string): string {
-  return s.replace(/[&<>"']/g, (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m]!));
+  return s.replace(
+    /[&<>"']/g,
+    (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]!,
+  );
 }
 
 // ==============================
@@ -205,10 +219,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   const ip = getIp(req);
   if (isRateLimited(ip)) {
-    return res.status(429).json({ ok: false, message: "Prea multe solicitări. Încearcă mai târziu." });
+    return res
+      .status(429)
+      .json({ ok: false, message: "Prea multe solicitări. Încearcă mai târziu." });
   }
 
-  const body = req.body;
+  const body = req.body as unknown;
   const { valid, errs, name, email, message, token } = validateBody(body);
   if (!valid) {
     return res.status(400).json({ ok: false, message: errs.join(" ") });
@@ -228,10 +244,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
 
   const subject = subjectLine();
-  const plain =
-    `De la: ${name} <${email}>\n` +
-    `Subiect: ${subject}\n\n` +
-    `${message}\n`;
+  const plain = `De la: ${name} <${email}>\n` + `Subiect: ${subject}\n\n` + `${message}\n`;
   const html =
     `<p><strong>De la:</strong> ${escapeHtml(name)} &lt;${escapeHtml(email)}&gt;</p>` +
     `<p><strong>Subiect:</strong> ${escapeHtml(subject)}</p>` +
@@ -244,7 +257,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       await sendWithSmtp({ to, from, replyTo: email, subject, text: plain, html });
     }
 
-    // optional: autoreply
     await sendAutoReply(email, from, name);
 
     // minimal log (no content)

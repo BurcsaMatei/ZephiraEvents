@@ -16,9 +16,7 @@ import AnimatedIcon from "../../ui/AnimatedIcon";
 // ==============================
 // Types
 // ==============================
-type ApiResponse =
-  | { ok: true }
-  | { ok: false; code: number; message: string };
+type ApiResponse = { ok: true } | { ok: false; code: number; message: string };
 
 // ==============================
 // Component
@@ -33,7 +31,9 @@ export default function FormContact() {
   // Load reCAPTCHA v2 (checkbox)
   useEffect(() => {
     if (widgetLoaded.current) return;
-    const hasScript = !!document.querySelector<HTMLScriptElement>('script[src^="https://www.google.com/recaptcha/api.js"]');
+    const hasScript = !!document.querySelector<HTMLScriptElement>(
+      'script[src^="https://www.google.com/recaptcha/api.js"]',
+    );
     if (!hasScript) {
       const sc = document.createElement("script");
       sc.src = "https://www.google.com/recaptcha/api.js";
@@ -59,7 +59,9 @@ export default function FormContact() {
     const hpt = String(fd.get("_hpt") || ""); // honeypot (must be empty)
 
     // pick up v2 checkbox token injected by reCAPTCHA
-    const recaptchaEl = document.querySelector<HTMLTextAreaElement>('textarea[name="g-recaptcha-response"]');
+    const recaptchaEl = document.querySelector<HTMLTextAreaElement>(
+      'textarea[name="g-recaptcha-response"]',
+    );
     const recaptchaToken = (recaptchaEl?.value || "").trim();
 
     // basic client-side guards (server re-validates)
@@ -82,8 +84,8 @@ export default function FormContact() {
       });
       const data = (await res.json()) as ApiResponse;
 
-      if (!res.ok || !("ok" in data) || data.ok === false) {
-        const msg = (data as any)?.message || "A apărut o eroare la trimitere.";
+      if (!res.ok || data.ok === false) {
+        const msg = data.ok === false ? data.message : "A apărut o eroare la trimitere.";
         setError(msg);
         setSending(false);
         return;
@@ -164,8 +166,16 @@ export default function FormContact() {
           </div>
 
           <div aria-live="polite" style={{ minHeight: 20, marginTop: 6 }}>
-            {error && <span role="status" style={{ color: "var(--danger, #cc3b3b)" }}>{error}</span>}
-            {done && !error && <span role="status">Mulțumim! Mesajul tău a fost trimis. Îți răspundem cât de repede.</span>}
+            {error && (
+              <span role="status" style={{ color: "var(--danger, #cc3b3b)" }}>
+                {error}
+              </span>
+            )}
+            {done && !error && (
+              <span role="status">
+                Mulțumim! Mesajul tău a fost trimis. Îți răspundem cât de repede.
+              </span>
+            )}
           </div>
 
           <div className={s.submitRow}>
