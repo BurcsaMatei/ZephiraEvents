@@ -5,7 +5,7 @@
 // ==============================
 // Imports
 // ==============================
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { withBase } from "../../../lib/config";
 import * as s from "../../../styles/contact/FormContact.css";
@@ -14,17 +14,86 @@ import Button from "../../Button";
 import AnimatedIcon from "../../ui/AnimatedIcon";
 
 // ==============================
+// Types
+// ==============================
+type ApiResponse =
+  | { ok: true }
+  | { ok: false; code: number; message: string };
+
+// ==============================
 // Component
 // ==============================
 export default function FormContact() {
   const [sending, setSending] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const formRef = useRef<HTMLFormElement | null>(null);
+  const widgetLoaded = useRef(false);
+
+  // Load reCAPTCHA v2 (checkbox)
+  useEffect(() => {
+    if (widgetLoaded.current) return;
+    const hasScript = !!document.querySelector<HTMLScriptElement>('script[src^="https://www.google.com/recaptcha/api.js"]');
+    if (!hasScript) {
+      const sc = document.createElement("script");
+      sc.src = "https://www.google.com/recaptcha/api.js";
+      sc.async = true;
+      sc.defer = true;
+      document.head.appendChild(sc);
+    }
+    widgetLoaded.current = true;
+  }, []);
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     setSending(true);
+    setError(null);
+
+    const f = formRef.current;
+    if (!f) return;
+
+    const fd = new FormData(f);
+    const name = String(fd.get("name") || "").trim();
+    const email = String(fd.get("email") || "").trim();
+    const message = String(fd.get("message") || "").trim();
+    const hpt = String(fd.get("_hpt") || ""); // honeypot (must be empty)
+
+    // pick up v2 checkbox token injected by reCAPTCHA
+    const recaptchaEl = document.querySelector<HTMLTextAreaElement>('textarea[name="g-recaptcha-response"]');
+    const recaptchaToken = (recaptchaEl?.value || "").trim();
+
+    // basic client-side guards (server re-validates)
+    if (!name || !email || !message) {
+      setSending(false);
+      setError("Te rugăm să completezi toate câmpurile obligatorii.");
+      return;
+    }
+    if (!recaptchaToken) {
+      setSending(false);
+      setError("Te rugăm să confirmi că nu ești robot (reCAPTCHA).");
+      return;
+    }
+
     try {
-      await new Promise((r) => setTimeout(r, 800));
-    } finally {
+      const res = await fetch(withBase("/api/contact"), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, message, recaptchaToken, _hpt: hpt }),
+      });
+      const data = (await res.json()) as ApiResponse;
+
+      if (!res.ok || !("ok" in data) || data.ok === false) {
+        const msg = (data as any)?.message || "A apărut o eroare la trimitere.";
+        setError(msg);
+        setSending(false);
+        return;
+      }
+
+      setDone(true);
+      setSending(false);
+      f.reset();
+    } catch {
+      setError("Nu am putut trimite mesajul. Încearcă din nou.");
       setSending(false);
     }
   };
@@ -33,7 +102,7 @@ export default function FormContact() {
     <div className={s.wrap} aria-labelledby="contact-form-title">
       {/* Col stânga – FORMULAR */}
       <Appear as="div" className={s.col}>
-        <form className={s.formBox} onSubmit={onSubmit}>
+        <form ref={formRef} className={s.formBox} onSubmit={onSubmit} noValidate>
           <h2 id="contact-form-title" className={s.formTitle}>
             Trimite-ne un mesaj
           </h2>
@@ -47,6 +116,8 @@ export default function FormContact() {
                 required
                 placeholder="Numele tău"
                 className={s.input}
+                maxLength={128}
+                autoComplete="name"
               />
             </label>
 
@@ -58,6 +129,8 @@ export default function FormContact() {
                 required
                 placeholder="email@exemplu.com"
                 className={s.input}
+                maxLength={160}
+                autoComplete="email"
               />
             </label>
 
@@ -69,8 +142,30 @@ export default function FormContact() {
                 required
                 placeholder="Spune-ne pe scurt despre proiect"
                 className={s.textarea}
+                maxLength={5000}
               />
             </label>
+
+            {/* Honeypot (must stay empty) */}
+            <input
+              type="text"
+              name="_hpt"
+              tabIndex={-1}
+              autoComplete="off"
+              style={{ position: "absolute", left: "-5000px", width: 0, height: 0 }}
+              aria-hidden="true"
+            />
+
+            {/* reCAPTCHA v2 checkbox */}
+            <div
+              className="g-recaptcha"
+              data-sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ""}
+            />
+          </div>
+
+          <div aria-live="polite" style={{ minHeight: 20, marginTop: 6 }}>
+            {error && <span role="status" style={{ color: "var(--danger, #cc3b3b)" }}>{error}</span>}
+            {done && !error && <span role="status">Mulțumim! Mesajul tău a fost trimis. Îți răspundem cât de repede.</span>}
           </div>
 
           <div className={s.submitRow}>
@@ -109,8 +204,8 @@ export default function FormContact() {
               <AnimatedIcon src={withBase("/icons/contact/whatsapp.svg")} size={22} hoverTilt />
               <p className={s.itemText}>
                 Urgent? Scrie-ne pe WhatsApp:{" "}
-                <a href="https://wa.me/40740123456" aria-label="Scrie pe WhatsApp">
-                  +40 740 123 456
+                <a href="https://wa.me/40769990800" aria-label="Scrie pe WhatsApp">
+                  +40 751 528 414
                 </a>
               </p>
             </div>
