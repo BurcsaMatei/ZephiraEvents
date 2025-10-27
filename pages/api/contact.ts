@@ -145,23 +145,51 @@ async function sendWithSmtp(opts: {
   const user = process.env.SMTP_USER!;
   const pass = process.env.SMTP_PASS!;
   const secure = String(process.env.SMTP_SECURE || "true") === "true";
+  const debug = String(process.env.CONTACT_DEBUG || "0") === "1";
+
+  // log minim (fără secrete)
+  if (debug) console.info("[smtp] cfg", { host, port, secure, from: opts.from, to: opts.to });
 
   const transporter = nodemailer.createTransport({
     host,
     port,
-    secure,
+    secure, // 465=true (SSL), 587=false (STARTTLS)
     auth: { user, pass },
+    logger: debug,
+    debug, // nodemailer debug to console
+    tls: {
+      servername: host,        // SNI corect
+      minVersion: "TLSv1.2",   // evită downgrade
+      // NOTĂ: nu setăm rejectUnauthorized:false; folosește doar temporar dacă vezi eroare de cert self-signed
+    },
   });
 
-  await transporter.sendMail({
-    from: opts.from,
-    to: opts.to,
-    subject: opts.subject,
-    replyTo: opts.replyTo,
-    text: opts.text,
-    html: opts.html,
-  });
+  try {
+    await transporter.verify();
+    if (debug) console.info("[smtp] verify ok");
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[smtp] verify error:", msg);
+    throw err;
+  }
+
+  try {
+    await transporter.sendMail({
+      from: opts.from,
+      to: opts.to,
+      subject: opts.subject,
+      replyTo: opts.replyTo,
+      text: opts.text,
+      html: opts.html,
+    });
+    if (debug) console.info("[smtp] send ok");
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[smtp] send error:", msg);
+    throw err;
+  }
 }
+// ==============================
 
 async function sendAutoReply(to: string, from: string, originalName: string) {
   if (String(process.env.CONTACT_AUTOREPLY_ENABLED || "0") !== "1") return;
