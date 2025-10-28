@@ -145,6 +145,7 @@ const ServicesPage: NextPage = () => {
                       "Coordonare A-Z în ziua evenimentului",
                       "Parteneri: DJ, foto-video, decor",
                     ],
+                    mediaSrc: "/images/motivationcards/mc-09.jpg",
                   },
                   {
                     title: "Locație & meniu",
@@ -153,6 +154,7 @@ const ServicesPage: NextPage = () => {
                       "Meniu personalizat & servire impecabilă",
                       "Setup flexibil: clasic, modern, corporate",
                     ],
+                    mediaSrc: "/images/motivationcards/mc-10.jpg",
                   },
                   {
                     title: "Experiența invitaților",
@@ -161,6 +163,7 @@ const ServicesPage: NextPage = () => {
                       "Zone foto & momente speciale",
                       "Acces facil, parcare, semnalistică",
                     ],
+                    mediaSrc: "/images/motivationcards/mc-11.jpg",
                   },
                   {
                     title: "Transparență & siguranță",
@@ -169,6 +172,7 @@ const ServicesPage: NextPage = () => {
                       "Timeline asumat și check-listuri",
                       "Suport prompt înainte și după eveniment",
                     ],
+                    mediaSrc: "/images/motivationcards/mc-12.jpg",
                   },
                 ]}
               />

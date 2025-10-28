@@ -124,6 +124,7 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
                       "Timeline A-Z pentru ziua evenimentului",
                       "Parteneri de încredere: DJ, foto-video, decor",
                     ],
+                    mediaSrc: "/images/motivationcards/mc-13.jpg",
                   },
                   {
                     title: "Sală & servicii",
@@ -132,6 +133,7 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
                       "Meniu personalizat & servire impecabilă",
                       "Setup clasic, modern sau corporate",
                     ],
+                    mediaSrc: "/images/motivationcards/mc-14.jpg",
                   },
                   {
                     title: "Experiența invitaților",
@@ -140,6 +142,7 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
                       "Zone foto & momente memorabile",
                       "Acces facil, parcare, semnalistică",
                     ],
+                    mediaSrc: "/images/motivationcards/mc-15.jpg",
                   },
                   {
                     title: "Transparență & siguranță",
@@ -148,6 +151,7 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
                       "Comunicare rapidă și transparentă",
                       "Suport înainte și după eveniment",
                     ],
+                    mediaSrc: "/images/motivationcards/mc-16.jpg",
                   },
                 ]}
               />

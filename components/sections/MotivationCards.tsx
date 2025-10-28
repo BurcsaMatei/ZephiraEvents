@@ -11,7 +11,7 @@ import type { ComponentType } from "react";
 // ==============================
 // Types
 // ==============================
-import type { MotivationCardsProps } from "./MotivationCards.lazy";
+import type { MotivationCardsProps } from  "../sections/MotivationCards.lazy"
 
 // ==============================
 // Dynamic import
