@@ -165,7 +165,7 @@ async function sendWithSmtp(opts: {
   });
 }
 
-// PATCH — pages/api/contact.ts (blocul sendAutoReply)
+// sendAutoReply ==============================
 
 async function sendAutoReply(to: string, from: string, originalName: string) {
   if (String(process.env.CONTACT_AUTOREPLY_ENABLED || "0") !== "1") return;
@@ -174,20 +174,33 @@ async function sendAutoReply(to: string, from: string, originalName: string) {
   const phone = "+40 769 990 800";
   const phoneHref = "tel:+40769990800";
   const waHref = "https://wa.me/40769990800";
+  const emailHref = "mailto:info@zephiraevents.ro";
+  const cookieHref = "https://zephiraevents.ro/cookie-policy";
+  const address = "Calea Odobești 409, Câmpineanca, Vrancea, 627055, România";
 
   const text =
     `Salut, ${originalName}!\n\n` +
-    `Îți mulțumim pentru mesaj. Confirmăm că l-am primit și revenim în 24–48h (L–V).\n` +
-    `Dacă e urgent, ne găsești la telefon ${phone} sau pe WhatsApp: ${waHref}\n\n` +
-    `Cu drag,\nEchipa ZephiraEvents`;
+    `Îți mulțumim pentru mesaj.\n\n` +
+    `Confirmăm că l-am primit și promitem sa revenim la tine în maxim 24–48h.\n\n` +
+    `Dacă e urgent, ne găsești la numarul de telefon: ${phone}\n` +
+    `sau ne poti scrie direct pe WhatsApp: ${waHref}\n\n` +
+    `Cu drag,\nEchipa ZephiraEvents\n\n` +
+    `Adresa: ${address}\n` +
+    `info@zephiraevents.ro\n` +
+    `https://zephiraevents.ro/cookie-policy\n`;
 
   const html =
     `<p>Salut, <strong>${escapeHtml(originalName)}</strong>!</p>` +
-    `<p>Îți mulțumim pentru mesaj. Confirmăm că l-am primit și revenim în 24–48h (L–V).</p>` +
-    `<p>Dacă e urgent, ne găsești la telefon ` +
-    `<a href="${phoneHref}">${escapeHtml(phone)}</a> sau pe ` +
-    `<a href="${waHref}">WhatsApp</a>.</p>` +
-    `<p>Cu drag,<br/>Echipa <strong>ZephiraEvents</strong></p>`;
+    `<p>Îți mulțumim pentru mesaj.</p>` +
+    `<p>Confirmăm că l-am primit și promitem sa revenim la tine în maxim 24–48h.</p>` +
+    `<p>Dacă e urgent, ne găsești la numarul de telefon: <a href="${phoneHref}">${escapeHtml(
+      phone,
+    )}</a><br/>` +
+    `sau ne poti scrie direct pe WhatsApp: <a href="${waHref}">${waHref}</a></p>` +
+    `<p>Cu drag,<br/>Echipa <strong>ZephiraEvents</strong></p>` +
+    `<p><em>Adresa:</em> ${escapeHtml(address)}<br/>` +
+    `<a href="${emailHref}">info@zephiraevents.ro</a><br/>` +
+    `<a href="${cookieHref}">${cookieHref}</a></p>`;
 
   const prov = provider();
   const fromAddr = process.env.CONTACT_FROM_EMAIL!;
@@ -197,7 +210,7 @@ async function sendAutoReply(to: string, from: string, originalName: string) {
     await sendWithSmtp({ to, from: fromAddr, replyTo: fromAddr, subject, text, html });
   }
 }
-
+// sendAutoReply ==============================
 
 // ==============================
 // Handler
