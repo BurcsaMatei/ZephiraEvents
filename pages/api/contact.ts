@@ -66,17 +66,13 @@ function validateBody(b: unknown) {
 async function verifyRecaptcha(token: string, ip: string): Promise<boolean> {
   const secret = (process.env.RECAPTCHA_SECRET_KEY || "").trim();
   if (!secret) return false;
-  const params = new URLSearchParams({
-    secret,
-    response: token,
-    remoteip: ip,
-  });
+  const params = new URLSearchParams({ secret, response: token, remoteip: ip });
   const res = await fetch("https://www.google.com/recaptcha/api/siteverify", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: params.toString(),
   });
-  const data = (await res.json()) as { success?: boolean; score?: number; action?: string };
+  const data = (await res.json()) as { success?: boolean };
   return !!data?.success;
 }
 
@@ -102,6 +98,13 @@ function subjectLine(): string {
   return `Mesaj contact — zephiraevents.ro — ${ts}`;
 }
 
+function escapeHtml(s: string): string {
+  return s.replace(
+    /[&<>"']/g,
+    (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]!,
+  );
+}
+
 // ==============================
 // Email senders (adapters)
 // ==============================
@@ -116,10 +119,7 @@ async function sendWithResend(opts: {
   const apiKey = process.env.RESEND_API_KEY!;
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      "Content-Type": "application/json",
-    },
+    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
     body: JSON.stringify({
       from: opts.from,
       to: [opts.to],
@@ -145,51 +145,25 @@ async function sendWithSmtp(opts: {
   const user = process.env.SMTP_USER!;
   const pass = process.env.SMTP_PASS!;
   const secure = String(process.env.SMTP_SECURE || "true") === "true";
-  const debug = String(process.env.CONTACT_DEBUG || "0") === "1";
-
-  // log minim (fără secrete)
-  if (debug) console.info("[smtp] cfg", { host, port, secure, from: opts.from, to: opts.to });
 
   const transporter = nodemailer.createTransport({
     host,
     port,
-    secure, // 465=true (SSL), 587=false (STARTTLS)
+    secure,                 // 587 → false (STARTTLS), 465 → true (SSL)
     auth: { user, pass },
-    logger: debug,
-    debug, // nodemailer debug to console
-    tls: {
-      servername: host,        // SNI corect
-      minVersion: "TLSv1.2",   // evită downgrade
-      // NOTĂ: nu setăm rejectUnauthorized:false; folosește doar temporar dacă vezi eroare de cert self-signed
-    },
+    authMethod: "LOGIN",    // stabil pentru cPanel/Exim
+    tls: { servername: host, minVersion: "TLSv1.2" },
   });
 
-  try {
-    await transporter.verify();
-    if (debug) console.info("[smtp] verify ok");
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error("[smtp] verify error:", msg);
-    throw err;
-  }
-
-  try {
-    await transporter.sendMail({
-      from: opts.from,
-      to: opts.to,
-      subject: opts.subject,
-      replyTo: opts.replyTo,
-      text: opts.text,
-      html: opts.html,
-    });
-    if (debug) console.info("[smtp] send ok");
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error("[smtp] send error:", msg);
-    throw err;
-  }
+  await transporter.sendMail({
+    from: opts.from,
+    to: opts.to,
+    subject: opts.subject,
+    replyTo: opts.replyTo,
+    text: opts.text,
+    html: opts.html,
+  });
 }
-// ==============================
 
 async function sendAutoReply(to: string, from: string, originalName: string) {
   if (String(process.env.CONTACT_AUTOREPLY_ENABLED || "0") !== "1") return;
@@ -210,31 +184,10 @@ async function sendAutoReply(to: string, from: string, originalName: string) {
   const prov = provider();
   const fromAddr = process.env.CONTACT_FROM_EMAIL!;
   if (prov === "resend") {
-    await sendWithResend({
-      to,
-      from: fromAddr,
-      replyTo: fromAddr,
-      subject,
-      text,
-      html,
-    });
+    await sendWithResend({ to, from: fromAddr, replyTo: fromAddr, subject, text, html });
   } else if (prov === "smtp") {
-    await sendWithSmtp({
-      to,
-      from: fromAddr,
-      replyTo: fromAddr,
-      subject,
-      text,
-      html,
-    });
+    await sendWithSmtp({ to, from: fromAddr, replyTo: fromAddr, subject, text, html });
   }
-}
-
-function escapeHtml(s: string): string {
-  return s.replace(
-    /[&<>"']/g,
-    (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]!,
-  );
 }
 
 // ==============================
@@ -272,7 +225,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
 
   const subject = subjectLine();
-  const plain = `De la: ${name} <${email}>\n` + `Subiect: ${subject}\n\n` + `${message}\n`;
+  const plain = `De la: ${name} <${email}>\nSubiect: ${subject}\n\n${message}\n`;
   const html =
     `<p><strong>De la:</strong> ${escapeHtml(name)} &lt;${escapeHtml(email)}&gt;</p>` +
     `<p><strong>Subiect:</strong> ${escapeHtml(subject)}</p>` +
@@ -286,10 +239,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
 
     await sendAutoReply(email, from, name);
-
-    // minimal log (no content)
-    console.info("[contact] sent", { ts: Date.now(), ip });
-
     return res.status(200).json({ ok: true });
   } catch {
     return res.status(500).json({ ok: false, message: "Eroare la trimiterea emailului." });
