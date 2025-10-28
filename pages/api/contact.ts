@@ -165,20 +165,28 @@ async function sendWithSmtp(opts: {
   });
 }
 
+// PATCH — pages/api/contact.ts (blocul sendAutoReply)
+
 async function sendAutoReply(to: string, from: string, originalName: string) {
   if (String(process.env.CONTACT_AUTOREPLY_ENABLED || "0") !== "1") return;
 
   const subject = "Am primit mesajul tău — ZephiraEvents";
+  const phone = "+40 769 990 800";
+  const phoneHref = "tel:+40769990800";
+  const waHref = "https://wa.me/40769990800";
+
   const text =
     `Salut, ${originalName}!\n\n` +
     `Îți mulțumim pentru mesaj. Confirmăm că l-am primit și revenim în 24–48h (L–V).\n` +
-    `Dacă e urgent, ne găsești și pe WhatsApp: +40 751 528 414.\n\n` +
+    `Dacă e urgent, ne găsești la telefon ${phone} sau pe WhatsApp: ${waHref}\n\n` +
     `Cu drag,\nEchipa ZephiraEvents`;
 
   const html =
     `<p>Salut, <strong>${escapeHtml(originalName)}</strong>!</p>` +
     `<p>Îți mulțumim pentru mesaj. Confirmăm că l-am primit și revenim în 24–48h (L–V).</p>` +
-    `<p>Dacă e urgent, ne găsești și pe WhatsApp: <strong>+40 751 528 414</strong>.</p>` +
+    `<p>Dacă e urgent, ne găsești la telefon ` +
+    `<a href="${phoneHref}">${escapeHtml(phone)}</a> sau pe ` +
+    `<a href="${waHref}">WhatsApp</a>.</p>` +
     `<p>Cu drag,<br/>Echipa <strong>ZephiraEvents</strong></p>`;
 
   const prov = provider();
@@ -189,6 +197,7 @@ async function sendAutoReply(to: string, from: string, originalName: string) {
     await sendWithSmtp({ to, from: fromAddr, replyTo: fromAddr, subject, text, html });
   }
 }
+
 
 // ==============================
 // Handler
