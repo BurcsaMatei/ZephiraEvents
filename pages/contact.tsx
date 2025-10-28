@@ -232,6 +232,7 @@ const ContactPage: NextPage = () => (
                     "Plan dedicat pentru nuntă, botez, majorat",
                     "Coordonare A-Z în ziua evenimentului",
                   ],
+                  mediaSrc: "/images/motivationcards/mc-17.jpg",
                 },
                 {
                   title: "Servicii impecabile",
@@ -240,6 +241,7 @@ const ContactPage: NextPage = () => (
                     "Parteneri DJ, foto-video & decor",
                     "Setup clasic, modern sau corporate",
                   ],
+                  mediaSrc: "/images/motivationcards/mc-18.jpg",
                 },
                 {
                   title: "Confort pentru invitați",
@@ -248,6 +250,7 @@ const ContactPage: NextPage = () => (
                     "Zone foto & momente memorabile",
                     "Acces facil, parcare, semnalistică",
                   ],
+                  mediaSrc: "/images/motivationcards/mc-19.jpg",
                 },
                 {
                   title: "Transparență & siguranță",
@@ -256,6 +259,7 @@ const ContactPage: NextPage = () => (
                     "Timeline asumat și check-listuri",
                     "Suport prompt înainte/după eveniment",
                   ],
+                  mediaSrc: "/images/motivationcards/mc-20.jpg",
                 },
               ]}
             />

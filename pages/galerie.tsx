@@ -287,6 +287,7 @@ function GaleriePage() {
                       "Decor, foto-video & DJ din rețeaua noastră de parteneri",
                       "Servicii de ospitalitate impecabile pentru invitați",
                     ],
+                    mediaSrc: "/images/motivationcards/mc-05.jpg",
                   },
                   {
                     title: "Botezuri & majorate",
@@ -295,6 +296,7 @@ function GaleriePage() {
                       "Meniu adaptat și program flexibil pentru familie",
                       "Scenografie foto și momente speciale incluse",
                     ],
+                    mediaSrc: "/images/motivationcards/mc-06.jpg",
                   },
                   {
                     title: "Evenimente corporate",
@@ -303,6 +305,7 @@ function GaleriePage() {
                       "Logistică, tehnic & protocol la standarde înalte",
                       "Acces facil în Focșani, parcare și semnalistică",
                     ],
+                    mediaSrc: "/images/motivationcards/mc-07.jpg",
                   },
                   {
                     title: "Sală de evenimente & servicii",
@@ -311,6 +314,7 @@ function GaleriePage() {
                       "Ofertă clară, fără costuri ascunse",
                       "Coordonare A-Z și suport înainte/după eveniment",
                     ],
+                    mediaSrc: "/images/motivationcards/mc-08.jpg",
                   },
                 ]}
               />
