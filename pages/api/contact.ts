@@ -149,9 +149,9 @@ async function sendWithSmtp(opts: {
   const transporter = nodemailer.createTransport({
     host,
     port,
-    secure,                 // 587 → false (STARTTLS), 465 → true (SSL)
+    secure, // 587 → false (STARTTLS), 465 → true (SSL)
     auth: { user, pass },
-    authMethod: "LOGIN",    // stabil pentru cPanel/Exim
+    authMethod: "LOGIN", // stabil pentru cPanel/Exim
     tls: { servername: host, minVersion: "TLSv1.2" },
   });
 

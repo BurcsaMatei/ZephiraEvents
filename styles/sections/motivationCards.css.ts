@@ -4,6 +4,7 @@
 // Imports
 // ==============================
 import { globalStyle, keyframes, style } from "@vanilla-extract/css";
+
 import { mq, themeClassDark, themeClassLight, vars } from "../theme.css";
 
 // ==============================
@@ -238,7 +239,11 @@ export const cta = style({
   "@media": {
     "(hover: hover)": {
       selectors: {
-        "&:hover": { background: "rgba(255,255,255,0.10)", transform: "translateY(-2px)", borderColor: "rgba(255,255,255,0.35)" },
+        "&:hover": {
+          background: "rgba(255,255,255,0.10)",
+          transform: "translateY(-2px)",
+          borderColor: "rgba(255,255,255,0.35)",
+        },
         "&:active": { transform: "translateY(0)" },
         "&:focus-visible": { outline: "none", boxShadow: "0 0 0 3px rgba(255,255,255,0.35)" },
       },

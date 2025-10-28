@@ -34,8 +34,7 @@ const DEFAULT_MEDIA = [
   "/images/motivationcards/mc-04.jpg",
 ] as const;
 
-const BACK_MESSAGE =
-  "Planifică evenimentul ideal la Zephira — servicii complete și flexibile.";
+const BACK_MESSAGE = "Planifică evenimentul ideal la Zephira — servicii complete și flexibile.";
 
 // ==============================
 // Component
@@ -93,21 +92,37 @@ function Card({
     node.style.transform = "translateZ(0) rotateX(0deg) rotateY(0deg)";
   }, []);
 
+  // A11y: suport Enter/Space pe rol de „button” (nu schimbăm logica; flip-ul e pe :focus-within)
+  const onKeyDown = React.useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" || e.key === " ") {
+      // prevenim scroll pe Space și lăsăm focusul pe card ca să declanșeze flip-ul via :focus-within
+      e.preventDefault();
+    }
+  }, []);
+
   const liPoints = Array.isArray(points) ? points.slice(0, 5) : [];
   const media = mediaSrc ?? DEFAULT_MEDIA[index % DEFAULT_MEDIA.length];
   const bgStyle = { backgroundImage: `url("${media}")` };
 
   return (
     <div className={s.cardWrap}>
-      {/* card devine focusabil pt. tap (flip) pe mobile */}
-      <div className={s.card} tabIndex={0} onMouseMove={onMouseMove} onMouseLeave={onMouseLeave}>
+      {/* card devine focusabil pentru tap/keyboard, respectând jsx-a11y */}
+      <div
+        className={s.card}
+        role="button"
+        tabIndex={0}
+        aria-label={`Deschide detalii: ${title}`}
+        onKeyDown={onKeyDown}
+        onMouseMove={onMouseMove}
+        onMouseLeave={onMouseLeave}
+      >
         <div className={s.aurora} aria-hidden />
         <span className={s.orbA} aria-hidden />
         <span className={s.orbB} aria-hidden />
 
         {/* === Flipper: față + spate === */}
         <div className={s.flipper}>
-          {/* === Front (NEschimbat vizual): text + listă + thumbnail mic === */}
+          {/* === Front === */}
           <div className={s.frontFace}>
             <div ref={innerRef} className={s.inner}>
               <h3 className={s.title}>{title}</h3>
@@ -128,7 +143,7 @@ function Card({
             </div>
           </div>
 
-          {/* === Back (flip): imagine full + overlay + mesaj + CTA === */}
+          {/* === Back === */}
           <div className={s.backFace} style={bgStyle} aria-hidden={false}>
             <div className={s.backOverlay} />
             <div className={s.backContent}>
