@@ -31,7 +31,7 @@ function normalizeUrl(
   if (!s) return "";
   const hasProtocol = /^https?:\/\//i.test(s) || s.startsWith("//");
   if (requireProtocol && !hasProtocol) {
-    devWarn(`URL fără protocol: "${s}". Așteptam http(s)://…`);
+    devWarn(`URL fÄrÄ protocol: "${s}". AČ™teptam http(s)://â€¦`);
     return "";
   }
   if (hasProtocol) return s.replace(/\/+$/, "");
@@ -42,7 +42,7 @@ function normalizeBasePath(val: string | undefined): string {
   const raw = (val || "").trim();
   if (!raw) return "";
   if (!raw.startsWith("/")) {
-    devWarn(`BASE_PATH ar trebui să înceapă cu "/". Corectez automat: "/${raw}"`);
+    devWarn(`BASE_PATH ar trebui sÄ Ă®nceapÄ cu "/". Corectez automat: "/${raw}"`);
   }
   return `/${raw.replace(/^\/+/, "").replace(/\/+$/, "")}`;
 }
@@ -108,13 +108,13 @@ const RAW_UI_DARK = (process.env.NEXT_PUBLIC_UI_THEME_COLOR_DARK || "").trim();
 
 const DEFAULTS = {
   pwaLight: "#5561F2", // accent (manifest)
-  pwaDark: "#7b84ff", // accent pentru dark (opțional)
-  uiLight: "#ffffff", // culoare bară UI în light
-  uiDark: "#0b0b0d", // culoare bară UI în dark
+  pwaDark: "#7b84ff", // accent pentru dark (opČ›ional)
+  uiLight: "#ffffff", // culoare barÄ UI Ă®n light
+  uiDark: "#0b0b0d", // culoare barÄ UI Ă®n dark
 };
 
 export const THEME = {
-  // Manifest (accent) — păstrăm aliasul pentru compat
+  // Manifest (accent) â€” pÄstrÄm aliasul pentru compat
   pwaThemeColor: RAW_PWA_LIGHT || DEFAULTS.pwaLight,
   pwaThemeColorLight: RAW_PWA_LIGHT || DEFAULTS.pwaLight,
   pwaThemeColorDark: RAW_PWA_DARK || DEFAULTS.pwaDark,
@@ -178,7 +178,7 @@ function alignTrailingSlash(pathname: string): string {
 
 export function canonical(pathname: string): string {
   if (!SITE.url) {
-    devWarn("SITE.url este gol — nu pot construi canonical absolut.");
+    devWarn("SITE.url este gol â€” nu pot construi canonical absolut.");
     return pathname;
   }
   if (isExternal(pathname)) return pathname;
@@ -193,7 +193,7 @@ export function canonical(pathname: string): string {
 export function absoluteUrl(path: string): string {
   if (!path) return path;
   if (!SITE.url) {
-    devWarn("SITE.url este gol — nu pot construi URL absolut.");
+    devWarn("SITE.url este gol â€” nu pot construi URL absolut.");
     return path;
   }
   if (isExternal(path)) return path;
@@ -256,7 +256,7 @@ export const SITEMAPS = [
   "/sitemap-gallery.xml", // galerie
 ] as const;
 
-export const STATIC_ROUTES = ["/", "/services", "/contact", "/blog"] as const;
+export const STATIC_ROUTES = ["/", "/servicii", "/contact", "/blog"] as const;
 export const GALLERY_ATTACH_LIMIT = 100 as const;
 
 // ==============================
