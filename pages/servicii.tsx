@@ -78,12 +78,12 @@ const ServicesPage: NextPage = () => {
   return (
     <>
       <Seo
-        title="Servicii â€” salÄ de evenimente Ă®n FocČ™ani, Vrancea"
-        description="ZephiraEvents oferÄ organizare completÄ pentru nunČ›i, botezuri, majorate Č™i evenimente corporate Ă®n FocČ™ani, judeČ›ul Vrancea â€” salÄ de evenimente, meniu personalizat, decor, foto-video, DJ, coordonare A-Z Č™i servicii impecabile."
-        url={pagePath}
-        image={absoluteUrl("/api/og?p=/servicii")}
-        structuredData={[breadcrumbList, servicesItemList]}
-      />
+  title="Servicii — sală de evenimente în Focșani, Vrancea"
+  description="ZephiraEvents oferă organizare completă pentru nunți, botezuri, majorate și evenimente corporate în Focșani, județul Vrancea — sală de evenimente, meniu personalizat, decor, foto-video, DJ, coordonare A-Z și servicii impecabile."
+  url={pagePath}
+  image={absoluteUrl("/api/og?p=/servicii")}
+  structuredData={[breadcrumbList, servicesItemList]}
+/>
 
       <Breadcrumbs items={crumbs} />
 
