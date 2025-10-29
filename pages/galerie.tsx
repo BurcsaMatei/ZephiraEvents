@@ -197,7 +197,7 @@ function GaleriePage() {
       <Seo
         title="Galerie"
         description={seoDefaults.description}
-        image="/images/og-gallery.jpg"
+        image={absoluteUrl("/api/og?p=/galerie")}
         url="/galerie"
         structuredData={[breadcrumbList, imageGalleryLd]}
       />

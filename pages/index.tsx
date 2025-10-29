@@ -70,7 +70,7 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
         title="Acasă"
         description={seoDefaults.description}
         url="/"
-        image={seoDefaults.ogImage}
+        image={absoluteUrl("/api/og?p=/")}
         structuredData={[breadcrumbList]}
       />
 
