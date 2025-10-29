@@ -1,4 +1,4 @@
-// pages/services.tsx
+// pages/servicii.tsx
 
 // ==============================
 // Imports
@@ -23,7 +23,7 @@ import { absoluteUrl } from "../lib/config";
 const pagePath = "/servicii";
 
 const crumbs: Crumb[] = [
-  { name: "AcasÄ", href: "/" },
+  { name: "Acasă", href: "/" },
   { name: "Servicii", current: true },
 ];
 
@@ -31,28 +31,42 @@ const breadcrumbList = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
   itemListElement: [
-    { "@type": "ListItem", position: 1, name: "AcasÄ", item: absoluteUrl("/") },
+    { "@type": "ListItem", position: 1, name: "Acasă", item: absoluteUrl("/") },
     { "@type": "ListItem", position: 2, name: "Servicii", item: absoluteUrl(pagePath) },
   ],
 } as const satisfies Json;
 
-// JSON-LD: ItemList de servicii (nume + descriere, fÄrÄ URL individual)
+// JSON-LD: ItemList de servicii (nume + descriere, fără URL individual)
 const serviceItems = [
   {
-    name: "Design UI/UX",
-    description: "Proiectare interfeČ›e clare Č™i moderne, orientate pe conversie.",
+    name: "Locație & sală de evenimente",
+    description:
+      "Sală modernă în Focșani, setup flexibil pentru nuntă, botez, majorat sau corporate.",
   },
   {
-    name: "Dezvoltare Next.js",
-    description: "Site-uri rapide, scalabile, cu TypeScript strict Č™i bune practici.",
+    name: "Organizare & coordonare A–Z",
+    description:
+      "Planificare completă, timeline asumat, check-list și coordonare în ziua evenimentului.",
   },
   {
-    name: "Optimizare performanČ›Ä & SEO tehnic",
-    description: "AnalizÄ, corecČ›ii Č™i bune practici pentru vitezÄ Č™i indexare.",
+    name: "Meniu & catering",
+    description:
+      "Meniuri personalizate, servire impecabilă, opțiuni dietare (vegetarian, copii, alergeni).",
   },
   {
-    name: "ConČ›inut Č™i blog",
-    description: "StructurÄ editorialÄ Č™i texte clare, optimizate pentru SEO.",
+    name: "Decor & aranjamente",
+    description:
+      "Concept vizual, flori, candy bar, zone foto, semnalistică și styling al sălii.",
+  },
+  {
+    name: "Foto-video & DJ/MC",
+    description:
+      "Parteneri validați, pachete flexibile, sunet și lumini potrivite pentru atmosferă.",
+  },
+  {
+    name: "Corporate & conferințe",
+    description:
+      "Setup scenă/ecran, logistică pentru prezentări, coffee break & protocol.",
   },
 ] as const;
 
@@ -78,12 +92,12 @@ const ServicesPage: NextPage = () => {
   return (
     <>
       <Seo
-  title="Servicii — sală de evenimente în Focșani, Vrancea"
-  description="ZephiraEvents oferă organizare completă pentru nunți, botezuri, majorate și evenimente corporate în Focșani, județul Vrancea — sală de evenimente, meniu personalizat, decor, foto-video, DJ, coordonare A-Z și servicii impecabile."
-  url={pagePath}
-  image={absoluteUrl("/api/og?p=/servicii")}
-  structuredData={[breadcrumbList, servicesItemList]}
-/>
+        title="Servicii — sală de evenimente în Focșani, Vrancea"
+        description="ZephiraEvents oferă organizare completă pentru nunți, botezuri, majorate și evenimente corporate în Focșani, județul Vrancea — sală de evenimente, meniu personalizat, decor, foto-video, DJ, coordonare A–Z și servicii impecabile."
+        url={pagePath}
+        image={absoluteUrl("/api/og?p=/servicii")}
+        structuredData={[breadcrumbList, servicesItemList]}
+      />
 
       <Breadcrumbs items={crumbs} />
 
@@ -93,10 +107,10 @@ const ServicesPage: NextPage = () => {
           <Appear>
             <Hero
               title="Servicii ZephiraEvents"
-              subtitle="SalÄ de evenimente Ă®n FocČ™ani, Vrancea â€” organizare completÄ pentru nunČ›i, botezuri, majorate Č™i corporate, cu servicii impecabile Č™i coordonare A-Z."
+              subtitle="Sală de evenimente în Focșani, Vrancea — organizare completă pentru nunți, botezuri, majorate și corporate, cu servicii impecabile și coordonare A–Z."
               image={{
                 src: "/images/current/hero-services.jpg",
-                alt: "SalÄ de evenimente ZephiraEvents din FocČ™ani",
+                alt: "Sală de evenimente ZephiraEvents din Focșani",
               }}
               height="md"
             />
@@ -106,15 +120,15 @@ const ServicesPage: NextPage = () => {
 
       <Separator />
 
-      {/* GrupÄm secČ›iunile pentru intrare pe rĂ˘nd (stagger Ă®ntre secČ›iuni) */}
+      {/* Grupăm secțiunile pentru intrare pe rând (stagger între secțiuni) */}
       <AppearGroup stagger={0.12} delay={0.06} amount={0.2}>
         <section className="section">
           <div className="container">
             <Appear>
               <IntroSection
-                eyebrow="Ce oferim Ă®n FocČ™ani, Vrancea"
-                title="Servicii complete pentru evenimente reuČ™ite"
-                lede="De la planificare Č™i design de salÄ la meniu, decor, foto-video, DJ Č™i coordonare Ă®n ziua evenimentului â€” soluČ›ii end-to-end pentru nuntÄ, botez, majorat sau corporate, cu servicii impecabile Č™i atenČ›ie la detalii."
+                eyebrow="Ce oferim în Focșani, Vrancea"
+                title="Servicii complete pentru evenimente reușite"
+                lede="De la planificare și design de sală la meniu, decor, foto-video, DJ și coordonare în ziua evenimentului — soluții end-to-end pentru nuntă, botez, majorat sau corporate, cu servicii impecabile și atenție la detalii."
               />
             </Appear>
           </div>
@@ -122,7 +136,7 @@ const ServicesPage: NextPage = () => {
 
         <Separator />
 
-        {/* Lista completÄ de servicii */}
+        {/* Lista completă de servicii */}
         <section className="section">
           <div className="container">
             <Appear>
@@ -139,38 +153,38 @@ const ServicesPage: NextPage = () => {
               <MotivationCards
                 items={[
                   {
-                    title: "Organizare & logisticÄ",
+                    title: "Organizare & logistică",
                     points: [
-                      "Plan dedicat pentru nuntÄ, botez, majorat",
-                      "Coordonare A-Z Ă®n ziua evenimentului",
+                      "Plan dedicat pentru nuntă, botez, majorat",
+                      "Coordonare A–Z în ziua evenimentului",
                       "Parteneri: DJ, foto-video, decor",
                     ],
                     mediaSrc: "/images/motivationcards/mc-09.jpg",
                   },
                   {
-                    title: "LocaČ›ie & meniu",
+                    title: "Locație & meniu",
                     points: [
-                      "SalÄ de evenimente Ă®n FocČ™ani, Vrancea",
-                      "Meniu personalizat & servire impecabilÄ",
+                      "Sală de evenimente în Focșani, Vrancea",
+                      "Meniu personalizat & servire impecabilă",
                       "Setup flexibil: clasic, modern, corporate",
                     ],
                     mediaSrc: "/images/motivationcards/mc-10.jpg",
                   },
                   {
-                    title: "ExperienČ›a invitaČ›ilor",
+                    title: "Experiența invitaților",
                     points: [
-                      "Flow de salÄ pentru confort",
+                      "Flow de sală pentru confort",
                       "Zone foto & momente speciale",
-                      "Acces facil, parcare, semnalisticÄ",
+                      "Acces facil, parcare, semnalistică",
                     ],
                     mediaSrc: "/images/motivationcards/mc-11.jpg",
                   },
                   {
-                    title: "TransparenČ›Ä & siguranČ›Ä",
+                    title: "Transparență & siguranță",
                     points: [
-                      "OfertÄ clarÄ, fÄrÄ costuri ascunse",
-                      "Timeline asumat Č™i check-listuri",
-                      "Suport prompt Ă®nainte Č™i dupÄ eveniment",
+                      "Ofertă clară, fără costuri ascunse",
+                      "Timeline asumat și check-listuri",
+                      "Suport prompt înainte și după eveniment",
                     ],
                     mediaSrc: "/images/motivationcards/mc-12.jpg",
                   },
@@ -184,10 +198,10 @@ const ServicesPage: NextPage = () => {
           <div className="container">
             <Appear>
               <Outro
-                eyebrow="RezervÄ sala â€” FocČ™ani"
-                title="Spune-ne data Č™i tipul evenimentului"
-                lead="Trimite detalii despre nuntÄ, botez, majorat sau corporate (numÄr invitaČ›i, preferinČ›e). ĂŽČ›i rÄspundem rapid cu disponibilitatea Č™i oferta personalizatÄ."
-                cta={{ label: "SolicitÄ ofertÄ", href: "/contact" }}
+                eyebrow="Rezervă sala — Focșani"
+                title="Spune-ne data și tipul evenimentului"
+                lead="Trimite detalii despre nuntă, botez, majorat sau corporate (număr invitați, preferințe). Îți răspundem rapid cu disponibilitatea și oferta personalizată."
+                cta={{ label: "Solicită ofertă", href: "/contact" }}
               />
             </Appear>
           </div>
