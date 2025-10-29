@@ -26,17 +26,17 @@ export type NavItem = { href: string; label: string };
 export type SocialKind = "facebook" | "instagram" | "tiktok";
 export type SocialItem = { href: string; label: string; kind: SocialKind };
 
-/** (OpČ›ional) Grupuri/submeniuri pentru scalare ulterioarÄ */
+/** (Opțional) Grupuri/submeniuri pentru scalare ulterioară */
 export type NavGroup = {
   label: string;
   items: readonly NavItem[];
 };
 
 // ==============================
-// Navigation (principal) â€” readonly
+// Navigation (principal) — readonly
 // ==============================
 export const NAV = [
-  { href: "/", label: "AcasÄ" },
+  { href: "/", label: "Acasă" },
   { href: "/galerie", label: "Galerie" },
   { href: "/servicii", label: "Servicii" },
   { href: "/blog", label: "Blog" },
@@ -44,7 +44,7 @@ export const NAV = [
 ] as const satisfies readonly NavItem[];
 
 // ==============================
-// Social â€” din .env/CMS cu fallback-uri sigure
+// Social — din .env/CMS cu fallback-uri sigure
 // ==============================
 const FB_DEFAULT = "https://facebook.com/";
 const IG_DEFAULT = "https://instagram.com/";
@@ -73,22 +73,22 @@ export function isExternal(url: string): boolean {
   return /^https?:\/\//i.test(url) || url.startsWith("//");
 }
 
-/** AplicÄ BASE_PATH pe rutele interne; externele rÄmĂ˘n intacte.
- *  NotÄ: al doilea argument este pÄstrat pentru compat, dar nu mai este folosit.
+/** Aplică BASE_PATH pe rutele interne; externele rămân intacte.
+ *  Notă: al doilea argument este păstrat pentru compat, dar nu mai este folosit.
  */
 export function resolveNavHref(href: string, _basePath?: string): string {
   if (!href) return href;
   return withBase(href);
 }
 
-/** VariantÄ absolutÄ â€” utilÄ pentru sitemap/JSON-LD. */
+/** Variantă absolută — utilă pentru sitemap/JSON-LD. */
 export function resolveNavHrefAbsolute(href: string): string {
   if (!href) return href;
   return absoluteUrl(href);
 }
 
 // ==============================
-// Dev safety (Ă®ngheČ›Äm structurile Ă®n dev)
+// Dev safety (înghețăm structurile în dev)
 // ==============================
 if (isDev()) {
   try {
@@ -98,11 +98,11 @@ if (isDev()) {
     // ignore
   }
 
-  // warn dacÄ existÄ href intern care nu Ă®ncepe cu "/" (evitÄm surprize)
+  // warn dacă există href intern care nu începe cu "/" (evităm surprize)
   for (const it of NAV as readonly NavItem[]) {
     if (!isExternal(it.href) && !it.href.startsWith("/")) {
       devWarn(
-        `NAV item "${it.label}" are href relativ fÄrÄ "/": "${it.href}". Recomandat: prefixeazÄ cu "/".`,
+        `NAV item "${it.label}" are href relativ fără "/": "${it.href}". Recomandat: prefixează cu "/".`,
       );
     }
   }
