@@ -99,10 +99,10 @@ const cardBase = style({
   boxShadow: vars.shadow.sm,
   border: `1px solid ${vars.color.border}`,
   minWidth: 320,
-  position: "relative", // ⭐ necesar pentru overlay button
+  position: "relative",
 });
 
-// ⭐ nou: buton absolut, acoperă întreg cardul (pentru a11y + click/keyboard)
+// Full-card overlay (păstrează comportamentul de toggle pe tot cardul în /reviews)
 export const cardInteractiveBtn = style({
   position: "absolute",
   inset: 0,
@@ -119,10 +119,71 @@ export const cardInteractiveBtn = style({
   },
 });
 
-export const cardFixedClass = style([cardBase, { width: 420, height: 200 }]); // Home: înălțime egală
-export const cardAutoClass = style([cardBase]); // /reviews: bază
+// ⭐ nou: buton săgeată stânga-jos (affordance)
+export const cardAffordanceBtn = style({
+  position: "absolute",
+  left: vars.space.md,
+  bottom: vars.space.md,
+  zIndex: 2, // peste overlay-ul full-card
+  width: 28,
+  height: 28,
+  borderRadius: "999px",
+  border: `1px solid ${vars.color.border}`,
+  background: vars.color.surface,
+  cursor: "pointer",
+  display: "grid",
+  placeItems: "center",
+  transition: `background ${vars.motion.normal} ${vars.motion.easing.standard}, border-color ${vars.motion.normal} ${vars.motion.easing.standard}`,
+  selectors: {
+    "&::after": {
+      content: "",
+      display: "block",
+      width: 10,
+      height: 10,
+      borderLeft: `2px solid ${vars.color.text}`,
+      borderBottom: `2px solid ${vars.color.text}`,
+      transform: "rotate(-45deg)", // chevron jos-stânga (indicativ expand)
+      transition: `transform ${vars.motion.normal} ${vars.motion.easing.standard}`,
+    },
+    // rotire când cardul este expandat
+    '[data-expanded="true"] &::after': {
+      transform: "rotate(135deg)", // chevron sus-stânga (indicativ collapse)
+    },
+    "&:hover": {
+      background: vars.color.cardBg,
+    },
+    "&:focus-visible": {
+      outline: `2px solid ${vars.color.focus}`,
+      outlineOffset: 2,
+    },
+  },
+});
+
+// ⭐ nou: overlay link pentru Home (click-through → /reviews)
+export const cardOverlayLink = style({
+  position: "absolute",
+  inset: 0,
+  zIndex: 1,
+  textDecoration: "none",
+  // focus vizibil pentru accesibilitate
+  selectors: {
+    "&:focus-visible": {
+      outline: `2px solid ${vars.color.focus}`,
+      outlineOffset: 4,
+    },
+  },
+});
+
+export const cardFixedClass = style([cardBase, { width: 420, height: 200 }]); // Home
+export const cardAutoClass = style([
+  cardBase,
+  {
+    width: "100%",
+    maxWidth: 420, // /reviews: limităm lățimea pentru centrare corectă
+  },
+]);
 export const cardPageCollapsedClass = style({
-  height: 220, // egalizare vizuală în listă
+  height: 220, // egalizare vizuală
   cursor: "pointer",
 });
 export const cardPageExpandedClass = style({
@@ -209,17 +270,20 @@ globalStyle(`${ctaRowClass} a:hover`, {
 });
 
 // ==============================
-// LISTĂ STATICĂ (/reviews) — 4/2/1 + hover border primar
+// LISTĂ STATICĂ (/reviews) — 1/2/4 centrat
 // ==============================
 export const listWrapClass = style({
   display: "grid",
   gap: vars.space.md,
-  gridTemplateColumns: "1fr",
+  gridTemplateColumns: "repeat(1, minmax(320px, max-content))",
+  justifyContent: "center",
+  justifyItems: "stretch",
   "@media": {
-    [mq.md]: { gridTemplateColumns: "1fr 1fr" },
-    [mq.xl]: { gridTemplateColumns: "1fr 1fr 1fr 1fr" },
+    [mq.md]: { gridTemplateColumns: "repeat(2, minmax(320px, max-content))" },
+    [mq.xl]: { gridTemplateColumns: "repeat(4, minmax(320px, max-content))" },
   },
 });
+
 // Hover border primar doar în pagina /reviews
 globalStyle(`${listWrapClass} ${cardAutoClass}:hover`, {
   borderColor: vars.color.primary,

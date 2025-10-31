@@ -6,6 +6,7 @@ import type { GetServerSideProps } from "next";
 import Head from "next/head";
 
 import Reviews from "../components/sections/Reviews";
+import { SITE } from "../lib/config";
 import { kv } from "../lib/kv";
 import type { Review } from "../lib/reviews";
 
@@ -57,15 +58,17 @@ export default function ReviewsPage({ page, perPage, items, total }: Props) {
       <Head>
         <title>Recenzii — ZephiraEvents</title>
         <meta name="robots" content="index,follow" />
+        <link rel="canonical" href={`${SITE.url}/reviews`} />
       </Head>
 
       {/* Formular doar pe pagina 1 + listă carduri egale, expand pe click */}
       <Reviews
         showForm={page === 1}
         fullBleed={false}
-        limit={Math.max(perPage, items.length)}
+        limit={perPage}
         mode="page"
-        heading="Recenzii-ZephiraEvents"
+        heading="Recenzii"
+        initialItems={items}
         formTitle="Scrie și tu o recenzie aici și spune-ne mai multe despre experiența ta la ZephiraEvents"
         formSubtitle="Toate recenziile sunt verificate iar recenzia ta va fi publicată pe site. Trimițând, confirmi că ești de acord ca numele și mesajul să fie afișate public."
       />
@@ -77,7 +80,7 @@ export default function ReviewsPage({ page, perPage, items, total }: Props) {
             ← Înapoi
           </a>
         )}
-        <span>
+        <span aria-current="page">
           Pagina {page} / {lastPage}
         </span>
         {next && (
