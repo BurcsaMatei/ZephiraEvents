@@ -11,9 +11,11 @@ import type { Review } from "../../lib/reviews";
 import {
   bandClass,
   bandsWrapClass,
+  cardAffordanceBtn, // săgeată stânga-jos
   cardAutoClass,
   cardFixedClass,
-  cardInteractiveBtn, // ⭐ new
+  cardInteractiveBtn, // full-card toggle (page)
+  cardOverlayLink, // click-through Home → /reviews
   cardPageCollapsedClass,
   cardPageExpandedClass,
   ctaRowClass,
@@ -39,6 +41,8 @@ type Props = {
   heading?: string;
   formTitle?: string;
   formSubtitle?: string;
+  /** SSR items pentru pagina /reviews — evită CLS */
+  initialItems?: Review[];
 };
 
 async function fetchLatest(n: number): Promise<Review[]> {
@@ -77,6 +81,7 @@ function ReviewCard({
   pageMode?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const contentId = `rv-content-${it.id}`;
 
   const CardClass = fixed
     ? cardFixedClass
@@ -89,16 +94,41 @@ function ReviewCard({
   const TextClass = fixed ? textClampClass : pageMode && !expanded ? textClampClass : textAutoClass;
 
   return (
-    <article className={CardClass}>
+    <article
+      className={CardClass}
+      data-expanded={pageMode ? (expanded ? "true" : "false") : undefined}
+    >
       {pageMode ? (
-        <button
-          type="button"
-          className={cardInteractiveBtn}
-          aria-label={expanded ? "Restrânge recenzia" : "Extinde recenzia"}
-          aria-expanded={expanded}
-          onClick={() => setExpanded((v) => !v)}
-        />
-      ) : null}
+        <>
+          {/* Full-card toggle pentru a păstra acțiunea existentă */}
+          <button
+            type="button"
+            className={cardInteractiveBtn}
+            aria-label={expanded ? "Restrânge recenzia" : "Extinde recenzia"}
+            aria-expanded={expanded}
+            aria-controls={contentId}
+            onClick={() => setExpanded((v) => !v)}
+          />
+          {/* Affordance: săgeată stânga-jos */}
+          <button
+            type="button"
+            className={cardAffordanceBtn}
+            aria-label={expanded ? "Restrânge recenzia" : "Extinde recenzia"}
+            aria-expanded={expanded}
+            aria-controls={contentId}
+            onClick={() => setExpanded((v) => !v)}
+          />
+        </>
+      ) : (
+        // Home: click pe card → /reviews (CTA generic)
+        <Link
+          href="/reviews"
+          className={cardOverlayLink}
+          aria-label="Deschide pagina cu toate recenziile"
+        >
+          <span />
+        </Link>
+      )}
 
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
@@ -113,7 +143,9 @@ function ReviewCard({
         <span>{formatDate(it.createdAt)}</span>
       </div>
       <Stars rating={it.rating} />
-      <p className={TextClass}>{it.text}</p>
+      <p className={TextClass} id={contentId}>
+        {it.text}
+      </p>
       {Array.isArray(it.photos) && it.photos.length > 0 && (
         <div className="photos">
           {it.photos.map((u) => (
@@ -134,8 +166,10 @@ export default function Reviews({
   heading = "Recenzii",
   formTitle,
   formSubtitle,
+  initialItems,
 }: Props) {
-  const [items, setItems] = useState<Review[]>([]);
+  // INIT din SSR pe pagină → evită CLS; Home va popula prin fetch
+  const [items, setItems] = useState<Review[]>(initialItems ?? []);
 
   const reload = useCallback(async () => {
     const data = await fetchLatest(limit);
@@ -143,8 +177,12 @@ export default function Reviews({
   }, [limit]);
 
   useEffect(() => {
+    // Bypass fetch la mount dacă suntem în pagina /reviews și avem initialItems
+    if (mode === "page" && Array.isArray(initialItems) && initialItems.length > 0) {
+      return;
+    }
     void reload();
-  }, [reload]);
+  }, [reload, mode, initialItems]);
 
   const topItems = useMemo(() => items.filter((_, i) => i % 2 === 0), [items]);
   const bottomItems = useMemo(() => items.filter((_, i) => i % 2 === 1), [items]);
