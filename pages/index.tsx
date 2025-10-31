@@ -15,6 +15,7 @@ import HeroIndex from "../components/sections/homepage/HeroIndex";
 import IntroSection from "../components/sections/IntroSection";
 import MotivationCards from "../components/sections/MotivationCards";
 import Outro from "../components/sections/Outro";
+import Reviews from "../components/sections/Reviews";
 import { Serviciipreview } from "../components/sections/Serviciipreview";
 import Seo from "../components/Seo";
 import Separator from "../components/Separator";
@@ -87,7 +88,7 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
 
       <Separator />
 
-      {/* Subfold: grupăm pentru intrare pe rând */}
+      {/* Subfold: grupăm pentru intrare pe rând (fără Reviews aici) */}
       <AppearGroup stagger={0.12} delay={0.06} amount={0.2}>
         {/* Intro */}
         <section className="section">
@@ -180,10 +181,17 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
             </Appear>
           </div>
         </section>
+      </AppearGroup>
 
-        <Separator />
+      <Separator />
 
-        {/* Outro */}
+      {/* REVIEWS FULL-BLEED — ÎN AFARA oricărui .container / .section / AppearGroup */}
+      <Reviews fullBleed mode="home" showForm={false} limit={12} />
+
+      <Separator />
+
+      {/* Outro (păstrăm structura originală, în container) */}
+      <AppearGroup stagger={0.12} delay={0.06} amount={0.2}>
         <section className="section">
           <div className="container">
             <Appear>

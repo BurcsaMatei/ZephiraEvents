@@ -55,8 +55,7 @@ const serviceItems = [
   },
   {
     name: "Decor & aranjamente",
-    description:
-      "Concept vizual, flori, candy bar, zone foto, semnalistică și styling al sălii.",
+    description: "Concept vizual, flori, candy bar, zone foto, semnalistică și styling al sălii.",
   },
   {
     name: "Foto-video & DJ/MC",
@@ -65,8 +64,7 @@ const serviceItems = [
   },
   {
     name: "Corporate & conferințe",
-    description:
-      "Setup scenă/ecran, logistică pentru prezentări, coffee break & protocol.",
+    description: "Setup scenă/ecran, logistică pentru prezentări, coffee break & protocol.",
   },
 ] as const;
 

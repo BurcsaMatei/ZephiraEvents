@@ -108,9 +108,9 @@ const RAW_UI_DARK = (process.env.NEXT_PUBLIC_UI_THEME_COLOR_DARK || "").trim();
 
 const DEFAULTS = {
   pwaLight: "#5561F2", // accent (manifest)
-  pwaDark: "#7b84ff",  // accent pentru dark (opțional)
-  uiLight: "#ffffff",  // culoare bară UI în light
-  uiDark: "#0b0b0d",   // culoare bară UI în dark
+  pwaDark: "#7b84ff", // accent pentru dark (opțional)
+  uiLight: "#ffffff", // culoare bară UI în light
+  uiDark: "#0b0b0d", // culoare bară UI în dark
 };
 
 export const THEME = {
@@ -250,10 +250,10 @@ export const SEO_DEFAULTS = {
 // Sitemap / Routes / Limits
 // ==============================
 export const SITEMAPS = [
-  "/sitemap.xml",        // index
-  "/sitemap-pages.xml",  // pagini non-blog
-  "/sitemap-posts.xml",  // articole blog
-  "/sitemap-gallery.xml" // galerie
+  "/sitemap.xml", // index
+  "/sitemap-pages.xml", // pagini non-blog
+  "/sitemap-posts.xml", // articole blog
+  "/sitemap-gallery.xml", // galerie
 ] as const;
 
 export const STATIC_ROUTES = ["/", "/servicii", "/contact", "/blog"] as const;

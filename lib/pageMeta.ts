@@ -73,4 +73,3 @@ export function getPageMeta(path: string): PageMeta {
   const route = normalizeRoute(path);
   return PAGE_META[route] ?? PAGE_META["/"];
 }
-
