@@ -1,6 +1,5 @@
 // styles/sections/reviewsForm.css.ts
 import { globalStyle, style } from "@vanilla-extract/css";
-
 import { mq, vars } from "../theme.css";
 
 export const formClass = style({
@@ -12,6 +11,8 @@ export const formClass = style({
   border: `1px solid ${vars.color.border}`,
   borderRadius: vars.radius.lg,
   boxShadow: vars.shadow.sm,
+  width: "100%",
+  maxWidth: "100%",
 });
 
 export const rowClass = style({
@@ -34,6 +35,7 @@ export const inputClass = style({
   background: vars.color.surface,
   color: vars.color.text,
   fontSize: vars.typography.size.md,
+  width: "100%",
   transition: `border-color ${vars.motion.fast} ${vars.motion.easing.standard}, box-shadow ${vars.motion.fast} ${vars.motion.easing.standard}`,
   selectors: {
     "&::placeholder": { color: vars.color.muted },
@@ -57,7 +59,6 @@ export const actionsClass = style({
   gap: vars.space.md,
 });
 
-// Descendenți mutați pe globalStyle (no '& > button' în style())
 globalStyle(`${actionsClass} > button`, {
   padding: `${vars.space.sm} ${vars.space.lg}`,
   borderRadius: vars.radius.md,
@@ -80,6 +81,14 @@ export const fileHintClass = style({
 export const filesPreviewClass = style({
   display: "flex",
   gap: vars.space.sm,
+  flexWrap: "wrap",
+});
+
+globalStyle(`${filesPreviewClass} img`, {
+  maxWidth: 120,
+  height: "auto",
+  borderRadius: vars.radius.md,
+  border: `1px solid ${vars.color.border}`,
 });
 
 export const avatarPreviewClass = style({
