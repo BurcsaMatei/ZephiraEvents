@@ -35,7 +35,6 @@ export const fullBleedClass = style({
   marginLeft: "-50vw",
   marginRight: "-50vw",
   isolation: "isolate",
-  background: vars.color.surface,
 });
 
 // Header
