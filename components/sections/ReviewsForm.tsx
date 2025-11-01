@@ -189,7 +189,6 @@ export default function ReviewsForm({ onCreated }: Props) {
             );
           })}
         </div>
-        {/* Input ascuns pentru compatibilitate/validare (dacă e nevoie) */}
         <input type="hidden" name="rating" value={rating} />
       </div>
 
