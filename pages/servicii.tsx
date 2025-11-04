@@ -9,6 +9,7 @@ import Appear, { AppearGroup } from "../components/animations/Appear";
 import Breadcrumbs, { type Crumb } from "../components/Breadcrumbs";
 import Hero from "../components/sections/Hero";
 import IntroSection from "../components/sections/IntroSection";
+import MenuOffers from "../components/sections/MenuOffers";
 import MotivationCards from "../components/sections/MotivationCards";
 import Outro from "../components/sections/Outro";
 import ServiciiComplete from "../components/sections/servicii/ServiciiComplete";
@@ -143,6 +144,10 @@ const ServicesPage: NextPage = () => {
           </div>
         </section>
 
+        <Separator />
+        <Appear>
+          <MenuOffers />
+        </Appear>
         <Separator />
 
         <section className="section">
