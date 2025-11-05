@@ -58,8 +58,8 @@ export default function FormContact() {
     const message = String(fd.get("message") || "").trim();
     const hpt = String(fd.get("_hpt") || ""); // honeypot (must be empty)
 
-    // pick up v2 checkbox token injected by reCAPTCHA
-    const recaptchaEl = document.querySelector<HTMLTextAreaElement>(
+    // pick up v2 checkbox token injected by reCAPTCHA — SCOPED LA FORMULAR
+    const recaptchaEl = f.querySelector<HTMLTextAreaElement>(
       'textarea[name="g-recaptcha-response"]',
     );
     const recaptchaToken = (recaptchaEl?.value || "").trim();
