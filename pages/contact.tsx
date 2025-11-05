@@ -8,6 +8,7 @@ import type { NextPage } from "next";
 import Appear, { AppearGroup } from "../components/animations/Appear";
 import type { Crumb } from "../components/Breadcrumbs";
 import Breadcrumbs from "../components/Breadcrumbs";
+import OfferRequest from "../components/forms/OfferRequest";
 import ContactInfo from "../components/sections/contact/ContactInfo";
 import ContactMapIframeConsent from "../components/sections/contact/ContactMapIframeConsent";
 import FormContact from "../components/sections/contact/FormContact";
@@ -186,6 +187,13 @@ const ContactPage: NextPage = () => (
         </section>
       )}
 
+      <Separator />
+      {/* ==== «Solicită ofertă» — după formularul de contact existent ==== */}
+      <section className="section">
+        <div className="container">
+          <OfferRequest />
+        </div>
+      </section>
       <Separator />
 
       {/* Hartă */}

@@ -37,8 +37,8 @@ export type ServiciipreviewProps = {
 const DEFAULT_PREVIEW: PreviewItem[] = [
   {
     id: "organizare-nunta",
-    title: "Organizare NuntÄ",
-    description: "Planificare completÄ, decor, muzicÄ, coordonare.",
+    title: "Organizare nuntă",
+    description: "Planificare completă, decor, muzică, coordonare.",
     iconSrc: "/icons/servicii/service1.svg",
   },
   {
@@ -50,7 +50,7 @@ const DEFAULT_PREVIEW: PreviewItem[] = [
   {
     id: "corporate-team-building",
     title: "Corporate & Team Building",
-    description: "LogisticÄ, scenÄ, sonorizare, agendÄ clarÄ.",
+    description: "Logistică, scenă, sonorizare, agendă clară.",
     iconSrc: "/icons/servicii/service3.svg",
   },
   {
@@ -66,8 +66,8 @@ const DEFAULT_PREVIEW: PreviewItem[] = [
 // ==============================
 export default function Serviciipreview({
   items = DEFAULT_PREVIEW,
-  title = "Servicii â€” pe scurt",
-  subtitle = "O privire rapidÄ asupra a ceea ce livrÄm constant.",
+  title = "Servicii — pe scurt",
+  subtitle = "O privire rapidă asupra a ceea ce livrăm constant.",
 }: ServiciipreviewProps): JSX.Element {
   return (
     <>
@@ -79,7 +79,7 @@ export default function Serviciipreview({
         <p className={s.previewSubtitle}>{subtitle}</p>
       </div>
 
-      {/* Grid servicii â€” intrare pe rĂ˘nd fÄrÄ wrapper intermediar */}
+      {/* Grid servicii — intrare pe rând fără wrapper intermediar */}
       <ul className={s.grid} aria-labelledby="services-preview-title">
         {items.map((it, i) => (
           <Appear as="li" key={it.id} className={s.cardSmall} delay={0.1 * i}>
@@ -118,7 +118,7 @@ export default function Serviciipreview({
           className={`${btn} ${btnPrimary}`}
           aria-label="Vezi toate serviciile"
         >
-          Vezi toate serviciile â†’
+          Vezi toate serviciile →
         </Button>
       </div>
     </>

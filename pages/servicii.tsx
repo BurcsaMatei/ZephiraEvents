@@ -9,6 +9,7 @@ import Appear, { AppearGroup } from "../components/animations/Appear";
 import Breadcrumbs, { type Crumb } from "../components/Breadcrumbs";
 import Hero from "../components/sections/Hero";
 import IntroSection from "../components/sections/IntroSection";
+import MenuOffers from "../components/sections/MenuOffers";
 import MotivationCards from "../components/sections/MotivationCards";
 import Outro from "../components/sections/Outro";
 import ServiciiComplete from "../components/sections/servicii/ServiciiComplete";
@@ -57,6 +58,7 @@ const serviceItems = [
     name: "Decor & aranjamente",
     description:
       "Concept vizual, flori, candy bar, zone foto, semnalistică și styling al sălii.",
+    description: "Concept vizual, flori, candy bar, zone foto, semnalistică și styling al sălii.",
   },
   {
     name: "Foto-video & DJ/MC",
@@ -67,6 +69,7 @@ const serviceItems = [
     name: "Corporate & conferințe",
     description:
       "Setup scenă/ecran, logistică pentru prezentări, coffee break & protocol.",
+    description: "Setup scenă/ecran, logistică pentru prezentări, coffee break & protocol.",
   },
 ] as const;
 
@@ -145,6 +148,10 @@ const ServicesPage: NextPage = () => {
           </div>
         </section>
 
+        <Separator />
+        <Appear>
+          <MenuOffers />
+        </Appear>
         <Separator />
 
         <section className="section">

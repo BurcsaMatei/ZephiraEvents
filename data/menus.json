@@ -1,0 +1,194 @@
+[
+  {
+    "slug": "basic",
+    "title": "Oferta Meniu Basic",
+    "pricePerPers": 56,
+    "currency": "EUR",
+    "image": "/images/servicii/meniu/meniu-01.jpg",
+    "imageAlt": "Meniu Basic — platouri reci, salau butter lemon, sarmalute, cotlet porc",
+    "sections": {
+      "starterRece": [
+        "Terina de pui cu branzeturi",
+        "Evantai de muschi file",
+        "Trandafir cascaval in ardei cu masline",
+        "Floare din salam banatean",
+        "Frigarui Capresse",
+        "Rulada de spanac cu branzeturi",
+        "Turnulet de castravete",
+        "Mousse de avocado cu somon"
+      ],
+      "antreuCald": "File de salau de Nil cu sos butter lemon, orez black and white si legume sote",
+      "felIntermediar": "Sarmalute in frunza de varza cu mamaliguta, ardei iute si smantana",
+      "felPrincipal": "Cotlet de porc la cuptor, rulouri de pui in bacon, cartofi zdrobiti cu rozmarin si salata verde",
+      "pachetBar": [
+        "Apa plata/minerala — nelimitat",
+        "Pepsi/Mirinda — nelimitat",
+        "Suc natural — nelimitat",
+        "Gheata frapiera — nelimitat, paine/chifle"
+      ]
+    }
+  },
+  {
+    "slug": "gold",
+    "title": "Oferta Meniu Gold",
+    "pricePerPers": 68,
+    "currency": "EUR",
+    "image": "/images/servicii/meniu/meniu-02.jpg",
+    "imageAlt": "Meniu Gold — platouri reci, pastrav risotto, sarmalute, ceafa porc",
+    "sections": {
+      "starterRece": [
+        "Prajitura de curcan in straturi",
+        "Simfonie pescareasca",
+        "Frigarui Capresse",
+        "Specialitate de branzeturi cu struguri si alune",
+        "Parfait de ficat cu dulceata de ardei",
+        "Terina de pui cu muschiulet de porc",
+        "Rulada mozaic cu prosciutto si branzeturi",
+        "Telemea in kataif cu dulceata si rosii",
+        "Terina de pui cu cabanos",
+        "Tortulet cu mezeluri si cascaval",
+        "Buchet de legume"
+      ],
+      "antreuCald": "File de pastrav pe pat de risotto cu parmezan, tagliatele de legume si sos lemon-butter",
+      "felIntermediar": "Sarmalute traditionale mixte (vie si varza) cu mamaliguta, smantana si ardei iute",
+      "felPrincipal": "Buturuga delicioasa de porc (ceafa) cu sos brun, rulouri de pui in bacon, cartofi zdrobiti gratinati cu cascaval si salata verde",
+      "pachetBar": [
+        "Apa plata/minerala — nelimitat",
+        "Pepsi/Mirinda — nelimitat",
+        "Suc natural — nelimitat",
+        "Gheata frapiera — nelimitat, paine/chifle"
+      ]
+    }
+  },
+  {
+    "slug": "traditional",
+    "title": "Oferta Meniu Traditional",
+    "pricePerPers": 76,
+    "currency": "EUR",
+    "image": "/images/servicii/meniu/meniu-03.jpg",
+    "imageAlt": "Meniu Traditional — platouri reci traditionale, pastrav risotto, sarmalute mixte, fel principal cu porc si pui",
+    "sections": {
+      "starterRece": [
+        "Ceafa de porc afumat, castravete, ardei gras",
+        "Salam crud uscat",
+        "Chiftelute de pui",
+        "Mini snitele din piept de curcan",
+        "Frigarui Capresse",
+        "Carnati afumati",
+        "Rulada de pui cu legume",
+        "Mix de branzeturi, masline asortate",
+        "Bulete de cascaval"
+      ],
+      "antreuCald": "File de pastrav pe pat de risotto cu parmezan, tagliatele de legume si sos lemon-butter",
+      "felIntermediar": "Sarmalute in foi de vita si de varza cu mamaliguta, smantana si ardei iute",
+      "felPrincipal": [
+        "Buturuga de porc cu sos brun",
+        "Rulouri de pui in bacon",
+        "Cartofi aurii cu rozmarin",
+        "Salata verde"
+      ],
+      "pachetBar": [
+        "Apa plata/minerala — nelimitat",
+        "Cola/Fanta — nelimitat",
+        "Suc natural — nelimitat",
+        "Cafea — nelimitat",
+        "Whisky Ballantine's Finest — nelimitat",
+        "Crema de whiskey — nelimitat",
+        "Vin spumant (primire invitati) — nelimitat",
+        "Fructe pe mese — design nou",
+        "Gheata frapiera — nelimitat, paine/chifle"
+      ]
+    }
+  },
+  {
+    "slug": "platinum",
+    "title": "Oferta Meniu Platinum",
+    "pricePerPers": 80,
+    "currency": "EUR",
+    "image": "/images/servicii/meniu/meniu-04.jpg",
+    "imageAlt": "Meniu Platinum — platouri reci, somon migdale, sarmalute mixte, fel principal complet",
+    "sections": {
+      "starterRece": [
+        "Rulada de pui cu spanac si bacon",
+        "Prajitura de ciuperci",
+        "Terina cu ciolan afumat",
+        "Rosii cherry si castravete",
+        "Rulada cu spanac si branza",
+        "File de porc",
+        "Mousse de avocado",
+        "Terina din piept de curcan cu branza feta",
+        "Prajitura de branzeturi in straturi",
+        "Pate de ficat",
+        "Vafa cu icre si lamaie"
+      ],
+      "antreuCald": "File de somon cu fulgi de migdale, tagliatele de legume si sos de lamaie",
+      "felIntermediar": "Sarmalute mixte cu bacon crocant, varza calita, mamaliguta, ardei iute si smantana",
+      "felPrincipal": [
+        "Buturuga din ceafa",
+        "Caprese de pui",
+        "Cartofi gratinati",
+        "Salata de ardei copt",
+        "Sos demiglace cu ceapa rosie"
+      ],
+      "pachetBar": [
+        "Apa plata/minerala — nelimitat",
+        "Cola/Fanta — nelimitat",
+        "Suc natural — nelimitat",
+        "Cafea — nelimitat",
+        "Whisky Ballantine's Finest — nelimitat",
+        "Crema de whiskey — nelimitat",
+        "Vin spumant (primire invitati) — nelimitat",
+        "Cocktail bar",
+        "Fructe pe mese — design nou",
+        "Gheata frapiera — nelimitat, paine/chifle",
+        "Tortul mirilor inclus"
+      ]
+    }
+  },
+  {
+    "slug": "diamond",
+    "title": "Oferta Meniu Diamond",
+    "pricePerPers": 100,
+    "currency": "EUR",
+    "image": "/images/servicii/meniu/meniu-05.jpg",
+    "imageAlt": "Meniu Diamond — platouri reci premium, somon risotto, sarmalute mixte, fel principal gourmet",
+    "sections": {
+      "starterRece": [
+        "Simfonie pescareasca",
+        "Prajitura de ciuperci",
+        "Terina cu ciolan afumat cu bacon",
+        "Rosii cherry si castravete",
+        "Mousse de branza cu jeleu de ardei rosu si rulou de pui",
+        "Salata Calabrese",
+        "File de porc",
+        "Terina din piept de curcan cu branza feta",
+        "Chiftea in crusta de seminte",
+        "Pate de ficat",
+        "Terina de pui cu mix de legume"
+      ],
+      "antreuCald": "Medalion de somon pe pat de risotto cu legume sote si sos de lamaie (sau varianta cu butter lemon si legume posate)",
+      "felIntermediar": "Sarmalute mixte cu bacon crocant, varza calita, mamaliguta, ardei iute si smantana",
+      "felPrincipal": [
+        "Ceafa inconto",
+        "Wellington de legume",
+        "Confit pulpa de rata in kataif sau deliciu de pui cu ciuperci",
+        "Salata calda de varza rosie",
+        "Sos Tao Tao"
+      ],
+      "pachetBar": [
+        "Apa plata/minerala — nelimitat",
+        "Cola/Fanta — nelimitat",
+        "Suc natural — nelimitat",
+        "Cafea — nelimitat",
+        "Whisky Ballantine's / J&B — nelimitat",
+        "Crema de whiskey — nelimitat",
+        "Vin spumant (primire invitati) — nelimitat",
+        "Cocktail bar",
+        "Fructe pe mese — model nou",
+        "Gheata frapiera — nelimitat, paine/chifle",
+        "Tortul si prajiturile incluse",
+        "Vinul casei inclus"
+      ]
+    }
+  }
+]
