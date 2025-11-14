@@ -6,6 +6,7 @@
     "currency": "EUR",
     "image": "/images/servicii/meniu/meniu-01.jpg",
     "imageAlt": "Meniu Basic — platouri reci, salau butter lemon, sarmalute, cotlet porc",
+    "eventType": "Nunta",
     "sections": {
       "starterRece": [
         "Terina de pui cu branzeturi",
@@ -35,6 +36,7 @@
     "currency": "EUR",
     "image": "/images/servicii/meniu/meniu-02.jpg",
     "imageAlt": "Meniu Gold — platouri reci, pastrav risotto, sarmalute, ceafa porc",
+    "eventType": "Nunta",
     "sections": {
       "starterRece": [
         "Prajitura de curcan in straturi",
@@ -67,6 +69,7 @@
     "currency": "EUR",
     "image": "/images/servicii/meniu/meniu-03.jpg",
     "imageAlt": "Meniu Traditional — platouri reci traditionale, pastrav risotto, sarmalute mixte, fel principal cu porc si pui",
+    "eventType": "Nunta",
     "sections": {
       "starterRece": [
         "Ceafa de porc afumat, castravete, ardei gras",
@@ -107,6 +110,7 @@
     "currency": "EUR",
     "image": "/images/servicii/meniu/meniu-04.jpg",
     "imageAlt": "Meniu Platinum — platouri reci, somon migdale, sarmalute mixte, fel principal complet",
+    "eventType": "Nunta",
     "sections": {
       "starterRece": [
         "Rulada de pui cu spanac si bacon",
@@ -152,6 +156,7 @@
     "currency": "EUR",
     "image": "/images/servicii/meniu/meniu-05.jpg",
     "imageAlt": "Meniu Diamond — platouri reci premium, somon risotto, sarmalute mixte, fel principal gourmet",
+    "eventType": "Nunta",
     "sections": {
       "starterRece": [
         "Simfonie pescareasca",
@@ -188,6 +193,417 @@
         "Gheata frapiera — nelimitat, paine/chifle",
         "Tortul si prajiturile incluse",
         "Vinul casei inclus"
+      ]
+    }
+  },
+  {
+    "slug": "botez-basic",
+    "title": "Meniu Botez & Cununie — BASIC",
+    "pricePerPers": 46,
+    "currency": "EUR",
+    "image": "/images/servicii/meniu/meniu-06.jpg",
+    "imageAlt": "Meniu Botez & Cununie BASIC — antreu rece, sarmale și fel principal",
+    "eventType": "Botez & Cununie",
+    "sections": {
+      "starterRece": [
+        "Terină de pui cu brânzeturi",
+        "Evantai de mușchi file",
+        "Trandafir cașcaval în ardei cu măsline",
+        "Floare din salam bănățean",
+        "Frigărui capresse",
+        "Ruladă de spanac cu brânzeturi",
+        "Turnuleț de castravete",
+        "Mousse de avocado cu somon"
+      ],
+      "antreuCald": "",
+      "felIntermediar": "Sărmăluțe în frunză de varză servite cu mămăliguță, ardei iute și smântână",
+      "felPrincipal": [
+        "Cotlet de porc la cuptor",
+        "Rulouri de pui în bacon",
+        "Cartofi zdrobiți și salată verde"
+      ],
+      "pachetBar": []
+    }
+  },
+  {
+    "slug": "botez-zephira-i",
+    "title": "Meniu Botez & Cununie — ZEPHIRA I",
+    "pricePerPers": 50,
+    "currency": "EUR",
+    "image": "/images/servicii/meniu/meniu-07.jpg",
+    "imageAlt": "Meniu Botez & Cununie ZEPHIRA I — antreu rece, pește și fel principal",
+    "eventType": "Botez & Cununie",
+    "sections": {
+      "starterRece": [
+        "Prăjitură de curcan în straturi",
+        "Simfonie pescărească",
+        "Frigărui capresse",
+        "Specialitate de brânzeturi cu struguri și alune",
+        "Parfait de ficat cu dulceață de ardei",
+        "Terină de pui cu mușchiuleț de porc",
+        "Ruladă mozaic cu prosciutto și brânzeturi",
+        "Telemea în kataif cu dulceață și roșii",
+        "Terină de pui cu cabanos",
+        "Tortuleț cu mezeluri și cașcaval",
+        "Buchet de legume"
+      ],
+      "antreuCald": "File de șalău pe pat de risotto cu parmezan, acompaniat de tagliatelle de legume și sos lemon-butter",
+      "felIntermediar": "",
+      "felPrincipal": [
+        "Buturugă de porc (ceafă)",
+        "Delicii din pulpă de pui umplute",
+        "Cartofi zdrobiți gratinați cu cașcaval, sos brun și salată de ardei copt"
+      ],
+      "pachetBar": []
+    }
+  },
+  {
+    "slug": "botez-zephira-ii",
+    "title": "Meniu Botez & Cununie — ZEPHIRA II",
+    "pricePerPers": 52,
+    "currency": "EUR",
+    "image": "/images/servicii/meniu/meniu-08.jpg",
+    "imageAlt": "Meniu Botez & Cununie ZEPHIRA II — antreu rece, pește și fel principal",
+    "eventType": "Botez & Cununie",
+    "sections": {
+      "starterRece": [
+        "Prăjitură de curcan în straturi",
+        "Simfonie pescărească",
+        "Frigărui capresse",
+        "Specialitate de brânzeturi cu struguri și alune",
+        "Parfait de ficat cu dulceață de ardei",
+        "Terină de pui cu mușchiuleț de porc",
+        "Ruladă mozaic cu prosciutto și brânzeturi",
+        "Telemea în kataif cu dulceață și roșii",
+        "Terină de pui cu cabanos",
+        "Tortuleț cu mezeluri și cașcaval",
+        "Buchet de legume"
+      ],
+      "antreuCald": "File de șalău pe pat de risotto cu parmezan, acompaniat de tagliatelle de legume și sos lemon-butter",
+      "felIntermediar": "Sărmăluțe în foi de viță și de varză cu mămăliguță, smântână și ardei iute",
+      "felPrincipal": [
+        "Buturugă de porc (ceafă)",
+        "Delicii din pulpă de pui umplute",
+        "Cartofi zdrobiți gratinați cu cașcaval, sos brun și salată de ardei copt"
+      ],
+      "pachetBar": []
+    }
+  },
+  {
+    "slug": "botez-zephira-iii",
+    "title": "Meniu Botez & Cununie — ZEPHIRA III",
+    "pricePerPers": 52,
+    "currency": "EUR",
+    "image": "/images/servicii/meniu/meniu-09.jpg",
+    "imageAlt": "Meniu Botez & Cununie ZEPHIRA III — antreu rece, fel tradițional și fel principal",
+    "eventType": "Botez & Cununie",
+    "sections": {
+      "starterRece": [
+        "Prăjitură de curcan în straturi",
+        "Simfonie pescărească",
+        "Frigărui capresse",
+        "Specialitate de brânzeturi cu struguri și alune",
+        "Parfait de ficat cu dulceață de ardei",
+        "Terină de pui cu mușchiuleț de porc",
+        "Ruladă mozaic cu prosciutto și brânzeturi",
+        "Telemea în kataif cu dulceață și roșii",
+        "Terină de pui cu cabanos",
+        "Tortuleț cu mezeluri și cașcaval",
+        "Buchet de legume"
+      ],
+      "antreuCald": "",
+      "felIntermediar": "Sărmăluțe în foi de viță și de varză, cu mămăliguță, smântână și ardei iute",
+      "felPrincipal": [
+        "Buturugă de porc (ceafă)",
+        "Delicii din pulpă de pui umplute",
+        "Cartofi zdrobiți gratinați cu cașcaval, sos brun și salată de ardei copt"
+      ],
+      "pachetBar": []
+    }
+  },
+  {
+    "slug": "botez-traditional-i",
+    "title": "Meniu Botez & Cununie — TRADITIONAL I",
+    "pricePerPers": 55,
+    "currency": "EUR",
+    "image": "/images/servicii/meniu/meniu-10.jpg",
+    "imageAlt": "Meniu Botez & Cununie TRADITIONAL I — antreu rece, pește și fel principal",
+    "eventType": "Botez & Cununie",
+    "sections": {
+      "starterRece": [
+        "Ceafă de porc afumat, castravete, ardei gras",
+        "Salam crud uscat",
+        "Chifteluțe de pui",
+        "Mini șnițele din piept de curcan",
+        "Frigărui caprezze",
+        "Cârnați afumați",
+        "Ruladă de pui cu legume",
+        "Mix de brânzeturi, măsline asortate",
+        "Bulete de cașcaval"
+      ],
+      "antreuCald": "File de șalău pe pat de risotto cu parmezan, tagliatelle de legume și sos lemon-butter",
+      "felIntermediar": "",
+      "felPrincipal": [
+        "Buturugă de porc cu sos brun",
+        "Rulouri de pui în bacon",
+        "Cartofi aurii cu rozmarin",
+        "Salată verde"
+      ],
+      "pachetBar": []
+    }
+  },
+  {
+    "slug": "botez-traditional-ii",
+    "title": "Meniu Botez & Cununie — TRADIȚIONAL II",
+    "pricePerPers": 60,
+    "currency": "EUR",
+    "image": "/images/servicii/meniu/meniu-11.jpg",
+    "imageAlt": "Meniu Botez & Cununie TRADIȚIONAL II — antreu rece, fel tradițional și fel principal",
+    "eventType": "Botez & Cununie",
+    "sections": {
+      "starterRece": [
+        "Ceafă de porc afumat, castravete, ardei gras",
+        "Salam crud uscat",
+        "Chifteluțe de pui",
+        "Mini șnițele din piept de curcan",
+        "Frigărui caprezze",
+        "Cârnați afumați",
+        "Ruladă de pui cu legume",
+        "Mix de brânzeturi, măsline asortate",
+        "Bulete de cașcaval"
+      ],
+      "antreuCald": "",
+      "felIntermediar": "Sărmăluțe în foi de viță și de varză, cu mămăliguță, smântână și ardei iute",
+      "felPrincipal": [
+        "Buturugă de porc cu sos brun",
+        "Rulouri de pui în bacon",
+        "Cartofi aurii cu rozmarin",
+        "Salată verde"
+      ],
+      "pachetBar": []
+    }
+  },
+  {
+    "slug": "corporate-basic",
+    "title": "Meniu: Corporate & Team Building — BASIC",
+    "pricePerPers": 180,
+    "currency": "RON",
+    "image": "/images/servicii/meniu/meniu-12.jpg",
+    "imageAlt": "Meniu Corporate & Team Building BASIC — antreu rece, fel principal și băuturi răcoritoare",
+    "eventType": "Corporate & Team Building",
+    "sections": {
+      "starterRece": [
+        "Terină de pui cu brânzeturi",
+        "Evantai de mușchi file",
+        "Trandafir cașcaval în ardei cu măsline",
+        "Floare din salam bănățean",
+        "Frigărui caprese",
+        "Ruladă de spanac cu brânzeturi",
+        "Turnuleț de castravete",
+        "Mousse de avocado cu somon"
+      ],
+      "antreuCald": "",
+      "felIntermediar": "",
+      "felPrincipal": [
+        "Cotlet de porc la cuptor",
+        "Rulouri de pui în bacon",
+        "Cartofi zdrobiți și salată verde"
+      ],
+      "pachetBar": ["Apă plată / minerală", "Pepsi / Mirinda", "Suc natural"]
+    }
+  },
+  {
+    "slug": "corporate-glamour",
+    "title": "Meniu: Corporate & Team Building — ZEPHIRA / GLAMOUR",
+    "pricePerPers": 250,
+    "currency": "RON",
+    "image": "/images/servicii/meniu/meniu-13.jpg",
+    "imageAlt": "Meniu Corporate & Team Building ZEPHIRA / GLAMOUR — antreu rece, fel principal și cocktail bar",
+    "eventType": "Corporate & Team Building",
+    "sections": {
+      "starterRece": [
+        "Prăjitură de curcan în straturi",
+        "Simfonie pescărească",
+        "Frigărui caprese",
+        "Specialitate de brânzeturi cu struguri și alune",
+        "Parfait de ficat cu dulceață de ardei",
+        "Terină de pui cu mușchiuleț de porc",
+        "Ruladă mozaic cu prosciutto și brânzeturi",
+        "Telemea în kataif cu dulceață și roșii",
+        "Terină de pui cu cabanos",
+        "Tortuleț cu mezeluri și cașcaval",
+        "Buchet de legume"
+      ],
+      "antreuCald": "",
+      "felIntermediar": "",
+      "felPrincipal": [
+        "Pork Wellington",
+        "Involtini de pui cu piure de cartofi, acompaniat de sos alb cu hribi"
+      ],
+      "pachetBar": [
+        "Apă plată / minerală – nelimitat",
+        "Cafea – nelimitat",
+        "Cola / Fanta / suc natural – nelimitat",
+        "Ballantine’s Finest – nelimitat",
+        "Cremă de whiskey – nelimitat",
+        "Fructe pe mese – design nou",
+        "Gheață / frapieră – nelimitat",
+        "Pâine și chifle"
+      ]
+    }
+  },
+  {
+    "slug": "corporate-traditional",
+    "title": "Meniu: Corporate & Team Building — TRADIȚIONAL",
+    "pricePerPers": 250,
+    "currency": "RON",
+    "image": "/images/servicii/meniu/meniu-14.jpg",
+    "imageAlt": "Meniu Corporate & Team Building TRADIȚIONAL — antreu rece, fel principal și cocktail bar",
+    "eventType": "Corporate & Team Building",
+    "sections": {
+      "starterRece": [
+        "Platou tradițional asortat (șuncă, cârnați, jumări, brânză, legume)",
+        "Ceafă de porc afumată",
+        "Salam crud uscat",
+        "Chifteluțe de pui",
+        "Mini șnițele din piept de curcan",
+        "Frigărui caprezze",
+        "Cârnați afumați",
+        "Ruladă de pui cu legume",
+        "Mix de brânzeturi, măsline asortate",
+        "Bulete de cașcaval"
+      ],
+      "antreuCald": "",
+      "felIntermediar": "",
+      "felPrincipal": [
+        "Ceafă de porc la cuptor",
+        "Pulpe de pui dezosate la cuptor",
+        "Cartofi aurii cu rozmarin",
+        "Salată de varză"
+      ],
+      "pachetBar": [
+        "Apă plată / minerală – nelimitat",
+        "Cafea – nelimitat",
+        "Cola / Fanta – nelimitat",
+        "Suc natural – nelimitat",
+        "Ballantine’s Finest – nelimitat",
+        "Cremă de whiskey – nelimitat",
+        "Fructe pe mese – design nou",
+        "Gheață / frapieră – nelimitat",
+        "Pâine și chifle",
+        "Tortul sărbătoritei – cadou"
+      ]
+    }
+  },
+  {
+    "slug": "private-basic",
+    "title": "Meniu: Petreceri Private & Majorate — BASIC",
+    "pricePerPers": 180,
+    "currency": "RON",
+    "image": "/images/servicii/meniu/meniu-15.jpg",
+    "imageAlt": "Meniu Petreceri Private & Majorate BASIC — antreu rece, fel principal și băuturi răcoritoare",
+    "eventType": "Petreceri Private & Majorate",
+    "sections": {
+      "starterRece": [
+        "Terină de pui cu brânzeturi",
+        "Evantai de mușchi file",
+        "Trandafir cașcaval în ardei cu măsline",
+        "Floare din salam bănățean",
+        "Frigărui caprese",
+        "Ruladă de spanac cu brânzeturi",
+        "Turnuleț de castravete",
+        "Mousse de avocado cu somon"
+      ],
+      "antreuCald": "",
+      "felIntermediar": "",
+      "felPrincipal": [
+        "Cotlet de porc la cuptor",
+        "Rulouri de pui în bacon",
+        "Cartofi zdrobiți și salată verde"
+      ],
+      "pachetBar": ["Apă plată / minerală", "Pepsi / Mirinda", "Suc natural"]
+    }
+  },
+  {
+    "slug": "private-glamour",
+    "title": "Meniu: petreceri Petreceri Private & Majorate — ZEPHIRA / GLAMOUR",
+    "pricePerPers": 250,
+    "currency": "RON",
+    "image": "/images/servicii/meniu/meniu-16.jpg",
+    "imageAlt": "Meniu Petreceri Private & Majorate ZEPHIRA / GLAMOUR — antreu rece, fel principal și cocktail bar",
+    "eventType": "Petreceri Private & Majorate",
+    "sections": {
+      "starterRece": [
+        "Prăjitură de curcan în straturi",
+        "Simfonie pescărească",
+        "Frigărui capresse",
+        "Specialitate de brânzeturi cu struguri și alune",
+        "Parfait de ficat cu dulceață de ardei",
+        "Terină de pui cu mușchiuleț de porc",
+        "Ruladă mozaic cu prosciutto și brânzeturi",
+        "Telemea în kataif cu dulceață și roșii",
+        "Terină de pui cu cabanos",
+        "Tortuleț cu mezeluri și cașcaval",
+        "Buchet de legume"
+      ],
+      "antreuCald": "",
+      "felIntermediar": "",
+      "felPrincipal": [
+        "Pork Wellington",
+        "Involtini de pui cu piure de cartofi, acompaniat de sos alb cu hribi"
+      ],
+      "pachetBar": [
+        "Apă plată / minerală – nelimitat",
+        "Cafea – nelimitat",
+        "Cola / Fanta / suc natural – nelimitat",
+        "Ballantine’s Finest – nelimitat",
+        "Cremă de whiskey – nelimitat",
+        "Fructe pe mese – design nou",
+        "Gheață / frapieră – nelimitat",
+        "Pâine și chifle"
+      ]
+    }
+  },
+  {
+    "slug": "private-traditional",
+    "title": "Meniu: petreceri private / banchete / majorate — TRADIȚIONAL",
+    "pricePerPers": 250,
+    "currency": "RON",
+    "image": "/images/servicii/meniu/meniu-17.jpg",
+    "imageAlt": "Meniu Petreceri Private & Majorate TRADIȚIONAL — antreu rece, fel principal și cocktail bar",
+    "eventType": "Petreceri Private & Majorate",
+    "sections": {
+      "starterRece": [
+        "Platou tradițional asortat (șuncă, cârnați, jumări, brânză, legume)",
+        "Ceafă de porc afumată",
+        "Salam crud uscat",
+        "Chifteluțe de pui",
+        "Mini șnițele din piept de curcan",
+        "Frigărui caprezze",
+        "Cârnați afumați",
+        "Ruladă de pui cu legume",
+        "Mix de brânzeturi, măsline asortate",
+        "Bulete de cașcaval"
+      ],
+      "antreuCald": "",
+      "felIntermediar": "",
+      "felPrincipal": [
+        "Ceafă de porc la cuptor",
+        "Pulpe de pui dezosate la cuptor",
+        "Cartofi aurii cu rozmarin",
+        "Salată de varză"
+      ],
+      "pachetBar": [
+        "Apă plată / minerală – nelimitat",
+        "Cafea – nelimitat",
+        "Cola / Fanta – nelimitat",
+        "Suc natural – nelimitat",
+        "Ballantine’s Finest – nelimitat",
+        "Cremă de whiskey – nelimitat",
+        "Fructe pe mese – design nou",
+        "Gheață / frapieră – nelimitat",
+        "Pâine și chifle",
+        "Tortul sărbătoritei – cadou"
       ]
     }
   }

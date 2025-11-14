@@ -5,16 +5,25 @@
 
 import { style } from "@vanilla-extract/css";
 
-import { vars } from "../../styles/theme.css";
+import { mq, vars } from "../../styles/theme.css";
 
 export const grid = style({
   display: "grid",
   gap: vars.space.lg,
   gridTemplateColumns: "1fr",
+  "@media": {
+    [mq.md]: {
+      gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+    },
+    [mq.xl]: {
+      gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+    },
+  },
 });
 
 export const card = style({
   position: "relative",
+  alignSelf: "flex-start",
   borderRadius: vars.radius.xl,
   overflow: "hidden",
   background: vars.color.cardBg,
@@ -22,6 +31,10 @@ export const card = style({
   boxShadow: vars.shadow.sm,
   border: `1px solid ${vars.color.border}`,
   selectors: {
+    "&:hover": {
+      borderColor: vars.color.primary,
+      boxShadow: vars.shadow.md,
+    },
     '&[data-open="true"]': {
       boxShadow: vars.shadow.md,
       borderColor: vars.color.surfaceActive,
@@ -45,7 +58,7 @@ export const media = style({
   position: "relative",
   width: "100%",
   height: 0,
-  paddingBottom: "34%", // compact: imagine mai scundă
+  paddingBottom: "30%", // ușor mai compact: imagine mai scundă
   overflow: "hidden",
 });
 
@@ -53,7 +66,7 @@ export const titleRow = style({
   display: "flex",
   alignItems: "center",
   gap: vars.space.md,
-  padding: `${vars.space.md} ${vars.space.lg}`,
+  padding: `${vars.space.sm} ${vars.space.md}`,
   borderTop: `1px solid ${vars.color.border}`,
 });
 
@@ -131,7 +144,7 @@ export const panel = style({
 });
 
 export const panelInner = style({
-  padding: vars.space.lg,
+  padding: vars.space.md,
   display: "grid",
   gap: vars.space.md,
 });
@@ -140,7 +153,7 @@ export const panelFooter = style({
   display: "flex",
   justifyContent: "flex-end",
   gap: vars.space.sm,
-  padding: `${vars.space.md} ${vars.space.lg}`,
+  padding: `${vars.space.sm} ${vars.space.md}`,
   borderTop: `1px solid ${vars.color.border}`,
   background: vars.color.surface,
 });
@@ -148,7 +161,7 @@ export const panelFooter = style({
 export const sectionBlock = style({
   background: vars.color.surface,
   borderRadius: vars.radius.lg,
-  padding: `${vars.space.sm} ${vars.space.md}`,
+  padding: `${vars.space.xs} ${vars.space.sm}`,
   border: `1px solid ${vars.color.border}`,
 });
 

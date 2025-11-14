@@ -17,6 +17,7 @@ import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { absoluteUrl } from "../lib/config";
+import { getMenusByEventType } from "../lib/menus";
 
 // ==============================
 // Constante
@@ -88,6 +89,11 @@ const servicesItemList = {
 // Component
 // ==============================
 const ServicesPage: NextPage = () => {
+  const nuntaMenus = getMenusByEventType("Nunta");
+  const botezMenus = getMenusByEventType("Botez & Cununie");
+  const privateMenus = getMenusByEventType("Petreceri Private & Majorate");
+  const corporateMenus = getMenusByEventType("Corporate & Team Building");
+
   return (
     <>
       <Seo
@@ -145,9 +151,45 @@ const ServicesPage: NextPage = () => {
         </section>
 
         <Separator />
+
+        {/* Meniuri nuntă */}
         <Appear>
-          <MenuOffers />
+          <MenuOffers id="meniuri-nunta" heading="Meniuri nuntă" menus={nuntaMenus} />
         </Appear>
+
+        <Separator />
+
+        {/* Meniuri botez & cununie */}
+        <Appear>
+          <MenuOffers
+            id="meniuri-botez-cununie"
+            heading="Meniuri botez & cununie"
+            menus={botezMenus}
+          />
+        </Appear>
+
+        <Separator />
+
+        {/* Meniuri petreceri private & majorate */}
+        <Appear>
+          <MenuOffers
+            id="meniuri-petreceri-private-majorate"
+            heading="Meniuri petreceri private & majorate"
+            menus={privateMenus}
+          />
+        </Appear>
+
+        <Separator />
+
+        {/* Meniuri corporate & team building */}
+        <Appear>
+          <MenuOffers
+            id="meniuri-corporate-team-building"
+            heading="Meniuri corporate & team building"
+            menus={corporateMenus}
+          />
+        </Appear>
+
         <Separator />
 
         <section className="section">
