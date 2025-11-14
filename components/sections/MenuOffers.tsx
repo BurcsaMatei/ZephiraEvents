@@ -1,12 +1,12 @@
 // components/sections/MenuOffers.tsx
 // ==============================
-// Oferte de meniu — 5 carduri expandabile (single-open) — arrow moves to bottom when open
+// Oferte de meniu — carduri expandabile (single-open) — arrow moves to bottom when open
 // ==============================
 
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import menusJson from "../../data/menus.json";
+import { getAllMenus } from "../../lib/menus";
 import { buildMenuJsonLd, type MenuData } from "../../lib/seo/menuJsonLd";
 import {
   arrowBtn,
@@ -26,22 +26,44 @@ import {
   titleRow,
   trigger,
 } from "../../styles/sections/menuOffers.css";
+import type { Menu } from "../../types/menu";
 
 // ==============================
 // Types
 // ==============================
-type Menus = MenuData[];
 type BtnRefMap = Record<string, HTMLButtonElement | null>;
+
+export interface MenuOffersProps {
+  /**
+   * ID pentru ancora secțiunii: ex. "meniuri-Nunta".
+   * Va fi folosit ca `id` pe <section> și ca prefix pentru heading.
+   */
+  id?: string;
+  /**
+   * Titlul secțiunii (H2). Ex: "Meniuri nuntă".
+   * Default: "Oferte de meniu".
+   */
+  heading?: string;
+  /**
+   * Lista de meniuri de afișat. Dacă nu e furnizată,
+   * se folosește getAllMenus() (fallback compatibil cu implementarea actuală).
+   */
+  menus?: Menu[];
+}
 
 // ==============================
 // Component
 // ==============================
-export default function MenuOffers() {
-  const menus = menusJson as unknown as Menus;
+export default function MenuOffers(props: MenuOffersProps = {}) {
+  const { id, heading = "Oferte de meniu", menus: menusProp } = props;
 
   const [openSlug, setOpenSlug] = useState<string | null>(null);
   const rootRef = useRef<HTMLElement | null>(null);
   const bottomBtnRefs = useRef<BtnRefMap>({});
+
+  const menus = useMemo<Menu[]>(() => menusProp ?? getAllMenus(), [menusProp]);
+
+  const headingId = id ? `${id}-title` : "menu-offers-title";
 
   // Close on outside click
   useEffect(() => {
@@ -71,31 +93,27 @@ export default function MenuOffers() {
     if (!openSlug) return;
     const btn = bottomBtnRefs.current[openSlug];
     if (btn) {
-      // Slight delay to ensure it's in DOM after expand transition begins
+      // slight delay ca să fie sigur în DOM după expand
       setTimeout(() => btn.focus(), 0);
     }
   }, [openSlug]);
 
-  const toggle = useCallback(
-    (slug: string) => {
-      setOpenSlug((cur) => (cur === slug ? null : slug));
-    },
-    [setOpenSlug],
-  );
+  const toggle = useCallback((slug: string) => {
+    setOpenSlug((cur) => (cur === slug ? null : slug));
+  }, []);
 
-  const jsonLd = useMemo(() => buildMenuJsonLd(menus), [menus]);
+  const jsonLd = useMemo(() => buildMenuJsonLd(menus as unknown as MenuData[]), [menus]);
   const sizes = "100vw"; // single-column
 
   return (
     <section
+      id={id}
       ref={rootRef as unknown as React.RefObject<HTMLElement>}
       className="section"
-      aria-labelledby="menu-offers-title"
+      aria-labelledby={headingId}
     >
       <div className="container">
-        <h2 id="menu-offers-title" style={{ display: "none" }}>
-          Oferte de meniu
-        </h2>
+        <h2 id={headingId}>{heading}</h2>
 
         <div className={grid}>
           {menus.map((m) => {
