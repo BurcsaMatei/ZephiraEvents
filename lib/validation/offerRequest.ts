@@ -2,11 +2,12 @@
 // ==============================
 // Imports
 // ==============================
+import { type EventTypeSlug, isMenuValidForEventType } from "../menus.public";
 
 // ==============================
 // Types
 // ==============================
-export type MenuSlug = "basic" | "gold" | "traditional" | "platinum" | "diamond" | "nu-sigur";
+export type MenuSlug = string; // slug din JSON sau "nu-sigur"
 export type LodgingKind = "proprie" | "oferta";
 export type MusicKind = "am-eu" | "oferta";
 export type PhotoVideoKind = "am-eu" | "oferta";
@@ -19,6 +20,7 @@ export interface OfferRequestBody {
   phone?: string;
   whatsapp?: boolean;
   email?: string;
+  eventType?: EventTypeSlug;
   menu?: MenuSlug;
   lodging?: { kind?: LodgingKind; rooms?: string; nights?: string; notes?: string };
   music?: { kind?: MusicKind; prefs?: string; genre?: string; interval?: string };
@@ -77,13 +79,12 @@ function isYmdOnOrAfterTodayBucharest(ymd: string): boolean {
   return ymd >= today;
 }
 
-const MENU_ALLOWED: readonly MenuSlug[] = [
-  "basic",
-  "gold",
-  "traditional",
-  "platinum",
-  "diamond",
-  "nu-sigur",
+// Tipuri permise pentru eventType (slugs finale)
+const EVENT_TYPES_ALLOWED: readonly EventTypeSlug[] = [
+  "nunta",
+  "botez-cununie",
+  "private-majorate",
+  "corporate",
 ] as const;
 
 // ==============================
@@ -104,27 +105,49 @@ export function validateOfferRequest(b: unknown): {
   const phoneNorm = normalizePhoneRO(String(body.phone || "").trim());
   const whatsapp = !!body.whatsapp;
   const email = String(body.email || "").trim();
-  const menu = (String(body.menu || "nu-sigur") as MenuSlug) || "nu-sigur";
+
+  const eventTypeRaw = String(body.eventType || "").trim();
+  const eventType = eventTypeRaw as EventTypeSlug;
+
+  const menu = String(body.menu || "nu-sigur").trim() as MenuSlug;
   const details = String(body.details || "").trim();
   const recaptchaToken = String(body.recaptchaToken || "").trim();
   const _hpt = String(body._hpt || "");
 
-  // required
+  // required – câmpuri de bază
   if (!name) errors.push("Nume lipsă.");
   if (!address) errors.push("Adresă lipsă.");
   if (!eventDate) errors.push("Dată eveniment lipsă.");
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(eventDate)) errors.push("Format dată invalid.");
-  if (eventDate && !isYmdOnOrAfterTodayBucharest(eventDate))
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(eventDate)) {
+    errors.push("Format dată invalid.");
+  } else if (!isYmdOnOrAfterTodayBucharest(eventDate)) {
     errors.push("Data evenimentului nu poate fi în trecut.");
-  if (!Number.isInteger(participants) || participants < 20 || participants > 250)
-    errors.push("Număr participanți invalid.");
-  if (!email || !emailLike(email)) errors.push("Email invalid.");
-  if (!phoneNorm || !isValidRoE164(phoneNorm)) errors.push("Telefon invalid (RO).");
-  if (!recaptchaToken) errors.push("reCAPTCHA lipsă.");
-  if (_hpt) errors.push("Request invalid.");
+  }
 
-  // menu
-  if (!MENU_ALLOWED.includes(menu)) errors.push("Meniu invalid.");
+  if (!Number.isInteger(participants) || participants < 20 || participants > 250) {
+    errors.push("Număr participanți invalid.");
+  }
+
+  if (!email || !emailLike(email)) {
+    errors.push("Email invalid.");
+  }
+
+  if (!phoneNorm || !isValidRoE164(phoneNorm)) {
+    errors.push("Telefon invalid (RO).");
+  }
+
+  if (!eventTypeRaw) {
+    errors.push("Tip eveniment lipsă.");
+  } else if (!EVENT_TYPES_ALLOWED.includes(eventType)) {
+    errors.push("Tip eveniment invalid.");
+  }
+
+  if (!recaptchaToken) {
+    errors.push("reCAPTCHA lipsă.");
+  }
+  if (_hpt) {
+    errors.push("Request invalid.");
+  }
 
   // lodging
   const lodgingKind = (body.lodging?.kind || "proprie") as LodgingKind;
@@ -145,7 +168,21 @@ export function validateOfferRequest(b: unknown): {
   const pvDeliverables =
     pvKind === "oferta" ? String(body.photoVideo?.deliverables || "").trim() : "";
 
-  if (errors.length > 0) return { valid: false, errors };
+  // Validare meniu în funcție de tipul de eveniment
+  if (!menu) {
+    errors.push("Meniu invalid.");
+  } else if (
+    eventTypeRaw &&
+    EVENT_TYPES_ALLOWED.includes(eventType) &&
+    !isMenuValidForEventType(eventType, menu)
+  ) {
+    // "nu-sigur" este considerat valid în isMenuValidForEventType pentru orice tip valid
+    errors.push("Combinație tip eveniment / meniu invalidă.");
+  }
+
+  if (errors.length > 0) {
+    return { valid: false, errors };
+  }
 
   return {
     valid: true,
@@ -158,6 +195,7 @@ export function validateOfferRequest(b: unknown): {
       phone: phoneNorm,
       whatsapp,
       email,
+      eventType,
       menu,
       lodging: { kind: lodgingKind, rooms, nights, notes: lodgingNotes },
       music: { kind: musicKind, prefs: musicPrefs, genre: musicGenre, interval: musicInterval },

@@ -5,7 +5,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import nodemailer from "nodemailer";
 
-import { buildOfferEmail } from "../../lib/mail/offerRequestEmail";
+import { buildOfferEmail, type EmailData } from "../../lib/mail/offerRequestEmail";
 import { validateOfferRequest } from "../../lib/validation/offerRequest";
 
 // ==============================
@@ -171,33 +171,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
 
   // Build email (către utilizator, cu BCC intern) — normalizează sub-obiectele la câmpuri obligatorii
-  const lodging: { kind: "proprie" | "oferta"; rooms: string; nights: string; notes: string } = {
+  const lodging: EmailData["lodging"] = {
     kind: data.lodging.kind || "proprie",
     rooms: data.lodging.rooms || "",
     nights: data.lodging.nights || "",
     notes: data.lodging.notes || "",
   };
 
-  const music: { kind: "am-eu" | "oferta"; prefs: string; genre: string; interval: string } = {
+  const music: EmailData["music"] = {
     kind: data.music.kind || "am-eu",
     prefs: data.music.prefs || "",
     genre: data.music.genre || "",
     interval: data.music.interval || "",
   };
 
-  const photoVideo: {
-    kind: "am-eu" | "oferta";
-    package: string;
-    duration: string;
-    deliverables: string;
-  } = {
+  const photoVideo: EmailData["photoVideo"] = {
     kind: data.photoVideo.kind || "am-eu",
     package: data.photoVideo.package || "",
     duration: data.photoVideo.duration || "",
     deliverables: data.photoVideo.deliverables || "",
   };
 
-  const emailData = {
+  const emailData: EmailData = {
     name: data.name,
     address: data.address,
     phone: data.phone,
@@ -205,7 +200,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     email: data.email,
     eventDateYmd: data.eventDate,
     participants: data.participants,
-    menu: data.menu, // MenuSlug e subtip al string — OK
+    eventType: data.eventType,
+    menu: data.menu, // slug-ul meniului, folosit pentru mapping în buildOfferEmail
     lodging,
     music,
     photoVideo,

@@ -7,6 +7,12 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { withBase } from "../../lib/config";
+import {
+  EVENT_TYPES_SELECT,
+  type EventTypeSlug,
+  getEventTypeAnchorHref,
+  getMenusForEventType,
+} from "../../lib/menus.public";
 import * as s from "../../styles/forms/offerRequest.css";
 import Button from "../Button";
 
@@ -17,7 +23,8 @@ type ApiOk = { ok: true };
 type ApiFail = { ok: false; message: string };
 type ApiResp = ApiOk | ApiFail;
 
-type MenuSlug = "basic" | "gold" | "traditional" | "platinum" | "diamond" | "nu-sigur";
+// Slug-urile reale ale meniurilor vin din JSON; aici menținem doar string + "nu-sigur"
+type MenuSlug = string;
 
 type LodgingKind = "proprie" | "oferta";
 type MusicKind = "am-eu" | "oferta";
@@ -95,18 +102,26 @@ export default function OfferRequest() {
 
   const minDate = useMemo(() => todayYmdEuropeBucharest(), []);
 
-  // Menus options
-  const menuOptions: MenusOption[] = useMemo(
-    () => [
-      { slug: "basic", title: "Oferta Meniu Basic" },
-      { slug: "gold", title: "Oferta Meniu Gold" },
-      { slug: "traditional", title: "Oferta Meniu Traditional" },
-      { slug: "platinum", title: "Oferta Meniu Platinum" },
-      { slug: "diamond", title: "Oferta Meniu Diamond" },
-      { slug: "nu-sigur", title: "Nu sunt sigur — consultă meniurile" },
-    ],
-    [],
-  );
+  // Tip eveniment + meniu dinamic
+  const defaultEventType: EventTypeSlug = EVENT_TYPES_SELECT[0]?.eventTypeSlug ?? "nunta";
+
+  const [eventType, setEventType] = useState<EventTypeSlug>(defaultEventType);
+  const [menuSlug, setMenuSlug] = useState<MenuSlug>("nu-sigur");
+
+  const menuOptions: MenusOption[] = useMemo(() => {
+    const menus = getMenusForEventType(eventType);
+    const base: MenusOption = {
+      slug: "nu-sigur",
+      title: "Nu sunt sigur — consultă meniurile",
+    };
+    const derived: MenusOption[] = menus.map((m) => ({
+      slug: m.slug,
+      title: m.title,
+    }));
+    return [base, ...derived];
+  }, [eventType]);
+
+  const menuHintHref = useMemo(() => withBase(getEventTypeAnchorHref(eventType)), [eventType]);
 
   // Load + render reCAPTCHA v2 ca widget separat, robust la race-condition cu alt formular
   useEffect(() => {
@@ -123,7 +138,9 @@ export default function OfferRequest() {
       if (recaptchaIdRef.current !== null) return;
       if (!window.grecaptcha) return;
       try {
-        const id = window.grecaptcha.render(recaptchaBoxRef.current, { sitekey: siteKey });
+        const id = window.grecaptcha.render(recaptchaBoxRef.current, {
+          sitekey: siteKey,
+        });
         recaptchaIdRef.current = id;
       } catch {
         /* ignore */
@@ -193,7 +210,8 @@ export default function OfferRequest() {
     const whatsapp = String(fd.get("whatsapp") || "") === "on";
     const email = String(fd.get("email") || "").trim();
 
-    const menu = String(fd.get("menu") || "nu-sigur") as MenuSlug;
+    const eventTypeRaw = String(fd.get("eventType") || "").trim();
+    const menu = String(fd.get("menu") || "nu-sigur").trim() as MenuSlug;
 
     const lodgingKind = (String(fd.get("lodging") || "proprie") as LodgingKind) || "proprie";
     const rooms = String(fd.get("rooms") || "").trim();
@@ -222,6 +240,11 @@ export default function OfferRequest() {
       setError("Completează toate câmpurile obligatorii și acordă GDPR.");
       return;
     }
+    if (!eventTypeRaw) {
+      setError("Selectează tipul evenimentului.");
+      return;
+    }
+
     if (!/^\d{4}-\d{2}-\d{2}$/.test(eventDate)) {
       setError("Data evenimentului este invalidă.");
       return;
@@ -240,6 +263,8 @@ export default function OfferRequest() {
       return;
     }
 
+    const eventTypeValue = eventTypeRaw as EventTypeSlug;
+
     // Payload
     const payload = {
       name,
@@ -249,6 +274,7 @@ export default function OfferRequest() {
       phone,
       whatsapp,
       email,
+      eventType: eventTypeValue,
       menu,
       lodging: {
         kind: lodgingKind,
@@ -296,6 +322,8 @@ export default function OfferRequest() {
       setLodging("proprie");
       setMusic("am-eu");
       setPhotoVideo("am-eu");
+      setEventType(defaultEventType);
+      setMenuSlug("nu-sigur");
       window.grecaptcha?.reset(recaptchaIdRef.current ?? undefined);
 
       window.setTimeout(() => setSuccess(false), 6000);
@@ -317,11 +345,8 @@ export default function OfferRequest() {
       <p className={s.lead}>
         Completează formularul, iar noi îți trimitem o propunere personalizată.{" "}
         <span className={s.hint}>
-          Dacă nu ești sigur de meniu,{" "}
-          <a className={s.link} href={withBase("/servicii#oferte-de-meniu")}>
-            vezi meniurile disponibile
-          </a>
-          .
+          Dacă nu ești sigur de meniu, vei putea consulta meniurile în funcție de tipul de eveniment
+          ales.
         </span>
       </p>
 
@@ -412,7 +437,7 @@ export default function OfferRequest() {
                 aria-describedby="offer-eventDate-hint"
               />
               <span id="offer-eventDate-hint" className={s.subtle}>
-                Format: dd.MM.yyyy
+                Format: dd.MM.yyyy (se introduce în format YYYY-MM-DD)
               </span>
             </label>
 
@@ -433,14 +458,48 @@ export default function OfferRequest() {
           </div>
 
           <label className={s.label}>
+            Tip eveniment <span className={s.req}>(obligatoriu)</span>
+            <select
+              className={s.select}
+              name="eventType"
+              required
+              value={eventType}
+              onChange={(ev) => {
+                const next = ev.target.value as EventTypeSlug;
+                setEventType(next);
+                setMenuSlug("nu-sigur");
+              }}
+            >
+              {EVENT_TYPES_SELECT.map((opt) => (
+                <option key={opt.eventTypeSlug} value={opt.eventTypeSlug}>
+                  {opt.eventTypeLabel}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className={s.label}>
             Meniu dorit
-            <select className={s.select} name="menu" defaultValue="nu-sigur">
+            <select
+              className={s.select}
+              name="menu"
+              value={menuSlug}
+              onChange={(ev) => setMenuSlug(ev.target.value as MenuSlug)}
+              aria-describedby="offer-menu-hint"
+            >
               {menuOptions.map((m) => (
                 <option key={m.slug} value={m.slug}>
                   {m.title}
                 </option>
               ))}
             </select>
+            <span id="offer-menu-hint" className={s.subtle}>
+              Vezi detalii pentru meniuri în pagina de servicii:{" "}
+              <a className={s.link} href={menuHintHref}>
+                deschide secțiunea pentru tipul de eveniment selectat
+              </a>
+              .
+            </span>
           </label>
         </fieldset>
 

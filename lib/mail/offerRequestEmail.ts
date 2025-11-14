@@ -2,6 +2,7 @@
 // ==============================
 // Imports
 // ==============================
+import { type EventTypeSlug, getEventTypeLabel, getMenuLabel } from "../menus.public";
 import { ddmmyyyyFromYmd } from "../validation/offerRequest";
 
 // ==============================
@@ -15,6 +16,9 @@ export interface EmailData {
   email: string;
   eventDateYmd: string;
   participants: number;
+  // eventType este slug-ul (ex. "nunta", "botez-cununie"); poate fi adăugat treptat în API
+  eventType?: EventTypeSlug;
+  // menu: slug din JSON sau "nu-sigur"
   menu: string;
   lodging: { kind: "proprie" | "oferta"; rooms: string; nights: string; notes: string };
   music: { kind: "am-eu" | "oferta"; prefs: string; genre: string; interval: string };
@@ -28,7 +32,14 @@ export interface EmailData {
 function esc(s: string): string {
   return s.replace(
     /[&<>"']/g,
-    (m) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[m]!,
+    (m) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      })[m]!,
   );
 }
 
@@ -37,30 +48,55 @@ function yn(b: boolean): "Da" | "Nu" {
 }
 
 function fmtKV(k: string, v: string): string {
-  return `<tr><td style="padding:6px 10px;border:1px solid #e5e5e5;"><strong>${esc(k)}</strong></td><td style="padding:6px 10px;border:1px solid #e5e5e5;">${esc(v)}</td></tr>`;
+  return `<tr><td style="padding:6px 10px;border:1px solid #e5e5e5;"><strong>${esc(
+    k,
+  )}</strong></td><td style="padding:6px 10px;border:1px solid #e5e5e5;">${esc(v)}</td></tr>`;
 }
 
 // ==============================
 // Builder
 // ==============================
-export function buildOfferEmail(data: EmailData): { subject: string; html: string; text: string } {
+export function buildOfferEmail(data: EmailData): {
+  subject: string;
+  html: string;
+  text: string;
+} {
   const subject = "Confirmare solicitare ofertă — ZephiraEvents";
   const dateRo = ddmmyyyyFromYmd(data.eventDateYmd);
 
   const lodgingSummary =
     data.lodging.kind === "oferta"
-      ? `Doresc ofertă (camere: ${data.lodging.rooms || "-"}, nopți: ${data.lodging.nights || "-"}, obs: ${data.lodging.notes || "-"})`
+      ? `Doresc ofertă (camere: ${data.lodging.rooms || "-"}, nopți: ${
+          data.lodging.nights || "-"
+        }, obs: ${data.lodging.notes || "-"})`
       : "Cazare proprie";
 
   const musicSummary =
     data.music.kind === "oferta"
-      ? `Doresc ofertă (preferințe: ${data.music.prefs || "-"}, gen: ${data.music.genre || "-"}, interval: ${data.music.interval || "-"})`
+      ? `Doresc ofertă (preferințe: ${data.music.prefs || "-"}, gen: ${
+          data.music.genre || "-"
+        }, interval: ${data.music.interval || "-"})`
       : "Am eu";
 
   const pvSummary =
     data.photoVideo.kind === "oferta"
-      ? `Doresc ofertă (pachet: ${data.photoVideo.package || "-"}, durată: ${data.photoVideo.duration || "-"}, livrabile: ${data.photoVideo.deliverables || "-"})`
+      ? `Doresc ofertă (pachet: ${data.photoVideo.package || "-"}, durată: ${
+          data.photoVideo.duration || "-"
+        }, livrabile: ${data.photoVideo.deliverables || "-"})`
       : "Am eu";
+
+  // Mapping central: tip eveniment + meniu (din slug)
+  const eventTypeSlug = data.eventType;
+  let eventTypeLabel = "Nespecificat";
+  let menuLabel = data.menu;
+
+  if (eventTypeSlug) {
+    eventTypeLabel = getEventTypeLabel(eventTypeSlug);
+    const resolved = getMenuLabel(eventTypeSlug, data.menu);
+    if (resolved) {
+      menuLabel = resolved;
+    }
+  }
 
   const html =
     `<div style="font:14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;color:#111">` +
@@ -72,7 +108,8 @@ export function buildOfferEmail(data: EmailData): { subject: string; html: strin
     fmtKV("Telefon", `${data.phone} (WhatsApp: ${yn(data.whatsapp)})`) +
     fmtKV("Data eveniment", dateRo) +
     fmtKV("Număr participanți", String(data.participants)) +
-    fmtKV("Meniu dorit", data.menu) +
+    fmtKV("Tip eveniment", eventTypeLabel) +
+    fmtKV("Meniu dorit", menuLabel) +
     fmtKV("Cazare", lodgingSummary) +
     fmtKV("Muzică", musicSummary) +
     fmtKV("Foto-video", pvSummary) +
@@ -93,7 +130,8 @@ export function buildOfferEmail(data: EmailData): { subject: string; html: strin
     `Telefon: ${data.phone} (WhatsApp: ${yn(data.whatsapp)})\n` +
     `Data eveniment: ${dateRo}\n` +
     `Număr participanți: ${data.participants}\n` +
-    `Meniu dorit: ${data.menu}\n` +
+    `Tip eveniment: ${eventTypeLabel}\n` +
+    `Meniu dorit: ${menuLabel}\n` +
     `Cazare: ${lodgingSummary}\n` +
     `Muzică: ${musicSummary}\n` +
     `Foto-video: ${pvSummary}\n` +
