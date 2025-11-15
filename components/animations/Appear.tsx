@@ -11,14 +11,12 @@ import * as React from "react";
 // ==============================
 // Types
 // ==============================
-// /* Tipuri */
 type AppearKind = "fade" | "fade-up" | "fade-down" | "fade-left" | "fade-right";
 type ViewportAmount = number | "some" | "all";
 
 // ==============================
 // Utils
 // ==============================
-// /* Utils */
 function makeVariants(kind: AppearKind, distance: number) {
   switch (kind) {
     case "fade-up":
@@ -39,7 +37,6 @@ const EASE = [0.2, 0, 0.2, 1] as const;
 // ==============================
 // Component
 // ==============================
-// /* Single */
 type BaseProps<T extends ElementType> = {
   as?: T;
   children?: ReactNode;
@@ -49,6 +46,8 @@ type BaseProps<T extends ElementType> = {
   duration?: number; // 0.48 elegant
   once?: boolean; // true
   amount?: ViewportAmount; // 0.2
+  /** Dacă e true, animăm imediat la mount (fără IntersectionObserver) */
+  immediate?: boolean; // false
 };
 export type AppearProps<T extends ElementType> = BaseProps<T> &
   Omit<ComponentPropsWithoutRef<T>, keyof BaseProps<T>>;
@@ -62,6 +61,7 @@ export default function Appear<T extends ElementType = "div">({
   duration = 0.48,
   once = true,
   amount = 0.2,
+  immediate = false,
   ...rest
 }: AppearProps<T>) {
   const reduce = useReducedMotion();
@@ -69,13 +69,14 @@ export default function Appear<T extends ElementType = "div">({
   const MotionTag = motion(Tag);
   const variants = makeVariants(kind, distance);
 
+  const transition = reduce ? { duration: 0 } : { duration, delay, ease: EASE };
+
   return (
     <MotionTag
       initial={reduce ? false : "hidden"}
-      whileInView="show"
-      viewport={{ once, amount }}
+      {...(immediate ? { animate: "show" } : { whileInView: "show", viewport: { once, amount } })}
       variants={variants}
-      transition={reduce ? { duration: 0 } : { duration, delay, ease: EASE }}
+      transition={transition}
       {...(rest as object)}
     >
       {children}
@@ -86,17 +87,16 @@ export default function Appear<T extends ElementType = "div">({
 // ==============================
 // Group (stagger)
 // ==============================
-// /* Group (stagger) – cu suport `as` pentru semantică (ex. ul/div) */
 type GroupBaseProps<T extends ElementType> = {
-  as?: T; // ex. "ul" pentru liste semantice
+  as?: T;
   children?: ReactNode;
   delay?: number; // 0
   stagger?: number; // 0.06
   once?: boolean; // true
   amount?: ViewportAmount; // 0.2
   className?: string;
-  wrapChildren?: boolean; // default false – păstrăm structura/semantica
-  kind?: AppearKind; // pt. wrapChildren=true
+  wrapChildren?: boolean; // default false
+  kind?: AppearKind;
   distance?: number; // 12
   duration?: number; // 0.48
 };

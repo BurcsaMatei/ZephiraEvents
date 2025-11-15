@@ -241,8 +241,8 @@ function GaleriePage() {
       {/* GRID Galerie */}
       <section className="section">
         <div className="container">
-          {/* Notă: pentru stagger pe carduri vom face un mic patch în CardGrid */}
-          <Appear>
+          {/* Appear o singură dată pe grid, dar imediat (fără IO) */}
+          <Appear immediate kind="fade">
             {cards.length === 0 ? (
               <p className="u-text-center">Nu există imagini de afișat momentan.</p>
             ) : (
@@ -250,7 +250,7 @@ function GaleriePage() {
                 cards={visibleCards}
                 onItemClick={(i) => openAt(i)}
                 aboveTheFold
-                priorityCount={6}
+                priorityCount={3}
               />
             )}
 
@@ -265,9 +265,10 @@ function GaleriePage() {
                 </Button>
               </div>
             )}
-
-            <div ref={sentinelRef} aria-hidden className="u-h-1" />
           </Appear>
+
+          {/* sentinel în afara oricărei animații */}
+          <div ref={sentinelRef} aria-hidden style={{ height: 48 }} />
         </div>
       </section>
 
