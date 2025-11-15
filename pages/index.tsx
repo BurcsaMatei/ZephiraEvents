@@ -84,6 +84,8 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
           width: 1024, // raport corect (~3:2) → anti „incorrect aspect ratio”
           height: 683,
         }}
+        heading="ZephiraEvents"
+        subheading="Sală de evenimente în Focșani, Vrancea"
       />
 
       <Separator />

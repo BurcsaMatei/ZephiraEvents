@@ -11,7 +11,6 @@ import { vars } from "./theme.css";
 // ==============================
 // Tokens & utilities
 // ==============================
-// === doar mask + efecte (fără layout) ===
 const HERO_MASK_URL = assetUrl("/masks/hero-arc-up.svg");
 
 // ==============================
@@ -25,7 +24,6 @@ const gradientFloat = keyframes({
 // ==============================
 // Classes
 // ==============================
-// Masca de arc pe <figure>
 export const maskStage = style({
   WebkitMaskImage: `url("${HERO_MASK_URL}")`,
   maskImage: `url("${HERO_MASK_URL}")`,
@@ -35,11 +33,21 @@ export const maskStage = style({
   maskSize: "100% 100%",
   WebkitMaskPosition: "center bottom",
   maskPosition: "center bottom",
-  // overflow hidden e deja în inline, dar îl dublăm defensiv fără a afecta layout-ul
   overflow: "hidden",
 });
 
-// Gradient decorativ (doar transform/opacity)
+export const mediaVideo = style({
+  position: "absolute",
+  inset: 0,
+  width: "100%",
+  height: "100%",
+  objectFit: "cover",
+  opacity: 0,
+  transition: `opacity ${vars.motion.normal} ${vars.motion.easing}`,
+  willChange: "opacity",
+});
+export const mediaVideoReady = style({ opacity: 1 });
+
 export const gradient = style({
   position: "absolute",
   inset: 0,
@@ -65,7 +73,6 @@ export const gradient = style({
   },
 });
 
-// Strat „dots”
 export const dots = style({
   position: "absolute",
   inset: 0,
@@ -78,10 +85,48 @@ export const dots = style({
   maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
 });
 
+// Conținut peste media
+export const contentLayer = style({
+  position: "absolute",
+  inset: 0,
+  zIndex: 4,
+  display: "grid",
+  placeItems: "center",
+  pointerEvents: "none",
+  padding: "min(6vw, 48px)",
+});
+
+export const contentWrap = style({
+  pointerEvents: "auto",
+  textAlign: "center",
+  maxWidth: "min(92ch, 92vw)",
+  margin: "0 auto",
+});
+
+// Alb forțat pe ambele teme + dimensiuni/greutăți
+export const heroTitle = style({
+  margin: 0,
+  fontWeight: 900,
+  letterSpacing: "-0.02em",
+  lineHeight: 1.08,
+  color: "#fff",
+  fontSize: "clamp(32px, 6.2vw, 64px)",
+  textShadow: "0 2px 18px rgba(0,0,0,0.45)",
+});
+
+export const heroSubtitle = style({
+  marginTop: "0.75em",
+  marginBottom: 0,
+  fontWeight: 600,
+  lineHeight: 1.35,
+  color: "#fff",
+  fontSize: "clamp(16px, 2.4vw, 22px)",
+  textShadow: "0 1px 12px rgba(0,0,0,0.45)",
+});
+
 // ==============================
 // Global styles
 // ==============================
-// Hover – doar pe transform/filters (no layout)
 globalStyle(`${String(maskStage)}:hover .${gradient}`, {
   filter: "saturate(1.18) contrast(1.10)",
 });
@@ -89,7 +134,6 @@ globalStyle(`${String(maskStage)}:hover .${dots}`, {
   opacity: 0.32,
 });
 
-// Reduced motion
 globalStyle("@media (prefers-reduced-motion: reduce)", {
   [`.${gradient}`]: { animation: "none" },
 });

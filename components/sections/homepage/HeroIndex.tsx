@@ -6,6 +6,7 @@
 import * as React from "react";
 
 import * as h from "../../../styles/heroIndex.css";
+import Appear from "../../animations/Appear";
 import HeroLCPImage from "../../HeroLCPImage";
 
 // ==============================
@@ -22,6 +23,8 @@ type ImgLike = {
 export type HeroIndexProps = {
   image?: ImgLike;
   withDecor?: boolean; // doar pentru efecte (gradient + dots)
+  heading?: string; // H1
+  subheading?: string; // subtitlu
 };
 
 // ==============================
@@ -36,14 +39,18 @@ const FALLBACK_IMG: ImgLike = {
 // ==============================
 // Component
 // ==============================
-export default function HeroIndex({ image, withDecor = true }: HeroIndexProps): JSX.Element {
+export default function HeroIndex({
+  image,
+  withDecor = true,
+  heading,
+  subheading,
+}: HeroIndexProps): JSX.Element {
   const src = image?.src ?? FALLBACK_IMG.src;
   const alt = image?.alt ?? FALLBACK_IMG.alt;
 
-  // FIX: boolean strict (fără undefined)
   const priorityFlag: boolean = (image?.priority ?? FALLBACK_IMG.priority) === true;
 
-  // Anti-CLS & full-bleed rămân inline (exact cum ți-au funcționat)
+  // Anti-CLS & full-bleed — rămân inline
   const fullBleedStyle: React.CSSProperties = {
     position: "relative",
     display: "block",
@@ -71,9 +78,10 @@ export default function HeroIndex({ image, withDecor = true }: HeroIndexProps): 
     overflow: "hidden",
   };
 
+  const [isVideoReady, setIsVideoReady] = React.useState(false);
+
   return (
     <div style={fullBleedStyle}>
-      {/* Masca + efectele sunt în CSS; logica de spațiu rămâne inline */}
       <figure className={h.maskStage} style={stageStyle} aria-hidden>
         <div style={mediaStyle}>
           <HeroLCPImage
@@ -83,6 +91,19 @@ export default function HeroIndex({ image, withDecor = true }: HeroIndexProps): 
             sizes="100vw"
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
+          <video
+            className={`${h.mediaVideo} ${isVideoReady ? h.mediaVideoReady : ""}`}
+            muted
+            autoPlay
+            loop
+            playsInline
+            preload="metadata"
+            poster={src}
+            onCanPlay={() => setIsVideoReady(true)}
+            aria-hidden
+          >
+            <source src="/videos/current/hero-index.mp4" type="video/mp4" />
+          </video>
         </div>
 
         {withDecor ? (
@@ -92,6 +113,19 @@ export default function HeroIndex({ image, withDecor = true }: HeroIndexProps): 
           </>
         ) : null}
       </figure>
+
+      {heading || subheading ? (
+        <div className={h.contentLayer} style={mediaStyle} aria-live="polite">
+          <div className={h.contentWrap}>
+            <Appear>
+              <>
+                {heading ? <h1 className={h.heroTitle}>{heading}</h1> : null}
+                {subheading ? <p className={h.heroSubtitle}>{subheading}</p> : null}
+              </>
+            </Appear>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
