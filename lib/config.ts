@@ -83,6 +83,13 @@ const RAW_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL;
 const PREFER_TRAILING = /\/$/.test(RAW_SITE_URL ?? "");
 const SITE_URL = normalizeUrl(RAW_SITE_URL, { requireProtocol: true });
 
+// Guard strict pentru producție: fără SITE_URL valid nu lansăm
+if (process.env.NODE_ENV === "production" && !SITE_URL) {
+  throw new Error(
+    'NEXT_PUBLIC_SITE_URL este obligatoriu în producție și trebuie să fie un URL absolut cu protocol (ex: "https://zephiraevents.ro").',
+  );
+}
+
 export const SITE = {
   url: SITE_URL,
   name: (process.env.NEXT_PUBLIC_SITE_NAME || "").trim(),
@@ -256,7 +263,15 @@ export const SITEMAPS = [
   "/sitemap-gallery.xml", // galerie
 ] as const;
 
-export const STATIC_ROUTES = ["/", "/servicii", "/contact", "/blog"] as const;
+export const STATIC_ROUTES = [
+  "/",
+  "/servicii",
+  "/galerie",
+  "/contact",
+  "/blog",
+  "/reviews",
+] as const;
+
 export const GALLERY_ATTACH_LIMIT = 100 as const;
 
 // ==============================
