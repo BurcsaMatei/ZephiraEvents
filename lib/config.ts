@@ -141,6 +141,7 @@ export const CONTACT = {
   address: {
     street: (process.env.NEXT_PUBLIC_CONTACT_STREET || "").trim(),
     city: (process.env.NEXT_PUBLIC_CONTACT_CITY || "").trim(),
+    commune: (process.env.NEXT_PUBLIC_CONTACT_COMMUNE || "").trim(),
     region: (process.env.NEXT_PUBLIC_CONTACT_REGION || "").trim(),
     postal: (process.env.NEXT_PUBLIC_CONTACT_POSTAL || "").trim(),
     country: (process.env.NEXT_PUBLIC_CONTACT_COUNTRY || "").trim(),

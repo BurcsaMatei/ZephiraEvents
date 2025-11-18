@@ -1,5 +1,3 @@
-// components/sections/contact/ContactSlaCard.tsx
-
 "use client";
 
 // ==============================
@@ -7,7 +5,7 @@
 // ==============================
 import React from "react";
 
-import { withBase } from "../../../lib/config";
+import { CONTACT, withBase } from "../../../lib/config";
 import { btn, link as btnLink, secondary as btnSecondary } from "../../../styles/button.css";
 import * as s from "../../../styles/contact/ContactSlaCard.css";
 import Appear from "../../animations/Appear";
@@ -26,10 +24,11 @@ type Props = {
 // Component
 // ==============================
 export default function ContactSlaCard({
-  whatsapp = "+40740123456",
+  whatsapp,
   guideHref = "/downloads/ghid-pregatire-continut.pdf",
 }: Props) {
-  const waHref = `https://wa.me/${whatsapp.replace(/[^\d]/g, "")}`;
+  const phoneRaw = (whatsapp || CONTACT.phone).trim();
+  const waHref = `https://wa.me/${phoneRaw.replace(/[^\d]/g, "")}`;
 
   return (
     <Appear as="article" aria-labelledby="contact-sla-title">

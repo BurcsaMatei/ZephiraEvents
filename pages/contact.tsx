@@ -10,6 +10,7 @@ import type { Crumb } from "../components/Breadcrumbs";
 import Breadcrumbs from "../components/Breadcrumbs";
 import OfferRequest from "../components/forms/OfferRequest";
 import ContactInfo from "../components/sections/contact/ContactInfo";
+import ContactMapAddress from "../components/sections/contact/ContactMapAddress";
 import ContactMapIframeConsent from "../components/sections/contact/ContactMapIframeConsent";
 import FormContact from "../components/sections/contact/FormContact";
 import Hero from "../components/sections/Hero";
@@ -201,6 +202,7 @@ const ContactPage: NextPage = () => (
         <section className="section" aria-label="Hartă locație">
           <div className="container">
             <Appear>
+              <ContactMapAddress />
               <ContactMapIframeConsent src={contactData.mapEmbedUrl} />
             </Appear>
           </div>
