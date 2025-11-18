@@ -7,7 +7,7 @@
 // ==============================
 import React, { useEffect, useRef, useState } from "react";
 
-import { withBase } from "../../../lib/config";
+import { CONTACT, withBase } from "../../../lib/config";
 import * as s from "../../../styles/contact/FormContact.css";
 import Appear from "../../animations/Appear";
 import Button from "../../Button";
@@ -27,6 +27,8 @@ export default function FormContact() {
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLFormElement | null>(null);
   const widgetLoaded = useRef(false);
+  const contactPhone = CONTACT.phone.trim();
+  const contactWhatsappHref = `https://wa.me/${contactPhone.replace(/[^\d]/g, "")}`;
 
   // Load reCAPTCHA v2 (checkbox)
   useEffect(() => {
@@ -214,8 +216,8 @@ export default function FormContact() {
               <AnimatedIcon src={withBase("/icons/contact/whatsapp.svg")} size={22} hoverTilt />
               <p className={s.itemText}>
                 Urgent? Scrie-ne pe WhatsApp:{" "}
-                <a href="https://wa.me/40769990800" aria-label="Scrie pe WhatsApp">
-                  +40 751 528 414
+                <a href={contactWhatsappHref} aria-label="Scrie pe WhatsApp">
+                  {contactPhone}
                 </a>
               </p>
             </div>
