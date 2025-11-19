@@ -271,6 +271,7 @@ export const STATIC_ROUTES = [
   "/contact",
   "/blog",
   "/reviews",
+  "/marca",
 ] as const;
 
 export const GALLERY_ATTACH_LIMIT = 100 as const;
