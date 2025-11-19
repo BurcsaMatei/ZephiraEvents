@@ -1,4 +1,5 @@
 // components/Footer.tsx
+
 "use client";
 
 // ==============================
@@ -85,6 +86,10 @@ export default function Footer(): JSX.Element {
         {/* Text copyright */}
         <span className={footerCopyClass}>
           © {new Date().getFullYear()} {siteName} — All rights reserved.
+        </span>
+        <span className={footerCopyClass}>
+          ZephiraEvents™ — marcă în curs de înregistrare.{" "}
+          <Link href={withBase("/marca")}>Detalii marcă</Link>
         </span>
 
         {/* Link-uri */}
