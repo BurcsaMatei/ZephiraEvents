@@ -12,6 +12,7 @@ import ArticlesPreview from "../components/sections/ArticlesPreview";
 // Subfold heavy – lazy wrapper care montează la intrarea în viewport (SSR off în interior)
 import ArcGallery from "../components/sections/homepage/ArcGallery.lazy";
 import HeroIndex from "../components/sections/homepage/HeroIndex";
+import LogoBeforeIntro from "../components/sections/homepage/LogoBeforeIntro";
 import IntroSection from "../components/sections/IntroSection";
 import MotivationCards from "../components/sections/MotivationCards";
 import Outro from "../components/sections/Outro";
@@ -88,19 +89,20 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
         subheading="Sală de evenimente în Focșani, Vrancea"
       />
 
-      <Separator />
-
       {/* Subfold: grupăm pentru intrare pe rând (fără Reviews aici) */}
       <AppearGroup stagger={0.12} delay={0.06} amount={0.2}>
         {/* Intro */}
         <section className="section">
           <div className="container">
             <Appear>
-              <IntroSection
-                eyebrow="Sală de evenimente în Focșani, Vrancea"
-                title="Evenimente impecabile. Fără stres."
-                lede="ZephiraEvents — sală de evenimente în Focșani, județul Vrancea — pentru nunți, botezuri, majorate și evenimente corporate. Organizare cap-coadă, servicii impecabile și atenție la detalii pentru tine și invitații tăi."
-              />
+              <>
+                <LogoBeforeIntro />
+                <IntroSection
+                  eyebrow="Sală de evenimente în Focșani, Vrancea"
+                  title="Evenimente impecabile. Fără stres."
+                  lede="ZephiraEvents — sală de evenimente în Focșani, județul Vrancea — pentru nunți, botezuri, majorate și evenimente corporate. Organizare cap-coadă, servicii impecabile și atenție la detalii pentru tine și invitații tăi."
+                />
+              </>
             </Appear>
           </div>
         </section>
