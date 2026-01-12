@@ -90,15 +90,14 @@ export const headerLogoBox = style({
 });
 
 export const headerLogoImg = style({
+  // IMPORTANT: pentru SVG inline avem nevoie de height explicit (altfel poate ajunge 0 în flex)
   display: "block",
-  height: "auto",
   width: "auto",
-  maxWidth: "none",
-  objectFit: "contain",
-  maxHeight: "min(28px, calc(var(--headerHeight, 64px) - 16px))",
+  height: 28, // mobil (păstrăm intenția actuală)
+  flexShrink: 0,
   "@media": {
-    [mq.md]: { maxHeight: "min(28px, calc(var(--headerHeight, 64px) - 16px))" },
-    [mq.lg]: { maxHeight: "min(32px, calc(var(--headerHeight, 64px) - 16px))" },
+    [mq.md]: { height: 28 },
+    [mq.lg]: { height: 32 }, // desktop (păstrăm intenția actuală)
   },
 });
 

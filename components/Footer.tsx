@@ -1,6 +1,6 @@
-// components/Footer.tsx
-
 "use client";
+
+// components/Footer.tsx
 
 // ==============================
 // Imports
@@ -24,11 +24,11 @@ import {
   iconTiktok,
   socialLink,
 } from "../styles/footer.css";
+import LogoMark from "./brand/LogoMark";
 import Button from "./Button";
 import { useCookieConsent } from "./cookies/CookieProvider";
 import ExternalLink from "./ExternalLink";
 import SmartLink from "./SmartLink";
-import Img from "./ui/Img";
 
 // ==============================
 // Constante
@@ -58,16 +58,7 @@ export default function Footer(): JSX.Element {
         {/* Logo */}
         <div className={footerLogoBoxClass}>
           <Link href={withBase("/")} className={footerLogoLink} aria-label={`${siteName} — Acasă`}>
-            <Img
-              key="footer-logo"
-              className={footerLogoImg}
-              src="/logo.svg"
-              alt={siteName}
-              width={160}
-              height={40}
-              priority={false}
-              variant="icon"
-            />
+            <LogoMark className={footerLogoImg} />
           </Link>
         </div>
 

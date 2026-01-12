@@ -1,0 +1,65 @@
+// components/brand/LogoMark.tsx
+
+// ==============================
+// Imports
+// ==============================
+import { useId } from "react";
+
+import {
+  logoMarkSvg,
+  logoStop1Var,
+  logoStop2Var,
+  logoStop3Var,
+} from "../../styles/brand/logoMark.css";
+
+// ==============================
+// Types
+// ==============================
+export type LogoMarkProps = {
+  className?: string;
+  /**
+   * Dacă vrei SVG-ul accesibil ca imagine (role="img"), setează label.
+   * Dacă nu, rămâne decorativ (aria-hidden), iar a11y se face pe wrapper (Link).
+   */
+  label?: string;
+};
+
+// ==============================
+// Component
+// ==============================
+export default function LogoMark({ className, label }: LogoMarkProps): JSX.Element {
+  const uid = useId();
+  const gradientId = `zephira-mark-gradient-${uid}`;
+
+  const isDecorative = !(typeof label === "string" && label.trim().length > 0);
+
+  return (
+    <svg
+      className={className ? `${logoMarkSvg} ${className}` : logoMarkSvg}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 485.42254 365.98196"
+      preserveAspectRatio="xMidYMid meet"
+      role={isDecorative ? undefined : "img"}
+      aria-label={isDecorative ? undefined : label}
+      aria-hidden={isDecorative ? true : undefined}
+      focusable="false"
+    >
+      <defs>
+        <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor={logoStop1Var} />
+          <stop offset="50%" stopColor={logoStop2Var} />
+          <stop offset="100%" stopColor={logoStop3Var} />
+        </linearGradient>
+      </defs>
+
+      <path
+        d="M433.01907,43.58779,359.45829,2.03106,121.7176,4.024,51.80981,43.44684l-.2807.15939L4.77288,96.66521l-.54095-.06662-.09635.78988L3.01124,98.66419,240.09912,359.96894,481.66392,94.64606Zm42.443,50.09542-83.93124,11.29643,40.34338-57.04557ZM234.687,124.70234,98.82439,108.13413l54.8414-47.0212Zm3.95261,3.4263V349.88509L98.35632,111.021Zm2.92376-.01606,143.69589-19.34089-143.69592,241.183Zm4.44033-3.54582L333.3529,60.42423l51.18089,45.49745Zm141.91415-20.2455-.038.05294-.0256.04284L337.28284,59.462l90.98129-12.191ZM241.76554,123.54618l-.00713-51.28428,85.43712-11.44752Zm-3.33765-51.28845.00713,51.15284L159.4633,61.42934ZM95.504,106.59374,56.17391,47.26387l93.563,12.83086Zm-.64114,5.05532L232.31993,345.70119,9.56541,100.19327l84.53668,10.30918Zm294.61191-3.44415,85.09756-11.45406L248.08582,345.51375ZM122.73591,7.84225,358.467,5.86653l67.81445,38.31006L240.09551,69.12527,58.28048,44.19144Zm-70.031,40.21629L91.979,107.29923,9.37846,97.22664Z"
+        transform="translate(0.34247 0.47446)"
+        fill="none"
+        stroke={`url(#${gradientId})`}
+        strokeMiterlimit={10}
+        strokeWidth={5}
+      />
+    </svg>
+  );
+}
