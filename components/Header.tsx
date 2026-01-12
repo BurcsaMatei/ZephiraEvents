@@ -1,6 +1,6 @@
-// components/Header.tsx
-
 "use client";
+
+// components/Header.tsx
 
 // ==============================
 // Imports
@@ -36,8 +36,8 @@ import {
   rightRow,
   themeSwitchWrap,
 } from "../styles/header.css";
+import LogoMark from "./brand/LogoMark";
 import type { HeaderPanelProps } from "./HeaderPanel.lazy";
-import Img from "./ui/Img";
 
 // ==============================
 // Dynamic import
@@ -231,14 +231,7 @@ export default function Header() {
     <header ref={headerRef} className={`${headerRoot} ${isHome ? headerFixed : ""}`} role="banner">
       <div className={`container ${headerWrap} ${effectiveVisible ? headerVisible : headerHidden}`}>
         <Link href={withBase("/")} aria-label={`${siteName} — Acasă`} className={headerLogoBox}>
-          <Img
-            className={headerLogoImg}
-            src="/logo.svg"
-            alt={siteName}
-            variant="icon"
-            width={120}
-            height={32}
-          />
+          <LogoMark className={headerLogoImg} />
           <strong>{siteName}</strong>
         </Link>
 
