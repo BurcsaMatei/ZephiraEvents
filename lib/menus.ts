@@ -44,3 +44,30 @@ export function getMenusByEventType(eventType: EventType): Menu[] {
 
   return filtered;
 }
+
+export function getMenuBySlug(slug: string): Menu | null {
+  const found = allMenus.find((m) => m.slug === slug) ?? null;
+
+  if (isDev() && !found) {
+    devWarn("Nu am găsit meniu pentru slug=%s", slug);
+  }
+
+  return found;
+}
+
+export function getEventTypeAnchorHref(eventType: EventType): string {
+  switch (eventType) {
+    case "Nunta":
+      return "/servicii#meniuri-nunta";
+    case "Botez & Cununie":
+      return "/servicii#meniuri-botez-cununie";
+    case "Petreceri Private & Majorate":
+      return "/servicii#meniuri-petreceri-private-majorate";
+    case "Corporate & Team Building":
+      return "/servicii#meniuri-corporate-team-building";
+    default: {
+      const _exhaustive: never = eventType;
+      return _exhaustive;
+    }
+  }
+}

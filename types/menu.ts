@@ -28,6 +28,13 @@ export interface Menu {
   currency: string; // ex. "EUR" | "RON"
   image: string;
   imageAlt: string;
+
+  /**
+   * Opțional: galerie de imagini pentru cardurile “ArcMenuGallery”.
+   * Dacă lipsește, UI folosește fallback (repetă `image` până la 3 cadre).
+   */
+  images?: string[];
+
   eventType: EventType;
   sections: MenuSections;
 }
