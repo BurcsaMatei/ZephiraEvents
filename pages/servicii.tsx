@@ -9,7 +9,7 @@ import Appear, { AppearGroup } from "../components/animations/Appear";
 import Breadcrumbs, { type Crumb } from "../components/Breadcrumbs";
 import Hero from "../components/sections/Hero";
 import IntroSection from "../components/sections/IntroSection";
-import MenuOffers from "../components/sections/MenuOffers";
+import ArcMenuGallery from "../components/sections/menus/ArcMenuGallery";
 import MotivationCards from "../components/sections/MotivationCards";
 import Outro from "../components/sections/Outro";
 import ServiciiComplete from "../components/sections/servicii/ServiciiComplete";
@@ -153,42 +153,66 @@ const ServicesPage: NextPage = () => {
         <Separator />
 
         {/* Meniuri nuntă */}
-        <Appear>
-          <MenuOffers id="meniuri-nunta" heading="Meniuri nuntă" menus={nuntaMenus} />
-        </Appear>
+        <section className="section" id="meniuri-nunta" aria-labelledby="meniuri-nunta-title">
+          <div className="container">
+            <Appear>
+              <h2 id="meniuri-nunta-title">Meniuri nuntă</h2>
+              <ArcMenuGallery menus={nuntaMenus} />
+            </Appear>
+          </div>
+        </section>
 
         <Separator />
 
         {/* Meniuri botez & cununie */}
-        <Appear>
-          <MenuOffers
-            id="meniuri-botez-cununie"
-            heading="Meniuri botez & cununie"
-            menus={botezMenus}
-          />
-        </Appear>
+        <section
+          className="section"
+          id="meniuri-botez-cununie"
+          aria-labelledby="meniuri-botez-cununie-title"
+        >
+          <div className="container">
+            <Appear>
+              <h2 id="meniuri-botez-cununie-title">Meniuri botez & cununie</h2>
+              <ArcMenuGallery menus={botezMenus} />
+            </Appear>
+          </div>
+        </section>
 
         <Separator />
 
         {/* Meniuri petreceri private & majorate */}
-        <Appear>
-          <MenuOffers
-            id="meniuri-petreceri-private-majorate"
-            heading="Meniuri petreceri private & majorate"
-            menus={privateMenus}
-          />
-        </Appear>
+        <section
+          className="section"
+          id="meniuri-petreceri-private-majorate"
+          aria-labelledby="meniuri-petreceri-private-majorate-title"
+        >
+          <div className="container">
+            <Appear>
+              <h2 id="meniuri-petreceri-private-majorate-title">
+                Meniuri petreceri private &amp; majorate
+              </h2>
+              <ArcMenuGallery menus={privateMenus} />
+            </Appear>
+          </div>
+        </section>
 
         <Separator />
 
         {/* Meniuri corporate & team building */}
-        <Appear>
-          <MenuOffers
-            id="meniuri-corporate-team-building"
-            heading="Meniuri corporate & team building"
-            menus={corporateMenus}
-          />
-        </Appear>
+        <section
+          className="section"
+          id="meniuri-corporate-team-building"
+          aria-labelledby="meniuri-corporate-team-building-title"
+        >
+          <div className="container">
+            <Appear>
+              <h2 id="meniuri-corporate-team-building-title">
+                Meniuri corporate &amp; team building
+              </h2>
+              <ArcMenuGallery menus={corporateMenus} />
+            </Appear>
+          </div>
+        </section>
 
         <Separator />
 
