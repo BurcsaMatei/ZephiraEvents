@@ -13,13 +13,19 @@
 // Imports
 // ==============================
 import dynamic from "next/dynamic";
-import type { ComponentType } from "react";
+import type { ComponentType, ReactNode } from "react";
 
 import type { Menu } from "../../../types/menu";
 
 // ==============================
 // Types
 // ==============================
+export type ArcMenuPresentation = {
+  eyebrow?: ReactNode;
+  title?: string;
+  lede?: ReactNode;
+};
+
 export type ArcMenuGalleryProps = {
   id?: string;
   heading?: string;
@@ -29,6 +35,7 @@ export type ArcMenuGalleryProps = {
   glowOpacity?: number;
   priorityFirst?: boolean;
   pauseWhenHidden?: boolean;
+  presentation?: ArcMenuPresentation;
 };
 
 // ==============================

@@ -153,66 +153,66 @@ const ServicesPage: NextPage = () => {
         <Separator />
 
         {/* Meniuri nuntă */}
-        <section className="section" id="meniuri-nunta" aria-labelledby="meniuri-nunta-title">
-          <div className="container">
-            <Appear>
-              <h2 id="meniuri-nunta-title">Meniuri nuntă</h2>
-              <ArcMenuGallery menus={nuntaMenus} />
-            </Appear>
-          </div>
-        </section>
+        <Appear>
+          <ArcMenuGallery
+            id="meniuri-nunta"
+            heading="OFERTE MENIURI"
+            menus={nuntaMenus}
+            presentation={{
+              eyebrow: "Meniuri nuntă",
+              title: "MENIURI",
+              lede: "Meniuri gândite pentru o nuntă elegantă, cu preparate echilibrate și prezentare impecabilă. Personalizăm opțiunile în funcție de preferințe (copii, vegetarian, alergeni), astfel încât masa să completeze perfect atmosfera serii.",
+            }}
+          />
+        </Appear>
 
         <Separator />
 
         {/* Meniuri botez & cununie */}
-        <section
-          className="section"
-          id="meniuri-botez-cununie"
-          aria-labelledby="meniuri-botez-cununie-title"
-        >
-          <div className="container">
-            <Appear>
-              <h2 id="meniuri-botez-cununie-title">Meniuri botez & cununie</h2>
-              <ArcMenuGallery menus={botezMenus} />
-            </Appear>
-          </div>
-        </section>
+        <Appear>
+          <ArcMenuGallery
+            id="meniuri-botez-cununie"
+            heading="OFERTE MENIURI"
+            menus={botezMenus}
+            presentation={{
+              eyebrow: "Meniuri botez & cununie",
+              title: "MENIURI",
+              lede: "Opțiuni potrivite pentru botez și cununie, cu gusturi clasice și porții bine calculate. Ajustăm structura meniului în funcție de invitați și preferințe, pentru o experiență lejeră și memorabilă.",
+            }}
+          />
+        </Appear>
 
         <Separator />
 
         {/* Meniuri petreceri private & majorate */}
-        <section
-          className="section"
-          id="meniuri-petreceri-private-majorate"
-          aria-labelledby="meniuri-petreceri-private-majorate-title"
-        >
-          <div className="container">
-            <Appear>
-              <h2 id="meniuri-petreceri-private-majorate-title">
-                Meniuri petreceri private &amp; majorate
-              </h2>
-              <ArcMenuGallery menus={privateMenus} />
-            </Appear>
-          </div>
-        </section>
+        <Appear>
+          <ArcMenuGallery
+            id="meniuri-petreceri-private-majorate"
+            heading="OFERTE MENIURI"
+            menus={privateMenus}
+            presentation={{
+              eyebrow: "Meniuri petreceri private & majorate",
+              title: "MENIURI",
+              lede: "Meniuri flexibile pentru petreceri private și majorate — combinații fresh, ritm bun al servirii și opțiuni pentru toate preferințele. Alegem împreună varianta care se potrivește stilului tău de eveniment.",
+            }}
+          />
+        </Appear>
 
         <Separator />
 
         {/* Meniuri corporate & team building */}
-        <section
-          className="section"
-          id="meniuri-corporate-team-building"
-          aria-labelledby="meniuri-corporate-team-building-title"
-        >
-          <div className="container">
-            <Appear>
-              <h2 id="meniuri-corporate-team-building-title">
-                Meniuri corporate &amp; team building
-              </h2>
-              <ArcMenuGallery menus={corporateMenus} />
-            </Appear>
-          </div>
-        </section>
+        <Appear>
+          <ArcMenuGallery
+            id="meniuri-corporate-team-building"
+            heading="OFERTE MENIURI"
+            menus={corporateMenus}
+            presentation={{
+              eyebrow: "Meniuri corporate & team building",
+              title: "MENIURI",
+              lede: "Meniuri pentru evenimente corporate și team building, cu servire eficientă și opțiuni versatile. Personalizăm în funcție de program, număr de invitați și tipul momentului (protocol, buffet, cină).",
+            }}
+          />
+        </Appear>
 
         <Separator />
 

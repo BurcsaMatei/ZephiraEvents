@@ -21,6 +21,94 @@ const dash = keyframes({
 });
 
 // ==============================
+// Header (presentation + label)
+// ==============================
+export const presentationWrap = style({
+  marginBottom: vars.space.lg,
+});
+
+export const presentationPanel = style({
+  position: "relative",
+  overflow: "hidden",
+  isolation: "isolate",
+});
+
+export const presentationContent = style({
+  position: "relative",
+  zIndex: 0, // content stays under ribbon when ribbon is shown
+});
+
+export const ribbon = style({
+  position: "absolute",
+
+  // ✅ MOBILE (default) — îl aducem în card ca să nu fie tăiat complet
+  top: -60,
+  left: 35,
+  width: "clamp(140px, 46vw, 155px)",
+  height: "clamp(140px, 46vw, 155px)",
+  transform: "rotate(40deg)",
+
+  zIndex: 3,
+  pointerEvents: "none",
+  transformOrigin: "top left",
+
+  // ✅ normal: 100% imaginea
+  opacity: 1,
+  transition: `opacity ${vars.motion.normal} ${vars.motion.easing}`,
+
+  "@media": {
+    // ✅ TABLET+
+    [mq.md]: {
+      top: -92,
+      left: 32,
+      width: "clamp(180px, 38vw, 240px)",
+      height: "clamp(180px, 38vw, 240px)",
+      transform: "rotate(40deg)",
+    },
+
+    // ✅ DESKTOP (valorile tale ok)
+    [mq.lg]: {
+      top: -95,
+      left: 55,
+      width: "clamp(190px, 26vw, 260px)",
+      height: "clamp(190px, 26vw, 260px)",
+      transform: "rotate(40deg)",
+    },
+
+    "(hover: hover)": {
+      selectors: {
+        [`${presentationPanel}:hover &`]: { opacity: 0.35 },
+      },
+    },
+
+    "(prefers-reduced-motion: reduce)": {
+      transition: "none",
+    },
+  },
+});
+
+globalStyle(`${ribbon} img`, {
+  width: "100%",
+  height: "100%",
+  objectFit: "contain",
+  display: "block",
+});
+
+export const offersLabel = style({
+  textAlign: "center",
+  margin: `${vars.space.md} auto ${vars.space.lg}`,
+  fontWeight: 850,
+  letterSpacing: "0.12em",
+  textTransform: "uppercase",
+  color: vars.color.text,
+  opacity: 0.92,
+  fontSize: "0.95rem",
+  "@media": {
+    [mq.lg]: { fontSize: "1rem" },
+  },
+});
+
+// ==============================
 // Grid
 // ==============================
 export const grid = style({
