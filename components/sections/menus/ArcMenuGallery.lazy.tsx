@@ -7,10 +7,11 @@
 // ==============================
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 
 import { withBase } from "../../../lib/config";
 import { buildMenuJsonLd, type MenuData } from "../../../lib/seo/menuJsonLd";
+import * as intro from "../../../styles/introSection.css";
 import * as s from "../../../styles/sections/arcMenuGallery.css";
 import type { Menu } from "../../../types/menu";
 import Appear from "../../animations/Appear";
@@ -19,6 +20,12 @@ import Img from "../../ui/Img";
 // ==============================
 // Types
 // ==============================
+export type ArcMenuPresentation = {
+  eyebrow?: ReactNode;
+  title?: string;
+  lede?: ReactNode;
+};
+
 export type ArcMenuGalleryProps = {
   id?: string;
   heading?: string;
@@ -28,6 +35,7 @@ export type ArcMenuGalleryProps = {
   glowOpacity?: number;
   priorityFirst?: boolean;
   pauseWhenHidden?: boolean;
+  presentation?: ArcMenuPresentation;
 };
 
 // ==============================
@@ -151,6 +159,10 @@ function menuToMenuData(menu: Menu): MenuData {
     imageAlt: menu.imageAlt,
     sections: menu.sections,
   };
+}
+
+function hasMeaningfulPresentation(p: ArcMenuPresentation | undefined): boolean {
+  return Boolean(p && (p.eyebrow || p.title || p.lede));
 }
 
 // ==============================
@@ -289,7 +301,6 @@ function ArcMenuCard({
                 />
               </svg>
 
-              {/* progress ring sincron “aproximativ” cu autoplay */}
               <svg key={progressKey} className={s.progress} viewBox="0 0 36 36" data-d={baseMs}>
                 <circle className={s.progressBg} cx="18" cy="18" r="15" />
                 <circle className={s.progressFg} cx="18" cy="18" r="15" />
@@ -311,32 +322,62 @@ export default function ArcMenuGallery({
   id,
   heading = "Oferte de meniu",
   menus,
-  intervalMs = 4800, // compat; folosim setul PROGRESS_DURATIONS pentru ring
+  intervalMs = 4800,
   tiltMax = 8,
   glowOpacity = 0.28,
   priorityFirst = false,
   pauseWhenHidden = true,
+  presentation,
 }: ArcMenuGalleryProps) {
   const reducedMotion = usePrefersReducedMotion();
   const pointerCoarse = usePointerCoarse();
 
   const safeMenus = useMemo(() => menus ?? [], [menus]);
-
-  // JSON-LD (păstrăm comportamentul din MenuOffers)
   const jsonLd = useMemo(() => buildMenuJsonLd(safeMenus.map(menuToMenuData)), [safeMenus]);
 
-  // Folosim setul fix de durate, ca să nu introducem inline styles.
-  // intervalMs rămâne prop pentru compat/viitor, dar ring-ul rămâne deterministic.
-  const _ = intervalMs;
+  void intervalMs;
+
+  const titleId = id ? `${id}-title` : "arc-menu-gallery-title";
+  const showPresentation = hasMeaningfulPresentation(presentation);
 
   return (
-    <section
-      id={id}
-      className="section"
-      aria-labelledby={id ? `${id}-title` : "arc-menu-gallery-title"}
-    >
+    <section id={id} className="section" aria-labelledby={titleId}>
       <div className="container">
-        <h2 id={id ? `${id}-title` : "arc-menu-gallery-title"}>{heading}</h2>
+        {showPresentation ? (
+          <>
+            <div className={s.presentationWrap}>
+              <div className={`${intro.panel} ${intro.onDark} ${s.presentationPanel}`}>
+                <span className={s.ribbon} aria-hidden="true">
+                  <Img
+                    src="/images/decor/ribbon.png"
+                    alt=""
+                    fill
+                    fit="contain"
+                    sizes="(max-width: 768px) 185px, 260px"
+                    quality={90}
+                    priority={false}
+                  />
+                </span>
+
+                <div className={`${intro.center} ${s.presentationContent}`}>
+                  {presentation?.eyebrow ? (
+                    <div className={intro.eyebrow}>{presentation.eyebrow}</div>
+                  ) : null}
+
+                  <h2 id={titleId} className={intro.heading}>
+                    {presentation?.title ?? "MENIURI"}
+                  </h2>
+
+                  {presentation?.lede ? <p className={intro.lede}>{presentation.lede}</p> : null}
+                </div>
+              </div>
+            </div>
+
+            <p className={s.offersLabel}>{heading}</p>
+          </>
+        ) : (
+          <h2 id={titleId}>{heading}</h2>
+        )}
 
         <div className={s.grid}>
           {safeMenus.map((menu, i) => {
