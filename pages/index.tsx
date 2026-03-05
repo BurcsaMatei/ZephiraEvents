@@ -18,6 +18,7 @@ import MotivationCards from "../components/sections/MotivationCards";
 import Outro from "../components/sections/Outro";
 import Reviews from "../components/sections/Reviews";
 import { Serviciipreview } from "../components/sections/Serviciipreview";
+import TentAtLocationBanner from "../components/sections/TentAtLocationBanner";
 import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
@@ -125,6 +126,17 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
           <div className="container">
             <Appear>
               <Serviciipreview />
+            </Appear>
+          </div>
+        </section>
+
+        <Separator />
+
+        {/* Banner: Cort la locație */}
+        <section className="section">
+          <div className="container">
+            <Appear>
+              <TentAtLocationBanner />
             </Appear>
           </div>
         </section>

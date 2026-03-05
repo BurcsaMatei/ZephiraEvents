@@ -6,21 +6,27 @@
 // Imports
 // ==============================
 import Link from "next/link";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { withBase } from "../lib/config";
+import { SERVICII_SUBMENU } from "../lib/nav";
 import {
   closeBtn,
   closeIcon,
   overlay,
   overlayOpen,
   panel,
+  panelAccordionBtn,
+  panelAccordionChevron,
+  panelAccordionContent,
+  panelAccordionContentOpen,
   panelLink,
   panelNav,
   panelOpen,
   panelPhoneLink,
   panelPhoneRow,
   panelSocialRow,
+  panelSubLink,
   socialLink,
 } from "../styles/header.css";
 
@@ -54,6 +60,28 @@ export default function HeaderPanel({
   const panelRef = useRef<HTMLDivElement | null>(null);
   const mountedOnceRef = useRef(false);
 
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const [menusOpen, setMenusOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) {
+      setServicesOpen(false);
+      setMenusOpen(false);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (!servicesOpen) setMenusOpen(false);
+  }, [servicesOpen]);
+
+  const servicesActive =
+    isActive("/servicii") || isActive("/meniuri") || isActive("/cort-evenimente-la-locatia-ta");
+
+  const closeAndRestoreFocus = useCallback(() => {
+    onClose();
+    setTimeout(() => burgerBtnRef.current?.focus(), 0);
+  }, [onClose, burgerBtnRef]);
+
   // Focus trap + Esc
   useEffect(() => {
     if (!open || !panelRef.current) return;
@@ -73,8 +101,7 @@ export default function HeaderPanel({
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
-        onClose();
-        setTimeout(() => burgerBtnRef.current?.focus(), 0);
+        closeAndRestoreFocus();
         return;
       }
       if (e.key === "Tab" && focusable.length > 0) {
@@ -92,16 +119,13 @@ export default function HeaderPanel({
 
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [open, onClose, burgerBtnRef]);
+  }, [open, closeAndRestoreFocus]);
 
   return (
     <>
       <div
         className={`${overlay} ${open ? overlayOpen : ""}`}
-        onClick={() => {
-          onClose();
-          setTimeout(() => burgerBtnRef.current?.focus(), 0);
-        }}
+        onClick={closeAndRestoreFocus}
         role="presentation"
         tabIndex={-1}
         aria-hidden
@@ -120,26 +144,98 @@ export default function HeaderPanel({
           type="button"
           className={closeBtn}
           aria-label="Închide meniul"
-          onClick={() => {
-            onClose();
-            setTimeout(() => burgerBtnRef.current?.focus(), 0);
-          }}
+          onClick={closeAndRestoreFocus}
         >
           <span className={closeIcon} aria-hidden />
         </button>
 
         <nav className={panelNav}>
-          {nav.map((item) => (
-            <Link
-              key={item.href}
-              className={panelLink}
-              href={withBase(item.href)}
-              aria-current={isActive(item.href) ? "page" : undefined}
-              data-active={isActive(item.href) ? "true" : "false"}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {nav.map((item) => {
+            if (item.href === "/servicii") {
+              return (
+                <div key={item.href}>
+                  <button
+                    type="button"
+                    className={panelAccordionBtn}
+                    onClick={() => setServicesOpen((v) => !v)}
+                    aria-expanded={servicesOpen}
+                    aria-controls="panel-servicii-submenu"
+                    data-open={servicesOpen ? "true" : "false"}
+                    data-active={servicesActive ? "true" : "false"}
+                  >
+                    <span>{item.label}</span>
+                    <span className={panelAccordionChevron} aria-hidden />
+                  </button>
+
+                  <div
+                    id="panel-servicii-submenu"
+                    className={`${panelAccordionContent} ${
+                      servicesOpen ? panelAccordionContentOpen : ""
+                    }`}
+                  >
+                    <Link
+                      className={panelSubLink}
+                      href={withBase("/servicii")}
+                      onClick={closeAndRestoreFocus}
+                    >
+                      Toate serviciile
+                    </Link>
+
+                    <button
+                      type="button"
+                      className={panelAccordionBtn}
+                      onClick={() => setMenusOpen((v) => !v)}
+                      aria-expanded={menusOpen}
+                      aria-controls="panel-servicii-meniuri"
+                      data-open={menusOpen ? "true" : "false"}
+                    >
+                      <span>{SERVICII_SUBMENU.meniuri.label}</span>
+                      <span className={panelAccordionChevron} aria-hidden />
+                    </button>
+
+                    <div
+                      id="panel-servicii-meniuri"
+                      className={`${panelAccordionContent} ${
+                        menusOpen ? panelAccordionContentOpen : ""
+                      }`}
+                    >
+                      {SERVICII_SUBMENU.meniuri.items.map((sub) => (
+                        <Link
+                          key={sub.href}
+                          className={panelSubLink}
+                          href={withBase(sub.href)}
+                          onClick={closeAndRestoreFocus}
+                        >
+                          {sub.label}
+                        </Link>
+                      ))}
+                    </div>
+
+                    <Link
+                      className={panelSubLink}
+                      href={withBase(SERVICII_SUBMENU.tent.href)}
+                      onClick={closeAndRestoreFocus}
+                    >
+                      {SERVICII_SUBMENU.tent.label}
+                    </Link>
+                  </div>
+                </div>
+              );
+            }
+
+            return (
+              <Link
+                key={item.href}
+                className={panelLink}
+                href={withBase(item.href)}
+                aria-current={isActive(item.href) ? "page" : undefined}
+                data-active={isActive(item.href) ? "true" : "false"}
+                onClick={closeAndRestoreFocus}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
 
         {rawPhone && (

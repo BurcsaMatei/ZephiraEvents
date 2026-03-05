@@ -151,6 +151,143 @@ export const navLink = style({
   },
 });
 
+// ==============================
+// Desktop submenu (Servicii accordion)
+// ==============================
+export const navItemWithMenu = style({
+  position: "relative",
+  display: "inline-flex",
+  alignItems: "center",
+});
+
+export const navMenuButton = style({
+  background: "transparent",
+  border: "none",
+  cursor: "pointer",
+  textDecoration: "none",
+  color: vars.color.text,
+  fontWeight: 600,
+  lineHeight: 1,
+  padding: `${vars.space.sm} ${vars.space.md}`,
+  borderRadius: vars.radius.md,
+  display: "inline-flex",
+  alignItems: "center",
+  gap: 10,
+  ":focus-visible": { outline: `2px solid ${vars.color.focus}`, outlineOffset: 2 },
+  selectors: {
+    "&:hover": { background: vars.color.surfaceHover },
+    '&[data-active="true"]': { background: vars.color.surfaceActive, color: vars.color.link },
+  },
+});
+
+export const navChevron = style({
+  width: 10,
+  height: 10,
+  display: "inline-block",
+  borderRight: `2px solid ${vars.color.text}`,
+  borderBottom: `2px solid ${vars.color.text}`,
+  transform: "rotate(45deg)",
+  transition: `transform ${vars.motion.fast} ${vars.motion.easing}`,
+  selectors: {
+    [`${navMenuButton}[data-open="true"] &`]: { transform: "rotate(-135deg)" },
+  },
+});
+
+export const navSubmenu = style({
+  position: "absolute",
+  top: "calc(100% + 8px)",
+  left: 0,
+  minWidth: 320,
+  background: vars.color.bg,
+  border: `1px solid ${vars.color.border}`,
+  borderRadius: vars.radius.lg,
+  boxShadow: vars.shadow.lg,
+  padding: vars.space.sm,
+  display: "grid",
+  gap: vars.space.xs,
+
+  opacity: 0,
+  transform: "translateY(-6px)",
+  pointerEvents: "none",
+  transition,
+
+  "@media": { "(prefers-reduced-motion: reduce)": { transition: "none" } },
+});
+
+export const navSubmenuOpen = style({
+  opacity: 1,
+  transform: "translateY(0)",
+  pointerEvents: "auto",
+});
+
+export const navSubLink = style({
+  textDecoration: "none",
+  color: vars.color.text,
+  fontWeight: 700,
+  padding: `${vars.space.sm} ${vars.space.md}`,
+  borderRadius: vars.radius.md,
+  ":focus-visible": { outline: `2px solid ${vars.color.focus}`, outlineOffset: 2 },
+  selectors: {
+    "&:hover": { background: vars.color.surfaceHover },
+  },
+});
+
+export const navSubDivider = style({
+  height: 1,
+  background: vars.color.border,
+  margin: `${vars.space.xs} ${vars.space.sm}`,
+});
+
+export const navSubGroupBtn = style({
+  background: "transparent",
+  border: "none",
+  cursor: "pointer",
+  width: "100%",
+  textAlign: "left",
+  color: vars.color.text,
+  fontWeight: 800,
+  padding: `${vars.space.sm} ${vars.space.md}`,
+  borderRadius: vars.radius.md,
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: 12,
+  ":focus-visible": { outline: `2px solid ${vars.color.focus}`, outlineOffset: 2 },
+  selectors: {
+    "&:hover": { background: vars.color.surfaceHover },
+  },
+});
+
+export const navSubGroupChevron = style({
+  width: 10,
+  height: 10,
+  display: "inline-block",
+  borderRight: `2px solid ${vars.color.text}`,
+  borderBottom: `2px solid ${vars.color.text}`,
+  transform: "rotate(45deg)",
+  transition: `transform ${vars.motion.fast} ${vars.motion.easing}`,
+  selectors: {
+    [`${navSubGroupBtn}[data-open="true"] &`]: { transform: "rotate(-135deg)" },
+  },
+});
+
+export const navSubGroup = style({
+  display: "grid",
+  gap: vars.space.xs,
+  paddingLeft: vars.space.sm,
+
+  maxHeight: 0,
+  overflow: "hidden",
+  opacity: 0,
+  transition: `max-height ${vars.motion.normal} ${vars.motion.easing}, opacity ${vars.motion.normal} ${vars.motion.easing}`,
+  "@media": { "(prefers-reduced-motion: reduce)": { transition: "none" } },
+});
+
+export const navSubGroupOpen = style({
+  maxHeight: 340,
+  opacity: 1,
+});
+
 // Burger
 export const mobileBtn = style({
   justifySelf: "end",
@@ -293,6 +430,73 @@ export const panelLink = style({
   selectors: {
     "&:hover": { background: vars.color.surfaceHover },
     '&[data-active="true"]': { background: vars.color.surfaceActive, color: vars.color.link },
+  },
+});
+
+// ==============================
+// Mobile panel submenu (accordion)
+// ==============================
+export const panelAccordionBtn = style({
+  background: "transparent",
+  border: "none",
+  cursor: "pointer",
+  width: "100%",
+  textAlign: "left",
+  color: vars.color.text,
+  fontWeight: 800,
+  padding: vars.space.md,
+  borderRadius: vars.radius.lg,
+  display: "inline-flex",
+  alignItems: "center",
+  justifyContent: "space-between",
+  gap: 12,
+  ":focus-visible": { outline: `2px solid ${vars.color.focus}`, outlineOffset: 2 },
+  selectors: {
+    "&:hover": { background: vars.color.surfaceHover },
+    '&[data-active="true"]': { background: vars.color.surfaceActive, color: vars.color.link },
+  },
+});
+
+export const panelAccordionChevron = style({
+  width: 10,
+  height: 10,
+  display: "inline-block",
+  borderRight: `2px solid ${vars.color.text}`,
+  borderBottom: `2px solid ${vars.color.text}`,
+  transform: "rotate(45deg)",
+  transition: `transform ${vars.motion.fast} ${vars.motion.easing}`,
+  selectors: {
+    [`${panelAccordionBtn}[data-open="true"] &`]: { transform: "rotate(-135deg)" },
+  },
+});
+
+export const panelAccordionContent = style({
+  display: "grid",
+  gap: vars.space.xs,
+  paddingLeft: vars.space.sm,
+  paddingRight: vars.space.sm,
+
+  maxHeight: 0,
+  overflow: "hidden",
+  opacity: 0,
+  transition: `max-height ${vars.motion.normal} ${vars.motion.easing}, opacity ${vars.motion.normal} ${vars.motion.easing}`,
+  "@media": { "(prefers-reduced-motion: reduce)": { transition: "none" } },
+});
+
+export const panelAccordionContentOpen = style({
+  maxHeight: 520,
+  opacity: 1,
+});
+
+export const panelSubLink = style({
+  textDecoration: "none",
+  color: vars.color.text,
+  fontWeight: 700,
+  padding: `${vars.space.sm} ${vars.space.md}`,
+  borderRadius: vars.radius.md,
+  ":focus-visible": { outline: `2px solid ${vars.color.focus}`, outlineOffset: 2 },
+  selectors: {
+    "&:hover": { background: vars.color.surfaceHover },
   },
 });
 

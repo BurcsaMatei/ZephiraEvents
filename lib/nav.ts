@@ -32,6 +32,10 @@ export type NavGroup = {
   items: readonly NavItem[];
 };
 
+// Submenu (Servicii)
+export type NavSubItem = { href: string; label: string };
+export type NavSubGroup = { label: string; items: readonly NavSubItem[] };
+
 // ==============================
 // Navigation (principal) — readonly
 // ==============================
@@ -42,6 +46,32 @@ export const NAV = [
   { href: "/blog", label: "Blog" },
   { href: "/contact", label: "Contact" },
 ] as const satisfies readonly NavItem[];
+
+// ==============================
+// Submenu: Servicii
+// ==============================
+export const SERVICII_SUBMENU = {
+  meniuri: {
+    label: "Meniuri",
+    items: [
+      { href: "/servicii#meniuri-nunta", label: "Meniuri nuntă" },
+      { href: "/servicii#meniuri-botez-cununie", label: "Meniuri botez & cununie" },
+      {
+        href: "/servicii#meniuri-petreceri-private-majorate",
+        label: "Meniuri petreceri private & majorate",
+      },
+      {
+        href: "/servicii#meniuri-corporate-team-building",
+        label: "Meniuri corporate & team building",
+      },
+    ],
+  } as const satisfies NavSubGroup,
+
+  tent: {
+    href: "/cort-evenimente-la-locatia-ta",
+    label: "Cort de evenimente la locația ta",
+  } as const satisfies NavSubItem,
+} as const;
 
 // ==============================
 // Social — din .env/CMS cu fallback-uri sigure

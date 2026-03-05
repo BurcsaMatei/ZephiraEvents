@@ -254,6 +254,9 @@ export const SEO_DEFAULTS = {
   twitterHandle: SITE.twitterHandle,
 } as const;
 
+// lib/config.ts
+// ... (fișierul rămâne identic, doar STATIC_ROUTES se extinde)
+
 // ==============================
 // Sitemap / Routes / Limits
 // ==============================
@@ -267,6 +270,7 @@ export const SITEMAPS = [
 export const STATIC_ROUTES = [
   "/",
   "/servicii",
+  "/cort-evenimente-la-locatia-ta",
   "/galerie",
   "/contact",
   "/blog",
