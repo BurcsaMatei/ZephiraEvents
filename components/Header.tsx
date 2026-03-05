@@ -13,7 +13,12 @@ import { useRouter } from "next/router";
 import { type ComponentType, useEffect, useRef, useState } from "react";
 
 import { CONTACT, SITE, withBase } from "../lib/config";
-import { NAV as NAV_DATA, SOCIAL as SOCIAL_DATA, type SocialKind } from "../lib/nav";
+import {
+  NAV as NAV_DATA,
+  SERVICII_SUBMENU,
+  SOCIAL as SOCIAL_DATA,
+  type SocialKind,
+} from "../lib/nav";
 import {
   burgerBot,
   burgerBox,
@@ -31,8 +36,19 @@ import {
   iconInstagram,
   iconTiktok,
   mobileBtn,
+  navChevron,
   navDesktop,
+  navItemWithMenu,
   navLink,
+  navMenuButton,
+  navSubDivider,
+  navSubGroup,
+  navSubGroupBtn,
+  navSubGroupChevron,
+  navSubGroupOpen,
+  navSubLink,
+  navSubmenu,
+  navSubmenuOpen,
   rightRow,
   themeSwitchWrap,
 } from "../styles/header.css";
@@ -99,6 +115,10 @@ export default function Header() {
   const isHome = router.pathname === "/";
   const [isVisible, setIsVisible] = useState<boolean>(!isHome);
 
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const [servicesMenusOpen, setServicesMenusOpen] = useState(false);
+  const servicesWrapRef = useRef<HTMLDivElement | null>(null);
+
   const burgerBtnRef = useRef<HTMLButtonElement | null>(null);
   const headerRef = useRef<HTMLElement | null>(null);
 
@@ -123,8 +143,16 @@ export default function Header() {
     ? { duration: 0 }
     : { duration: 0.2, ease: EASE };
 
+  const closeDesktopMenus = () => {
+    setServicesOpen(false);
+    setServicesMenusOpen(false);
+  };
+
   useEffect(() => {
-    const handler = () => setOpen(false);
+    const handler = () => {
+      setOpen(false);
+      closeDesktopMenus();
+    };
     const events = router.events as unknown as EventsAPI;
     events.on("routeChangeStart", handler);
     return () => events.off("routeChangeStart", handler);
@@ -137,6 +165,32 @@ export default function Header() {
       root.style.overflow = "";
     };
   }, [open]);
+
+  // Close desktop submenu on outside click / ESC
+  useEffect(() => {
+    if (!servicesOpen) return;
+
+    const onDown = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as Node | null;
+      const wrap = servicesWrapRef.current;
+      if (!wrap || !target) return;
+      if (!wrap.contains(target)) closeDesktopMenus();
+    };
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeDesktopMenus();
+    };
+
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("touchstart", onDown, { passive: true });
+    document.addEventListener("keydown", onKey);
+
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("touchstart", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [servicesOpen]);
 
   // Reveal pe Home: header-ul devine vizibil după ce Hero iese din viewport
   useEffect(() => {
@@ -186,6 +240,11 @@ export default function Header() {
   const isActive = (href: string) =>
     href === "/" ? router.pathname === "/" : router.pathname.startsWith(href);
 
+  const isServicesActive =
+    router.pathname.startsWith("/servicii") ||
+    router.pathname.startsWith("/meniuri") ||
+    router.pathname.startsWith("/cort-evenimente-la-locatia-ta");
+
   const rawPhone = CONTACT?.phone?.trim() || "";
   const telHref = rawPhone ? `tel:${rawPhone.replace(/[^\d+]/g, "")}` : "";
 
@@ -227,6 +286,14 @@ export default function Header() {
     }
   };
 
+  const toggleServices = () => {
+    setServicesOpen((v) => {
+      const next = !v;
+      if (!next) setServicesMenusOpen(false);
+      return next;
+    });
+  };
+
   return (
     <header ref={headerRef} className={`${headerRoot} ${isHome ? headerFixed : ""}`} role="banner">
       <div className={`container ${headerWrap} ${effectiveVisible ? headerVisible : headerHidden}`}>
@@ -237,17 +304,94 @@ export default function Header() {
 
         <div className={rightRow}>
           <nav className={navDesktop} aria-label="Meniu principal">
-            {NAV.map((item) => (
-              <Link
-                key={item.href}
-                className={navLink}
-                href={withBase(item.href)}
-                aria-current={isActive(item.href) ? "page" : undefined}
-                data-active={isActive(item.href) ? "true" : "false"}
-              >
-                {item.label}
-              </Link>
-            ))}
+            {NAV.map((item) => {
+              if (item.href === "/servicii") {
+                return (
+                  <div key={item.href} ref={servicesWrapRef} className={navItemWithMenu}>
+                    <button
+                      type="button"
+                      className={navMenuButton}
+                      onClick={toggleServices}
+                      aria-expanded={servicesOpen}
+                      aria-controls="nav-servicii-submenu"
+                      data-open={servicesOpen ? "true" : "false"}
+                      data-active={isServicesActive ? "true" : "false"}
+                    >
+                      <span>{item.label}</span>
+                      <span className={navChevron} aria-hidden />
+                    </button>
+
+                    <div
+                      id="nav-servicii-submenu"
+                      className={`${navSubmenu} ${servicesOpen ? navSubmenuOpen : ""}`}
+                      role="menu"
+                      aria-label="Submeniu Servicii"
+                    >
+                      <Link
+                        className={navSubLink}
+                        href={withBase("/servicii")}
+                        onClick={closeDesktopMenus}
+                      >
+                        Toate serviciile
+                      </Link>
+
+                      <div className={navSubDivider} aria-hidden />
+
+                      <button
+                        type="button"
+                        className={navSubGroupBtn}
+                        onClick={() => setServicesMenusOpen((v) => !v)}
+                        aria-expanded={servicesMenusOpen}
+                        aria-controls="nav-servicii-meniuri"
+                        data-open={servicesMenusOpen ? "true" : "false"}
+                      >
+                        <span>{SERVICII_SUBMENU.meniuri.label}</span>
+                        <span className={navSubGroupChevron} aria-hidden />
+                      </button>
+
+                      <div
+                        id="nav-servicii-meniuri"
+                        className={`${navSubGroup} ${servicesMenusOpen ? navSubGroupOpen : ""}`}
+                      >
+                        {SERVICII_SUBMENU.meniuri.items.map((sub) => (
+                          <Link
+                            key={sub.href}
+                            className={navSubLink}
+                            href={withBase(sub.href)}
+                            onClick={closeDesktopMenus}
+                          >
+                            {sub.label}
+                          </Link>
+                        ))}
+                      </div>
+
+                      <div className={navSubDivider} aria-hidden />
+
+                      <Link
+                        className={navSubLink}
+                        href={withBase(SERVICII_SUBMENU.tent.href)}
+                        onClick={closeDesktopMenus}
+                      >
+                        {SERVICII_SUBMENU.tent.label}
+                      </Link>
+                    </div>
+                  </div>
+                );
+              }
+
+              return (
+                <Link
+                  key={item.href}
+                  className={navLink}
+                  href={withBase(item.href)}
+                  aria-current={isActive(item.href) ? "page" : undefined}
+                  data-active={isActive(item.href) ? "true" : "false"}
+                  onClick={closeDesktopMenus}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
           <div className={themeSwitchWrap}>

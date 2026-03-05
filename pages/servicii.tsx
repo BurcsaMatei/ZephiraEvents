@@ -13,6 +13,7 @@ import ArcMenuGallery from "../components/sections/menus/ArcMenuGallery";
 import MotivationCards from "../components/sections/MotivationCards";
 import Outro from "../components/sections/Outro";
 import ServiciiComplete from "../components/sections/servicii/ServiciiComplete";
+import TentAtLocationBanner from "../components/sections/TentAtLocationBanner";
 import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
@@ -146,6 +147,17 @@ const ServicesPage: NextPage = () => {
           <div className="container">
             <Appear>
               <ServiciiComplete />
+            </Appear>
+          </div>
+        </section>
+
+        <Separator />
+
+        {/* Banner: Cort la locație */}
+        <section className="section">
+          <div className="container">
+            <Appear>
+              <TentAtLocationBanner />
             </Appear>
           </div>
         </section>
