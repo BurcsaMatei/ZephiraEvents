@@ -140,24 +140,22 @@ const ContactPage: NextPage = () => (
       structuredData={[breadcrumbList, contactJsonLd]}
     />
 
-    <Breadcrumbs items={crumbs} />
-
     {/* Hero */}
-    <section className="section">
-      <div className="container">
-        <Appear>
-          <Hero
-            title="Contact ZephiraEvents"
-            subtitle="Sală de evenimente în Focșani, Vrancea — scrie-ne pentru nuntă, botez, majorat sau corporate. Îți răspundem rapid cu disponibilitatea sălii și o ofertă adaptată."
-            image={{
-              src: "/images/current/hero-contact.jpg",
-              alt: "Contact sală de evenimente ZephiraEvents, Focșani",
-            }}
-            height="md"
-          />
-        </Appear>
-      </div>
+    <section data-full-bleed="true">
+      <Appear>
+        <Hero
+          title="Contact ZephiraEvents"
+          subtitle="Sală de evenimente în Focșani, Vrancea — scrie-ne pentru nuntă, botez, majorat sau corporate. Îți răspundem rapid cu disponibilitatea sălii și o ofertă adaptată."
+          image={{
+            src: "/images/current/hero-contact.jpg",
+            alt: "Contact sală de evenimente ZephiraEvents, Focșani",
+          }}
+          height="md"
+        />
+      </Appear>
     </section>
+
+    <Breadcrumbs items={crumbs} />
 
     <Separator />
 

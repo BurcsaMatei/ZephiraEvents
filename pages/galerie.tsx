@@ -202,24 +202,22 @@ function GaleriePage() {
         structuredData={[breadcrumbList, imageGalleryLd]}
       />
 
-      <Breadcrumbs items={crumbs} />
-
       {/* Hero */}
-      <section className="section">
-        <div className="container">
-          <Appear>
-            <Hero
-              title="Galerie ZephiraEvents — sală de evenimente în Focșani, Vrancea"
-              subtitle="Nunți, botezuri, majorate și evenimente corporate realizate în sala noastră de evenimente din Focșani — servicii impecabile, decoruri atent alese și momente care rămân."
-              image={{
-                src: "/images/current/hero-gallery.jpg",
-                alt: "Colaj de imagini din evenimente organizate la ZephiraEvents, Focșani",
-              }}
-              height="md"
-            />
-          </Appear>
-        </div>
+      <section data-full-bleed="true">
+        <Appear>
+          <Hero
+            title="Galerie ZephiraEvents — sală de evenimente în Focșani, Vrancea"
+            subtitle="Nunți, botezuri, majorate și evenimente corporate realizate în sala noastră de evenimente din Focșani — servicii impecabile, decoruri atent alese și momente care rămân."
+            image={{
+              src: "/images/current/hero-gallery.jpg",
+              alt: "Colaj de imagini din evenimente organizate la ZephiraEvents, Focșani",
+            }}
+            height="md"
+          />
+        </Appear>
       </section>
+
+      <Breadcrumbs items={crumbs} />
 
       <Separator />
 

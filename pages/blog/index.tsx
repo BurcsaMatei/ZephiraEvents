@@ -56,24 +56,22 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
         structuredData={[breadcrumbList]}
       />
 
-      <Breadcrumbs items={crumbs} />
-
       {/* Hero */}
-      <section className="section">
-        <div className="container">
-          <Appear>
-            <Hero
-              title="Blog ZephiraEvents"
-              subtitle="Ghiduri, liste de verificare și inspirație pentru nunți, botezuri, majorate și corporate în Focșani, Vrancea — sală de evenimente, organizare A-Z și servicii impecabile."
-              image={{
-                src: "/images/current/hero-index-blog.jpg",
-                alt: "Blog ZephiraEvents — idei pentru evenimente în Focșani",
-              }}
-              height="md"
-            />
-          </Appear>
-        </div>
+      <section data-full-bleed="true">
+        <Appear>
+          <Hero
+            title="Blog ZephiraEvents"
+            subtitle="Ghiduri, liste de verificare și inspirație pentru nunți, botezuri, majorate și corporate în Focșani, Vrancea — sală de evenimente, organizare A-Z și servicii impecabile."
+            image={{
+              src: "/images/current/hero-index-blog.jpg",
+              alt: "Blog ZephiraEvents — idei pentru evenimente în Focșani",
+            }}
+            height="md"
+          />
+        </Appear>
       </section>
+
+      <Breadcrumbs items={crumbs} />
 
       <Separator />
 
