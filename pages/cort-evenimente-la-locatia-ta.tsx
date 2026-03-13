@@ -109,20 +109,20 @@ const TentAtLocationPage: NextPage = () => {
           <div className="container">
             <Appear>
               <div className={b.panel}>
-                <p className={b.eyebrow}>Ce include</p>
-                <h2 className={b.title}>Ne ocupăm de tot, cap-coadă</h2>
-                <p className={b.lede}>
+                <p className={b.panelEyebrow}>Ce include</p>
+                <h2 className={b.panelTitle}>Ne ocupăm de tot, cap-coadă</h2>
+                <p className={b.panelLede}>
                   Venim cu soluția completă, adaptată locației și numărului de invitați — ca tu să
                   ai o experiență impecabilă, fără bătăi de cap.
                 </p>
 
-                <ul className={b.list}>
-                  <li className={b.listItem}>Cort + montaj/demontaj, plan de amplasare</li>
-                  <li className={b.listItem}>Meniuri personalizate + catering complet</li>
-                  <li className={b.listItem}>
+                <ul className={b.panelList}>
+                  <li className={b.panelListItem}>Cort + montaj/demontaj, plan de amplasare</li>
+                  <li className={b.panelListItem}>Meniuri personalizate + catering complet</li>
+                  <li className={b.panelListItem}>
                     Echipă de servire + coordonare în ziua evenimentului
                   </li>
-                  <li className={b.listItem}>Logistică & organizare A–Z</li>
+                  <li className={b.panelListItem}>Logistică & organizare A–Z</li>
                 </ul>
               </div>
             </Appear>
