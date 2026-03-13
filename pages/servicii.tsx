@@ -19,6 +19,7 @@ import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { absoluteUrl } from "../lib/config";
 import { getMenusByEventType } from "../lib/menus";
+import * as tent from "../styles/sections/tentAtLocationBanner.css";
 
 // ==============================
 // Constante
@@ -158,6 +159,32 @@ const ServicesPage: NextPage = () => {
           <div className="container">
             <Appear>
               <TentAtLocationBanner />
+            </Appear>
+          </div>
+        </section>
+
+        {/* Intro: Ce include serviciul de cort */}
+        <section className="section">
+          <div className="container">
+            <Appear>
+              <div className={tent.introBlock}>
+                <p className={tent.introLede}>
+                  organizare, catering, servire și coordonare A–Z — ca tu să ai un eveniment
+                  impecabil, fără stres.
+                </p>
+                <ul className={tent.introList}>
+                  <li className={tent.introListItem}>
+                    Cort + montaj/demontaj, setup adaptat locației
+                  </li>
+                  <li className={tent.introListItem}>
+                    Meniu complet &amp; catering, opțiuni personalizate
+                  </li>
+                  <li className={tent.introListItem}>
+                    Echipă de servire + coordonare în ziua evenimentului
+                  </li>
+                  <li className={tent.introListItem}>Logistică &amp; organizare cap-coadă</li>
+                </ul>
+              </div>
             </Appear>
           </div>
         </section>
