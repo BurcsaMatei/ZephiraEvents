@@ -530,6 +530,24 @@ Pe ultimele task-uri vizibile:
 - s-a făcut swap la imaginile galeriei principale
 - s-a continuat workflow-ul de commit / push / PR / squash merge
 
+## Faza 14 — Hero full-bleed cu mască arc pe toate paginile secundare
+
+`Hero.tsx` și `styles/hero.css.ts` refactorizate pentru full-bleed + mască SVG arc, consistent cu HeroIndex:
+
+- `heroWrap`: adăugat arc SVG mask (`hero-arc-up.svg`), eliminat `borderRadius`/`boxShadow`/`border`/`background`
+- `hSm/hMd/hLg`: înălțimi vh cu `height` explicit (`42/58/78vh`) între `minHeight` și `maxHeight` — permite centrare verticală corectă prin grid
+- `hero` (clasa CSS): full-bleed mutat din inline style în clasa CSS (`width: 100vw`, `margin: calc(50% - 50vw)`)
+- `heroInner`: `position: absolute; inset: 0` în loc de `position: relative; height: 100%` — umple `heroWrap` indiferent de înălțimea calculată, centrare verticală funcțională
+- `Hero.tsx`: eliminat `fullBleedStyle` inline, `React` default import; adăugat `data-full-bleed="true"` pe `<section>`
+
+Pe toate 6 pagini cu Hero (`servicii`, `galerie`, `blog/index`, `contact`, `cort-evenimente-la-locatia-ta`, `meniuri/[slug]`):
+- eliminat `<div className="container">` wrapper din jurul Hero
+- wrapper `<section>` fără clasa `.section` (evită `paddingBlock: 24px` care crea gap deasupra hero)
+- `<Breadcrumbs>` mutat sub hero section
+- `data-full-bleed="true"` pe wrapper section
+
+PR #76, squash merge în main, branch șters.
+
 ## Faza 13 — TentAtLocationBanner rescris ca video hero
 
 `TentAtLocationBanner.tsx` și `styles/sections/tentAtLocationBanner.css.ts` rescrise complet.
@@ -547,11 +565,13 @@ Panelul text-only a devenit modul video hero full-bleed, după pattern-ul exact 
 - CTA-uri: „Vezi detalii" (alb solid) + „Solicită ofertă" (transparent/border alb), `justifyContent: center`
 
 Structura CSS exportată în `tentAtLocationBanner.css.ts`:
+
 - **Hero video**: `maskStage`, `mediaVideo`, `mediaVideoReady`, `gradient`, `dots`, `contentLayer`, `contentWrap`, `eyebrow`, `title`, `lede`, `ctaRow`, `ctaPrimary`, `ctaSecondary`
 - **Intro block** (pentru `servicii.tsx`): `introBlock`, `introLede` (uppercase + 900), `introList`, `introListItem` (flex, centrat)
 - **Card panel** (pentru `cort-evenimente-la-locatia-ta.tsx`): `panel`, `panelEyebrow`, `panelTitle`, `panelLede`, `panelList`, `panelListItem`
 
 Pagini actualizate:
+
 - `pages/cort-evenimente-la-locatia-ta.tsx` — folosește `panelEyebrow`, `panelTitle`, `panelLede`, `panelList`, `panelListItem` (nu mai are acces la stilurile vechi `root`, `panel` text-only)
 - `pages/servicii.tsx` — adăugat intro block sub banner cu continuarea textului și lista cu ✓, centrat
 
@@ -1210,6 +1230,7 @@ Când se reia munca pe ZephiraEvents, fișierele cerute depind de task, dar de r
 - task recent: submenu servicii + page/bannere asociate
 - task recent: swap imagini galerie
 - feature/tent-hero-video: TentAtLocationBanner → video hero complet, merged în main
+- feature/hero-fullbleed-mask (PR #76): Hero full-bleed + arc mask + centrare verticală pe toate paginile secundare, merged în main
 
 ---
 
