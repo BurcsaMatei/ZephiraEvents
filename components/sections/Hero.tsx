@@ -3,7 +3,7 @@
 // ==============================
 // Imports
 // ==============================
-import React, { type ReactNode, useId } from "react";
+import { type ReactNode, useId } from "react";
 
 import * as h from "../../styles/hero.css";
 import HeroLCPImage from "../HeroLCPImage";
@@ -45,6 +45,7 @@ export default function Hero({
   return (
     <section
       className={h.hero}
+      data-full-bleed="true"
       aria-labelledby="hero-heading"
       aria-describedby={subtitle ? subtitleId : undefined}
     >

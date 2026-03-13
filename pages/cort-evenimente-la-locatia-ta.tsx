@@ -70,23 +70,21 @@ const TentAtLocationPage: NextPage = () => {
         structuredData={[breadcrumbList, serviceJsonLd]}
       />
 
-      <Breadcrumbs items={crumbs} />
-
-      <section className="section">
-        <div className="container">
-          <Appear>
-            <Hero
-              title="Cort de evenimente la locația ta"
-              subtitle="Amplasăm cortul, organizăm, gătim, servim și coordonăm A–Z — tu alegi locația, noi ne ocupăm de restul."
-              image={{
-                src: "/images/current/hero-services.jpg",
-                alt: "Cort de evenimente — servicii ZephiraEvents",
-              }}
-              height="md"
-            />
-          </Appear>
-        </div>
+      <section data-full-bleed="true">
+        <Appear>
+          <Hero
+            title="Cort de evenimente la locația ta"
+            subtitle="Amplasăm cortul, organizăm, gătim, servim și coordonăm A–Z — tu alegi locația, noi ne ocupăm de restul."
+            image={{
+              src: "/images/current/hero-services.jpg",
+              alt: "Cort de evenimente — servicii ZephiraEvents",
+            }}
+            height="md"
+          />
+        </Appear>
       </section>
+
+      <Breadcrumbs items={crumbs} />
 
       <Separator />
 

@@ -56,20 +56,18 @@ const MenuDetailPage: NextPage<PageProps> = ({ menu }) => {
         image={absoluteUrl(`/api/og?p=${pagePath}`)}
       />
 
-      <Breadcrumbs items={crumbs} />
-
-      <section className="section">
-        <div className="container">
-          <Appear>
-            <Hero
-              title={menu.title}
-              subtitle={`${menu.eventType} • ${menu.currency} ${menu.pricePerPers}/pers.`}
-              image={{ src: menu.image, alt: menu.imageAlt || menu.title }}
-              height="sm"
-            />
-          </Appear>
-        </div>
+      <section className="section" data-full-bleed="true">
+        <Appear>
+          <Hero
+            title={menu.title}
+            subtitle={`${menu.eventType} • ${menu.currency} ${menu.pricePerPers}/pers.`}
+            image={{ src: menu.image, alt: menu.imageAlt || menu.title }}
+            height="sm"
+          />
+        </Appear>
       </section>
+
+      <Breadcrumbs items={crumbs} />
 
       <Separator />
 

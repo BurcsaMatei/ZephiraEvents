@@ -106,24 +106,22 @@ const ServicesPage: NextPage = () => {
         structuredData={[breadcrumbList, servicesItemList]}
       />
 
-      <Breadcrumbs items={crumbs} />
-
       {/* Hero (LCP discret) */}
-      <section className="section">
-        <div className="container">
-          <Appear>
-            <Hero
-              title="Servicii ZephiraEvents"
-              subtitle="Sală de evenimente în Focșani, Vrancea — organizare completă pentru nunți, botezuri, majorate și corporate, cu servicii impecabile și coordonare A–Z."
-              image={{
-                src: "/images/current/hero-services.jpg",
-                alt: "Sală de evenimente ZephiraEvents din Focșani",
-              }}
-              height="md"
-            />
-          </Appear>
-        </div>
+      <section data-full-bleed="true">
+        <Appear>
+          <Hero
+            title="Servicii ZephiraEvents"
+            subtitle="Sală de evenimente în Focșani, Vrancea — organizare completă pentru nunți, botezuri, majorate și corporate, cu servicii impecabile și coordonare A–Z."
+            image={{
+              src: "/images/current/hero-services.jpg",
+              alt: "Sală de evenimente ZephiraEvents din Focșani",
+            }}
+            height="md"
+          />
+        </Appear>
       </section>
+
+      <Breadcrumbs items={crumbs} />
 
       <Separator />
 

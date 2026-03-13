@@ -5,7 +5,13 @@
 // ==============================
 import { globalStyle, keyframes, style } from "@vanilla-extract/css";
 
-import { themeClassLight, vars } from "./theme.css";
+import { assetUrl } from "../lib/config";
+import { vars } from "./theme.css";
+
+// ==============================
+// Tokens
+// ==============================
+const HERO_MASK_URL = assetUrl("/masks/hero-arc-up.svg");
 
 // ==============================
 // Keyframes
@@ -28,32 +34,47 @@ const sweep = keyframes({
 // ==============================
 export const heroWrap = style({
   position: "relative",
-  borderRadius: vars.radius.xl,
   overflow: "hidden",
   isolation: "isolate",
-  background: "linear-gradient(to bottom right, rgba(255,255,255,0.04), rgba(255,255,255,0.02))",
-  border: "none",
-  boxShadow: vars.shadow.lg,
-});
-globalStyle(`${themeClassLight} ${heroWrap}`, {
-  boxShadow: "0 12px 40px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06)",
+  WebkitMaskImage: `url("${HERO_MASK_URL}")`,
+  maskImage: `url("${HERO_MASK_URL}")`,
+  WebkitMaskRepeat: "no-repeat",
+  maskRepeat: "no-repeat",
+  WebkitMaskSize: "100% 100%",
+  maskSize: "100% 100%",
+  WebkitMaskPosition: "center bottom",
+  maskPosition: "center bottom",
 });
 
-// Înălțimi declarate → rezervă spațiul (0 CLS)
+// Înălțimi vh → anti-CLS fără px fix
 export const hSm = style({
-  height: "360px",
+  minHeight: "36vh",
+  height: "42vh",
+  maxHeight: "50vh",
 });
 export const hMd = style({
-  height: "520px",
+  minHeight: "52vh",
+  height: "58vh",
+  maxHeight: "68vh",
 });
 export const hLg = style({
-  height: "720px",
+  minHeight: "70vh",
+  height: "78vh",
+  maxHeight: "88vh",
 });
 
 // ==============================
 // Layering
 // ==============================
-export const hero = style({ position: "relative" });
+export const hero = style({
+  position: "relative",
+  display: "block",
+  width: "100vw",
+  maxWidth: "100vw",
+  marginLeft: "calc(50% - 50vw)",
+  marginRight: "calc(50% - 50vw)",
+  isolation: "isolate",
+});
 
 export const heroMedia = style({
   position: "absolute",
@@ -173,12 +194,12 @@ export const orbB = style({
 // Content
 // ==============================
 export const heroInner = style({
-  position: "relative",
+  position: "absolute",
+  inset: 0,
   zIndex: 2,
   display: "grid",
   placeItems: "center",
   textAlign: "center",
-  height: "100%",
   padding: "clamp(16px, 4vw, 32px)",
 });
 
