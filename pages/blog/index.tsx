@@ -123,6 +123,7 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
                       "Parteneri de încredere: DJ, foto-video, decor",
                     ],
                     mediaSrc: "/images/motivationcards/mc-13.jpg",
+                    ctaHref: "/servicii",
                   },
                   {
                     title: "Sală & servicii",
@@ -132,6 +133,7 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
                       "Setup clasic, modern sau corporate",
                     ],
                     mediaSrc: "/images/motivationcards/mc-14.jpg",
+                    ctaHref: "/servicii#meniuri-nunta",
                   },
                   {
                     title: "Experiența invitaților",
@@ -141,6 +143,7 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
                       "Acces facil, parcare, semnalistică",
                     ],
                     mediaSrc: "/images/motivationcards/mc-15.jpg",
+                    ctaHref: "/galerie",
                   },
                   {
                     title: "Transparență & siguranță",
@@ -150,6 +153,7 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
                       "Suport înainte și după eveniment",
                     ],
                     mediaSrc: "/images/motivationcards/mc-16.jpg",
+                    ctaHref: "/contact",
                   },
                 ]}
               />

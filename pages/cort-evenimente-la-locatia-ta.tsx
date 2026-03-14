@@ -207,6 +207,7 @@ const TentAtLocationPage: NextPage = () => {
                       "Meniu și catering la standarde înalte",
                     ],
                     mediaSrc: "/images/motivationcards/mc-21.jpg",
+                    ctaHref: "/servicii#meniuri-nunta",
                   },
                   {
                     title: "Botez și majorat la locație",
@@ -216,6 +217,7 @@ const TentAtLocationPage: NextPage = () => {
                       "Meniu adaptat și program flexibil",
                     ],
                     mediaSrc: "/images/motivationcards/mc-22.jpg",
+                    ctaHref: "/servicii#meniuri-botez-cununie",
                   },
                   {
                     title: "Corporate la alegerea ta",
@@ -225,6 +227,7 @@ const TentAtLocationPage: NextPage = () => {
                       "Accesibil oriunde în județ",
                     ],
                     mediaSrc: "/images/motivationcards/mc-23.jpg",
+                    ctaHref: "/servicii#meniuri-corporate-team-building",
                   },
                   {
                     title: "Locație unică, servicii complete",
@@ -234,6 +237,7 @@ const TentAtLocationPage: NextPage = () => {
                       "Transparență totală la ofertă",
                     ],
                     mediaSrc: "/images/motivationcards/mc-24.jpg",
+                    ctaHref: "/cort-evenimente-la-locatia-ta",
                   },
                 ]}
               />

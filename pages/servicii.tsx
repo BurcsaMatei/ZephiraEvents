@@ -266,6 +266,7 @@ const ServicesPage: NextPage = () => {
                       "Parteneri: DJ, foto-video, decor",
                     ],
                     mediaSrc: "/images/motivationcards/mc-09.jpg",
+                    ctaHref: "/contact",
                   },
                   {
                     title: "Locație & meniu",
@@ -275,6 +276,7 @@ const ServicesPage: NextPage = () => {
                       "Setup flexibil: clasic, modern, corporate",
                     ],
                     mediaSrc: "/images/motivationcards/mc-10.jpg",
+                    ctaHref: "/servicii#meniuri-nunta",
                   },
                   {
                     title: "Experiența invitaților",
@@ -284,6 +286,7 @@ const ServicesPage: NextPage = () => {
                       "Acces facil, parcare, semnalistică",
                     ],
                     mediaSrc: "/images/motivationcards/mc-11.jpg",
+                    ctaHref: "/galerie",
                   },
                   {
                     title: "Transparență & siguranță",
@@ -293,6 +296,7 @@ const ServicesPage: NextPage = () => {
                       "Suport prompt înainte și după eveniment",
                     ],
                     mediaSrc: "/images/motivationcards/mc-12.jpg",
+                    ctaHref: "/blog",
                   },
                 ]}
               />
