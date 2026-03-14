@@ -621,6 +621,41 @@ Hero → Breadcrumbs → Separator
 
 ---
 
+## Faza 17 — Servicii cards clickable cu anchor links și hover tint
+
+`ServiciiComplete.tsx` și `Serviciipreview.lazy.tsx` actualizate cu carduri clickabile. PR #81, squash merge în main, branch șters.
+
+**Modificări `ServiciiComplete.tsx`:**
+- Import `Link` from `next/link`
+- Toate cele 8 carduri au `href` completat în `ALL_SERVICES`
+- Card content învelit în `<Link href={it.href} className={s.cardSmallLink}>` — un singur element interactiv per card
+- `hoverTilt={false}` pe `AnimatedIcon` — CSS preia controlul animației
+
+**Modificări `Serviciipreview.lazy.tsx`:**
+- Import `Link` adăugat
+- `href` completat pe toate cele 4 carduri din `DEFAULT_PREVIEW` (cu prefix `/servicii#ancora`)
+- Card content învelit în `<Link href={it.href ?? "/servicii"} className={s.cardSmallLink}>`
+- `hoverTilt={false}` pe `AnimatedIcon`
+
+**Mapping href-uri `ServiciiComplete`:**
+- Organizare Nuntă → `#meniuri-nunta`
+- Botez & Cununie → `#meniuri-botez-cununie`
+- Corporate & Team Building → `#meniuri-corporate-team-building`
+- Petreceri Private & Majorate → `#meniuri-petreceri-private-majorate`
+- Evenimente în Aer Liber → `/cort-evenimente-la-locatia-ta`
+- Bucătărie Proprie & Catering → `#meniuri-nunta` (fallback, de rafinat ulterior)
+- Servicii Ospătari & Bar → `#meniuri-nunta` (fallback, de rafinat ulterior)
+- Cazare & Logistică Invitați → `#meniuri-nunta` (fallback, de rafinat ulterior)
+
+**Modificări `styles/services.css.ts`:**
+- `cardSmall`: `cursor: pointer`, hover/focus-within → `background: rgba(85, 97, 242, 0.08)` + `borderColor: primary` + `translateY(-3px)`
+- `cardSmallLink`: `display: block`, padding, no underline, `color: inherit`
+- `cardIconTint`: tranziție transform spring-like curve
+- `globalStyle`: hover pe card declanșează animația SVG (`rotate(3deg)` + `translateY(-2px)`)
+- Tranziție `background 0.25s cubic-bezier(.2,0,.2,1)`
+
+---
+
 ## Faza 16 — MotivationCards CTA-uri contextuale per card per pagină
 
 `MotivationCards.lazy.tsx` extins cu props `ctaHref?: string` și `ctaLabel?: string` pe tipul `Item`. PR #80, squash merge în main, branch șters.
@@ -1015,6 +1050,7 @@ Este într-o fază de:
 - reviews ca modul existent
 - contact ca flow existent
 - SEO infrastructure
+- cardurile de servicii clickabile (`ServiciiComplete` + `ServiciiPreview`)
 
 ## 10.3 Ce rămâne sensibil / deschis
 
@@ -1304,6 +1340,7 @@ Când se reia munca pe ZephiraEvents, fișierele cerute depind de task, dar de r
 - fix/tent-gallery-mobile (PR #78): TentGallery `<button>` → `<div role="button">` + `aspectRatio` fix pe imageWrap și videoWrap — merged în main
 - fix/tent-gallery-mobile-v2 (PR #79): TentGallery `Appear immediate` + `Image width/height` fix + `image` CSS `width: 100% / height: auto` — merged în main
 - feature/motivation-cards-cta (PR #80): MotivationCards `ctaHref`/`ctaLabel` props + CTA-uri contextuale pe toate cele 6 pagini — merged în main
+- feature/servicii-cards-clickable (PR #81): ServiciiComplete + ServiciiPreview carduri clickabile cu anchor links, hover tint `rgba(85, 97, 242, 0.08)`, animație SVG CSS-driven — merged în main
 
 ---
 
