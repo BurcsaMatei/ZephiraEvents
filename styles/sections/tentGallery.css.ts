@@ -20,16 +20,13 @@ export const imageWrap = style({
   position: "relative",
   width: "100%",
   aspectRatio: "4/3",
+  display: "block",
+  minHeight: 0,
   overflow: "hidden",
   borderRadius: vars.radius.lg,
   background: vars.color.surface,
   boxShadow: vars.shadow.sm,
   cursor: "pointer",
-  // reset button
-  border: "none",
-  padding: 0,
-  margin: 0,
-  display: "block",
   transition: `box-shadow ${vars.motion.normal} ${vars.motion.easing.standard}`,
   selectors: {
     "&:hover": { boxShadow: vars.shadow.lg },

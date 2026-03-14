@@ -83,11 +83,13 @@ export default function TentGallery() {
       <Appear kind="fade">
         <div className={s.grid}>
           {IMAGES.map((img, i) => (
-            <button
+            <div
               key={img.src}
-              type="button"
+              role="button"
+              tabIndex={0}
               className={s.imageWrap}
               onClick={() => open(i)}
+              onKeyDown={(e) => e.key === "Enter" && open(i)}
               aria-label={img.alt}
             >
               <Image
@@ -98,7 +100,7 @@ export default function TentGallery() {
                 className={s.image}
                 priority={i < 4}
               />
-            </button>
+            </div>
           ))}
         </div>
       </Appear>
