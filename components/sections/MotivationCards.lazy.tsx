@@ -17,6 +17,8 @@ type Item = {
   title: string;
   points: [string, string, string] | string[];
   mediaSrc?: string; // override per pagină
+  ctaHref?: string; // fallback /servicii
+  ctaLabel?: string; // fallback Descoperă serviciile →
 };
 
 export type MotivationCardsProps = {
@@ -44,7 +46,15 @@ export default function MotivationCards({ items, className }: MotivationCardsPro
   return (
     <div className={[s.grid, className].filter(Boolean).join(" ")}>
       {safeItems.map((it, idx) => (
-        <Card key={idx} index={idx} title={it.title} points={it.points} mediaSrc={it.mediaSrc} />
+        <Card
+          key={idx}
+          index={idx}
+          title={it.title}
+          points={it.points}
+          mediaSrc={it.mediaSrc}
+          ctaHref={it.ctaHref}
+          ctaLabel={it.ctaLabel}
+        />
       ))}
     </div>
   );
@@ -58,11 +68,15 @@ function Card({
   title,
   points,
   mediaSrc,
+  ctaHref,
+  ctaLabel,
 }: {
   index: number;
   title: string;
   points: string[] | [string, string, string];
   mediaSrc: string | undefined;
+  ctaHref: string | undefined;
+  ctaLabel: string | undefined;
 }) {
   const innerRef = React.useRef<HTMLDivElement>(null);
   const reduceMotion =
@@ -149,7 +163,11 @@ function Card({
             <div className={s.backContent}>
               <h3 className={s.backTitle}>{title}</h3>
               <p className={s.backMsg}>{BACK_MESSAGE}</p>
-              <Link href="/servicii" className={s.cta} aria-label="Vezi serviciile">
+              <Link
+                href={ctaHref ?? "/servicii"}
+                className={s.cta}
+                aria-label={ctaLabel ?? "Descoperă serviciile →"}
+              >
                 <ArrowIcon />
               </Link>
             </div>

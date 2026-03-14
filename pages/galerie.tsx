@@ -287,6 +287,7 @@ function GaleriePage() {
                       "Servicii de ospitalitate impecabile pentru invitați",
                     ],
                     mediaSrc: "/images/motivationcards/mc-05.jpg",
+                    ctaHref: "/servicii#meniuri-nunta",
                   },
                   {
                     title: "Botezuri & majorate",
@@ -296,6 +297,7 @@ function GaleriePage() {
                       "Scenografie foto și momente speciale incluse",
                     ],
                     mediaSrc: "/images/motivationcards/mc-06.jpg",
+                    ctaHref: "/servicii#meniuri-botez-cununie",
                   },
                   {
                     title: "Evenimente corporate",
@@ -305,6 +307,7 @@ function GaleriePage() {
                       "Acces facil în Focșani, parcare și semnalistică",
                     ],
                     mediaSrc: "/images/motivationcards/mc-07.jpg",
+                    ctaHref: "/servicii#meniuri-corporate-team-building",
                   },
                   {
                     title: "Sală de evenimente & servicii",
@@ -314,6 +317,7 @@ function GaleriePage() {
                       "Coordonare A-Z și suport înainte/după eveniment",
                     ],
                     mediaSrc: "/images/motivationcards/mc-08.jpg",
+                    ctaHref: "/galerie",
                   },
                 ]}
               />

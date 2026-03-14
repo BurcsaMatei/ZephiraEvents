@@ -241,6 +241,7 @@ const ContactPage: NextPage = () => (
                     "Coordonare A-Z în ziua evenimentului",
                   ],
                   mediaSrc: "/images/motivationcards/mc-17.jpg",
+                  ctaHref: "/servicii",
                 },
                 {
                   title: "Servicii impecabile",
@@ -250,6 +251,7 @@ const ContactPage: NextPage = () => (
                     "Setup clasic, modern sau corporate",
                   ],
                   mediaSrc: "/images/motivationcards/mc-18.jpg",
+                  ctaHref: "/servicii#meniuri-nunta",
                 },
                 {
                   title: "Confort pentru invitați",
@@ -259,6 +261,7 @@ const ContactPage: NextPage = () => (
                     "Acces facil, parcare, semnalistică",
                   ],
                   mediaSrc: "/images/motivationcards/mc-19.jpg",
+                  ctaHref: "/galerie",
                 },
                 {
                   title: "Transparență & siguranță",
@@ -268,6 +271,7 @@ const ContactPage: NextPage = () => (
                     "Suport prompt înainte/după eveniment",
                   ],
                   mediaSrc: "/images/motivationcards/mc-20.jpg",
+                  ctaHref: "/blog",
                 },
               ]}
             />
