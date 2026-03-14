@@ -609,7 +609,7 @@ Hero → Breadcrumbs → Separator
 → Separator → bloc motivațional „Locația ta, atmosfera noastră" + CTA tel:
 → Separator → TentGallery (20 imagini + lightbox Zoom)
 → Separator → bloc „De ce ZephiraEvents"
-→ Separator → MotivationCards (mc-21–24, CTA spre /servicii hardcodat în componentă)
+→ Separator → MotivationCards (mc-21–24, ctaHref contextual per card)
 → Separator → Outro
 ```
 
@@ -617,8 +617,30 @@ Hero → Breadcrumbs → Separator
 
 - `tentIntro.css.ts` reutilizat pentru toate blocurile text centrate de pe pagină (3 blocuri distincte)
 - CTA telefon (`<a href="tel:...">`) folosește `CONTACT.phone` din `lib/config.ts` + `replace(/[^\d+]/g, "")`, condiționat dacă variabila e setată — același pattern ca `Header.tsx`
-- `MotivationCards` — CTA spre `/servicii` e hardcodat în `MotivationCards.lazy.tsx`, nu necesită prop
 - Blocul „Ce include" restilaizat de la `b.panel` (border card) la `ti.wrap` (text centrat, aerisit, fără border) în același task
+
+---
+
+## Faza 16 — MotivationCards CTA-uri contextuale per card per pagină
+
+`MotivationCards.lazy.tsx` extins cu props `ctaHref?: string` și `ctaLabel?: string` pe tipul `Item`. PR #80, squash merge în main, branch șters.
+
+**Modificare componentă:**
+
+- `Item` tip: adăugat `ctaHref?: string` (fallback `/servicii`) și `ctaLabel?: string` (fallback `"Descoperă serviciile →"`)
+- `Card` subcomponent: primește și aplică `ctaHref` și `ctaLabel`; tipul intern folosește `string | undefined` (compatibil cu `exactOptionalPropertyTypes: true`)
+- `<Link href={ctaHref ?? "/servicii"} aria-label={ctaLabel ?? "Descoperă serviciile →"}>`
+
+**Toate cele 6 pagini actualizate cu `ctaHref` contextual:**
+
+| Pagină | Card 1 | Card 2 | Card 3 | Card 4 |
+|--------|--------|--------|--------|--------|
+| index | /servicii | /servicii#meniuri-nunta | /galerie | /contact |
+| galerie | /servicii#meniuri-nunta | /servicii#meniuri-botez-cununie | /servicii#meniuri-corporate-team-building | /galerie |
+| contact | /servicii | /servicii#meniuri-nunta | /galerie | /blog |
+| blog | /servicii | /servicii#meniuri-nunta | /galerie | /contact |
+| cort-la-locatie | /servicii#meniuri-nunta | /servicii#meniuri-botez-cununie | /servicii#meniuri-corporate-team-building | /cort-evenimente-la-locatia-ta |
+| servicii | /contact | /servicii#meniuri-nunta | /galerie | /blog |
 
 ---
 
@@ -922,7 +944,7 @@ Rol:
 ### Pagină dedicată „cort evenimente la locația ta”
 
 - introdusă împreună cu navigația și bannerul aferent
-- extinsă cu TentVideos, TentGallery, blocuri motivaționale și MotivationCards (PR #77)
+- extinsă cu TentVideos, TentGallery, blocuri motivaționale și MotivationCards (PR #77); CTA-uri contextuale per card prin `ctaHref` prop (PR #80)
 
 ### TentAtLocationBanner — video hero
 
@@ -1281,6 +1303,7 @@ Când se reia munca pe ZephiraEvents, fișierele cerute depind de task, dar de r
 - feature/tent-gallery-videos (PR #77): pagina cort-la-locatie extinsă cu TentVideos, TentGallery, blocuri motivaționale, MotivationCards, tentIntro.css.ts — merged în main
 - fix/tent-gallery-mobile (PR #78): TentGallery `<button>` → `<div role="button">` + `aspectRatio` fix pe imageWrap și videoWrap — merged în main
 - fix/tent-gallery-mobile-v2 (PR #79): TentGallery `Appear immediate` + `Image width/height` fix + `image` CSS `width: 100% / height: auto` — merged în main
+- feature/motivation-cards-cta (PR #80): MotivationCards `ctaHref`/`ctaLabel` props + CTA-uri contextuale pe toate cele 6 pagini — merged în main
 
 ---
 
