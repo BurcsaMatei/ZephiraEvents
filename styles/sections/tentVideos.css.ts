@@ -19,7 +19,8 @@ export const grid = style({
 export const videoWrap = style({
   position: "relative",
   width: "100%",
-  aspectRatio: "16/9",
+  paddingTop: "56.25%", // 16/9 ratio = 56.25%
+  height: 0,
   overflow: "hidden",
   borderRadius: vars.radius.lg,
   background: vars.color.surface,
