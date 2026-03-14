@@ -1278,6 +1278,7 @@ Când se reia munca pe ZephiraEvents, fișierele cerute depind de task, dar de r
 - feature/tent-hero-video: TentAtLocationBanner → video hero complet, merged în main
 - feature/hero-fullbleed-mask (PR #76): Hero full-bleed + arc mask + centrare verticală pe toate paginile secundare, merged în main
 - feature/tent-gallery-videos (PR #77): pagina cort-la-locatie extinsă cu TentVideos, TentGallery, blocuri motivaționale, MotivationCards, tentIntro.css.ts — merged în main
+- fix/tent-gallery-mobile (PR #78): TentGallery `<button>` → `<div role="button">` + `aspectRatio` fix pe imageWrap și videoWrap — merged în main
 
 ---
 
