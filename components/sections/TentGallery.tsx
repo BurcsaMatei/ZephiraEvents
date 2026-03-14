@@ -80,7 +80,7 @@ export default function TentGallery() {
 
   return (
     <>
-      <Appear kind="fade">
+      <Appear immediate kind="fade">
         <div className={s.grid}>
           {IMAGES.map((img, i) => (
             <div
