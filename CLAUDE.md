@@ -1154,6 +1154,7 @@ Standardul folosit repetat:
 - cod scalabil
 - fără workaround-uri hacky
 - accent pe SEO / performanță / a11y
+- **orice componentă de galerie/grid care folosește `<Appear>` trebuie să aibă `immediate` prop setat** — fără `immediate`, `IntersectionObserver` nu declanșează animația pe mobile în producție, lăsând grid-ul la `opacity: 0` (fix dovedit în PR #56 pe galeria principală și PR #79 pe TentGallery)
 
 ## 12.5 Regula nouă de continuitate
 
@@ -1279,6 +1280,7 @@ Când se reia munca pe ZephiraEvents, fișierele cerute depind de task, dar de r
 - feature/hero-fullbleed-mask (PR #76): Hero full-bleed + arc mask + centrare verticală pe toate paginile secundare, merged în main
 - feature/tent-gallery-videos (PR #77): pagina cort-la-locatie extinsă cu TentVideos, TentGallery, blocuri motivaționale, MotivationCards, tentIntro.css.ts — merged în main
 - fix/tent-gallery-mobile (PR #78): TentGallery `<button>` → `<div role="button">` + `aspectRatio` fix pe imageWrap și videoWrap — merged în main
+- fix/tent-gallery-mobile-v2 (PR #79): TentGallery `Appear immediate` + `Image width/height` fix + `image` CSS `width: 100% / height: auto` — merged în main
 
 ---
 
