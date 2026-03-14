@@ -5,6 +5,7 @@
 // ==============================
 // Imports
 // ==============================
+import Link from "next/link";
 import React from "react";
 
 import { withBase } from "../../lib/config";
@@ -39,24 +40,28 @@ const DEFAULT_PREVIEW: PreviewItem[] = [
     id: "organizare-nunta",
     title: "Organizare nuntă",
     description: "Planificare completă, decor, muzică, coordonare.",
+    href: "/servicii#meniuri-nunta",
     iconSrc: "/icons/servicii/service1.svg",
   },
   {
     id: "botez-cununie",
     title: "Botez & Cununie",
     description: "Pachet complet, candy bar, photo corner.",
+    href: "/servicii#meniuri-botez-cununie",
     iconSrc: "/icons/servicii/service2.svg",
   },
   {
     id: "corporate-team-building",
     title: "Corporate & Team Building",
     description: "Logistică, scenă, sonorizare, agendă clară.",
+    href: "/servicii#meniuri-corporate-team-building",
     iconSrc: "/icons/servicii/service3.svg",
   },
   {
     id: "petreceri-private-majorate",
     title: "Petreceri Private & Majorate",
     description: "DJ, lumini, bar, momente speciale.",
+    href: "/servicii#meniuri-petreceri-private-majorate",
     iconSrc: "/icons/servicii/service4.svg",
   },
 ];
@@ -83,30 +88,22 @@ export default function Serviciipreview({
       <ul className={s.grid} aria-labelledby="services-preview-title">
         {items.map((it, i) => (
           <Appear as="li" key={it.id} className={s.cardSmall} delay={0.1 * i}>
-            <div className={s.cardIconWrapSmall}>
-              {it.iconSrc ? (
-                <AnimatedIcon
-                  src={withBase(it.iconSrc)}
-                  size={32}
-                  hoverTilt
-                  className={s.cardIconTint}
-                  ariaLabel={it.title}
-                />
-              ) : null}
-            </div>
+            <Link href={it.href ?? "/servicii"} className={s.cardSmallLink} aria-label={it.title}>
+              <div className={s.cardIconWrapSmall}>
+                {it.iconSrc ? (
+                  <AnimatedIcon
+                    src={withBase(it.iconSrc)}
+                    size={32}
+                    hoverTilt={false}
+                    className={s.cardIconTint}
+                    ariaLabel={it.title}
+                  />
+                ) : null}
+              </div>
 
-            <h3 className={s.cardTitleSmall}>{it.title}</h3>
-            <p className={s.cardDescSmall}>{it.description}</p>
-
-            {it.href ? (
-              <a
-                className={s.cardLink}
-                href={withBase(it.href)}
-                aria-label={`Detalii despre ${it.title}`}
-              >
-                Detalii
-              </a>
-            ) : null}
+              <h3 className={s.cardTitleSmall}>{it.title}</h3>
+              <p className={s.cardDescSmall}>{it.description}</p>
+            </Link>
           </Appear>
         ))}
       </ul>

@@ -633,14 +633,14 @@ Hero → Breadcrumbs → Separator
 
 **Toate cele 6 pagini actualizate cu `ctaHref` contextual:**
 
-| Pagină | Card 1 | Card 2 | Card 3 | Card 4 |
-|--------|--------|--------|--------|--------|
-| index | /servicii | /servicii#meniuri-nunta | /galerie | /contact |
-| galerie | /servicii#meniuri-nunta | /servicii#meniuri-botez-cununie | /servicii#meniuri-corporate-team-building | /galerie |
-| contact | /servicii | /servicii#meniuri-nunta | /galerie | /blog |
-| blog | /servicii | /servicii#meniuri-nunta | /galerie | /contact |
+| Pagină          | Card 1                  | Card 2                          | Card 3                                    | Card 4                         |
+| --------------- | ----------------------- | ------------------------------- | ----------------------------------------- | ------------------------------ |
+| index           | /servicii               | /servicii#meniuri-nunta         | /galerie                                  | /contact                       |
+| galerie         | /servicii#meniuri-nunta | /servicii#meniuri-botez-cununie | /servicii#meniuri-corporate-team-building | /galerie                       |
+| contact         | /servicii               | /servicii#meniuri-nunta         | /galerie                                  | /blog                          |
+| blog            | /servicii               | /servicii#meniuri-nunta         | /galerie                                  | /contact                       |
 | cort-la-locatie | /servicii#meniuri-nunta | /servicii#meniuri-botez-cununie | /servicii#meniuri-corporate-team-building | /cort-evenimente-la-locatia-ta |
-| servicii | /contact | /servicii#meniuri-nunta | /galerie | /blog |
+| servicii        | /contact                | /servicii#meniuri-nunta         | /galerie                                  | /blog                          |
 
 ---
 

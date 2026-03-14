@@ -3,7 +3,7 @@
 // ==============================
 // Imports
 // ==============================
-import { style } from "@vanilla-extract/css";
+import { globalStyle, style } from "@vanilla-extract/css";
 
 import { mq, vars } from "./theme.css";
 
@@ -147,27 +147,11 @@ export const previewSubtitle = style({
   fontSize: "clamp(14px, 1.6vw, 16px)",
 });
 
-// Card — small
-export const cardSmall = style({
-  gridColumn: "span 6",
-  border: `1px solid ${vars.color.border}`,
-  backgroundColor: vars.color.surface,
-  borderRadius: vars.radius.md,
-  boxShadow: vars.shadow.sm,
-  padding: vars.space.md,
-  transition: `transform ${vars.motion.normal} ${vars.motion.easing}, box-shadow ${vars.motion.normal} ${vars.motion.easing}, border-color ${vars.motion.normal} ${vars.motion.easing}`,
-  listStyle: "none",
-  selectors: {
-    "&::marker": { content: '""' },
-    "&:hover": {
-      transform: "translateY(-2px)",
-      boxShadow: vars.shadow.md,
-      borderColor: vars.color.primary,
-    },
-    "&:focus-visible": { outline: `2px solid ${vars.color.focus}`, outlineOffset: 2 },
-  },
-  "@media": { [mq.lg]: { gridColumn: "span 3" } },
-});
+// ==============================
+// Card — small (clickable)
+// Ordinea contează: cardIconWrapSmall trebuie definit înainte de cardSmall
+// pentru a putea fi referit în globalStyle de la finalul fișierului.
+// ==============================
 
 export const cardIconWrapSmall = style({
   width: 32,
@@ -192,10 +176,57 @@ export const cardDescSmall = style({
 // Icon tint (for <AnimatedIcon />)
 export const cardIconTint = style({
   color: vars.color.text,
+  transition: "transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)",
+});
+
+export const cardSmall = style({
+  gridColumn: "span 6",
+  border: `1px solid ${vars.color.border}`,
+  backgroundColor: vars.color.surface,
+  borderRadius: vars.radius.md,
+  boxShadow: vars.shadow.sm,
+  cursor: "pointer",
+  transition:
+    "transform 0.25s cubic-bezier(.2,0,.2,1), box-shadow 0.25s cubic-bezier(.2,0,.2,1), border-color 0.25s cubic-bezier(.2,0,.2,1), background 0.25s cubic-bezier(.2,0,.2,1)",
+  listStyle: "none",
+  selectors: {
+    "&::marker": { content: '""' },
+    "&:hover": {
+      transform: "translateY(-3px)",
+      boxShadow: vars.shadow.md,
+      borderColor: vars.color.primary,
+      background: "rgba(85, 97, 242, 0.08)",
+    },
+    "&:focus-within": {
+      outline: `2px solid ${vars.color.focus}`,
+      outlineOffset: 2,
+      borderColor: vars.color.primary,
+      background: "rgba(85, 97, 242, 0.08)",
+    },
+  },
+  "@media": { [mq.lg]: { gridColumn: "span 3" } },
+});
+
+// Link wrapper — acoperă tot card-ul
+export const cardSmallLink = style({
+  display: "block",
+  padding: vars.space.md,
+  textDecoration: "none",
+  color: "inherit",
+  selectors: {
+    "&:focus-visible": { outline: "none" },
+  },
 });
 
 /** Centrare + spațiere CTA (fără inline styles) */
 export const ctaCenter = style({
   marginTop: vars.space.xl,
   textAlign: "center",
+});
+
+// ==============================
+// Hover propagation: card hover → icon animation
+// ==============================
+globalStyle(`${cardSmall}:hover ${cardIconWrapSmall} > *`, {
+  transform: "rotate(3deg) translateY(-2px)",
 });
