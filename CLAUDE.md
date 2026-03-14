@@ -578,6 +578,48 @@ Pagini actualizate:
 
 Componenta apare în `pages/index.tsx` (teaser homepage) și `pages/servicii.tsx` (secțiune dedicată).
 
+## Faza 15 — Pagina cort-la-locatie: galerie video + galerie imagini + blocuri motivaționale
+
+`pages/cort-evenimente-la-locatia-ta.tsx` extinsă substanțial. PR #77, squash merge în main, branch șters.
+
+**Componente noi:**
+
+- `components/sections/TentVideos.tsx` — grid fluid (max 2 col desktop, `minmax(min(100%, 480px), 1fr)`) cu 8 video-uri `/videos/tent/01–08.mp4`, `autoPlay muted loop playsInline`, fără text/caption/lightbox
+- `components/sections/TentGallery.tsx` — grid fluid cu 20 imagini `/images/gallery/tent/g-001–020.jpg`, lightbox YARL cu plugin Zoom (lazy-loaded on-idle, pattern identic cu `galerie.tsx`), `<button>` clickabil cu `aria-label`, `Next/Image fill`
+
+**Stiluri noi (Vanilla Extract):**
+
+- `styles/sections/tentVideos.css.ts` — `grid`, `videoWrap` (aspectRatio 16/9, borderRadius lg), `video` (absolute fill, objectFit cover)
+- `styles/sections/tentGallery.css.ts` — `grid`, `imageWrap` (aspectRatio 4/3, button reset, hover shadow, focus-visible ring), `image` (objectFit cover)
+- `styles/sections/tentIntro.css.ts` — pattern bloc centrat fără border card: `wrap` (grid, textAlign center), `eyebrow` (badge capsulă + `margin: 0 auto` pentru centrare în grid context), `heading` (gradient text identic Outro), `lede` (muted, maxWidth 68ch), `list`/`listItem` (✓ accent cu `vars.color.link`), `ctaRow` (flex centrat)
+
+**Assets adăugate:**
+
+- `public/images/gallery/tent/g-001.jpg … g-020.jpg` — 20 imagini galerie cort
+- `public/videos/tent/01.mp4 … 08.mp4` — 8 video-uri cort
+- `public/images/motivationcards/mc-21.jpg … mc-24.jpg` — 4 imagini pentru MotivationCards
+
+**Structura finală a paginii:**
+
+```
+Hero → Breadcrumbs → Separator
+→ IntroSection („Serviciu complet, la tine acasă")
+→ Separator → bloc „Ce include" (ti.wrap, fără border card)
+→ Separator → TentVideos (8 video-uri, grid 2col desktop)
+→ Separator → bloc motivațional „Locația ta, atmosfera noastră" + CTA tel:
+→ Separator → TentGallery (20 imagini + lightbox Zoom)
+→ Separator → bloc „De ce ZephiraEvents"
+→ Separator → MotivationCards (mc-21–24, CTA spre /servicii hardcodat în componentă)
+→ Separator → Outro
+```
+
+**Note tehnice:**
+
+- `tentIntro.css.ts` reutilizat pentru toate blocurile text centrate de pe pagină (3 blocuri distincte)
+- CTA telefon (`<a href="tel:...">`) folosește `CONTACT.phone` din `lib/config.ts` + `replace(/[^\d+]/g, "")`, condiționat dacă variabila e setată — același pattern ca `Header.tsx`
+- `MotivationCards` — CTA spre `/servicii` e hardcodat în `MotivationCards.lazy.tsx`, nu necesită prop
+- Blocul „Ce include" restilaizat de la `b.panel` (border card) la `ti.wrap` (text centrat, aerisit, fără border) în același task
+
 ---
 
 # 7) Ce este făcut ca standardizare de arhitectură
@@ -880,6 +922,7 @@ Rol:
 ### Pagină dedicată „cort evenimente la locația ta”
 
 - introdusă împreună cu navigația și bannerul aferent
+- extinsă cu TentVideos, TentGallery, blocuri motivaționale și MotivationCards (PR #77)
 
 ### TentAtLocationBanner — video hero
 
@@ -1220,6 +1263,8 @@ Când se reia munca pe ZephiraEvents, fișierele cerute depind de task, dar de r
 11. Submenu servicii și rafinare navigație
 12. Polish tehnic + warning fixes + refresh imagini galerie
 13. TentAtLocationBanner rescris ca video hero (arc mask, CTA-uri, intro centrat în servicii)
+14. Hero full-bleed cu mască arc pe toate paginile secundare
+15. Pagina cort-la-locatie extinsă: TentVideos + TentGallery + blocuri motivaționale + MotivationCards
 
 ## Checkpoint-uri memorate explicit
 
@@ -1232,6 +1277,7 @@ Când se reia munca pe ZephiraEvents, fișierele cerute depind de task, dar de r
 - task recent: swap imagini galerie
 - feature/tent-hero-video: TentAtLocationBanner → video hero complet, merged în main
 - feature/hero-fullbleed-mask (PR #76): Hero full-bleed + arc mask + centrare verticală pe toate paginile secundare, merged în main
+- feature/tent-gallery-videos (PR #77): pagina cort-la-locatie extinsă cu TentVideos, TentGallery, blocuri motivaționale, MotivationCards, tentIntro.css.ts — merged în main
 
 ---
 
