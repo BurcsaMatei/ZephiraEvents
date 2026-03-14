@@ -27,12 +27,6 @@ export const imageWrap = style({
   cursor: "pointer",
   transition: `box-shadow ${vars.motion.normal} ${vars.motion.easing.standard}`,
   selectors: {
-    // pseudo-element pentru aspect ratio 4:3 — garantat cross-browser inclusiv Safari iOS
-    "&::before": {
-      content: '""',
-      display: "block",
-      paddingTop: "75%", // 3/4 = 75%
-    },
     "&:hover": { boxShadow: vars.shadow.lg },
     "&:focus-visible": {
       outline: `2px solid ${vars.color.focus}`,
@@ -42,9 +36,8 @@ export const imageWrap = style({
 });
 
 export const image = style({
-  position: "absolute",
-  inset: 0,
+  display: "block",
   width: "100%",
-  height: "100%",
+  height: "auto",
   objectFit: "cover",
 });

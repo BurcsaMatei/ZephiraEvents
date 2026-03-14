@@ -95,8 +95,8 @@ export default function TentGallery() {
               <Image
                 src={img.src}
                 alt={img.alt}
-                fill
-                sizes="(max-width: 768px) calc(50vw - 16px), (max-width: 1200px) calc(33vw - 16px), 280px"
+                width={600}
+                height={450}
                 className={s.image}
                 priority={i < 4}
               />
