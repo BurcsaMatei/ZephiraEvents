@@ -18,10 +18,8 @@ export const grid = style({
 
 export const imageWrap = style({
   position: "relative",
-  width: "100%",
-  aspectRatio: "4/3",
   display: "block",
-  minHeight: 0,
+  width: "100%",
   overflow: "hidden",
   borderRadius: vars.radius.lg,
   background: vars.color.surface,
@@ -38,5 +36,8 @@ export const imageWrap = style({
 });
 
 export const image = style({
+  display: "block",
+  width: "100%",
+  height: "auto",
   objectFit: "cover",
 });
