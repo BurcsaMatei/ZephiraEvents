@@ -541,6 +541,7 @@ Pe ultimele task-uri vizibile:
 - `Hero.tsx`: eliminat `fullBleedStyle` inline, `React` default import; adăugat `data-full-bleed="true"` pe `<section>`
 
 Pe toate 6 pagini cu Hero (`servicii`, `galerie`, `blog/index`, `contact`, `cort-evenimente-la-locatia-ta`, `meniuri/[slug]`):
+
 - eliminat `<div className="container">` wrapper din jurul Hero
 - wrapper `<section>` fără clasa `.section` (evită `paddingBlock: 24px` care crea gap deasupra hero)
 - `<Breadcrumbs>` mutat sub hero section
