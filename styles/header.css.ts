@@ -423,7 +423,7 @@ export const panelNav = style({
 export const panelLink = style({
   textDecoration: "none",
   color: vars.color.text,
-  fontWeight: 700,
+  fontWeight: 600,
   padding: vars.space.md,
   borderRadius: vars.radius.lg,
   ":focus-visible": { outline: `2px solid ${vars.color.focus}`, outlineOffset: 2 },
@@ -443,7 +443,7 @@ export const panelAccordionBtn = style({
   width: "100%",
   textAlign: "left",
   color: vars.color.text,
-  fontWeight: 800,
+  fontWeight: 600,
   padding: vars.space.md,
   borderRadius: vars.radius.lg,
   display: "inline-flex",
@@ -491,7 +491,7 @@ export const panelAccordionContentOpen = style({
 export const panelSubLink = style({
   textDecoration: "none",
   color: vars.color.text,
-  fontWeight: 700,
+  fontWeight: 600,
   padding: `${vars.space.sm} ${vars.space.md}`,
   borderRadius: vars.radius.md,
   ":focus-visible": { outline: `2px solid ${vars.color.focus}`, outlineOffset: 2 },
