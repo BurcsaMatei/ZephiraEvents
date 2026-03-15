@@ -188,7 +188,7 @@ const ContactPage: NextPage = () => (
 
       <Separator />
       {/* ==== «Solicită ofertă» — după formularul de contact existent ==== */}
-      <section className="section">
+      <section id="oferta" className="section">
         <div className="container">
           <OfferRequest />
         </div>

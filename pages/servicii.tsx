@@ -12,7 +12,9 @@ import IntroSection from "../components/sections/IntroSection";
 import ArcMenuGallery from "../components/sections/menus/ArcMenuGallery";
 import MotivationCards from "../components/sections/MotivationCards";
 import Outro from "../components/sections/Outro";
+import CateringSection from "../components/sections/servicii/CateringSection";
 import ServiciiComplete from "../components/sections/servicii/ServiciiComplete";
+import WaiterBarSection from "../components/sections/servicii/WaiterBarSection";
 import TentAtLocationBanner from "../components/sections/TentAtLocationBanner";
 import Seo from "../components/Seo";
 import Separator from "../components/Separator";
@@ -250,6 +252,28 @@ const ServicesPage: NextPage = () => {
             }}
           />
         </Appear>
+
+        <Separator />
+
+        {/* Ospătari & Bar — echipă + CTA-uri */}
+        <section id="ospatari-bar" className="section">
+          <div className="container">
+            <Appear>
+              <WaiterBarSection />
+            </Appear>
+          </div>
+        </section>
+
+        <Separator />
+
+        {/* Bucătărie Proprie & Catering */}
+        <section id="catering" className="section">
+          <div className="container">
+            <Appear>
+              <CateringSection />
+            </Appear>
+          </div>
+        </section>
 
         <Separator />
 

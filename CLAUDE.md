@@ -626,18 +626,21 @@ Hero → Breadcrumbs → Separator
 `ServiciiComplete.tsx` și `Serviciipreview.lazy.tsx` actualizate cu carduri clickabile. PR #81, squash merge în main, branch șters.
 
 **Modificări `ServiciiComplete.tsx`:**
+
 - Import `Link` from `next/link`
 - Toate cele 8 carduri au `href` completat în `ALL_SERVICES`
 - Card content învelit în `<Link href={it.href} className={s.cardSmallLink}>` — un singur element interactiv per card
 - `hoverTilt={false}` pe `AnimatedIcon` — CSS preia controlul animației
 
 **Modificări `Serviciipreview.lazy.tsx`:**
+
 - Import `Link` adăugat
 - `href` completat pe toate cele 4 carduri din `DEFAULT_PREVIEW` (cu prefix `/servicii#ancora`)
 - Card content învelit în `<Link href={it.href ?? "/servicii"} className={s.cardSmallLink}>`
 - `hoverTilt={false}` pe `AnimatedIcon`
 
 **Mapping href-uri `ServiciiComplete`:**
+
 - Organizare Nuntă → `#meniuri-nunta`
 - Botez & Cununie → `#meniuri-botez-cununie`
 - Corporate & Team Building → `#meniuri-corporate-team-building`
@@ -648,6 +651,7 @@ Hero → Breadcrumbs → Separator
 - Cazare & Logistică Invitați → `#meniuri-nunta` (fallback, de rafinat ulterior)
 
 **Modificări `styles/services.css.ts`:**
+
 - `cardSmall`: `cursor: pointer`, hover/focus-within → `background: rgba(85, 97, 242, 0.08)` + `borderColor: primary` + `translateY(-3px)`
 - `cardSmallLink`: `display: block`, padding, no underline, `color: inherit`
 - `cardIconTint`: tranziție transform spring-like curve
