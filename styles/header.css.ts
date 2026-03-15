@@ -5,7 +5,7 @@
 // ==============================
 import { style } from "@vanilla-extract/css";
 
-import { mq, vars } from "./theme.css";
+import { darkThemeClass, mq, vars } from "./theme.css";
 
 // ==============================
 // Tokens & utilities
@@ -348,7 +348,9 @@ export const panel = style({
   right: 0,
   bottom: 0,
   width: "75vw", // cerință: ~75% din ecran pe mobil
-  background: vars.color.bg,
+  background: "rgba(255, 255, 255, 0.75)",
+  backdropFilter: "blur(16px)",
+  WebkitBackdropFilter: "blur(16px)",
   transform: "translateX(100%)",
   transition,
   boxShadow: vars.shadow.lg,
@@ -362,6 +364,13 @@ export const panel = style({
   "@media": {
     "(prefers-reduced-motion: reduce)": { transition: "none" },
     [mq.lg]: { width: "min(82vw, 420px)" },
+  },
+  selectors: {
+    [`.${darkThemeClass} &`]: {
+      background: "rgba(17, 18, 21, 0.80)",
+      backdropFilter: "blur(20px)",
+      WebkitBackdropFilter: "blur(20px)",
+    },
   },
 });
 export const panelOpen = style({ transform: "translateX(0)" });
