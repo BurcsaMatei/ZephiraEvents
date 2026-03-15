@@ -348,7 +348,7 @@ export const panel = style({
   right: 0,
   bottom: 0,
   width: "75vw", // cerință: ~75% din ecran pe mobil
-  background: "rgba(255, 255, 255, 0.75)",
+  background: "rgba(255, 255, 255, 0.55)",
   backdropFilter: "blur(16px)",
   WebkitBackdropFilter: "blur(16px)",
   transform: "translateX(100%)",
@@ -367,7 +367,7 @@ export const panel = style({
   },
   selectors: {
     [`.${darkThemeClass} &`]: {
-      background: "rgba(17, 18, 21, 0.80)",
+      background: "rgba(17, 18, 21, 0.60)",
       backdropFilter: "blur(20px)",
       WebkitBackdropFilter: "blur(20px)",
     },
