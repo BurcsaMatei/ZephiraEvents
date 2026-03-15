@@ -627,11 +627,13 @@ Două componente noi adăugate în pages/servicii.tsx pentru serviciile
 „Ospătari & Bar" și „Bucătărie Proprie & Catering".
 
 **Componente noi:**
+
 - `components/sections/servicii/WaiterBarSection.tsx`
 - `components/sections/servicii/CateringSection.tsx`
 - `styles/sections/waiterBarSection.css.ts` (stiluri comune pentru ambele)
 
 **Structura fiecărei componente:**
+
 - Bloc 3 coloane: imagine PNG transparentă | text central | imagine PNG transparentă
 - Imaginile se sprijină jos pe o bandă primary full-bleed subțire (7px)
 - Grid 4 carduri clickabile sub bandă — pattern identic cu ServiciiComplete
@@ -639,22 +641,41 @@ Două componente noi adăugate în pages/servicii.tsx pentru serviciile
 - assets: `public/images/servicii/servicii/waiter.png`, `cook.png`, `waiter-cat-1.png`, `waiter-cat-2.png`
 
 **Layout mobile:**
+
 - `textTop` (eyebrow + heading + lede) — deasupra imageRow, full-width
 - imageRow 3 coloane (1fr 2fr 1fr) — imagine | textBottom | imagine
 - `textBottom` (pre-CTA + CTA) — centrat vertical între personaje cu `alignSelf: center`
 - `textCol` (desktop) — `display: none` pe mobile, `display: flex` pe `mq.lg`
 
 **Ancore adăugate în pages/servicii.tsx:**
+
 - `id="ospatari-bar"` pe section WaiterBarSection
 - `id="catering"` pe section CateringSection
 
 **Href-uri actualizate în ServiciiComplete ALL_SERVICES:**
+
 - Card 6 Bucătărie Proprie & Catering → `#catering`
 - Card 7 Servicii Ospătari & Bar → `#ospatari-bar`
 - Card 8 Cazare & Logistică Invitați → `/contact#oferta`
 
 **Ancora adăugată în pages/contact.tsx:**
+
 - `id="oferta"` pe section-ul care conține OfferRequest
+
+---
+
+## Faza 19 — Mobile menu polish + HeaderPanel glassmorphism
+
+**Mobile menu typography fix (PR #85, #86):**
+- `panelLink`, `panelAccordionBtn`, `panelSubLink` — `fontWeight` uniformizat la `600`
+- `panelLink`, `panelAccordionBtn`, `panelSubLink` — `fontSize: "1rem"` explicit
+  (elimină diferența de sizing între `<a>` și `<button>` din browser defaults)
+
+**HeaderPanel glassmorphism (PR #87, #88):**
+- `panel`: `backdropFilter: blur(16px)` + `WebkitBackdropFilter: blur(16px)`
+- Light mode: `background: rgba(255, 255, 255, 0.55)`
+- Dark mode: `background: rgba(17, 18, 21, 0.60)` + `blur(20px)`
+- `darkThemeClass` importat în `header.css.ts`
 
 ---
 
@@ -1094,6 +1115,7 @@ Este într-o fază de:
 - cardurile de servicii clickabile (`ServiciiComplete` + `ServiciiPreview`)
 - WaiterBarSection și CateringSection (servicii complete fără fallback-uri)
 - ancora `id="oferta"` în pagina de contact
+- mobile menu drawer — typography uniformă și glassmorphism
 
 ## 10.3 Ce rămâne sensibil / deschis
 
@@ -1387,6 +1409,10 @@ Când se reia munca pe ZephiraEvents, fișierele cerute depind de task, dar de r
 - feature/waiter-bar-section (PR #82): WaiterBarSection + CateringSection implementate, ancore servicii complete actualizate, `id="oferta"` în contact — merged în main
 - feature/waiter-bar-mobile-layout (PR #83): layout mobile textTop/textBottom split pentru ambele componente — merged în main
 - fix/waiter-bar-textbottom-center (PR #84): `alignSelf: center` pe textBottom — merged în main
+- fix/mobile-menu-typography (PR #85): fontWeight 600 uniform pe toate elementele drawer mobil — merged în main
+- fix/mobile-menu-fontsize (PR #86): fontSize 1rem explicit pe panelLink/panelAccordionBtn/panelSubLink — merged în main
+- feature/header-panel-glass (PR #87): glassmorphism pe HeaderPanel — merged în main
+- fix/header-panel-glass-opacity (PR #88): opacitate ajustată light 0.55 / dark 0.60 — merged în main
 
 ---
 
