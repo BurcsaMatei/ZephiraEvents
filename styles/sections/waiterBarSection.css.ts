@@ -55,13 +55,13 @@ export const textTop = style({
 
 /* Bloc CTA în coloana centrală a imageRow — vizibil doar pe mobile */
 export const textBottom = style({
-  textAlign: "center",
+  alignSelf: "center",
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
-  gap: vars.space.md,
-  paddingInline: vars.space.sm,
+  textAlign: "center",
+  gap: vars.space.sm,
   "@media": {
     [mq.lg]: {
       display: "none",
