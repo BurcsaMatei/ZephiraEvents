@@ -423,6 +423,7 @@ export const panelNav = style({
 export const panelLink = style({
   textDecoration: "none",
   color: vars.color.text,
+  fontSize: "1rem",
   fontWeight: 600,
   padding: vars.space.md,
   borderRadius: vars.radius.lg,
@@ -443,6 +444,7 @@ export const panelAccordionBtn = style({
   width: "100%",
   textAlign: "left",
   color: vars.color.text,
+  fontSize: "1rem",
   fontWeight: 600,
   padding: vars.space.md,
   borderRadius: vars.radius.lg,
@@ -491,6 +493,7 @@ export const panelAccordionContentOpen = style({
 export const panelSubLink = style({
   textDecoration: "none",
   color: vars.color.text,
+  fontSize: "1rem",
   fontWeight: 600,
   padding: `${vars.space.sm} ${vars.space.md}`,
   borderRadius: vars.radius.md,
