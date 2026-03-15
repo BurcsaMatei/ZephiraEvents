@@ -37,8 +37,8 @@ export const imageCol = style({
   },
 });
 
-/* Coloană text centrată */
-export const textCol = style({
+/* Bloc text deasupra imageRow — vizibil doar pe mobile */
+export const textTop = style({
   textAlign: "center",
   paddingBlock: vars.space.md,
   paddingInline: vars.space.sm,
@@ -48,8 +48,39 @@ export const textCol = style({
   gap: vars.space.md,
   "@media": {
     [mq.lg]: {
-      paddingBlock: vars.space.xl,
-      paddingInline: vars.space.xl,
+      display: "none",
+    },
+  },
+});
+
+/* Bloc CTA în coloana centrală a imageRow — vizibil doar pe mobile */
+export const textBottom = style({
+  textAlign: "center",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  gap: vars.space.md,
+  paddingInline: vars.space.sm,
+  "@media": {
+    [mq.lg]: {
+      display: "none",
+    },
+  },
+});
+
+/* Coloană text centrată — vizibilă doar pe desktop */
+export const textCol = style({
+  textAlign: "center",
+  paddingBlock: vars.space.xl,
+  paddingInline: vars.space.xl,
+  display: "none",
+  flexDirection: "column",
+  alignItems: "center",
+  gap: vars.space.md,
+  "@media": {
+    [mq.lg]: {
+      display: "flex",
     },
   },
 });
