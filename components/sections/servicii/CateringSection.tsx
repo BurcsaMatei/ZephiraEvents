@@ -48,7 +48,18 @@ const CARDS = [
 export default function CateringSection(): JSX.Element {
   return (
     <>
-      {/* Bloc imagini + text: 3 coloane, aliniate jos pe bandă */}
+      {/* Bloc text deasupra imaginilor — vizibil doar pe mobile */}
+      <div className={w.textTop}>
+        <span className={ti.eyebrow}>Bucătărie Proprie &amp; Catering</span>
+        <h2 className={ti.heading}>Gust autentic, prezentare impecabilă</h2>
+        <p className={ti.lede}>
+          Preparăm totul în bucătăria noastră proprie — de la aperitive rafinate la deserturi
+          artizanale. Fiecare meniu este gândit cu atenție pentru a completa perfect atmosfera
+          evenimentului tău.
+        </p>
+      </div>
+
+      {/* Rând imagini: 3 coloane — imagine | CTA mobile / text desktop | imagine */}
       <div className={w.imageRow}>
         {/* Coloana stânga */}
         <div className={w.imageCol}>
@@ -60,7 +71,13 @@ export default function CateringSection(): JSX.Element {
           />
         </div>
 
-        {/* Coloana centru — text */}
+        {/* Coloana centru — CTA pe mobile, text complet pe desktop */}
+        <div className={w.textBottom}>
+          <p className={w.preCtaText}>Discută meniul cu echipa noastră</p>
+          <Link href="/contact" className={w.ctaButton}>
+            Solicită ofertă
+          </Link>
+        </div>
         <div className={w.textCol}>
           <span className={ti.eyebrow}>Bucătărie Proprie &amp; Catering</span>
           <h2 className={ti.heading}>Gust autentic, prezentare impecabilă</h2>

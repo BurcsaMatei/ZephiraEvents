@@ -52,7 +52,17 @@ export default function WaiterBarSection(): JSX.Element {
 
   return (
     <>
-      {/* Bloc imagini + text: 3 coloane, aliniate jos pe bandă */}
+      {/* Bloc text deasupra imaginilor — vizibil doar pe mobile */}
+      <div className={w.textTop}>
+        <span className={ti.eyebrow}>Ospătari &amp; Bar</span>
+        <h2 className={ti.heading}>Echipa care face diferența</h2>
+        <p className={ti.lede}>
+          Ospătari profesioniști, bar complet echipat și un serviciu impecabil — de la primul
+          aperitiv până la ultimul toast. Noi ne ocupăm ca fiecare invitat să se simtă special.
+        </p>
+      </div>
+
+      {/* Rând imagini: 3 coloane — imagine | CTA mobile / text desktop | imagine */}
       <div className={w.imageRow}>
         {/* Coloana stânga — ospătar */}
         <div className={w.imageCol}>
@@ -64,7 +74,17 @@ export default function WaiterBarSection(): JSX.Element {
           />
         </div>
 
-        {/* Coloana centru — text */}
+        {/* Coloana centru — CTA pe mobile, text complet pe desktop */}
+        <div className={w.textBottom}>
+          {rawPhone ? (
+            <>
+              <p className={w.preCtaText}>Ia legătură cu managerul de organizare</p>
+              <a href={telHref} className={w.ctaPhone}>
+                {CONTACT.phone}
+              </a>
+            </>
+          ) : null}
+        </div>
         <div className={w.textCol}>
           <span className={ti.eyebrow}>Ospătari &amp; Bar</span>
           <h2 className={ti.heading}>Echipa care face diferența</h2>
