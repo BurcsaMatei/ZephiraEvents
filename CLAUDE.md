@@ -621,6 +621,43 @@ Hero → Breadcrumbs → Separator
 
 ---
 
+## Faza 18 — WaiterBarSection și CateringSection
+
+Două componente noi adăugate în pages/servicii.tsx pentru serviciile
+„Ospătari & Bar" și „Bucătărie Proprie & Catering".
+
+**Componente noi:**
+- `components/sections/servicii/WaiterBarSection.tsx`
+- `components/sections/servicii/CateringSection.tsx`
+- `styles/sections/waiterBarSection.css.ts` (stiluri comune pentru ambele)
+
+**Structura fiecărei componente:**
+- Bloc 3 coloane: imagine PNG transparentă | text central | imagine PNG transparentă
+- Imaginile se sprijină jos pe o bandă primary full-bleed subțire (7px)
+- Grid 4 carduri clickabile sub bandă — pattern identic cu ServiciiComplete
+  (hover tint rgba primary 0.08, border primary, translateY -3px)
+- assets: `public/images/servicii/servicii/waiter.png`, `cook.png`, `waiter-cat-1.png`, `waiter-cat-2.png`
+
+**Layout mobile:**
+- `textTop` (eyebrow + heading + lede) — deasupra imageRow, full-width
+- imageRow 3 coloane (1fr 2fr 1fr) — imagine | textBottom | imagine
+- `textBottom` (pre-CTA + CTA) — centrat vertical între personaje cu `alignSelf: center`
+- `textCol` (desktop) — `display: none` pe mobile, `display: flex` pe `mq.lg`
+
+**Ancore adăugate în pages/servicii.tsx:**
+- `id="ospatari-bar"` pe section WaiterBarSection
+- `id="catering"` pe section CateringSection
+
+**Href-uri actualizate în ServiciiComplete ALL_SERVICES:**
+- Card 6 Bucătărie Proprie & Catering → `#catering`
+- Card 7 Servicii Ospătari & Bar → `#ospatari-bar`
+- Card 8 Cazare & Logistică Invitați → `/contact#oferta`
+
+**Ancora adăugată în pages/contact.tsx:**
+- `id="oferta"` pe section-ul care conține OfferRequest
+
+---
+
 ## Faza 17 — Servicii cards clickable cu anchor links și hover tint
 
 `ServiciiComplete.tsx` și `Serviciipreview.lazy.tsx` actualizate cu carduri clickabile. PR #81, squash merge în main, branch șters.
@@ -1055,6 +1092,8 @@ Este într-o fază de:
 - contact ca flow existent
 - SEO infrastructure
 - cardurile de servicii clickabile (`ServiciiComplete` + `ServiciiPreview`)
+- WaiterBarSection și CateringSection (servicii complete fără fallback-uri)
+- ancora `id="oferta"` în pagina de contact
 
 ## 10.3 Ce rămâne sensibil / deschis
 
@@ -1345,6 +1384,9 @@ Când se reia munca pe ZephiraEvents, fișierele cerute depind de task, dar de r
 - fix/tent-gallery-mobile-v2 (PR #79): TentGallery `Appear immediate` + `Image width/height` fix + `image` CSS `width: 100% / height: auto` — merged în main
 - feature/motivation-cards-cta (PR #80): MotivationCards `ctaHref`/`ctaLabel` props + CTA-uri contextuale pe toate cele 6 pagini — merged în main
 - feature/servicii-cards-clickable (PR #81): ServiciiComplete + ServiciiPreview carduri clickabile cu anchor links, hover tint `rgba(85, 97, 242, 0.08)`, animație SVG CSS-driven — merged în main
+- feature/waiter-bar-section (PR #82): WaiterBarSection + CateringSection implementate, ancore servicii complete actualizate, `id="oferta"` în contact — merged în main
+- feature/waiter-bar-mobile-layout (PR #83): layout mobile textTop/textBottom split pentru ambele componente — merged în main
+- fix/waiter-bar-textbottom-center (PR #84): `alignSelf: center` pe textBottom — merged în main
 
 ---
 
