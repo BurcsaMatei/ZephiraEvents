@@ -288,6 +288,7 @@ function GaleriePage() {
                     ],
                     mediaSrc: "/images/motivationcards/mc-05.jpg",
                     ctaHref: "/servicii#meniuri-nunta",
+                    backMsg: "Vezi meniurile complete pentru nuntă.",
                   },
                   {
                     title: "Botezuri & majorate",
@@ -298,6 +299,7 @@ function GaleriePage() {
                     ],
                     mediaSrc: "/images/motivationcards/mc-06.jpg",
                     ctaHref: "/servicii#meniuri-botez-cununie",
+                    backMsg: "Explorează pachetele pentru botez și cununie.",
                   },
                   {
                     title: "Evenimente corporate",
@@ -308,6 +310,7 @@ function GaleriePage() {
                     ],
                     mediaSrc: "/images/motivationcards/mc-07.jpg",
                     ctaHref: "/servicii#meniuri-corporate-team-building",
+                    backMsg: "Descoperă soluțiile noastre corporate.",
                   },
                   {
                     title: "Sală de evenimente & servicii",
@@ -318,6 +321,7 @@ function GaleriePage() {
                     ],
                     mediaSrc: "/images/motivationcards/mc-08.jpg",
                     ctaHref: "/galerie",
+                    backMsg: "Explorează galeria completă.",
                   },
                 ]}
               />

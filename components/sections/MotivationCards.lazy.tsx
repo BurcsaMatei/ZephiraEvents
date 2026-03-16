@@ -19,6 +19,7 @@ type Item = {
   mediaSrc?: string; // override per pagină
   ctaHref?: string; // fallback /servicii
   ctaLabel?: string; // fallback Descoperă serviciile →
+  backMsg?: string; // mesaj contextual pe spate; fallback BACK_MESSAGE
 };
 
 export type MotivationCardsProps = {
@@ -54,6 +55,7 @@ export default function MotivationCards({ items, className }: MotivationCardsPro
           mediaSrc={it.mediaSrc}
           ctaHref={it.ctaHref}
           ctaLabel={it.ctaLabel}
+          backMsg={it.backMsg}
         />
       ))}
     </div>
@@ -70,6 +72,7 @@ function Card({
   mediaSrc,
   ctaHref,
   ctaLabel,
+  backMsg,
 }: {
   index: number;
   title: string;
@@ -77,6 +80,7 @@ function Card({
   mediaSrc: string | undefined;
   ctaHref: string | undefined;
   ctaLabel: string | undefined;
+  backMsg: string | undefined;
 }) {
   const innerRef = React.useRef<HTMLDivElement>(null);
   const reduceMotion =
@@ -162,7 +166,7 @@ function Card({
             <div className={s.backOverlay} />
             <div className={s.backContent}>
               <h3 className={s.backTitle}>{title}</h3>
-              <p className={s.backMsg}>{BACK_MESSAGE}</p>
+              <p className={s.backMsg}>{backMsg ?? BACK_MESSAGE}</p>
               <Link
                 href={ctaHref ?? "/servicii"}
                 className={s.cta}

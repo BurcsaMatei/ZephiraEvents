@@ -684,19 +684,23 @@ Două componente noi adăugate în pages/servicii.tsx pentru serviciile
 ## Faza 20 — Menus polish + MenusIntro component
 
 **Eyebrow/title swap pe toate cele 4 secțiuni ArcMenuGallery din servicii.tsx:**
+
 - presentation.eyebrow → "Meniuri" (generic)
 - presentation.title → titlul specific ("Meniuri nuntă", "Meniuri botez & cununie", etc.)
 
 **Panel/card removal din ArcMenuGallery:**
+
 - Eliminat wrapper-ul glassmorphism/card cu ribbon decorativ
 - eyebrow + title + lede rămân randate simplu, centrat, fără border/background
 
 **Arc grid centrat:**
+
 - styles/sections/arcMenuGallery.css.ts — grid înlocuit cu
   auto-fit + minmax(0, 280px) + justifyContent: center
 - Cardurile se centrează automat indiferent de număr (3, 4, 6)
 
 **Componentă nouă MenusIntro:**
+
 - components/sections/servicii/MenusIntro.tsx
 - Pattern identic cu WaiterBarSection/CateringSection
 - Imagini: /images/servicii/servicii/menus-left.png + menus-right.png
@@ -705,6 +709,7 @@ Două componente noi adăugate în pages/servicii.tsx pentru serviciile
 - Integrată în servicii.tsx între tent.introBlock și primul ArcMenuGallery
 
 **Fix separatoare în servicii.tsx:**
+
 - Adăugat Separator între TentAtLocationBanner și tent.introBlock
 - Adăugat Separator între MotivationCards și Outro
 

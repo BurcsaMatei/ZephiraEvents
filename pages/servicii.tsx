@@ -305,6 +305,7 @@ const ServicesPage: NextPage = () => {
                     ],
                     mediaSrc: "/images/motivationcards/mc-09.jpg",
                     ctaHref: "/contact",
+                    backMsg: "Contactează-ne și stabilim detaliile împreună.",
                   },
                   {
                     title: "Locație & meniu",
@@ -315,6 +316,7 @@ const ServicesPage: NextPage = () => {
                     ],
                     mediaSrc: "/images/motivationcards/mc-10.jpg",
                     ctaHref: "/servicii#meniuri-nunta",
+                    backMsg: "Explorează meniurile noastre pentru nuntă.",
                   },
                   {
                     title: "Experiența invitaților",
@@ -325,6 +327,7 @@ const ServicesPage: NextPage = () => {
                     ],
                     mediaSrc: "/images/motivationcards/mc-11.jpg",
                     ctaHref: "/galerie",
+                    backMsg: "Vezi imagini reale din evenimentele noastre.",
                   },
                   {
                     title: "Transparență & siguranță",
@@ -335,6 +338,7 @@ const ServicesPage: NextPage = () => {
                     ],
                     mediaSrc: "/images/motivationcards/mc-12.jpg",
                     ctaHref: "/blog",
+                    backMsg: "Citește articolele noastre despre organizarea evenimentelor.",
                   },
                 ]}
               />

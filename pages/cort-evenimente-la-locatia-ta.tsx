@@ -208,6 +208,7 @@ const TentAtLocationPage: NextPage = () => {
                     ],
                     mediaSrc: "/images/motivationcards/mc-21.jpg",
                     ctaHref: "/servicii#meniuri-nunta",
+                    backMsg: "Vezi meniurile complete pentru nunta ta.",
                   },
                   {
                     title: "Botez și majorat la locație",
@@ -218,6 +219,7 @@ const TentAtLocationPage: NextPage = () => {
                     ],
                     mediaSrc: "/images/motivationcards/mc-22.jpg",
                     ctaHref: "/servicii#meniuri-botez-cununie",
+                    backMsg: "Explorează pachetele pentru botez și cununie.",
                   },
                   {
                     title: "Corporate la alegerea ta",
@@ -228,6 +230,7 @@ const TentAtLocationPage: NextPage = () => {
                     ],
                     mediaSrc: "/images/motivationcards/mc-23.jpg",
                     ctaHref: "/servicii#meniuri-corporate-team-building",
+                    backMsg: "Descoperă soluțiile noastre corporate.",
                   },
                   {
                     title: "Locație unică, servicii complete",
@@ -238,6 +241,7 @@ const TentAtLocationPage: NextPage = () => {
                     ],
                     mediaSrc: "/images/motivationcards/mc-24.jpg",
                     ctaHref: "/cort-evenimente-la-locatia-ta",
+                    backMsg: "Află mai multe despre serviciul de cort la locația ta.",
                   },
                 ]}
               />
