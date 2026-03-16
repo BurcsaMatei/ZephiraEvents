@@ -738,6 +738,25 @@ Două componente noi adăugate în pages/servicii.tsx pentru serviciile
 
 ---
 
+## Faza 22 — Menu slug + Blog slug mobile fixes
+
+**fix/menu-slug-mobile (PR #92):**
+- Hero gap fix: eliminat `className="section"` de pe `<section data-full-bleed="true">` în `pages/meniuri/[slug].tsx`
+- Breadcrumbs: `menu.title` → `menu.eventType ?? "Meniu"` ca label pentru current item (scurt pe mobile)
+- `metaRow` mobile: `flexWrap: nowrap`, `overflowX: auto`, `scrollbarWidth: none` — cele 3 pill-uri pe o singură linie
+- `pill` + `backLink` mobile: `fontSize: 0.8rem`, `whiteSpace: nowrap`, `flexShrink: 0`
+
+**fix/blog-slug-mobile (PR #93):**
+- Restructurare completă `pages/blog/[slug].tsx`:
+  - Imagine articol → `Hero` full-bleed cu mască arc (title + subtitle dată/timp suprapuse)
+  - `<Breadcrumbs>` mutat după Hero section
+  - Current item breadcrumbs: `post.title` → `"Articol"` (scurt)
+  - Eliminat: `IntroSection`, `coverFigure`, `coverCaption`, `hasCoverCaption`
+  - `priority: true` pe Hero image (LCP corect)
+  - JSON-LD `BreadcrumbList` păstrează `post.title` pentru SEO
+
+---
+
 ## Faza 17 — Servicii cards clickable cu anchor links și hover tint
 
 `ServiciiComplete.tsx` și `Serviciipreview.lazy.tsx` actualizate cu carduri clickabile. PR #81, squash merge în main, branch șters.
@@ -1178,6 +1197,8 @@ Este într-o fază de:
 - meniuri din pagina servicii — prezentare curată, fără panel, grid centrat
 - MenusIntro component — tranziție vizuală între cort și meniuri
 - MotivationCards — backMsg contextual + mobile layout compact
+- pages/meniuri/[slug].tsx — hero gap fix, breadcrumbs scurt, metaRow compact pe mobile
+- pages/blog/[slug].tsx — hero full-bleed, structură curată
 
 ## 10.3 Ce rămâne sensibil / deschis
 
@@ -1478,6 +1499,8 @@ Când se reia munca pe ZephiraEvents, fișierele cerute depind de task, dar de r
 - feature/menus-polish (PR #89): menus polish complet — eyebrow/title swap, panel removed, arc grid centrat, MenusIntro component, fix separatoare — merged în main
 - feature/motivation-cards-polish (PR #90): backMsg contextual pe toate cele 6 pagini — merged în main
 - fix/motivation-cards-mobile (PR #91): mobile 2col, height compact, title jos, back text stânga — merged în main
+- fix/menu-slug-mobile (PR #92): hero gap, breadcrumbs scurt, metaRow single line pe mobile — merged în main
+- fix/blog-slug-mobile (PR #93): hero full-bleed, breadcrumbs "Articol", restructurare completă slug blog — merged în main
 
 ---
 
