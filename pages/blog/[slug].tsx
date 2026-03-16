@@ -5,16 +5,15 @@
 // ==============================
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
 
-import Appear from "../../components/animations/Appear";
+import Appear, { AppearGroup } from "../../components/animations/Appear";
 import RelatedPosts from "../../components/blog/RelatedPosts";
-import Breadcrumbs from "../../components/Breadcrumbs";
-import IntroSection from "../../components/sections/IntroSection";
+import Breadcrumbs, { type Crumb } from "../../components/Breadcrumbs";
+import Hero from "../../components/sections/Hero";
 import Seo from "../../components/Seo";
-import Img from "../../components/ui/Img";
+import Separator from "../../components/Separator";
 import { getAllPosts, getPostBySlug } from "../../lib/blogData";
 import { absoluteOgImage, absoluteUrl, SEO_DEFAULTS } from "../../lib/config";
 import { formatDateISOtoRo } from "../../lib/dates";
-import { coverCaption, coverFigure } from "../../styles/blogPost.css";
 import { proseClass } from "../../styles/prose.css";
 
 // ==============================
@@ -27,13 +26,8 @@ type Props = {
 };
 
 // ==============================
-// Type guards / helpers pure
+// Helpers
 // ==============================
-function hasCoverCaption(p: BasePost | unknown): p is BasePost & { coverCaption: string } {
-  const v = (p as { coverCaption?: unknown })?.coverCaption;
-  return typeof v === "string" && v.trim().length > 0;
-}
-
 function buildBreadcrumbList(canonical: string, postTitle: string) {
   return {
     "@context": "https://schema.org",
@@ -90,7 +84,12 @@ const BlogPostPage: NextPage<Props> = ({ post, related }) => {
   const lede = `${formatDateISOtoRo(post.date)}${reading ? ` · ${reading}` : ""}`;
 
   const coverSrc = post.coverImage ?? "/images/blog/placeholder.jpg";
-  const coverAlt: string = post.title;
+
+  const crumbs: Crumb[] = [
+    { name: "Acasă", href: "/" },
+    { name: "Blog", href: "/blog" },
+    { name: "Articol", current: true },
+  ];
 
   return (
     <>
@@ -103,62 +102,42 @@ const BlogPostPage: NextPage<Props> = ({ post, related }) => {
         structuredData={[breadcrumbList, blogPosting]}
       />
 
-      <Breadcrumbs
-        items={[
-          { name: "Acasă", href: "/" },
-          { name: "Blog", href: "/blog" },
-          { name: post.title, current: true },
-        ]}
-      />
-
-      {/* Intro aliniat și animat */}
-      <section className="section">
-        <div className="container">
-          <Appear>
-            <IntroSection eyebrow="Articol" title={post.title} lede={lede} />
-          </Appear>
-        </div>
+      <section data-full-bleed="true">
+        <Appear>
+          <Hero
+            title={post.title}
+            subtitle={lede}
+            image={{ src: coverSrc, alt: post.title, priority: true }}
+            height="sm"
+          />
+        </Appear>
       </section>
 
-      {/* Conținut principal – aliniat la containerul global */}
-      <section className="section">
-        <div className="container">
-          {post.coverImage && (
-            <Appear as="figure" aria-label="Imagine reprezentativă articol" className={coverFigure}>
-              <Img
-                src={coverSrc}
-                alt={coverAlt}
-                fill
-                fit="cover"
-                sizes="(max-width: 1024px) 100vw, 1024px"
-                priority={false}
-              />
-            </Appear>
-          )}
+      <Breadcrumbs items={crumbs} />
 
-          {hasCoverCaption(post) && (
-            <Appear as="figcaption" className={coverCaption} delay={0.06}>
-              {post.coverCaption}
-            </Appear>
-          )}
+      <Separator />
 
-          {post.contentHtml && (
-            <Appear as="article" className={proseClass} delay={0.12}>
-              {/* eslint-disable-next-line react/no-danger */}
-              <div dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
-            </Appear>
-          )}
-        </div>
-      </section>
+      <AppearGroup stagger={0.12} delay={0.06} amount={0.2}>
+        <section className="section">
+          <div className="container">
+            {post.contentHtml && (
+              <Appear as="article" className={proseClass}>
+                <div dangerouslySetInnerHTML={{ __html: post.contentHtml }} />
+              </Appear>
+            )}
+          </div>
+        </section>
 
-      {/* Related Posts – aliniat + animat */}
-      <section className="section">
-        <div className="container">
-          <Appear>
-            <RelatedPosts items={related} />
-          </Appear>
-        </div>
-      </section>
+        <Separator />
+
+        <section className="section">
+          <div className="container">
+            <Appear>
+              <RelatedPosts items={related} />
+            </Appear>
+          </div>
+        </section>
+      </AppearGroup>
     </>
   );
 };
