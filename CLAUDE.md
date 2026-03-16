@@ -681,6 +681,35 @@ Două componente noi adăugate în pages/servicii.tsx pentru serviciile
 
 ---
 
+## Faza 20 — Menus polish + MenusIntro component
+
+**Eyebrow/title swap pe toate cele 4 secțiuni ArcMenuGallery din servicii.tsx:**
+- presentation.eyebrow → "Meniuri" (generic)
+- presentation.title → titlul specific ("Meniuri nuntă", "Meniuri botez & cununie", etc.)
+
+**Panel/card removal din ArcMenuGallery:**
+- Eliminat wrapper-ul glassmorphism/card cu ribbon decorativ
+- eyebrow + title + lede rămân randate simplu, centrat, fără border/background
+
+**Arc grid centrat:**
+- styles/sections/arcMenuGallery.css.ts — grid înlocuit cu
+  auto-fit + minmax(0, 280px) + justifyContent: center
+- Cardurile se centrează automat indiferent de număr (3, 4, 6)
+
+**Componentă nouă MenusIntro:**
+- components/sections/servicii/MenusIntro.tsx
+- Pattern identic cu WaiterBarSection/CateringSection
+- Imagini: /images/servicii/servicii/menus-left.png + menus-right.png
+- Bandă primary jos, layout mobile identic (textTop/textBottom split)
+- textBottom: "Descoperă toate opțiunile disponibile" + CTA "Vezi meniurile ↓" → #meniuri-nunta
+- Integrată în servicii.tsx între tent.introBlock și primul ArcMenuGallery
+
+**Fix separatoare în servicii.tsx:**
+- Adăugat Separator între TentAtLocationBanner și tent.introBlock
+- Adăugat Separator între MotivationCards și Outro
+
+---
+
 ## Faza 17 — Servicii cards clickable cu anchor links și hover tint
 
 `ServiciiComplete.tsx` și `Serviciipreview.lazy.tsx` actualizate cu carduri clickabile. PR #81, squash merge în main, branch șters.
@@ -1118,6 +1147,8 @@ Este într-o fază de:
 - WaiterBarSection și CateringSection (servicii complete fără fallback-uri)
 - ancora `id="oferta"` în pagina de contact
 - mobile menu drawer — typography uniformă și glassmorphism
+- meniuri din pagina servicii — prezentare curată, fără panel, grid centrat
+- MenusIntro component — tranziție vizuală între cort și meniuri
 
 ## 10.3 Ce rămâne sensibil / deschis
 
@@ -1415,6 +1446,7 @@ Când se reia munca pe ZephiraEvents, fișierele cerute depind de task, dar de r
 - fix/mobile-menu-fontsize (PR #86): fontSize 1rem explicit pe panelLink/panelAccordionBtn/panelSubLink — merged în main
 - feature/header-panel-glass (PR #87): glassmorphism pe HeaderPanel — merged în main
 - fix/header-panel-glass-opacity (PR #88): opacitate ajustată light 0.55 / dark 0.60 — merged în main
+- feature/menus-polish (PR #89): menus polish complet — eyebrow/title swap, panel removed, arc grid centrat, MenusIntro component, fix separatoare — merged în main
 
 ---
 
