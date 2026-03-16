@@ -667,11 +667,13 @@ Două componente noi adăugate în pages/servicii.tsx pentru serviciile
 ## Faza 19 — Mobile menu polish + HeaderPanel glassmorphism
 
 **Mobile menu typography fix (PR #85, #86):**
+
 - `panelLink`, `panelAccordionBtn`, `panelSubLink` — `fontWeight` uniformizat la `600`
 - `panelLink`, `panelAccordionBtn`, `panelSubLink` — `fontSize: "1rem"` explicit
   (elimină diferența de sizing între `<a>` și `<button>` din browser defaults)
 
 **HeaderPanel glassmorphism (PR #87, #88):**
+
 - `panel`: `backdropFilter: blur(16px)` + `WebkitBackdropFilter: blur(16px)`
 - Light mode: `background: rgba(255, 255, 255, 0.55)`
 - Dark mode: `background: rgba(17, 18, 21, 0.60)` + `blur(20px)`

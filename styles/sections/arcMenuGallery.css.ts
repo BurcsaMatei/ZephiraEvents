@@ -114,8 +114,15 @@ export const offersLabel = style({
 export const grid = style({
   display: "grid",
   gap: vars.space.lg,
-  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-  "@media": { [mq.lg]: { gridTemplateColumns: "repeat(4, minmax(0, 1fr))" } },
+  gridTemplateColumns: "repeat(2, minmax(0, 280px))",
+  justifyContent: "center",
+  "@media": {
+    [mq.lg]: {
+      gridTemplateColumns: "repeat(auto-fit, minmax(0, 280px))",
+      maxWidth: "1200px",
+      margin: "0 auto",
+    },
+  },
 });
 
 // ==============================

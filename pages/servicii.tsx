@@ -13,6 +13,7 @@ import ArcMenuGallery from "../components/sections/menus/ArcMenuGallery";
 import MotivationCards from "../components/sections/MotivationCards";
 import Outro from "../components/sections/Outro";
 import CateringSection from "../components/sections/servicii/CateringSection";
+import MenusIntro from "../components/sections/servicii/MenusIntro";
 import ServiciiComplete from "../components/sections/servicii/ServiciiComplete";
 import WaiterBarSection from "../components/sections/servicii/WaiterBarSection";
 import TentAtLocationBanner from "../components/sections/TentAtLocationBanner";
@@ -163,6 +164,8 @@ const ServicesPage: NextPage = () => {
           </div>
         </section>
 
+        <Separator />
+
         {/* Intro: Ce include serviciul de cort */}
         <section className="section">
           <div className="container">
@@ -191,6 +194,17 @@ const ServicesPage: NextPage = () => {
 
         <Separator />
 
+        {/* Introducere meniuri */}
+        <section className="section">
+          <div className="container">
+            <Appear>
+              <MenusIntro />
+            </Appear>
+          </div>
+        </section>
+
+        <Separator />
+
         {/* Meniuri nuntă */}
         <Appear>
           <ArcMenuGallery
@@ -198,8 +212,8 @@ const ServicesPage: NextPage = () => {
             heading="OFERTE MENIURI"
             menus={nuntaMenus}
             presentation={{
-              eyebrow: "Meniuri nuntă",
-              title: "MENIURI",
+              eyebrow: "Meniuri",
+              title: "Meniuri nuntă",
               lede: "Meniuri gândite pentru o nuntă elegantă, cu preparate echilibrate și prezentare impecabilă. Personalizăm opțiunile în funcție de preferințe (copii, vegetarian, alergeni), astfel încât masa să completeze perfect atmosfera serii.",
             }}
           />
@@ -214,8 +228,8 @@ const ServicesPage: NextPage = () => {
             heading="OFERTE MENIURI"
             menus={botezMenus}
             presentation={{
-              eyebrow: "Meniuri botez & cununie",
-              title: "MENIURI",
+              eyebrow: "Meniuri",
+              title: "Meniuri botez & cununie",
               lede: "Opțiuni potrivite pentru botez și cununie, cu gusturi clasice și porții bine calculate. Ajustăm structura meniului în funcție de invitați și preferințe, pentru o experiență lejeră și memorabilă.",
             }}
           />
@@ -230,8 +244,8 @@ const ServicesPage: NextPage = () => {
             heading="OFERTE MENIURI"
             menus={privateMenus}
             presentation={{
-              eyebrow: "Meniuri petreceri private & majorate",
-              title: "MENIURI",
+              eyebrow: "Meniuri",
+              title: "Meniuri petreceri private & majorate",
               lede: "Meniuri flexibile pentru petreceri private și majorate — combinații fresh, ritm bun al servirii și opțiuni pentru toate preferințele. Alegem împreună varianta care se potrivește stilului tău de eveniment.",
             }}
           />
@@ -246,8 +260,8 @@ const ServicesPage: NextPage = () => {
             heading="OFERTE MENIURI"
             menus={corporateMenus}
             presentation={{
-              eyebrow: "Meniuri corporate & team building",
-              title: "MENIURI",
+              eyebrow: "Meniuri",
+              title: "Meniuri corporate & team building",
               lede: "Meniuri pentru evenimente corporate și team building, cu servire eficientă și opțiuni versatile. Personalizăm în funcție de program, număr de invitați și tipul momentului (protocol, buffet, cină).",
             }}
           />
@@ -327,6 +341,8 @@ const ServicesPage: NextPage = () => {
             </Appear>
           </div>
         </section>
+
+        <Separator />
 
         <section className="section">
           <div className="container">
