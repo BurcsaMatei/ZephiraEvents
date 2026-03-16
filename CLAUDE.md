@@ -715,6 +715,27 @@ Două componente noi adăugate în pages/servicii.tsx pentru serviciile
 
 ---
 
+## Faza 21 — MotivationCards polish
+
+**backMsg contextual (PR #90):**
+- Adăugat câmp `backMsg?: string` în tipul `Item`
+- Fiecare pagină transmite un mesaj contextual diferit pe spatele cardului
+- Fallback: "Planifică evenimentul ideal la Zephira — servicii complete și flexibile."
+- 6 pagini actualizate: index, servicii, galerie, contact, blog, cort-la-locatie
+
+**Mobile layout fix (PR #91):**
+- Grid: `repeat(2, 1fr)` pe mobile — 2 coloane
+- `list`: `display: none` pe mobile — bifele ascunse
+- `title`: `clamp(1.2rem, 4vw, 1.5rem)` pe mobile — mărit
+- `card minHeight`: 260px → 180px pe mobile
+- `inner paddingBottom`: 64px → 48px pe mobile
+- `inner justifyContent: flex-end` pe mobile — titlul stă jos deasupra mediaBadge
+- `grid alignItems: start` pe mobile — cardurile nu se întind la înălțimea maximă
+- `backContent`: textAlign left, placeItems start, padding md pe mobile
+- `backTitle` + `backMsg`: textAlign left, fontSize clamp pe mobile
+
+---
+
 ## Faza 17 — Servicii cards clickable cu anchor links și hover tint
 
 `ServiciiComplete.tsx` și `Serviciipreview.lazy.tsx` actualizate cu carduri clickabile. PR #81, squash merge în main, branch șters.
@@ -1154,6 +1175,7 @@ Este într-o fază de:
 - mobile menu drawer — typography uniformă și glassmorphism
 - meniuri din pagina servicii — prezentare curată, fără panel, grid centrat
 - MenusIntro component — tranziție vizuală între cort și meniuri
+- MotivationCards — backMsg contextual + mobile layout compact
 
 ## 10.3 Ce rămâne sensibil / deschis
 
@@ -1452,6 +1474,8 @@ Când se reia munca pe ZephiraEvents, fișierele cerute depind de task, dar de r
 - feature/header-panel-glass (PR #87): glassmorphism pe HeaderPanel — merged în main
 - fix/header-panel-glass-opacity (PR #88): opacitate ajustată light 0.55 / dark 0.60 — merged în main
 - feature/menus-polish (PR #89): menus polish complet — eyebrow/title swap, panel removed, arc grid centrat, MenusIntro component, fix separatoare — merged în main
+- feature/motivation-cards-polish (PR #90): backMsg contextual pe toate cele 6 pagini — merged în main
+- fix/motivation-cards-mobile (PR #91): mobile 2col, height compact, title jos, back text stânga — merged în main
 
 ---
 
