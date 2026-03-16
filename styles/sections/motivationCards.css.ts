@@ -22,9 +22,15 @@ export const grid = style({
   display: "grid",
   gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
   gap: vars.space.lg,
-  alignItems: "stretch",
+  alignItems: "start",
   justifyItems: "stretch",
-  "@media": { [mq.lg]: { gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: vars.space.xl } },
+  "@media": {
+    [mq.lg]: {
+      gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+      gap: vars.space.xl,
+      alignItems: "stretch",
+    },
+  },
 });
 
 globalStyle(`.section:has(.${grid})`, {
@@ -52,7 +58,7 @@ export const card = style({
   boxShadow: vars.shadow.lg,
   height: "100%",
   width: "100%",
-  minHeight: "260px",
+  minHeight: "180px",
   display: "flex",
   flexDirection: "column",
   "@media": {
@@ -154,11 +160,18 @@ export const inner = style({
   padding: `${vars.space.lg} ${vars.space.lg}`,
   display: "flex",
   flexDirection: "column",
+  justifyContent: "flex-end",
   minHeight: 0,
   flex: 1,
   willChange: "transform",
-  paddingBottom: "64px",
-  "@media": { [mq.lg]: { padding: `${vars.space.xl} ${vars.space.xl}`, paddingBottom: "80px" } },
+  paddingBottom: "48px",
+  "@media": {
+    [mq.lg]: {
+      padding: `${vars.space.xl} ${vars.space.xl}`,
+      paddingBottom: "80px",
+      justifyContent: "flex-start",
+    },
+  },
 });
 
 export const title = style({
@@ -315,11 +328,11 @@ export const backContent = style({
   position: "relative",
   zIndex: 2,
   height: "100%",
-  padding: vars.space.xl,
+  padding: vars.space.md,
   display: "grid",
-  placeItems: "center",
-  textAlign: "center",
-  gap: vars.space.md,
+  placeItems: "start",
+  textAlign: "left",
+  gap: vars.space.sm,
   color: "#fff",
   opacity: 0,
   willChange: "opacity",
@@ -334,6 +347,12 @@ export const backContent = style({
     [`${card}:focus-within &`]: { opacity: 1, transitionDelay: "280ms" },
   },
   "@media": {
+    [mq.lg]: {
+      padding: vars.space.xl,
+      placeItems: "center",
+      textAlign: "center",
+      gap: vars.space.md,
+    },
     "(prefers-reduced-motion: reduce)": {
       transitionProperty: "none",
       opacity: 1,
@@ -344,18 +363,22 @@ export const backContent = style({
 export const backTitle = style({
   margin: 0,
   fontWeight: 800,
-  fontSize: "1.1rem",
+  fontSize: "clamp(1rem, 3.5vw, 1.2rem)",
   lineHeight: 1.2,
   color: "#fff",
+  textAlign: "left",
   backfaceVisibility: "hidden",
   transform: "translateZ(0)",
+  "@media": { [mq.lg]: { fontSize: "1.1rem", textAlign: "center" } },
 });
 
 export const backMsg = style({
   margin: 0,
-  fontSize: vars.typography.size.md,
+  fontSize: "clamp(0.8rem, 3vw, 0.95rem)",
   lineHeight: vars.typography.leading.normal,
   color: "#fff",
+  textAlign: "left",
   backfaceVisibility: "hidden",
   transform: "translateZ(0)",
+  "@media": { [mq.lg]: { fontSize: vars.typography.size.md, textAlign: "center" } },
 });
