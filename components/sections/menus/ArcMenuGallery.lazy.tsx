@@ -344,37 +344,17 @@ export default function ArcMenuGallery({
     <section id={id} className="section" aria-labelledby={titleId}>
       <div className="container">
         {showPresentation ? (
-          <>
-            <div className={s.presentationWrap}>
-              <div className={`${intro.panel} ${intro.onDark} ${s.presentationPanel}`}>
-                <span className={s.ribbon} aria-hidden="true">
-                  <Img
-                    src="/images/decor/ribbon.png"
-                    alt=""
-                    fill
-                    fit="contain"
-                    sizes="(max-width: 768px) 185px, 260px"
-                    quality={90}
-                    priority={false}
-                  />
-                </span>
+          <div className={`${intro.center} ${s.presentationContent}`}>
+            {presentation?.eyebrow ? (
+              <div className={intro.eyebrow}>{presentation.eyebrow}</div>
+            ) : null}
 
-                <div className={`${intro.center} ${s.presentationContent}`}>
-                  {presentation?.eyebrow ? (
-                    <div className={intro.eyebrow}>{presentation.eyebrow}</div>
-                  ) : null}
+            <h2 id={titleId} className={intro.heading}>
+              {presentation?.title ?? "MENIURI"}
+            </h2>
 
-                  <h2 id={titleId} className={intro.heading}>
-                    {presentation?.title ?? "MENIURI"}
-                  </h2>
-
-                  {presentation?.lede ? <p className={intro.lede}>{presentation.lede}</p> : null}
-                </div>
-              </div>
-            </div>
-
-            <p className={s.offersLabel}>{heading}</p>
-          </>
+            {presentation?.lede ? <p className={intro.lede}>{presentation.lede}</p> : null}
+          </div>
         ) : (
           <h2 id={titleId}>{heading}</h2>
         )}
