@@ -44,7 +44,7 @@ const MenuDetailPage: NextPage<PageProps> = ({ menu }) => {
   const crumbs: Crumb[] = [
     { name: "Acasă", href: "/" },
     { name: "Servicii", href: "/servicii" },
-    { name: menu.title, current: true },
+    { name: menu.eventType ?? "Meniu", current: true },
   ];
 
   return (
@@ -56,7 +56,7 @@ const MenuDetailPage: NextPage<PageProps> = ({ menu }) => {
         image={absoluteUrl(`/api/og?p=${pagePath}`)}
       />
 
-      <section className="section" data-full-bleed="true">
+      <section data-full-bleed="true">
         <Appear>
           <Hero
             title={menu.title}
