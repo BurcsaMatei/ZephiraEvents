@@ -20,7 +20,7 @@ const shimmer = keyframes({
 // ==============================
 export const grid = style({
   display: "grid",
-  gridTemplateColumns: "repeat(1, minmax(0, 1fr))",
+  gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
   gap: vars.space.lg,
   alignItems: "stretch",
   justifyItems: "stretch",
@@ -163,21 +163,23 @@ export const inner = style({
 
 export const title = style({
   margin: 0,
-  fontSize: "1.1rem",
+  fontSize: "clamp(1.2rem, 4vw, 1.5rem)",
   lineHeight: 1.2,
   fontWeight: 800,
   color: vars.color.cardText,
   letterSpacing: "0.3px",
   overflow: "hidden",
   maxHeight: "2.4em",
+  "@media": { [mq.lg]: { fontSize: "1.1rem" } },
 });
 
 export const list = style({
   listStyle: "none",
   margin: `${vars.space.md} 0 0`,
   padding: 0,
-  display: "grid",
+  display: "none",
   rowGap: vars.space.md,
+  "@media": { [mq.lg]: { display: "grid" } },
 });
 
 export const item = style({

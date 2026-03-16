@@ -124,6 +124,7 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
                     ],
                     mediaSrc: "/images/motivationcards/mc-13.jpg",
                     ctaHref: "/servicii",
+                    backMsg: "Descoperă serviciile complete ZephiraEvents.",
                   },
                   {
                     title: "Sală & servicii",
@@ -134,6 +135,7 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
                     ],
                     mediaSrc: "/images/motivationcards/mc-14.jpg",
                     ctaHref: "/servicii#meniuri-nunta",
+                    backMsg: "Vezi meniurile noastre pentru nuntă.",
                   },
                   {
                     title: "Experiența invitaților",
@@ -144,6 +146,7 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
                     ],
                     mediaSrc: "/images/motivationcards/mc-15.jpg",
                     ctaHref: "/galerie",
+                    backMsg: "Explorează galeria evenimentelor noastre.",
                   },
                   {
                     title: "Transparență & siguranță",
@@ -154,6 +157,7 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
                     ],
                     mediaSrc: "/images/motivationcards/mc-16.jpg",
                     ctaHref: "/contact",
+                    backMsg: "Contactează-ne pentru mai multe detalii.",
                   },
                 ]}
               />

@@ -168,6 +168,7 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
                       "Parteneri de încredere: DJ, foto-video, decor",
                     ],
                     ctaHref: "/servicii",
+                    backMsg: "Descoperă cum organizăm fiecare detaliu pentru tine.",
                   },
                   {
                     title: "Locație & servicii",
@@ -177,6 +178,7 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
                       "Setup flexibil: clasic, modern, corporate",
                     ],
                     ctaHref: "/servicii#meniuri-nunta",
+                    backMsg: "Vezi pachetele complete pentru nunta ta.",
                   },
                   {
                     title: "Experiență pentru invitați",
@@ -186,6 +188,7 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
                       "Acces facil, parcare, indicatoare",
                     ],
                     ctaHref: "/galerie",
+                    backMsg: "Explorează galeria noastră de evenimente reale.",
                   },
                   {
                     title: "Transparență & siguranță",
@@ -195,6 +198,7 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
                       "Suport prompt înainte și după eveniment",
                     ],
                     ctaHref: "/contact",
+                    backMsg: "Ia legătura cu noi și discutăm împreună.",
                   },
                 ]}
               />

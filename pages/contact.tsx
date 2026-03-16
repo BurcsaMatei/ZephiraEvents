@@ -242,6 +242,7 @@ const ContactPage: NextPage = () => (
                   ],
                   mediaSrc: "/images/motivationcards/mc-17.jpg",
                   ctaHref: "/servicii",
+                  backMsg: "Descoperă toate serviciile noastre.",
                 },
                 {
                   title: "Servicii impecabile",
@@ -252,6 +253,7 @@ const ContactPage: NextPage = () => (
                   ],
                   mediaSrc: "/images/motivationcards/mc-18.jpg",
                   ctaHref: "/servicii#meniuri-nunta",
+                  backMsg: "Vezi meniurile noastre pentru nuntă.",
                 },
                 {
                   title: "Confort pentru invitați",
@@ -262,6 +264,7 @@ const ContactPage: NextPage = () => (
                   ],
                   mediaSrc: "/images/motivationcards/mc-19.jpg",
                   ctaHref: "/galerie",
+                  backMsg: "Explorează galeria evenimentelor noastre.",
                 },
                 {
                   title: "Transparență & siguranță",
@@ -272,6 +275,7 @@ const ContactPage: NextPage = () => (
                   ],
                   mediaSrc: "/images/motivationcards/mc-20.jpg",
                   ctaHref: "/blog",
+                  backMsg: "Citește articolele noastre pe blog.",
                 },
               ]}
             />
