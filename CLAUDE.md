@@ -718,12 +718,14 @@ Două componente noi adăugate în pages/servicii.tsx pentru serviciile
 ## Faza 21 — MotivationCards polish
 
 **backMsg contextual (PR #90):**
+
 - Adăugat câmp `backMsg?: string` în tipul `Item`
 - Fiecare pagină transmite un mesaj contextual diferit pe spatele cardului
 - Fallback: "Planifică evenimentul ideal la Zephira — servicii complete și flexibile."
 - 6 pagini actualizate: index, servicii, galerie, contact, blog, cort-la-locatie
 
 **Mobile layout fix (PR #91):**
+
 - Grid: `repeat(2, 1fr)` pe mobile — 2 coloane
 - `list`: `display: none` pe mobile — bifele ascunse
 - `title`: `clamp(1.2rem, 4vw, 1.5rem)` pe mobile — mărit
