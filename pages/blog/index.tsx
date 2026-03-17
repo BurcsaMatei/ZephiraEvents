@@ -18,6 +18,7 @@ import Separator from "../../components/Separator";
 import type { Json } from "../../interfaces";
 import { getAllPosts } from "../../lib/blogData";
 import { absoluteUrl } from "../../lib/config";
+import * as ti from "../../styles/sections/tentIntro.css";
 import type { Post } from "../../types/blog";
 
 // ==============================
@@ -104,6 +105,24 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
                 </Appear>
               ))}
             </Grid>
+          </div>
+        </section>
+
+        <Separator />
+
+        {/* Pre-intro */}
+        <section className="section">
+          <div className="container">
+            <Appear>
+              <div className={ti.wrap}>
+                <p className={ti.eyebrow}>Mai mult decât un blog</p>
+                <h2 className={ti.heading}>Sfaturi reale, din experiență directă</h2>
+                <p className={ti.lede}>
+                  Scriem despre ce știm — organizare, meniuri, decoruri și tot ce face un eveniment
+                  memorabil.
+                </p>
+              </div>
+            </Appear>
           </div>
         </section>
 

@@ -79,6 +79,7 @@ export default function TentAtLocationBanner(): JSX.Element {
 
         <div className={s.gradient} />
         <div className={s.dots} />
+        <div className={s.arcGradient} aria-hidden="true" />
       </figure>
 
       <div className={s.contentLayer} style={mediaStyle} aria-live="polite">

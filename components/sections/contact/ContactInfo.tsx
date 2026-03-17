@@ -11,8 +11,8 @@ import {
   contactGridClass,
   contactIconClass,
   contactItemClass,
+  contactItemLinkClass,
   contactTextClass,
-  headingMb,
 } from "../../../styles/contact/contactInfo.css";
 import Appear from "../../animations/Appear";
 import AnimatedIcon from "../../ui/AnimatedIcon";
@@ -27,48 +27,77 @@ type Props = {
   email: string;
 };
 
+type ItemDef = {
+  iconSrc: string;
+  title: string;
+  text: string;
+  href: string | undefined;
+  external?: boolean;
+};
+
 // ==============================
 // Component
 // ==============================
 const ContactInfo: React.FC<Props> = ({ businessName, address, phone, email }) => {
-  const items: Array<{ iconSrc: string; title: string; text: React.ReactNode }> = [
-    { iconSrc: withBase("/icons/contact/location.svg"), title: businessName, text: address },
+  const items: ItemDef[] = [
+    {
+      iconSrc: withBase("/icons/contact/location.svg"),
+      title: businessName,
+      text: address,
+      href:
+        address !== "—"
+          ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`
+          : undefined,
+      external: true,
+    },
     {
       iconSrc: withBase("/icons/contact/phone-call.svg"),
       title: "Telefon",
-      text: phone !== "—" ? <a href={`tel:${phone.replace(/\s+/g, "")}`}>{phone}</a> : "—",
+      text: phone,
+      href: phone !== "—" ? `tel:${phone.replace(/\s+/g, "")}` : undefined,
     },
     {
       iconSrc: withBase("/icons/contact/email.svg"),
       title: "E-mail",
-      text: email !== "—" ? <a href={`mailto:${email}`}>{email}</a> : "—",
+      text: email,
+      href: email !== "—" ? `mailto:${email}` : undefined,
     },
   ];
 
   return (
-    <>
-      <Appear as="h2" id="contact-info-title" className={`${cardTitleClass} ${headingMb}`}>
-        Informații de contact
-      </Appear>
-
-      <div className={contactGridClass} aria-labelledby="contact-info-title">
-        {items.map((item, i) => (
-          <Appear as="div" key={i} className={contactItemClass} delay={0.1 * i}>
+    <div className={contactGridClass} aria-label="Informații de contact">
+      {items.map((item, i) => {
+        const inner = (
+          <>
             <AnimatedIcon
               src={item.iconSrc}
-              size={26}
+              size={32}
               hoverTilt
               className={contactIconClass}
               ariaLabel={item.title}
             />
-            <div>
-              <h3 className={cardTitleClass}>{item.title}</h3>
-              <p className={contactTextClass}>{item.text}</p>
-            </div>
+            <h3 className={cardTitleClass}>{item.title}</h3>
+            <p className={contactTextClass}>{item.text}</p>
+          </>
+        );
+
+        return (
+          <Appear as="div" key={i} delay={0.1 * i}>
+            {item.href ? (
+              <a
+                href={item.href}
+                className={`${contactItemClass} ${contactItemLinkClass}`}
+                {...(item.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+              >
+                {inner}
+              </a>
+            ) : (
+              <div className={contactItemClass}>{inner}</div>
+            )}
           </Appear>
-        ))}
-      </div>
-    </>
+        );
+      })}
+    </div>
   );
 };
 

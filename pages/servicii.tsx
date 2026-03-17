@@ -23,6 +23,7 @@ import type { Json } from "../interfaces";
 import { absoluteUrl } from "../lib/config";
 import { getMenusByEventType } from "../lib/menus";
 import * as tent from "../styles/sections/tentAtLocationBanner.css";
+import * as ti from "../styles/sections/tentIntro.css";
 
 // ==============================
 // Constante
@@ -285,6 +286,24 @@ const ServicesPage: NextPage = () => {
           <div className="container">
             <Appear>
               <CateringSection />
+            </Appear>
+          </div>
+        </section>
+
+        <Separator />
+
+        {/* Pre-intro */}
+        <section className="section">
+          <div className="container">
+            <Appear>
+              <div className={ti.wrap}>
+                <p className={ti.eyebrow}>De ce ZephiraEvents</p>
+                <h2 className={ti.heading}>Servicii complete, experiență impecabilă</h2>
+                <p className={ti.lede}>
+                  Fiecare eveniment este unic — și exact așa îl tratăm. De la planificare la
+                  execuție, suntem alături de tine.
+                </p>
+              </div>
             </Appear>
           </div>
         </section>

@@ -19,7 +19,7 @@ const VIDEOS = Array.from(
 // ==============================
 export default function TentVideos() {
   return (
-    <Appear kind="fade">
+    <Appear immediate kind="fade">
       <div className={s.grid}>
         {VIDEOS.map((src) => (
           <div key={src} className={s.videoWrap}>

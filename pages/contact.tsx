@@ -21,6 +21,7 @@ import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { absoluteUrl, CONTACT, SITE } from "../lib/config";
+import * as ti from "../styles/sections/tentIntro.css";
 
 // ==============================
 // Types
@@ -224,6 +225,23 @@ const ContactPage: NextPage = () => (
           </div>
         </section>
       )}
+
+      <Separator />
+
+      <section className="section">
+        <div className="container">
+          <Appear>
+            <div className={ti.wrap}>
+              <p className={ti.eyebrow}>Suntem aici pentru tine</p>
+              <h2 className={ti.heading}>Hai să construim ceva frumos împreună</h2>
+              <p className={ti.lede}>
+                Indiferent de tipul evenimentului, echipa noastră te ghidează de la prima discuție
+                până la final.
+              </p>
+            </div>
+          </Appear>
+        </div>
+      </section>
 
       <Separator />
 

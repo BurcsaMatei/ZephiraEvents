@@ -741,12 +741,14 @@ Două componente noi adăugate în pages/servicii.tsx pentru serviciile
 ## Faza 22 — Menu slug + Blog slug mobile fixes
 
 **fix/menu-slug-mobile (PR #92):**
+
 - Hero gap fix: eliminat `className="section"` de pe `<section data-full-bleed="true">` în `pages/meniuri/[slug].tsx`
 - Breadcrumbs: `menu.title` → `menu.eventType ?? "Meniu"` ca label pentru current item (scurt pe mobile)
 - `metaRow` mobile: `flexWrap: nowrap`, `overflowX: auto`, `scrollbarWidth: none` — cele 3 pill-uri pe o singură linie
 - `pill` + `backLink` mobile: `fontSize: 0.8rem`, `whiteSpace: nowrap`, `flexShrink: 0`
 
 **fix/blog-slug-mobile (PR #93):**
+
 - Restructurare completă `pages/blog/[slug].tsx`:
   - Imagine articol → `Hero` full-bleed cu mască arc (title + subtitle dată/timp suprapuse)
   - `<Breadcrumbs>` mutat după Hero section

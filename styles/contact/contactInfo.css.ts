@@ -3,7 +3,7 @@
 // ==============================
 // Imports
 // ==============================
-import { style } from "@vanilla-extract/css";
+import { globalStyle, style } from "@vanilla-extract/css";
 
 import { mq, vars } from "../theme.css";
 
@@ -15,6 +15,7 @@ export const contactGridClass = style({
   gridTemplateColumns: "1fr",
   gap: vars.space.md,
   marginTop: vars.space.md,
+  alignItems: "stretch",
   "@media": {
     [mq.md]: {
       gridTemplateColumns: "repeat(2, 1fr)",
@@ -26,18 +27,22 @@ export const contactGridClass = style({
 });
 
 export const contactItemClass = style({
+  height: "100%",
   background: vars.color.surface,
   border: `1px solid ${vars.color.border}`,
   borderRadius: vars.radius.lg,
   padding: vars.space.md,
   display: "flex",
-  alignItems: "center",
-  gap: vars.space.md,
+  flexDirection: "column",
+  justifyContent: "flex-start",
+  alignItems: "flex-start",
+  gap: vars.space.sm,
   boxShadow: vars.shadow.sm,
-  transition: `transform ${vars.motion.normal} ${vars.motion.easing}, box-shadow ${vars.motion.normal} ${vars.motion.easing}, border-color ${vars.motion.normal} ${vars.motion.easing}`,
+  cursor: "pointer",
+  transition: `background ${vars.motion.normal} cubic-bezier(.2,0,.2,1), box-shadow ${vars.motion.normal} ${vars.motion.easing}, border-color ${vars.motion.normal} ${vars.motion.easing}`,
   selectors: {
     "&:hover": {
-      transform: "translateY(-2px) scale(1.015)",
+      background: "rgba(85, 97, 242, 0.08)",
       boxShadow: vars.shadow.md,
       borderColor: vars.color.primary,
     },
@@ -49,10 +54,16 @@ export const contactItemClass = style({
   },
 });
 
+export const contactItemLinkClass = style({
+  textDecoration: "none",
+  color: "inherit",
+});
+
 export const cardTitleClass = style({
-  fontWeight: 600,
+  fontWeight: 700,
   fontSize: "1rem",
   margin: 0,
+  textAlign: "left",
   color: vars.color.primary,
   "@media": { [mq.md]: { fontSize: "1.1rem" } },
 });
@@ -63,6 +74,8 @@ export const headingMb = style({
 });
 
 export const contactIconClass = style({
+  width: 32,
+  height: 32,
   flexShrink: 0,
   color: vars.color.primary,
   display: "inline-flex",
@@ -72,7 +85,16 @@ export const contactIconClass = style({
 
 export const contactTextClass = style({
   fontSize: "14px",
-  color: vars.color.text,
+  color: vars.color.muted,
+  textAlign: "left",
   lineHeight: 1.45,
   "@media": { [mq.md]: { fontSize: "15px", lineHeight: 1.5 } },
+});
+
+// ==============================
+// Hover propagation: card hover → icon animation
+// ==============================
+globalStyle(`.${contactItemClass}:hover .${contactIconClass}`, {
+  transform: "rotate(3deg) translateY(-2px)",
+  transition: "transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)",
 });

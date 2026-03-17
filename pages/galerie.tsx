@@ -21,6 +21,7 @@ import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { absoluteAssetUrl, absoluteUrl, seoDefaults } from "../lib/config";
 import { getGalleryItems } from "../lib/gallery";
+import * as ti from "../styles/sections/tentIntro.css";
 
 // ==============================
 // Types
@@ -239,34 +240,48 @@ function GaleriePage() {
       {/* GRID Galerie */}
       <section className="section">
         <div className="container">
-          {/* Appear o singură dată pe grid, dar imediat (fără IO) */}
-          <Appear immediate kind="fade">
-            {cards.length === 0 ? (
-              <p className="u-text-center">Nu există imagini de afișat momentan.</p>
-            ) : (
-              <CardGrid
-                cards={visibleCards}
-                onItemClick={(i) => openAt(i)}
-                aboveTheFold
-                priorityCount={3}
-              />
-            )}
+          {cards.length === 0 ? (
+            <p className="u-text-center">Nu există imagini de afișat momentan.</p>
+          ) : (
+            <CardGrid
+              cards={visibleCards}
+              onItemClick={(i) => openAt(i)}
+              aboveTheFold
+              priorityCount={3}
+            />
+          )}
 
-            {!ioSupported && canLoadMore && (
-              <div className="u-text-center u-mt-md">
-                <Button
-                  type="button"
-                  aria-label="Încarcă mai multe imagini"
-                  onClick={() => setVisible((v) => Math.min(v + PAGE_SIZE, cards.length))}
-                >
-                  Încarcă mai multe
-                </Button>
-              </div>
-            )}
-          </Appear>
+          {!ioSupported && canLoadMore && (
+            <div className="u-text-center u-mt-md">
+              <Button
+                type="button"
+                aria-label="Încarcă mai multe imagini"
+                onClick={() => setVisible((v) => Math.min(v + PAGE_SIZE, cards.length))}
+              >
+                Încarcă mai multe
+              </Button>
+            </div>
+          )}
 
           {/* sentinel în afara oricărei animații */}
           <div ref={sentinelRef} aria-hidden style={{ height: 48 }} />
+        </div>
+      </section>
+
+      <Separator />
+
+      <section className="section">
+        <div className="container">
+          <Appear>
+            <div className={ti.wrap}>
+              <p className={ti.eyebrow}>În spatele imaginilor</p>
+              <h2 className={ti.heading}>Fiecare foto spune o poveste reală</h2>
+              <p className={ti.lede}>
+                Evenimentele din galerie nu sunt reconstituiri — sunt momente reale, trăite de
+                oameni reali.
+              </p>
+            </div>
+          </Appear>
         </div>
       </section>
 
