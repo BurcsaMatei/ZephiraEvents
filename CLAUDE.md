@@ -803,6 +803,19 @@ Două componente noi adăugate în pages/servicii.tsx pentru serviciile
 
 ---
 
+## Faza 24 — Header panel redesign
+
+**fix/header-panel-gradient (PR #95):**
+- Eliminat backdropFilter/WebkitBackdropFilter complet
+- Light mode: linear-gradient(135deg, rgba(255,255,255,0.98), rgba(85,97,242,0.06))
+- Dark mode: linear-gradient(135deg, rgba(17,18,21,0.99), rgba(123,132,255,0.08))
+- Border stânga gradient via globalStyle ::before pe panel:
+  linear-gradient transparent → primary 0.6 → primary 0.6 → transparent
+  height 84%, top 8% — se estompează la colțuri
+- Rezultat: panel opac, premium, fără blur murdar
+
+---
+
 ## Faza 17 — Servicii cards clickable cu anchor links și hover tint
 
 `ServiciiComplete.tsx` și `Serviciipreview.lazy.tsx` actualizate cu carduri clickabile. PR #81, squash merge în main, branch șters.
@@ -1249,6 +1262,7 @@ Este într-o fază de:
 - arc gradient pe toate componentele Hero
 - ContactInfo — carduri clickabile, layout consistent cu ServiciiComplete
 - CardGrid Appear — optimizat pe container
+- Header panel mobile — gradient brand, fără blur, border stânga elegant
 
 ## 10.3 Ce rămâne sensibil / deschis
 
@@ -1552,6 +1566,7 @@ Când se reia munca pe ZephiraEvents, fișierele cerute depind de task, dar de r
 - fix/menu-slug-mobile (PR #92): hero gap, breadcrumbs scurt, metaRow single line pe mobile — merged în main
 - fix/blog-slug-mobile (PR #93): hero full-bleed, breadcrumbs "Articol", restructurare completă slug blog — merged în main
 - feature/homepage-contact-gallery-polish (PR #94): MotivationCards reorder, pre-intro blocks, ContactInfo redesign, map border-radius, background noise+gradient, arc gradient heroes, CardGrid Appear fix — merged în main
+- fix/header-panel-gradient (PR #95): header panel gradient brand, no blur, border left gradient — merged în main
 
 ---
 
