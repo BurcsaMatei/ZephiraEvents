@@ -203,6 +203,17 @@ export const heroInner = style({
   padding: "clamp(16px, 4vw, 32px)",
 });
 
+export const arcGradient = style({
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  right: 0,
+  height: "32%",
+  background: "linear-gradient(to bottom, transparent, rgba(85, 97, 242, 0.55))",
+  pointerEvents: "none",
+  zIndex: 3,
+});
+
 // ==============================
 // Alignment
 // ==============================

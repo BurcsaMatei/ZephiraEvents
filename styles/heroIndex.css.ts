@@ -85,6 +85,17 @@ export const dots = style({
   maskImage: "linear-gradient(to bottom, transparent 0%, black 18%, black 82%, transparent 100%)",
 });
 
+export const arcGradient = style({
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  right: 0,
+  height: "32%",
+  background: "linear-gradient(to bottom, transparent, rgba(85, 97, 242, 0.55))",
+  pointerEvents: "none",
+  zIndex: 3,
+});
+
 // Conținut peste media
 export const contentLayer = style({
   position: "absolute",

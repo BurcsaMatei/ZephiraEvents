@@ -67,6 +67,8 @@ export default function Hero({
           )}
         </div>
 
+        <div className={h.arcGradient} aria-hidden="true" />
+
         {/* Content */}
         <div className={`${h.heroInner} ${alignClass}`}>
           <div className={h.innerContent}>

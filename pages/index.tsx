@@ -24,6 +24,7 @@ import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { getAllPosts } from "../lib/blogData";
 import { absoluteUrl, seoDefaults } from "../lib/config";
+import * as ti from "../styles/sections/tentIntro.css";
 
 // ==============================
 // Types
@@ -151,10 +152,34 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
             </Appear>
           </div>
         </section>
+      </AppearGroup>
+
+      <Separator />
+
+      {/* REVIEWS FULL-BLEED — ÎN AFARA oricărui .container / .section / AppearGroup */}
+      <Reviews fullBleed mode="home" showForm={false} limit={12} />
+
+      <Separator />
+
+      {/* Pre-intro + MotivationCards + Outro */}
+      <AppearGroup stagger={0.12} delay={0.06} amount={0.2}>
+        <section className="section">
+          <div className="container">
+            <Appear>
+              <div className={ti.wrap}>
+                <p className={ti.eyebrow}>De ce noi</p>
+                <h2 className={ti.heading}>Calitate dovedită, oameni de încredere</h2>
+                <p className={ti.lede}>
+                  De la primul detaliu până la ultimul toast — suntem alături de tine la fiecare
+                  pas.
+                </p>
+              </div>
+            </Appear>
+          </div>
+        </section>
 
         <Separator />
 
-        {/* MotivationCards */}
         <section className="section">
           <div className="container">
             <Appear>
@@ -205,17 +230,9 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
             </Appear>
           </div>
         </section>
-      </AppearGroup>
 
-      <Separator />
+        <Separator />
 
-      {/* REVIEWS FULL-BLEED — ÎN AFARA oricărui .container / .section / AppearGroup */}
-      <Reviews fullBleed mode="home" showForm={false} limit={12} />
-
-      <Separator />
-
-      {/* Outro (păstrăm structura originală, în container) */}
-      <AppearGroup stagger={0.12} delay={0.06} amount={0.2}>
         <section className="section">
           <div className="container">
             <Appear>

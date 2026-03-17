@@ -112,6 +112,8 @@ export default function HeroIndex({
             <div className={h.dots} />
           </>
         ) : null}
+
+        <div className={h.arcGradient} aria-hidden="true" />
       </figure>
 
       {heading || subheading ? (

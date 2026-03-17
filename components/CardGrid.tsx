@@ -31,33 +31,30 @@ export default function CardGrid({
   const handleActivate = (i: number) => onItemClick?.(i);
 
   return (
-    <Grid gap="16px" align="stretch" justify="stretch" mode="fluid" minCol={240}>
-      {cards.map((c, i) => {
-        const priority = aboveTheFold && i < priorityCount;
+    <Appear immediate kind="fade">
+      <Grid gap="16px" align="stretch" justify="stretch" mode="fluid" minCol={240}>
+        {cards.map((c, i) => {
+          const priority = aboveTheFold && i < priorityCount;
 
-        const interactiveProps = onItemClick
-          ? ({ onClick: () => handleActivate(i) } as const)
-          : c.href
-            ? ({ href: withBase(c.href) } as const) // base path pentru linkuri interne
-            : ({} as const);
+          const interactiveProps = onItemClick
+            ? ({ onClick: () => handleActivate(i) } as const)
+            : c.href
+              ? ({ href: withBase(c.href) } as const)
+              : ({} as const);
 
-        return (
-          <Appear
-            as="div"
-            key={`${c.href ?? c.src}-${i}`}
-            style={{ height: "100%" }}
-            delay={0.1 * i}
-          >
-            <Card
-              title={c.alt || "Imagine"}
-              image={{ src: c.src, alt: c.alt, priority }}
-              mediaRatio="4/3"
-              {...(c.caption ? { excerpt: c.caption } : {})}
-              {...interactiveProps}
-            />
-          </Appear>
-        );
-      })}
-    </Grid>
+          return (
+            <div key={`${c.href ?? c.src}-${i}`} style={{ height: "100%" }}>
+              <Card
+                title={c.alt || "Imagine"}
+                image={{ src: c.src, alt: c.alt, priority }}
+                mediaRatio="4/3"
+                {...(c.caption ? { excerpt: c.caption } : {})}
+                {...interactiveProps}
+              />
+            </div>
+          );
+        })}
+      </Grid>
+    </Appear>
   );
 }

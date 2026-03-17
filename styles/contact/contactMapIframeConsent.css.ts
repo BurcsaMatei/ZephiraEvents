@@ -5,6 +5,8 @@
 // ==============================
 import { style } from "@vanilla-extract/css";
 
+import { vars } from "../theme.css";
+
 // ==============================
 // Classes
 // ==============================
@@ -22,6 +24,8 @@ export const mapWrap = style({
   width: "100%",
   aspectRatio: "16/9",
   overflow: "hidden",
+  borderRadius: vars.radius.lg,
+  boxShadow: vars.shadow.md,
 });
 
 export const iframeFull = style({
