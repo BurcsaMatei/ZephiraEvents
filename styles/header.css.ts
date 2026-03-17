@@ -3,7 +3,7 @@
 // ==============================
 // Imports
 // ==============================
-import { style } from "@vanilla-extract/css";
+import { globalStyle, style } from "@vanilla-extract/css";
 
 import { darkThemeClass, mq, vars } from "./theme.css";
 
@@ -348,9 +348,7 @@ export const panel = style({
   right: 0,
   bottom: 0,
   width: "75vw", // cerință: ~75% din ecran pe mobil
-  background: "rgba(255, 255, 255, 0.55)",
-  backdropFilter: "blur(16px)",
-  WebkitBackdropFilter: "blur(16px)",
+  background: "linear-gradient(135deg, rgba(255,255,255,0.98), rgba(85,97,242,0.06))",
   transform: "translateX(100%)",
   transition,
   boxShadow: vars.shadow.lg,
@@ -367,9 +365,7 @@ export const panel = style({
   },
   selectors: {
     [`.${darkThemeClass} &`]: {
-      background: "rgba(17, 18, 21, 0.60)",
-      backdropFilter: "blur(20px)",
-      WebkitBackdropFilter: "blur(20px)",
+      background: "linear-gradient(135deg, rgba(17,18,21,0.99), rgba(123,132,255,0.08))",
     },
   },
 });
@@ -555,4 +551,21 @@ export const socialLink = style({
     outlineOffset: 2,
     borderRadius: 8,
   },
+});
+
+// ==============================
+// Panel — border stânga gradient
+// ==============================
+globalStyle(`${panel}::before`, {
+  content: '""',
+  position: "absolute",
+  top: "8%",
+  left: 0,
+  width: "2px",
+  height: "84%",
+  background:
+    "linear-gradient(to bottom, transparent, rgba(85, 97, 242, 0.6) 30%, rgba(85, 97, 242, 0.6) 70%, transparent)",
+  borderRadius: "0 1px 1px 0",
+  pointerEvents: "none",
+  zIndex: 1,
 });
