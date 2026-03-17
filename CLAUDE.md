@@ -759,6 +759,50 @@ Două componente noi adăugate în pages/servicii.tsx pentru serviciile
 
 ---
 
+## Faza 23 — Homepage/Contact/Gallery polish + Background + Arc gradient
+
+**MotivationCards reorder + pre-intro (PR #94):**
+- index.tsx: MotivationCards mutat după Reviews
+- Pre-intro ti.wrap adăugat înainte de MotivationCards pe:
+  * index.tsx — "De ce noi / Calitate dovedită, oameni de încredere"
+  * galerie.tsx — "În spatele imaginilor / Fiecare foto spune o poveste reală"
+  * contact.tsx — "Suntem aici pentru tine / Hai să construim ceva frumos împreună"
+  * blog/index.tsx — "Mai mult decât un blog / Sfaturi reale, din experiență directă"
+  * servicii.tsx — "De ce ZephiraEvents / Servicii complete, experiență impecabilă"
+
+**ContactInfo redesign (PR #94):**
+- Eliminat titlul "Informații de contact"
+- Carduri clickabile: adresă → Google Maps, telefon → tel:, email → mailto:
+- Layout aliniat stânga — identic cu cardSmall din ServiciiComplete
+- Hover: tint primary + border primary (fără translateY)
+- AnimatedIcon hoverTilt declanșat la hover pe card via Framer Motion
+
+**Hartă contact (PR #94):**
+- mapWrap: borderRadius vars.radius.lg + boxShadow vars.shadow.md
+
+**Adresă actualizată:**
+- NEXT_PUBLIC_CONTACT_STREET: Calea Odobești 408
+- NEXT_PUBLIC_CONTACT_CITY: Cîmpineanca
+- NEXT_PUBLIC_CONTACT_MAP_EMBED: URL nou Google Maps embed
+
+**Background global (PR #94):**
+- body::after cu position: fixed, zIndex: -1, pointerEvents: none
+- Light: noise SVG (baseFrequency 0.75, opacity 0.025) + radial-gradient primary 0.08 + secondary 0.09
+- Dark: noise SVG + radial-gradient primary 0.10 + secondary 0.11
+- position: fixed elimină repaint la scroll
+
+**Arc gradient pe heroes (PR #94):**
+- arcGradient clasă nouă în hero.css.ts
+- Aplicat pe: Hero.tsx, HeroIndex.tsx, TentAtLocationBanner.tsx
+- linear-gradient transparent → rgba(85,97,242,0.55) la baza heroWrap
+- Urmărește forma măștii arc
+
+**CardGrid + TentVideos Appear fix (PR #94):**
+- CardGrid: Appear mutat de pe fiecare item pe containerul Grid (immediate kind="fade") — elimină stagger redundant
+- TentVideos: immediate adăugat pe Appear container
+
+---
+
 ## Faza 17 — Servicii cards clickable cu anchor links și hover tint
 
 `ServiciiComplete.tsx` și `Serviciipreview.lazy.tsx` actualizate cu carduri clickabile. PR #81, squash merge în main, branch șters.
@@ -1201,6 +1245,10 @@ Este într-o fază de:
 - MotivationCards — backMsg contextual + mobile layout compact
 - pages/meniuri/[slug].tsx — hero gap fix, breadcrumbs scurt, metaRow compact pe mobile
 - pages/blog/[slug].tsx — hero full-bleed, structură curată
+- background global — noise + gradient mesh pe body::after
+- arc gradient pe toate componentele Hero
+- ContactInfo — carduri clickabile, layout consistent cu ServiciiComplete
+- CardGrid Appear — optimizat pe container
 
 ## 10.3 Ce rămâne sensibil / deschis
 
@@ -1503,6 +1551,7 @@ Când se reia munca pe ZephiraEvents, fișierele cerute depind de task, dar de r
 - fix/motivation-cards-mobile (PR #91): mobile 2col, height compact, title jos, back text stânga — merged în main
 - fix/menu-slug-mobile (PR #92): hero gap, breadcrumbs scurt, metaRow single line pe mobile — merged în main
 - fix/blog-slug-mobile (PR #93): hero full-bleed, breadcrumbs "Articol", restructurare completă slug blog — merged în main
+- feature/homepage-contact-gallery-polish (PR #94): MotivationCards reorder, pre-intro blocks, ContactInfo redesign, map border-radius, background noise+gradient, arc gradient heroes, CardGrid Appear fix — merged în main
 
 ---
 
