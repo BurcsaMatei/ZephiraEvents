@@ -5,7 +5,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import type { Review } from "../../../lib/reviews";
 import {
@@ -44,13 +44,6 @@ type Props = {
   /** SSR items pentru pagina /reviews — evită CLS */
   initialItems?: Review[];
 };
-
-async function fetchLatest(n: number): Promise<Review[]> {
-  const res = await fetch(`/api/reviews?limit=${n}`, { cache: "no-store" });
-  if (!res.ok) return [];
-  const json = (await res.json()) as { ok: boolean; items: Review[] };
-  return json.items ?? [];
-}
 
 function Stars({ rating }: { rating: number }) {
   return (
@@ -168,21 +161,7 @@ export default function Reviews({
   formSubtitle,
   initialItems,
 }: Props) {
-  // INIT din SSR pe pagină → evită CLS; Home va popula prin fetch
-  const [items, setItems] = useState<Review[]>(initialItems ?? []);
-
-  const reload = useCallback(async () => {
-    const data = await fetchLatest(limit);
-    setItems(data);
-  }, [limit]);
-
-  useEffect(() => {
-    // Bypass fetch la mount dacă suntem în pagina /reviews și avem initialItems
-    if (mode === "page" && Array.isArray(initialItems) && initialItems.length > 0) {
-      return;
-    }
-    void reload();
-  }, [reload, mode, initialItems]);
+  const items = useMemo(() => (initialItems ?? []).slice(0, limit), [initialItems, limit]);
 
   const topItems = useMemo(() => items.filter((_, i) => i % 2 === 0), [items]);
   const bottomItems = useMemo(() => items.filter((_, i) => i % 2 === 1), [items]);
@@ -214,7 +193,7 @@ export default function Reviews({
 
           {/* Centrare formular pe pagină */}
           <div className="container" style={{ maxWidth: 760, margin: "0 auto" }}>
-            <ReviewsForm onCreated={() => reload()} />
+            <ReviewsForm onCreated={() => {}} />
           </div>
         </>
       )}

@@ -1,18 +1,16 @@
-// components/sections/ReviewsForm.tsx
+// components/sections/reviews/ReviewsForm.tsx
 // ==============================
-// Reviews Form — with client-side Blob uploads (avatar + photos)
+// Reviews Form — trimite recenzia prin email (fără storage)
 // ==============================
 
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 
-import { uploadFileViaSignedUrl } from "../../../lib/storage/blob";
 import {
   actionsClass,
   avatarPreviewClass,
   fileHintClass,
-  filesPreviewClass,
   formClass,
   inputClass,
   labelClass,
@@ -26,8 +24,17 @@ import {
 } from "../../../styles/sections/reviews/reviewsForm.css";
 
 type Props = {
-  onCreated?: (opts: { refresh?: boolean }) => void;
+  onCreated?: () => void;
 };
+
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve((reader.result as string).split(",")[1] ?? "");
+    reader.onerror = () => reject(new Error("Eroare la citirea fișierului."));
+    reader.readAsDataURL(file);
+  });
+}
 
 export default function ReviewsForm({ onCreated }: Props) {
   const [authorName, setAuthorName] = useState("");
@@ -35,98 +42,101 @@ export default function ReviewsForm({ onCreated }: Props) {
   const [text, setText] = useState("");
   const [honeypot, setHoneypot] = useState("");
   const [busy, setBusy] = useState(false);
+  const [done, setDone] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Client-side uploads → URLs
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(undefined);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
-  const [photoFiles, setPhotoFiles] = useState<File[]>([]);
-  const [photoUrls, setPhotoUrls] = useState<string[]>([]);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const canSubmit = useMemo(() => {
-    return (
+  const canSubmit = useMemo(
+    () =>
       authorName.trim().length >= 2 &&
       text.trim().length >= 10 &&
       rating >= 1 &&
       rating <= 5 &&
-      !busy
-    );
-  }, [authorName, text, rating, busy]);
+      !busy,
+    [authorName, text, rating, busy],
+  );
 
-  const handleAvatarSelect = useCallback(async (file: File | null) => {
+  const handleAvatarSelect = useCallback((file: File | null) => {
     setAvatarFile(file);
-    setAvatarUrl(undefined);
+    setAvatarPreview(null);
     if (!file) return;
     if (!/^image\//.test(file.type) || file.size > 5 * 1024 * 1024) {
-      alert("Avatar invalid (doar imagine, max 5MB).");
+      alert("Poza trebuie să fie o imagine de maxim 5MB.");
       return;
     }
-    try {
-      const url = await uploadFileViaSignedUrl(file, "reviews-avatars");
-      setAvatarUrl(url);
-    } catch (e) {
-      alert((e as Error).message);
-    }
-  }, []);
-
-  const handlePhotosSelect = useCallback(async (files: FileList | null) => {
-    setPhotoFiles([]);
-    setPhotoUrls([]);
-    if (!files || !files.length) return;
-    const arr = Array.from(files).slice(0, 4);
-    const accepted: File[] = [];
-    for (const f of arr) {
-      if (!/^image\//.test(f.type) || f.size > 5 * 1024 * 1024) continue;
-      accepted.push(f);
-    }
-    setPhotoFiles(accepted);
-    const urls: string[] = [];
-    for (const f of accepted) {
-      try {
-        const u = await uploadFileViaSignedUrl(f, "reviews-photos");
-        urls.push(u);
-      } catch (e) {
-        // eslint-disable-next-line no-console
-        console.error(e);
-      }
-    }
-    setPhotoUrls(urls);
+    const url = URL.createObjectURL(file);
+    setAvatarPreview(url);
   }, []);
 
   const submit = useCallback(async () => {
     if (!canSubmit) return;
     setBusy(true);
+    setError(null);
+
     try {
-      const res = await fetch("/api/reviews", {
+      let photoBase64: string | undefined;
+      let photoMime: string | undefined;
+      let photoFilename: string | undefined;
+
+      if (avatarFile) {
+        photoBase64 = await fileToBase64(avatarFile);
+        photoMime = avatarFile.type;
+        photoFilename = avatarFile.name;
+      }
+
+      const body: Record<string, unknown> = {
+        name: authorName,
+        rating,
+        text,
+        honeypot,
+      };
+      if (photoBase64) {
+        body.photoBase64 = photoBase64;
+        body.photoMime = photoMime;
+        body.photoFilename = photoFilename;
+      }
+
+      const res = await fetch("/api/review-submit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          authorName,
-          rating,
-          text,
-          honeypot,
-          profilePhotoUrl: avatarUrl, // optional
-          photos: photoUrls, // optional
-        }),
+        body: JSON.stringify(body),
       });
-      const json = (await res.json()) as { ok: boolean };
-      if (!res.ok || !json.ok) throw new Error("Nu am putut publica recenzia.");
+
+      const json = (await res.json()) as { ok: boolean; message?: string };
+      if (!res.ok || !json.ok) {
+        throw new Error(json.message ?? "Nu am putut trimite recenzia.");
+      }
+
       // reset
       setAuthorName("");
       setRating(5);
       setText("");
       setHoneypot("");
       setAvatarFile(null);
-      setAvatarUrl(undefined);
-      setPhotoFiles([]);
-      setPhotoUrls([]);
-      onCreated?.({ refresh: true });
+      setAvatarPreview(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      setDone(true);
+      onCreated?.();
     } catch (e) {
-      alert((e as Error).message);
+      setError((e as Error).message);
     } finally {
       setBusy(false);
     }
-  }, [authorName, rating, text, honeypot, avatarUrl, photoUrls, canSubmit, onCreated]);
+  }, [authorName, rating, text, honeypot, avatarFile, canSubmit, onCreated]);
+
+  if (done) {
+    return (
+      <div className={formClass} role="status">
+        <p>
+          <strong>Mulțumim pentru recenzie!</strong> O vom publica după verificare.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form
@@ -152,11 +162,11 @@ export default function ReviewsForm({ onCreated }: Props) {
       </div>
 
       <div className={rowClass}>
-        <label className={labelClass} htmlFor="authorName">
+        <label className={labelClass} htmlFor="rv-name">
           Nume și prenume
         </label>
         <input
-          id="authorName"
+          id="rv-name"
           className={inputClass}
           value={authorName}
           onChange={(e) => setAuthorName(e.target.value)}
@@ -169,10 +179,10 @@ export default function ReviewsForm({ onCreated }: Props) {
 
       {/* Rating cu stele (1–5) */}
       <div className={ratingRowClass} role="radiogroup" aria-label="Alege ratingul">
-        <span className={srOnly} id="rating-label">
+        <span className={srOnly} id="rv-rating-label">
           Rating (1–5)
         </span>
-        <div className={starsGroupClass} aria-labelledby="rating-label">
+        <div className={starsGroupClass} aria-labelledby="rv-rating-label">
           {[1, 2, 3, 4, 5].map((v) => {
             const active = v <= rating;
             return (
@@ -193,11 +203,11 @@ export default function ReviewsForm({ onCreated }: Props) {
       </div>
 
       <div className={rowClass}>
-        <label className={labelClass} htmlFor="text">
+        <label className={labelClass} htmlFor="rv-text">
           Recenzia ta
         </label>
         <textarea
-          id="text"
+          id="rv-text"
           className={textareaClass}
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -208,51 +218,39 @@ export default function ReviewsForm({ onCreated }: Props) {
       </div>
 
       <div className={rowClass}>
-        <label className={labelClass} htmlFor="avatar">
-          Poză profil (opțional)
+        <label className={labelClass} htmlFor="rv-avatar">
+          Poză de profil (opțional)
         </label>
         <input
-          id="avatar"
+          ref={fileInputRef}
+          id="rv-avatar"
           className={inputClass}
           type="file"
           accept="image/*"
           onChange={(e) => handleAvatarSelect(e.target.files?.[0] ?? null)}
         />
-        {avatarUrl && (
+        {avatarPreview && (
           <div className={avatarPreviewClass}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={avatarUrl} alt="Avatar încărcat" />
+            <img src={avatarPreview} alt="Previzualizare poză profil" />
           </div>
         )}
-        <p className={fileHintClass}>Doar imagini, max 5MB.</p>
+        <p className={fileHintClass}>
+          Imagine, max 5MB. Ajunge ca atașament — o salvăm noi manual.
+        </p>
       </div>
 
-      <div className={rowClass}>
-        <label className={labelClass} htmlFor="photos">
-          Imagini recenzie (0–4)
-        </label>
-        <input
-          id="photos"
-          className={inputClass}
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={(e) => handlePhotosSelect(e.target.files)}
-        />
-        {photoUrls.length > 0 && (
-          <div className={filesPreviewClass}>
-            {photoUrls.map((u) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img key={u} src={u} alt="Imagine încărcată" />
-            ))}
-          </div>
+      <div aria-live="polite" style={{ minHeight: 20 }}>
+        {error && (
+          <span role="alert" style={{ color: "var(--danger, #cc3b3b)" }}>
+            {error}
+          </span>
         )}
-        <p className={fileHintClass}>Max 4 imagini, fiecare ≤5MB.</p>
       </div>
 
       <div className={actionsClass}>
         <button type="submit" disabled={!canSubmit || busy}>
-          {busy ? "Public..." : "Publică recenzia"}
+          {busy ? "Se trimite..." : "Trimite recenzia"}
         </button>
       </div>
     </form>

@@ -67,6 +67,12 @@ next-env.d.ts
 # ==============================
 /docs
 
+# ==============================
+# generated at postbuild
+# ==============================
+/public/rss.xml
+/public/feed.xml
+
 
 .vercel
 .env*.local
