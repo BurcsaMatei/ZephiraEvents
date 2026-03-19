@@ -3,7 +3,7 @@
 // Reviews domain helpers (KV + ZSET by date)
 // ==============================
 
-import { kv } from "../lib/kv";
+import { kv } from "./storage/kv";
 
 export type Rating = 1 | 2 | 3 | 4 | 5;
 

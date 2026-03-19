@@ -5,8 +5,8 @@
 // ==============================
 import { globalStyle, keyframes, style } from "@vanilla-extract/css";
 
-import { assetUrl } from "../lib/config";
-import { vars } from "./theme.css";
+import { assetUrl } from "../../../lib/config";
+import { vars } from "../../theme.css";
 
 // ==============================
 // Tokens & utilities

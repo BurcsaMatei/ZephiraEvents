@@ -11,8 +11,8 @@ import React, { type ReactNode, useEffect, useMemo, useRef, useState } from "rea
 
 import { withBase } from "../../../lib/config";
 import { buildMenuJsonLd, type MenuData } from "../../../lib/seo/menuJsonLd";
-import * as intro from "../../../styles/introSection.css";
 import * as s from "../../../styles/sections/arcMenuGallery.css";
+import * as intro from "../../../styles/sections/introSection.css";
 import type { Menu } from "../../../types/menu";
 import Appear from "../../animations/Appear";
 import Img from "../../ui/Img";

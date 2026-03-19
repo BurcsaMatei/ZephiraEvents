@@ -9,7 +9,7 @@ import { type ReactNode, useId } from "react";
 
 import { withBase } from "../../lib/config";
 import * as btn from "../../styles/button.css";
-import * as s from "../../styles/outro.css";
+import * as s from "../../styles/sections/outro.css";
 import Appear from "../animations/Appear";
 import Button from "../Button";
 

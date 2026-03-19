@@ -3,8 +3,8 @@
 // ==============================
 // Imports
 // ==============================
-import * as s from "../../styles/sections/tentVideos.css";
-import Appear from "../animations/Appear";
+import * as s from "../../../styles/sections/tent/tentVideos.css";
+import Appear from "../../animations/Appear";
 
 // ==============================
 // Constante

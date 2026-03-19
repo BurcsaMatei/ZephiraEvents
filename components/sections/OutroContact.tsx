@@ -5,8 +5,8 @@
 // ==============================
 import { useId } from "react";
 
-import * as base from "../../styles/outro.css";
-import * as s from "../../styles/outroContact.css";
+import * as base from "../../styles/sections/outro.css";
+import * as s from "../../styles/sections/outroContact.css";
 import Appear from "../animations/Appear";
 import Button from "../Button";
 

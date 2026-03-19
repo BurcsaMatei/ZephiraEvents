@@ -6,10 +6,10 @@
 import Link from "next/link";
 import * as React from "react";
 
-import { withBase } from "../../lib/config";
-import * as s from "../../styles/sections/tentAtLocationBanner.css";
-import Appear from "../animations/Appear";
-import HeroLCPImage from "../HeroLCPImage";
+import { withBase } from "../../../lib/config";
+import * as s from "../../../styles/sections/tent/tentAtLocationBanner.css";
+import Appear from "../../animations/Appear";
+import HeroLCPImage from "../../HeroLCPImage";
 
 // ==============================
 // Constante

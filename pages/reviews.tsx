@@ -5,10 +5,10 @@
 import type { GetServerSideProps } from "next";
 import Head from "next/head";
 
-import Reviews from "../components/sections/Reviews";
+import Reviews from "../components/sections/reviews/Reviews";
 import { SITE } from "../lib/config";
-import { kv } from "../lib/kv";
 import type { Review } from "../lib/reviews";
+import { kv } from "../lib/storage/kv";
 
 type Props = {
   page: number;

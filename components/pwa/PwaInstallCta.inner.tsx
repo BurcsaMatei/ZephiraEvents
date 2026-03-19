@@ -7,9 +7,9 @@
 // ==============================
 import { useCallback, useEffect, useId, useState } from "react";
 
-import * as s from "../styles/pwaCta.css";
-import Button from "./Button";
-import Img from "./ui/Img";
+import * as s from "../../styles/pwa/pwaCta.css";
+import Button from "../Button";
+import Img from "../ui/Img";
 
 // ==============================
 // Types

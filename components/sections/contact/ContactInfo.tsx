@@ -13,7 +13,7 @@ import {
   contactItemClass,
   contactItemLinkClass,
   contactTextClass,
-} from "../../../styles/contact/contactInfo.css";
+} from "../../../styles/contact/ContactInfo.css";
 import Appear from "../../animations/Appear";
 import AnimatedIcon from "../../ui/AnimatedIcon";
 

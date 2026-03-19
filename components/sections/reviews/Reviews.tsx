@@ -7,7 +7,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import type { Review } from "../../lib/reviews";
+import type { Review } from "../../../lib/reviews";
 import {
   bandClass,
   bandsWrapClass,
@@ -30,7 +30,7 @@ import {
   titleClass,
   trackLeftClass,
   trackRightClass,
-} from "../../styles/sections/reviews.css";
+} from "../../../styles/sections/reviews/reviews.css";
 import ReviewsForm from "./ReviewsForm";
 
 type Props = {

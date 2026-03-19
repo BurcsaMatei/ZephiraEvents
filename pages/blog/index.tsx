@@ -18,7 +18,7 @@ import Separator from "../../components/Separator";
 import type { Json } from "../../interfaces";
 import { getAllPosts } from "../../lib/blogData";
 import { absoluteUrl } from "../../lib/config";
-import * as ti from "../../styles/sections/tentIntro.css";
+import * as ti from "../../styles/sections/tent/tentIntro.css";
 import type { Post } from "../../types/blog";
 
 // ==============================

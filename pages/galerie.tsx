@@ -21,7 +21,7 @@ import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { absoluteAssetUrl, absoluteUrl, seoDefaults } from "../lib/config";
 import { getGalleryItems } from "../lib/gallery";
-import * as ti from "../styles/sections/tentIntro.css";
+import * as ti from "../styles/sections/tent/tentIntro.css";
 
 // ==============================
 // Types
