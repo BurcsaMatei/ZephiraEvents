@@ -24,13 +24,14 @@ import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { getAllPosts } from "../lib/blogData";
 import { absoluteUrl, seoDefaults } from "../lib/config";
+import { getLatestReviews, type Review } from "../lib/reviews";
 import * as ti from "../styles/sections/tent/tentIntro.css";
 
 // ==============================
 // Types
 // ==============================
 type BlogPostItem = ReturnType<typeof getAllPosts>[number];
-type HomeProps = { postsPreview: BlogPostItem[] };
+type HomeProps = { postsPreview: BlogPostItem[]; reviewItems: Review[] };
 
 // ==============================
 // Constante
@@ -44,7 +45,7 @@ const breadcrumbList = {
 // ==============================
 // Component
 // ==============================
-const Home: NextPage<HomeProps> = ({ postsPreview }) => {
+const Home: NextPage<HomeProps> = ({ postsPreview, reviewItems }) => {
   const router = useRouter();
 
   // Prefetch /galerie când browserul e idle
@@ -157,7 +158,7 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
       <Separator />
 
       {/* REVIEWS FULL-BLEED — ÎN AFARA oricărui .container / .section / AppearGroup */}
-      <Reviews fullBleed mode="home" showForm={false} limit={12} />
+      <Reviews fullBleed mode="home" showForm={false} limit={12} initialItems={reviewItems} />
 
       <Separator />
 
@@ -255,9 +256,10 @@ const Home: NextPage<HomeProps> = ({ postsPreview }) => {
 // ==============================
 // Data fetching
 // ==============================
-export const getStaticProps: GetStaticProps<HomeProps> = async () => {
+export const getStaticProps: GetStaticProps<HomeProps> = () => {
   const postsPreview = getAllPosts().slice(0, 4);
-  return { props: { postsPreview } };
+  const reviewItems = getLatestReviews(12);
+  return { props: { postsPreview, reviewItems } };
 };
 
 // ==============================

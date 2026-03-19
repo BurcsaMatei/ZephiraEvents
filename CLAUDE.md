@@ -116,35 +116,36 @@ types/                 blog.ts, menu.ts, etc.
 
 ### Pagini principale
 
-| Pagină | Fișier | Rol comercial |
-|--------|--------|---------------|
-| `/` | `pages/index.tsx` | Homepage — brand, teaser servicii, galerie arc, recenzii, motivație |
-| `/servicii` | `pages/servicii.tsx` | Prezentare completă servicii, meniuri (4 tipuri), cort extern, ospătari, catering |
-| `/galerie` | `pages/galerie.tsx` | Galerie foto cu lightbox YARL + Zoom |
-| `/contact` | `pages/contact.tsx` | Contact (tel/email/adresă), hartă cu consent, formular contact, formular ofertă |
-| `/cort-evenimente-la-locatia-ta` | `pages/cort-evenimente-la-locatia-ta.tsx` | Landing serviciu cort extern — video, galerie, motivație |
-| `/reviews` | `pages/reviews.tsx` | Recenzii clienți (SSR/KV) + formular adăugare |
-| `/blog` | `pages/blog/index.tsx` | Lista articole blog (SEO) |
-| `/blog/[slug]` | `pages/blog/[slug].tsx` | Articol individual cu Hero full-bleed |
-| `/meniuri/[slug]` | `pages/meniuri/[slug].tsx` | Pagina dinamică meniu — detalii, prețuri, galerie |
-| `/marca` | `pages/marca.tsx` | Pagina identitate brand |
-| `/cookie-policy` | `pages/cookie-policy.tsx` | Politica cookie |
+| Pagină                           | Fișier                                    | Rol comercial                                                                     |
+| -------------------------------- | ----------------------------------------- | --------------------------------------------------------------------------------- |
+| `/`                              | `pages/index.tsx`                         | Homepage — brand, teaser servicii, galerie arc, recenzii, motivație               |
+| `/servicii`                      | `pages/servicii.tsx`                      | Prezentare completă servicii, meniuri (4 tipuri), cort extern, ospătari, catering |
+| `/galerie`                       | `pages/galerie.tsx`                       | Galerie foto cu lightbox YARL + Zoom                                              |
+| `/contact`                       | `pages/contact.tsx`                       | Contact (tel/email/adresă), hartă cu consent, formular contact, formular ofertă   |
+| `/cort-evenimente-la-locatia-ta` | `pages/cort-evenimente-la-locatia-ta.tsx` | Landing serviciu cort extern — video, galerie, motivație                          |
+| `/reviews`                       | `pages/reviews.tsx`                       | Recenzii clienți (SSR/KV) + formular adăugare                                     |
+| `/blog`                          | `pages/blog/index.tsx`                    | Lista articole blog (SEO)                                                         |
+| `/blog/[slug]`                   | `pages/blog/[slug].tsx`                   | Articol individual cu Hero full-bleed                                             |
+| `/meniuri/[slug]`                | `pages/meniuri/[slug].tsx`                | Pagina dinamică meniu — detalii, prețuri, galerie                                 |
+| `/marca`                         | `pages/marca.tsx`                         | Pagina identitate brand                                                           |
+| `/cookie-policy`                 | `pages/cookie-policy.tsx`                 | Politica cookie                                                                   |
 
 ### API Routes
 
-| Route | Fișier | Rol |
-|-------|--------|-----|
-| `POST /api/contact` | `pages/api/contact.ts` | Trimite email contact via SMTP + autoreply |
+| Route                     | Fișier                       | Rol                                         |
+| ------------------------- | ---------------------------- | ------------------------------------------- |
+| `POST /api/contact`       | `pages/api/contact.ts`       | Trimite email contact via SMTP + autoreply  |
 | `POST /api/offer-request` | `pages/api/offer-request.ts` | Procesează solicitare ofertă, trimite email |
-| `GET/POST /api/reviews` | `pages/api/reviews.ts` | Citire/scriere recenzii în Vercel KV |
-| `GET /api/og` | `pages/api/og.tsx` | Generare OG image dinamic (@vercel/og) |
-| `POST /api/csp-report` | `pages/api/csp-report.ts` | Colectare rapoarte Content-Security-Policy |
+| `GET/POST /api/reviews`   | `pages/api/reviews.ts`       | Citire/scriere recenzii în Vercel KV        |
+| `GET /api/og`             | `pages/api/og.tsx`           | Generare OG image dinamic (@vercel/og)      |
+| `POST /api/csp-report`    | `pages/api/csp-report.ts`    | Colectare rapoarte Content-Security-Policy  |
 
 ---
 
 ## 5. Discipline tehnice obligatorii
 
 ### Cod
+
 - TypeScript strict — fără `any`, fără workaround-uri
 - Vanilla Extract pentru tot styling-ul — fără inline styling permanent
 - Fișierele CSS sunt `styles/**/*.css.ts`, co-locate cu domeniul lor
@@ -152,18 +153,21 @@ types/                 blog.ts, menu.ts, etc.
 - Pattern `dynamic(() => import(...))` pentru componente cu SSR off
 
 ### Arhitectură
+
 - `lib/config.ts` și `lib/nav.ts` sunt sursele de adevăr — nu duplica config în componente
 - `data/*.json` pentru conținut data-driven (meniuri, galerie) — nu hardcoda în componente
 - Separare clară: `components/` (UI) / `lib/` (logică) / `pages/` (routing) / `styles/` (styling)
 - API routes validează cu Zod înainte de orice procesare
 
 ### Reguli speciale descoperite în lucru
+
 - **`Appear` cu `immediate` prop:** orice componentă `<Appear>` pe un grid/container trebuie să aibă `immediate` setat — fără el, `IntersectionObserver` nu declanșează animația pe mobile în producție (fix dovedit în PR #56, #79)
 - **Full-bleed pattern:** secțiunile Hero nu se învelesc în `.section > .container` — au `data-full-bleed="true"` și nu au clasa `.section` pe wrapper (aceasta adaugă `paddingBlock: 24px` și creează gap)
 - **`Breadcrumbs` după Hero:** întotdeauna sub secțiunea `<Hero>`, nu în interiorul ei
 - **`<Appear>` pe container, nu pe fiecare item:** pentru grid-uri cu multe items, `Appear` cu `immediate` se pune pe containerul `Grid`, nu pe fiecare card individual
 
 ### SEO
+
 - Metadata centralizată în `lib/pageMeta.ts`
 - JSON-LD pe paginile relevante
 - OG assets dedicate per pagină unde e cazul
@@ -196,11 +200,13 @@ types/                 blog.ts, menu.ts, etc.
 ## 7. Fișiere cheie per domeniu
 
 ### Navigație / Header
+
 - `lib/nav.ts` — NAV, SERVICII_SUBMENU, SOCIAL
 - `lib/config.ts` — BASE_PATH, withBase, CONTACT, SITE
 - `components/Header.tsx`, `components/HeaderPanel.lazy.tsx`
 
 ### Meniuri
+
 - `data/menus.json` — datele meniurilor
 - `lib/menus.ts`, `lib/menus.public.ts` — logică domeniu
 - `types/menu.ts`
@@ -210,18 +216,21 @@ types/                 blog.ts, menu.ts, etc.
 - `styles/menus/menuDetail.css.ts`
 
 ### Galerie
+
 - `data/gallery.json` (generat), `data/galleryCaptions.json`
 - `lib/gallery.ts`, `lib/gallery.data.ts`, `lib/gallery.store.ts`, `lib/gallery/schema.ts`
 - `pages/galerie.tsx`
 - `scripts/build-gallery.mjs` — adaugă imagini în `public/images/gallery/` și regenerează
 
 ### Contact
+
 - `components/sections/contact/ContactInfo.tsx`, `FormContact.tsx`, `ContactMapIframeConsent.tsx`
 - `pages/contact.tsx` — are `id="oferta"` pe secțiunea OfferRequest
 - `pages/api/contact.ts`
 - `.env.local` — SMTP, reCAPTCHA
 
 ### Solicitare ofertă
+
 - `components/forms/OfferRequest.tsx`
 - `pages/api/offer-request.ts`
 - `lib/mail/offerRequestEmail.ts`
@@ -229,12 +238,14 @@ types/                 blog.ts, menu.ts, etc.
 - `styles/forms/offerRequest.css.ts`
 
 ### Recenzii
+
 - `components/sections/reviews/Reviews.tsx`, `ReviewsForm.tsx`
 - `pages/reviews.tsx`, `pages/api/reviews.ts`
 - `lib/reviews.ts`
 - `lib/storage/blob.ts`, `lib/storage/kv.ts`
 
 ### SEO / Metadata
+
 - `components/Seo.tsx`, `components/JsonLd.tsx`
 - `lib/pageMeta.ts`, `lib/url.ts`
 - `lib/seo/menuJsonLd.ts`
@@ -242,6 +253,7 @@ types/                 blog.ts, menu.ts, etc.
 - `pages/api/og.tsx`
 
 ### Shell / Theme / Layout
+
 - `components/Layout.tsx`
 - `styles/theme.css.ts`, `styles/theme.global.css.ts`, `styles/globals.css`
 - `components/ThemeSwitcher.tsx`
