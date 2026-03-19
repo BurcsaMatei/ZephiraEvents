@@ -4,7 +4,7 @@
 // ==============================
 import { globalStyle, keyframes, style } from "@vanilla-extract/css";
 
-import { mq, vars } from "../theme.css";
+import { mq, vars } from "../../theme.css";
 
 // ==============================
 // Keyframes pentru benzi

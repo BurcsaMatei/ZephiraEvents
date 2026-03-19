@@ -7,7 +7,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 
-import { uploadFileViaSignedUrl } from "../../lib/blob";
+import { uploadFileViaSignedUrl } from "../../../lib/storage/blob";
 import {
   actionsClass,
   avatarPreviewClass,
@@ -23,7 +23,7 @@ import {
   starBtnClass,
   starsGroupClass,
   textareaClass,
-} from "../../styles/sections/reviewsForm.css";
+} from "../../../styles/sections/reviews/reviewsForm.css";
 
 type Props = {
   onCreated?: (opts: { refresh?: boolean }) => void;

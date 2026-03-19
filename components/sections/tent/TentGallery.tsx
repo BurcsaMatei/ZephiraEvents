@@ -8,8 +8,8 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Plugin, Slide } from "yet-another-react-lightbox";
 
-import * as s from "../../styles/sections/tentGallery.css";
-import Appear from "../animations/Appear";
+import * as s from "../../../styles/sections/tent/tentGallery.css";
+import Appear from "../../animations/Appear";
 
 // ==============================
 // Constante

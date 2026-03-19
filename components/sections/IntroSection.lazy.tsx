@@ -6,7 +6,7 @@
 // ==============================
 import React, { type ReactNode, useId } from "react";
 
-import * as s from "../../styles/introSection.css";
+import * as s from "../../styles/sections/introSection.css";
 import Appear from "../animations/Appear";
 
 // ==============================

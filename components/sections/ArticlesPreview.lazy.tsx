@@ -9,6 +9,7 @@ import React, { useMemo } from "react";
 
 import { type BlogPost } from "../../lib/blogData";
 import { withBase } from "../../lib/config";
+import { btn, primary as btnPrimary } from "../../styles/button.css";
 import {
   cardWrap,
   ctaRowClass,
@@ -17,8 +18,7 @@ import {
   headerClass,
   subtitleClass,
   titleClass,
-} from "../../styles/articlesPreview.css";
-import { btn, primary as btnPrimary } from "../../styles/button.css";
+} from "../../styles/sections/articlesPreview.css";
 import type { Post } from "../../types/blog";
 import Appear from "../animations/Appear";
 import BlogCard from "../blog/BlogCard";

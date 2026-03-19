@@ -13,7 +13,7 @@ import {
   consentP,
   iframeFull,
   mapWrap,
-} from "../../../styles/contact/contactMapIframeConsent.css";
+} from "../../../styles/contact/ContactMapIframeConsent.css";
 import Appear from "../../animations/Appear";
 import Button from "../../Button";
 

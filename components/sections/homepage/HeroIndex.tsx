@@ -5,7 +5,7 @@
 // ==============================
 import * as React from "react";
 
-import * as h from "../../../styles/heroIndex.css";
+import * as h from "../../../styles/sections/homepage/heroIndex.css";
 import Appear from "../../animations/Appear";
 import HeroLCPImage from "../../HeroLCPImage";
 

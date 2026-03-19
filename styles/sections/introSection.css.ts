@@ -11,8 +11,8 @@ import {
   eyebrow as baseEyebrow,
   heading as baseHeading,
   lede as baseLede,
-} from "./sectionBase.css";
-import { mq, vars } from "./theme.css";
+} from "../sectionBase.css";
+import { mq, vars } from "../theme.css";
 
 // ==============================
 // Classes

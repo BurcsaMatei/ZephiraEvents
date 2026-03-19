@@ -17,7 +17,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import CookieProvider from "../components/cookies/CookieProvider";
 import Layout from "../components/Layout";
 // ---- type-only imports pentru a DERIVA exact props-urile componentelor (nu intră în bundle)
-import type ServiceWorkerRegisterComponent from "../components/ServiceWorkerRegister";
+import type ServiceWorkerRegisterComponent from "../components/pwa/ServiceWorkerRegister";
 // Helpers config
 import { withBase } from "../lib/config";
 // Container scope + tema implicită (Vanilla Extract) — wrapper global permis
@@ -26,7 +26,7 @@ import { containerThemeDefault, pageScope } from "../styles/container.css";
 import { themeClassDark, themeClassLight } from "../styles/theme.css";
 type ServiceWorkerRegisterProps = React.ComponentProps<typeof ServiceWorkerRegisterComponent>;
 
-import type InstallAppButtonComponent from "../components/InstallAppButton";
+import type InstallAppButtonComponent from "../components/pwa/InstallAppButton";
 type InstallAppButtonProps = React.ComponentProps<typeof InstallAppButtonComponent>;
 
 // ==============================
@@ -47,11 +47,11 @@ let InstallAppButtonDynamic: React.ComponentType<InstallAppButtonProps> | null =
 
 if (ENABLE_PWA) {
   ServiceWorkerRegisterDynamic = dynamic<ServiceWorkerRegisterProps>(
-    () => import("../components/ServiceWorkerRegister"),
+    () => import("../components/pwa/ServiceWorkerRegister"),
     { ssr: false },
   );
   InstallAppButtonDynamic = dynamic<InstallAppButtonProps>(
-    () => import("../components/InstallAppButton"),
+    () => import("../components/pwa/InstallAppButton"),
     { ssr: false },
   );
 }

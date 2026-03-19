@@ -11,14 +11,14 @@ import Hero from "../components/sections/Hero";
 import IntroSection from "../components/sections/IntroSection";
 import MotivationCards from "../components/sections/MotivationCards";
 import Outro from "../components/sections/Outro";
-import TentGallery from "../components/sections/TentGallery";
-import TentVideos from "../components/sections/TentVideos";
+import TentGallery from "../components/sections/tent/TentGallery";
+import TentVideos from "../components/sections/tent/TentVideos";
 import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { absoluteUrl, CONTACT } from "../lib/config";
 import * as btn from "../styles/button.css";
-import * as ti from "../styles/sections/tentIntro.css";
+import * as ti from "../styles/sections/tent/tentIntro.css";
 
 // ==============================
 // Constante

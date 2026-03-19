@@ -16,14 +16,14 @@ import CateringSection from "../components/sections/servicii/CateringSection";
 import MenusIntro from "../components/sections/servicii/MenusIntro";
 import ServiciiComplete from "../components/sections/servicii/ServiciiComplete";
 import WaiterBarSection from "../components/sections/servicii/WaiterBarSection";
-import TentAtLocationBanner from "../components/sections/TentAtLocationBanner";
+import TentAtLocationBanner from "../components/sections/tent/TentAtLocationBanner";
 import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { absoluteUrl } from "../lib/config";
 import { getMenusByEventType } from "../lib/menus";
-import * as tent from "../styles/sections/tentAtLocationBanner.css";
-import * as ti from "../styles/sections/tentIntro.css";
+import * as tent from "../styles/sections/tent/tentAtLocationBanner.css";
+import * as ti from "../styles/sections/tent/tentIntro.css";
 
 // ==============================
 // Constante

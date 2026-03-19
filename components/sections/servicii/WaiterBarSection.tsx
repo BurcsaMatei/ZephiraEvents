@@ -8,7 +8,7 @@ import Link from "next/link";
 import React from "react";
 
 import { CONTACT } from "../../../lib/config";
-import * as ti from "../../../styles/sections/tentIntro.css";
+import * as ti from "../../../styles/sections/tent/tentIntro.css";
 import * as w from "../../../styles/sections/waiterBarSection.css";
 import * as s from "../../../styles/services.css";
 import Appear from "../../animations/Appear";

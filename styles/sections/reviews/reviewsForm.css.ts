@@ -1,7 +1,7 @@
 // styles/sections/reviewsForm.css.ts
 import { globalStyle, style } from "@vanilla-extract/css";
 
-import { mq, vars } from "../theme.css";
+import { mq, vars } from "../../theme.css";
 
 export const formClass = style({
   display: "grid",

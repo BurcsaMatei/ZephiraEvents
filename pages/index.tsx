@@ -16,15 +16,15 @@ import LogoBeforeIntro from "../components/sections/homepage/LogoBeforeIntro";
 import IntroSection from "../components/sections/IntroSection";
 import MotivationCards from "../components/sections/MotivationCards";
 import Outro from "../components/sections/Outro";
-import Reviews from "../components/sections/Reviews";
+import Reviews from "../components/sections/reviews/Reviews";
 import { Serviciipreview } from "../components/sections/Serviciipreview";
-import TentAtLocationBanner from "../components/sections/TentAtLocationBanner";
+import TentAtLocationBanner from "../components/sections/tent/TentAtLocationBanner";
 import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { getAllPosts } from "../lib/blogData";
 import { absoluteUrl, seoDefaults } from "../lib/config";
-import * as ti from "../styles/sections/tentIntro.css";
+import * as ti from "../styles/sections/tent/tentIntro.css";
 
 // ==============================
 // Types

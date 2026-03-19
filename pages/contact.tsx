@@ -21,7 +21,7 @@ import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { absoluteUrl, CONTACT, SITE } from "../lib/config";
-import * as ti from "../styles/sections/tentIntro.css";
+import * as ti from "../styles/sections/tent/tentIntro.css";
 
 // ==============================
 // Types
