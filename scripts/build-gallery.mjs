@@ -33,7 +33,8 @@ async function walk(dir) {
   for (const ent of entries) {
     const abs = path.join(dir, ent.name);
     if (ent.isDirectory()) {
-      out.push(...(await walk(abs)));
+      // Subdirectoarele sunt galerii separate (ex: tent/) — nu le includem în galeria principală
+      continue;
     } else {
       const ext = path.extname(ent.name).toLowerCase();
       if (!IMG_EXT.has(ext)) continue;
