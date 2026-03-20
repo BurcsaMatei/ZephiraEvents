@@ -137,7 +137,7 @@ const ContactPage: NextPage = () => (
       title="Contact — sală de evenimente în Focșani, Vrancea"
       description="Contactează ZephiraEvents pentru organizarea de nunți, botezuri, majorate și evenimente corporate în Focșani, județul Vrancea. Verifică disponibilitatea sălii, solicită ofertă personalizată și beneficiezi de servicii impecabile, coordonare A-Z și răspuns rapid."
       url={contactData.url}
-      image={absoluteUrl("/api/og?p=/contact")}
+      image="/images/og-contact.jpg"
       structuredData={[breadcrumbList, contactJsonLd]}
     />
 

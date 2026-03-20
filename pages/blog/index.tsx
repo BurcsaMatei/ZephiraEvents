@@ -53,7 +53,7 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
         title="Blog — sală de evenimente în Focșani, Vrancea"
         description="Sfaturi și idei pentru organizarea de nunți, botezuri, majorate și evenimente corporate în Focșani, județul Vrancea — inspirație pentru sală, decor, meniu și servicii impecabile."
         url={absoluteUrl("/blog")}
-        image={absoluteUrl("/api/og?p=/blog")}
+        image="/images/og-blog.jpg"
         structuredData={[breadcrumbList]}
       />
 
