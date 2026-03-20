@@ -4,6 +4,7 @@
 // Imports
 // ==============================
 import type { GetStaticProps, NextPage } from "next";
+import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -17,9 +18,7 @@ import LogoBeforeIntro from "../components/sections/homepage/LogoBeforeIntro";
 import IntroSection from "../components/sections/IntroSection";
 import MotivationCards from "../components/sections/MotivationCards";
 import Outro from "../components/sections/Outro";
-import Reviews from "../components/sections/reviews/Reviews";
 import { Serviciipreview } from "../components/sections/Serviciipreview";
-import TentAtLocationBanner from "../components/sections/tent/TentAtLocationBanner";
 import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
@@ -27,6 +26,16 @@ import { getAllPosts } from "../lib/blogData";
 import { absoluteUrl, seoDefaults } from "../lib/config";
 import { getLatestReviews, type Review } from "../lib/reviews";
 import * as ti from "../styles/sections/tent/tentIntro.css";
+
+// Componente sub fold — SSR off, lazy loaded
+const TentAtLocationBanner = dynamic(
+  () => import("../components/sections/tent/TentAtLocationBanner"),
+  { ssr: false, loading: () => null },
+);
+const Reviews = dynamic(() => import("../components/sections/reviews/Reviews"), {
+  ssr: false,
+  loading: () => null,
+});
 
 // ==============================
 // Types

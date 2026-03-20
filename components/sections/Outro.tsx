@@ -17,7 +17,7 @@ import type { OutroProps } from "./Outro.lazy";
 // Dynamic import
 // ==============================
 const OutroLazy = dynamic(() => import("./Outro.lazy"), {
-  ssr: true,
+  ssr: false,
   loading: () => null,
 }) as ComponentType<OutroProps>;
 

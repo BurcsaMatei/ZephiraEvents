@@ -3,6 +3,9 @@
 // ==============================
 // Imports
 // ==============================
+import "yet-another-react-lightbox/styles.css";
+import "yet-another-react-lightbox/plugins/captions.css";
+
 import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Plugin, Slide } from "yet-another-react-lightbox";
