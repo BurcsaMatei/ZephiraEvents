@@ -71,7 +71,7 @@ const TentAtLocationPage: NextPage = () => {
         title="Cort de evenimente la locația ta — organizare completă A–Z"
         description="ZephiraEvents amplasează un cort premium la locația aleasă de tine și se ocupă de tot: organizare, meniu & catering, servire și coordonare A–Z — pentru un eveniment impecabil, fără stres."
         url={pagePath}
-        image={absoluteUrl("/api/og?p=/cort-evenimente-la-locatia-ta")}
+        image="/images/og-cort.jpg"
         structuredData={[breadcrumbList, serviceJsonLd]}
       />
 

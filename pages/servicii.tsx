@@ -106,7 +106,7 @@ const ServicesPage: NextPage = () => {
         title="Servicii — sală de evenimente în Focșani, Vrancea"
         description="ZephiraEvents oferă organizare completă pentru nunți, botezuri, majorate și evenimente corporate în Focșani, județul Vrancea — sală de evenimente, meniu personalizat, decor, foto-video, DJ, coordonare A–Z și servicii impecabile."
         url={pagePath}
-        image={absoluteUrl("/api/og?p=/servicii")}
+        image="/images/og-servicii.jpg"
         structuredData={[breadcrumbList, servicesItemList]}
       />
 

@@ -11,7 +11,7 @@ import Hero from "../../components/sections/Hero";
 import Outro from "../../components/sections/Outro";
 import Seo from "../../components/Seo";
 import Separator from "../../components/Separator";
-import { absoluteUrl, withBase } from "../../lib/config";
+import { withBase } from "../../lib/config";
 import { getAllMenus, getEventTypeAnchorHref, getMenuBySlug } from "../../lib/menus";
 import * as s from "../../styles/menus/menuDetail.css";
 import { list, sectionBlock, sectionTitle } from "../../styles/sections/menuOffers.css";
@@ -53,7 +53,7 @@ const MenuDetailPage: NextPage<PageProps> = ({ menu }) => {
         title={`${menu.title} — Meniu`}
         description={menuDescription(menu)}
         url={pagePath}
-        image={absoluteUrl(`/api/og?p=${pagePath}`)}
+        image={menu.image}
       />
 
       <section data-full-bleed="true">

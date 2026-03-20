@@ -3,7 +3,13 @@
 // Mapare rută → meta pentru OG & Hero (sursa unică de adevăr)
 // ==============================
 
-export type PageRoute = "/" | "/servicii" | "/galerie" | "/contact" | "/blog";
+export type PageRoute =
+  | "/"
+  | "/servicii"
+  | "/galerie"
+  | "/contact"
+  | "/blog"
+  | "/cort-evenimente-la-locatia-ta";
 
 export interface PageMeta {
   route: PageRoute;
@@ -23,6 +29,7 @@ function normalizeRoute(path: string): PageRoute {
     case "/galerie":
     case "/contact":
     case "/blog":
+    case "/cort-evenimente-la-locatia-ta":
       return clean;
     default:
       return "/";
@@ -66,6 +73,13 @@ const PAGE_META: Record<PageRoute, PageMeta> = {
     subtitle:
       "Ghiduri, liste de verificare și inspirație pentru nunți, botezuri, majorate și corporate în Focșani, Vrancea — sală de evenimente, organizare A-Z și servicii impecabile.",
     heroSrc: "/images/current/hero-index-blog.jpg",
+  },
+  "/cort-evenimente-la-locatia-ta": {
+    route: "/cort-evenimente-la-locatia-ta",
+    title: "Cort de evenimente la locația ta — organizare completă A–Z",
+    subtitle:
+      "Amplasăm cortul, organizăm, gătim, servim și coordonăm A–Z — tu alegi locația, noi ne ocupăm de restul.",
+    heroSrc: "/images/current/hero-tent.jpg",
   },
 };
 

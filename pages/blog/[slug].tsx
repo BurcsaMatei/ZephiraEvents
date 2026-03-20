@@ -98,7 +98,7 @@ const BlogPostPage: NextPage<Props> = ({ post, related }) => {
         title={post.title}
         description={post.excerpt}
         url={canonical}
-        image={absoluteOgImage(coverSrc)}
+        image={absoluteOgImage(post.coverImage)}
         structuredData={[breadcrumbList, blogPosting]}
       />
 
