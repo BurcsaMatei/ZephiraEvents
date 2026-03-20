@@ -6,8 +6,6 @@
 // Global styles / vendor CSS (order matters)
 import "../styles/globals.css";
 import "../styles/theme.global.css"; // mapează tokens → elemente
-import "yet-another-react-lightbox/styles.css";
-import "yet-another-react-lightbox/plugins/captions.css";
 
 import type { AppProps } from "next/app";
 import dynamic from "next/dynamic";

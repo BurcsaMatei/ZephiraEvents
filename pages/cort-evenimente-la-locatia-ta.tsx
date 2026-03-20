@@ -3,6 +3,8 @@
 // ==============================
 // Imports
 // ==============================
+import "yet-another-react-lightbox/styles.css";
+
 import type { NextPage } from "next";
 
 import Appear, { AppearGroup } from "../components/animations/Appear";

@@ -5,6 +5,7 @@
 // ==============================
 // Imports
 // ==============================
+import dynamic from "next/dynamic";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 
 import { isGrantedConsent, readConsent, removeConsent, writeConsent } from "../../lib/cookies";
@@ -18,7 +19,8 @@ import {
   overlay,
   overlayCloser,
 } from "../../styles/cookieDialog.css";
-import CookieBanner from "./CookieBanner";
+
+const CookieBanner = dynamic(() => import("./CookieBanner"), { ssr: false });
 
 // ==============================
 // Types
@@ -138,11 +140,13 @@ export default function CookieProvider({ children }: { children: React.ReactNode
   const [marketing, setMarketing] = useState(false);
   const [bannerVisible, setBannerVisible] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const loadedRef = useRef({ gtm: false, ga: false, fb: false });
 
-  // init din storage
+  // init din storage + mount gate pentru CookieDialog/Banner
   useEffect(() => {
+    setMounted(true);
     const stored = readConsent();
     if (isGrantedConsent(stored)) {
       setAnalytics(!!stored.granted.analytics);
@@ -300,8 +304,8 @@ export default function CookieProvider({ children }: { children: React.ReactNode
   return (
     <CookieContext.Provider value={value}>
       {children}
-      <CookieDialog />
-      <CookieBanner />
+      {mounted && <CookieDialog />}
+      {mounted && <CookieBanner />}
     </CookieContext.Provider>
   );
 }

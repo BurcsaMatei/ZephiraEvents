@@ -35,6 +35,9 @@ function makeVariants(kind: AppearKind, distance: number) {
 const EASE = [0.2, 0, 0.2, 1] as const;
 
 // ==============================
+// Motion component cache
+// ==============================
+// ==============================
 // Component
 // ==============================
 type BaseProps<T extends ElementType> = {
@@ -66,7 +69,8 @@ export default function Appear<T extends ElementType = "div">({
 }: AppearProps<T>) {
   const reduce = useReducedMotion();
   const Tag = (as ?? "div") as ElementType;
-  const MotionTag = motion.create(Tag);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const MotionTag = React.useMemo(() => motion.create(Tag), [Tag]);
   const variants = makeVariants(kind, distance);
 
   const transition = reduce ? { duration: 0 } : { duration, delay, ease: EASE };
@@ -119,7 +123,8 @@ export function AppearGroup<T extends ElementType = "div">({
 }: AppearGroupProps<T>) {
   const reduce = useReducedMotion();
   const Tag = (as ?? "div") as ElementType;
-  const MotionTag = motion.create(Tag);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const MotionTag = React.useMemo(() => motion.create(Tag), [Tag]);
 
   const mapped = React.useMemo(() => {
     if (!wrapChildren) return children;
