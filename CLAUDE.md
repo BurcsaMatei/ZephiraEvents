@@ -1,7 +1,7 @@
 # ZephiraEvents — CLAUDE.md
 
 **Versiune:** v2
-**Data:** 2026-03-19
+**Data:** 2026-03-20
 **Status:** activ
 
 ---
@@ -17,13 +17,13 @@ ZephiraEvents este un website premium de prezentare și conversie pentru o sală
 - **Framework:** Next.js 15 (Pages Router), React 19, TypeScript strict
 - **Styling:** Vanilla Extract (`*.css.ts`) — fără inline styling ca standard
 - **Animații:** Framer Motion, componenta `Appear` internă
-- **Storage:** Vercel KV (`lib/storage/kv.ts`), Vercel Blob (`lib/storage/blob.ts`)
 - **Mail:** Nodemailer (SMTP `mail.zephiraevents.ro`)
 - **Validare:** Zod
 - **Lightbox:** yet-another-react-lightbox
 - **Deployment:** Vercel
 - **PWA:** next-pwa (activ doar în producție cu `NEXT_PUBLIC_ENABLE_PWA=1`)
-- **SEO:** metadata centralizată, JSON-LD, OG dinamic, sitemap/robots server-side
+- **SEO:** metadata centralizată, JSON-LD, OG static pre-generat, sitemap/robots server-side
+- **devDependencies notabile:** `sharp` (optimizare imagini), `puppeteer` (generare OG screenshots)
 
 ---
 
@@ -59,7 +59,6 @@ lib/
   gallery/             schema.ts — validare și tipuri galerie
   mail/                offerRequestEmail.ts — template email ofertă
   seo/                 menuJsonLd.ts — structured data meniuri
-  storage/             blob.ts — Vercel Blob; kv.ts — Vercel KV
   validation/          offerRequest.ts — validare Zod pentru ofertă
   blogData.ts          helper citire articole blog (MDX/fișiere)
   config.ts            centrul de adevăr: SITE, CONTACT, THEME, SOCIAL_URLS, BASE_PATH, helpers URL
@@ -92,6 +91,9 @@ public/
 scripts/
   build-gallery.mjs    generează lib/gallery.data.ts + data/gallery.json (rulat la prebuild)
   build-rss.ts         generează public/rss.xml + public/feed.xml (rulat la postbuild)
+  generate-og.mjs      generează OG images statice pentru cele 6 pagini fixe (Puppeteer)
+  optimise-images.mjs  comprimă JPEG-uri din public/images/ cu sharp (MozJPEG)
+  optimise-videos.mjs  recomprimă MP4-uri din public/videos/ cu ffmpeg
   project-tree.ps1     utilitar explorare structură (PowerShell)
 
 styles/
@@ -123,7 +125,7 @@ types/                 blog.ts, menu.ts, etc.
 | `/galerie`                       | `pages/galerie.tsx`                       | Galerie foto cu lightbox YARL + Zoom                                              |
 | `/contact`                       | `pages/contact.tsx`                       | Contact (tel/email/adresă), hartă cu consent, formular contact, formular ofertă   |
 | `/cort-evenimente-la-locatia-ta` | `pages/cort-evenimente-la-locatia-ta.tsx` | Landing serviciu cort extern — video, galerie, motivație                          |
-| `/reviews`                       | `pages/reviews.tsx`                       | Recenzii clienți (SSR/KV) + formular adăugare                                     |
+| `/reviews`                       | `pages/reviews.tsx`                       | Recenzii clienți (SSG/JSON static) + formular trimitere pe email                  |
 | `/blog`                          | `pages/blog/index.tsx`                    | Lista articole blog (SEO)                                                         |
 | `/blog/[slug]`                   | `pages/blog/[slug].tsx`                   | Articol individual cu Hero full-bleed                                             |
 | `/meniuri/[slug]`                | `pages/meniuri/[slug].tsx`                | Pagina dinamică meniu — detalii, prețuri, galerie                                 |
@@ -132,13 +134,13 @@ types/                 blog.ts, menu.ts, etc.
 
 ### API Routes
 
-| Route                     | Fișier                       | Rol                                         |
-| ------------------------- | ---------------------------- | ------------------------------------------- |
-| `POST /api/contact`       | `pages/api/contact.ts`       | Trimite email contact via SMTP + autoreply  |
-| `POST /api/offer-request` | `pages/api/offer-request.ts` | Procesează solicitare ofertă, trimite email |
-| `GET/POST /api/reviews`   | `pages/api/reviews.ts`       | Citire/scriere recenzii în Vercel KV        |
-| `GET /api/og`             | `pages/api/og.tsx`           | Generare OG image dinamic (@vercel/og)      |
-| `POST /api/csp-report`    | `pages/api/csp-report.ts`    | Colectare rapoarte Content-Security-Policy  |
+| Route                        | Fișier                          | Rol                                                                  |
+| ---------------------------- | ------------------------------- | -------------------------------------------------------------------- |
+| `POST /api/contact`          | `pages/api/contact.ts`          | Trimite email contact via SMTP + autoreply                           |
+| `POST /api/offer-request`    | `pages/api/offer-request.ts`    | Procesează solicitare ofertă, trimite email                          |
+| `POST /api/review-submit`    | `pages/api/review-submit.ts`    | Formular recenzie — trimite pe email (cu poza ca attachment base64)  |
+| `GET /api/og`                | `pages/api/og.tsx`              | Unealtă internă pentru `npm run generate:og` — nu e apelat din pagini |
+| `POST /api/csp-report`       | `pages/api/csp-report.ts`       | Colectare rapoarte Content-Security-Policy                           |
 
 ---
 
@@ -240,9 +242,10 @@ types/                 blog.ts, menu.ts, etc.
 ### Recenzii
 
 - `components/sections/reviews/Reviews.tsx`, `ReviewsForm.tsx`
-- `pages/reviews.tsx`, `pages/api/reviews.ts`
-- `lib/reviews.ts`
-- `lib/storage/blob.ts`, `lib/storage/kv.ts`
+- `pages/reviews.tsx` — SSG, citește din JSON static
+- `pages/api/review-submit.ts` — primește recenzia, trimite email cu poza ca attachment
+- `lib/reviews.ts` — citește `data/reviews.json`, transformă `date` → `createdAt` epoch ms
+- `data/reviews.json` — 12 recenzii statice; pentru a adăuga una, editează manual fișierul
 
 ### SEO / Metadata
 
@@ -250,7 +253,9 @@ types/                 blog.ts, menu.ts, etc.
 - `lib/pageMeta.ts`, `lib/url.ts`
 - `lib/seo/menuJsonLd.ts`
 - `pages/robots.txt.ts`, `pages/sitemap*.ts`
-- `pages/api/og.tsx`
+- `pages/api/og.tsx` — unealtă internă, nu apelată din pagini
+- OG images statice pre-generate: `public/images/og.jpg`, `og-servicii.jpg`, `og-galerie.jpg`, `og-contact.jpg`, `og-blog.jpg`, `og-cort.jpg`
+- Pentru regenerare OG: `npm run generate:og` (necesită `npm run dev` pe `:3000`)
 
 ### Shell / Theme / Layout
 
@@ -266,11 +271,37 @@ types/                 blog.ts, menu.ts, etc.
 **Offer Request** (`pages/api/offer-request.ts`, `components/forms/OfferRequest.tsx`)
 Infrastructura există și funcționează în dev. Rămân neînchise: business rules finale (slugs tip eveniment, single/multi-select meniuri, personal recomandat), sumar email complet, reCAPTCHA propriu, a11y strictă.
 
-**Reviews — cleanup minor**
-Form condiționat doar pe pagina 1. Cleanup uploads test/seeded din Blob. Altfel funcțional.
+**Reviews — sistem nou (email + JSON static)**
+Recenziile sunt stocate în `data/reviews.json` (12 intrări). Formularul trimite recenzia pe email via `/api/review-submit` cu poza ca attachment base64. Pentru a publica o recenzie nouă, se editează manual `data/reviews.json` și se face un nou deploy. Nu mai există storage extern (KV/Blob).
 
 **Contact — verificare producție**
 Form + API funcționale în dev. Necesită confirmare finală `.env.local` producție: SMTP, reCAPTCHA v2, autoreply ON, test end-to-end.
+
+## 8a. Scripturi de optimizare
+
+```
+scripts/generate-og.mjs
+  Generează OG images statice (Puppeteer, 1200×630 JPEG q95) pentru 6 pagini + 2 PWA screenshots.
+  Rulare: npm run generate:og
+  Necesită: npm run dev activ pe portul 3000
+
+scripts/optimise-images.mjs
+  Comprimă JPEG-urile din public/images/ cu sharp (MozJPEG).
+  Calități: q82 pentru hero/blog, q80 pentru galerie/meniuri/motivationcards.
+  Re-run safe: fișierele deja procesate (backup în _originals/) sunt sărite automat.
+  Rulare: npm run optimise:images
+  Notă: PNG-urile din servicii/servicii/ sunt excluse de la recomprimare (compresia lossless
+        le-ar mări față de originalele deja optimizate cu pngquant).
+
+scripts/optimise-videos.mjs
+  Recomprimă MP4-urile din public/videos/ cu ffmpeg.
+  Codec: libx264, CRF 28, preset slow, fără audio (-an), faststart.
+  Re-run safe: fișierele deja procesate (backup în _originals/) sunt sărite automat.
+  Rulare: npm run optimise:videos
+  Necesită: ffmpeg instalat și accesibil în PATH.
+  VIDEO-URILE AU FOST OPTIMIZATE în sesiunea din 2026-03-20:
+  reducere ~64.5% (≈50 MB → ≈17.8 MB) — 10 fișiere procesate.
+```
 
 ---
 
