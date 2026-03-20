@@ -15,7 +15,8 @@ import HeroLCPImage from "../../HeroLCPImage";
 // Constante
 // ==============================
 const POSTER_SRC = "/images/current/hero-services.jpg";
-const VIDEO_SRC = "/videos/current/your-location-tent-video.mp4";
+const VIDEO_SRC_MOBILE = "/videos/current/your-location-tent-video-mobile.mp4";
+const VIDEO_SRC_DESKTOP = "/videos/current/your-location-tent-video.mp4";
 
 // ==============================
 // Component
@@ -73,7 +74,8 @@ export default function TentAtLocationBanner(): JSX.Element {
             onCanPlay={() => setIsVideoReady(true)}
             aria-hidden
           >
-            <source src={VIDEO_SRC} type="video/mp4" />
+            <source src={VIDEO_SRC_MOBILE} media="(max-width: 768px)" type="video/mp4" />
+            <source src={VIDEO_SRC_DESKTOP} type="video/mp4" />
           </video>
         </div>
 
