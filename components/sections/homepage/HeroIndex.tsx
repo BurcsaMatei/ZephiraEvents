@@ -98,7 +98,6 @@ export default function HeroIndex({
             loop
             playsInline
             preload="metadata"
-            poster={src}
             onCanPlay={() => setIsVideoReady(true)}
             aria-hidden
           >

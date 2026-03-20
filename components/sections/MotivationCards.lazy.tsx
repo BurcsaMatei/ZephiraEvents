@@ -121,9 +121,7 @@ function Card({
 
   const liPoints = Array.isArray(points) ? points.slice(0, 5) : [];
   const media =
-    mediaSrc ??
-    DEFAULT_MEDIA[index % DEFAULT_MEDIA.length] ??
-    "/images/motivationcards/mc-01.jpg";
+    mediaSrc ?? DEFAULT_MEDIA[index % DEFAULT_MEDIA.length] ?? "/images/motivationcards/mc-01.jpg";
   const bgStyle = { backgroundImage: `url("${media}")` };
 
   return (

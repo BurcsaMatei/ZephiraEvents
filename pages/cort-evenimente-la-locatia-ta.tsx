@@ -81,7 +81,7 @@ const TentAtLocationPage: NextPage = () => {
             title="Cort de evenimente la locația ta"
             subtitle="Amplasăm cortul, organizăm, gătim, servim și coordonăm A–Z — tu alegi locația, noi ne ocupăm de restul."
             image={{
-              src: "/images/current/hero-services.jpg",
+              src: "/images/current/hero-tent.jpg",
               alt: "Cort de evenimente — servicii ZephiraEvents",
             }}
             height="md"

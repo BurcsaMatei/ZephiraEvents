@@ -134,13 +134,13 @@ types/                 blog.ts, menu.ts, etc.
 
 ### API Routes
 
-| Route                        | Fișier                          | Rol                                                                  |
-| ---------------------------- | ------------------------------- | -------------------------------------------------------------------- |
-| `POST /api/contact`          | `pages/api/contact.ts`          | Trimite email contact via SMTP + autoreply                           |
-| `POST /api/offer-request`    | `pages/api/offer-request.ts`    | Procesează solicitare ofertă, trimite email                          |
-| `POST /api/review-submit`    | `pages/api/review-submit.ts`    | Formular recenzie — trimite pe email (cu poza ca attachment base64)  |
-| `GET /api/og`                | `pages/api/og.tsx`              | Unealtă internă pentru `npm run generate:og` — nu e apelat din pagini |
-| `POST /api/csp-report`       | `pages/api/csp-report.ts`       | Colectare rapoarte Content-Security-Policy                           |
+| Route                     | Fișier                       | Rol                                                                   |
+| ------------------------- | ---------------------------- | --------------------------------------------------------------------- |
+| `POST /api/contact`       | `pages/api/contact.ts`       | Trimite email contact via SMTP + autoreply                            |
+| `POST /api/offer-request` | `pages/api/offer-request.ts` | Procesează solicitare ofertă, trimite email                           |
+| `POST /api/review-submit` | `pages/api/review-submit.ts` | Formular recenzie — trimite pe email (cu poza ca attachment base64)   |
+| `GET /api/og`             | `pages/api/og.tsx`           | Unealtă internă pentru `npm run generate:og` — nu e apelat din pagini |
+| `POST /api/csp-report`    | `pages/api/csp-report.ts`    | Colectare rapoarte Content-Security-Policy                            |
 
 ---
 

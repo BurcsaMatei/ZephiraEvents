@@ -37,7 +37,7 @@ const Lightbox = dynamic(() => import("yet-another-react-lightbox"), { ssr: fals
 // ==============================
 // Constante
 // ==============================
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 24;
 
 // ==============================
 // Component
@@ -103,7 +103,7 @@ function GaleriePage() {
           lockRef.current = false;
         }, 300);
       },
-      { root: null, rootMargin: "400px 0px", threshold: 0.01 },
+      { root: null, rootMargin: "800px 0px", threshold: 0.01 },
     );
 
     io.observe(el);

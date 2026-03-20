@@ -33,13 +33,12 @@ const ORIGINALS_BASE = path.join(IMAGES_BASE, "_originals");
  * exclude: fișiere de sărit (nume exact, case-sensitive).
  */
 const TASKS = [
-  { rel: "public/images/current", type: "jpeg", quality: 82 },
-  { rel: "public/images/gallery", type: "jpeg", quality: 80 },
-  { rel: "public/images/gallery/tent", type: "jpeg", quality: 80 },
-  { rel: "public/images/blog", type: "jpeg", quality: 82, exclude: ["placeholder.jpg"] },
-  { rel: "public/images/servicii/meniu", type: "jpeg", quality: 80 },
-  { rel: "public/images/motivationcards", type: "jpeg", quality: 80 },
-  { rel: "public/images/servicii/servicii", type: "png" },
+  { rel: "public/images/current", type: "jpeg", quality: 70 },
+  { rel: "public/images/gallery", type: "jpeg", quality: 70 },
+  { rel: "public/images/gallery/tent", type: "jpeg", quality: 70 },
+  { rel: "public/images/blog", type: "jpeg", quality: 70, exclude: ["placeholder.jpg"] },
+  { rel: "public/images/servicii/meniu", type: "jpeg", quality: 70 },
+  { rel: "public/images/motivationcards", type: "jpeg", quality: 70 },
 ];
 
 const JPEG_EXTS = new Set([".jpg", ".jpeg"]);
