@@ -4,6 +4,7 @@
 // ==============================
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 
@@ -123,8 +124,7 @@ function ReviewCard({
         </Link>
       )}
 
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={it.profilePhotoUrl || "/images/profiles/profile-01.jpg"}
         alt=""
         width={48}
