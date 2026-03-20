@@ -101,6 +101,11 @@ export default function HeroIndex({
             onCanPlay={() => setIsVideoReady(true)}
             aria-hidden
           >
+            <source
+              src="/videos/current/hero-index-mobile.mp4"
+              media="(max-width: 768px)"
+              type="video/mp4"
+            />
             <source src="/videos/current/hero-index.mp4" type="video/mp4" />
           </video>
         </div>
