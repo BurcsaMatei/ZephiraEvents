@@ -5,6 +5,7 @@
 // ==============================
 // Imports
 // ==============================
+import Image from "next/image";
 import Link from "next/link";
 import * as React from "react";
 
@@ -119,7 +120,10 @@ function Card({
   }, []);
 
   const liPoints = Array.isArray(points) ? points.slice(0, 5) : [];
-  const media = mediaSrc ?? DEFAULT_MEDIA[index % DEFAULT_MEDIA.length];
+  const media =
+    mediaSrc ??
+    DEFAULT_MEDIA[index % DEFAULT_MEDIA.length] ??
+    "/images/motivationcards/mc-01.jpg";
   const bgStyle = { backgroundImage: `url("${media}")` };
 
   return (
@@ -156,8 +160,7 @@ function Card({
 
             {/* Media: pătrat stânga-jos (thumbnail) */}
             <div className={s.mediaBadge} aria-hidden>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className={s.mediaImg} src={media} alt="" loading="lazy" decoding="async" />
+              <Image className={s.mediaImg} src={media} alt="" fill sizes="80px" loading="lazy" />
             </div>
           </div>
 
