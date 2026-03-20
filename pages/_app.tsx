@@ -12,6 +12,7 @@ import dynamic from "next/dynamic";
 import { createContext, useContext, useEffect, useState } from "react";
 
 // App providers / layout
+import { ReducedMotionProvider } from "../components/animations/ReducedMotionProvider";
 import CookieProvider from "../components/cookies/CookieProvider";
 import Layout from "../components/Layout";
 // ---- type-only imports pentru a DERIVA exact props-urile componentelor (nu intră în bundle)
@@ -196,9 +197,11 @@ export default function App({ Component, pageProps }: AppProps) {
       >
         {/* Scope global + tema implicită a containerului → afectează toate <section>-urile */}
         <div className={`${pageScope} ${containerThemeDefault}`}>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <ReducedMotionProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </ReducedMotionProvider>
         </div>
 
         {/* Service worker — ON doar în producție + NEXT_PUBLIC_ENABLE_PWA=1 */}

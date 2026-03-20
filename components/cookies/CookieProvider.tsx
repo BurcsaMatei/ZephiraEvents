@@ -136,8 +136,10 @@ const CookieContext = createContext<ConsentCtx | null>(null);
 // Provider
 // ==============================
 export default function CookieProvider({ children }: { children: React.ReactNode }) {
-  const [analytics, setAnalytics] = useState(false);
-  const [marketing, setMarketing] = useState(false);
+  const [consentState, setConsentState] = useState({ analytics: false, marketing: false });
+  const analytics = consentState.analytics;
+  const marketing = consentState.marketing;
+
   const [bannerVisible, setBannerVisible] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -149,12 +151,13 @@ export default function CookieProvider({ children }: { children: React.ReactNode
     setMounted(true);
     const stored = readConsent();
     if (isGrantedConsent(stored)) {
-      setAnalytics(!!stored.granted.analytics);
-      setMarketing(!!stored.granted.marketing);
+      setConsentState({
+        analytics: !!stored.granted.analytics,
+        marketing: !!stored.granted.marketing,
+      });
       setBannerVisible(false);
     } else {
-      setAnalytics(false);
-      setMarketing(false);
+      setConsentState({ analytics: false, marketing: false });
       setBannerVisible(true);
     }
   }, []);
@@ -164,12 +167,10 @@ export default function CookieProvider({ children }: { children: React.ReactNode
     const onStorage = () => {
       const stored = readConsent();
       if (isGrantedConsent(stored)) {
-        setAnalytics(!!stored.granted.analytics);
-        setMarketing(!!stored.granted.marketing);
+        setConsentState({ analytics: !!stored.granted.analytics, marketing: !!stored.granted.marketing });
         setBannerVisible(false);
       } else {
-        setAnalytics(false);
-        setMarketing(false);
+        setConsentState({ analytics: false, marketing: false });
         setBannerVisible(true);
       }
     };
@@ -177,75 +178,90 @@ export default function CookieProvider({ children }: { children: React.ReactNode
     return () => window.removeEventListener("storage", onStorage);
   }, []);
 
-  // gating + inject – analytics
+  // gating + inject – analytics (setTimeout defer — nu blochează main thread la mount)
   useEffect(() => {
-    if (!analytics) {
-      gtagConsentUpdate({ analytics: false, marketing });
-      return;
-    }
+    const id = setTimeout(() => {
+      if (!analytics) {
+        gtagConsentUpdate({ analytics: false, marketing });
+        return;
+      }
 
-    if (GTM_ID && !loadedRef.current.gtm) {
-      ensureDataLayer();
-      window.gtag?.("consent", "default", {
-        analytics_storage: "denied",
-        ad_storage: marketing ? "granted" : "denied",
-      });
-      injectScript(
-        `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(GTM_ID)}`,
-        "gtm-js",
-      );
-      loadedRef.current.gtm = true;
-    } else if (GA_MEASUREMENT_ID && !loadedRef.current.ga) {
-      ensureDataLayer();
-      injectScript(
-        `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA_MEASUREMENT_ID)}`,
-        "ga4-js",
-      );
-      injectInline(
-        [
-          "window.dataLayer=window.dataLayer||[];",
-          "function gtag(){dataLayer.push(arguments);}",
-          "gtag('js', new Date());",
-          "gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied'});",
-          `gtag('config','${GA_MEASUREMENT_ID}',{anonymize_ip:true,transport_type:'beacon'});`,
-        ].join(""),
-        "ga4-init",
-      );
-      loadedRef.current.ga = true;
-    }
+      if (GTM_ID && !loadedRef.current.gtm) {
+        ensureDataLayer();
+        window.gtag?.("consent", "default", {
+          analytics_storage: "denied",
+          ad_storage: marketing ? "granted" : "denied",
+        });
+        injectScript(
+          `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(GTM_ID)}`,
+          "gtm-js",
+        );
+        loadedRef.current.gtm = true;
+      } else if (GA_MEASUREMENT_ID && !loadedRef.current.ga) {
+        ensureDataLayer();
+        injectScript(
+          `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA_MEASUREMENT_ID)}`,
+          "ga4-js",
+        );
+        injectInline(
+          [
+            "window.dataLayer=window.dataLayer||[];",
+            "function gtag(){dataLayer.push(arguments);}",
+            "gtag('js', new Date());",
+            "gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied'});",
+            `gtag('config','${GA_MEASUREMENT_ID}',{anonymize_ip:true,transport_type:'beacon'});`,
+          ].join(""),
+          "ga4-init",
+        );
+        loadedRef.current.ga = true;
+      }
 
-    gtagConsentUpdate({ analytics: true, marketing });
+      gtagConsentUpdate({ analytics: true, marketing });
+    }, 0);
+    return () => clearTimeout(id);
   }, [analytics, marketing]);
 
-  // gating + inject – marketing
+  // gating + inject – marketing (setTimeout defer — nu blochează main thread la mount)
   useEffect(() => {
-    if (!marketing) {
-      fbqConsentUpdate(false);
-      return;
-    }
-    if (!FB_PIXEL_ID || loadedRef.current.fb) {
+    const id = setTimeout(() => {
+      if (!marketing) {
+        fbqConsentUpdate(false);
+        return;
+      }
+      if (!FB_PIXEL_ID || loadedRef.current.fb) {
+        fbqConsentUpdate(true);
+        return;
+      }
+      injectInline(
+        [
+          "!function(f,b,e,v,n,t,s){",
+          "if(f.fbq)return;n=f.fbq=function(){n.callMethod?",
+          "n.callMethod.apply(n,arguments):n.queue.push(arguments)};",
+          "if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';",
+          "n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;",
+          "s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)",
+          "}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');",
+          `fbq('init','${FB_PIXEL_ID}');`,
+          "fbq('consent','revoke');",
+        ].join(""),
+        "fb-init",
+      );
+      loadedRef.current.fb = true;
       fbqConsentUpdate(true);
-      return;
-    }
-    injectInline(
-      [
-        "!function(f,b,e,v,n,t,s){",
-        "if(f.fbq)return;n=f.fbq=function(){n.callMethod?",
-        "n.callMethod.apply(n,arguments):n.queue.push(arguments)};",
-        "if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';",
-        "n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;",
-        "s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)",
-        "}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');",
-        `fbq('init','${FB_PIXEL_ID}');`,
-        "fbq('consent','revoke');",
-      ].join(""),
-      "fb-init",
-    );
-    loadedRef.current.fb = true;
-    fbqConsentUpdate(true);
+    }, 0);
+    return () => clearTimeout(id);
   }, [marketing]);
 
   // API
+  const setAnalytics = useCallback(
+    (v: boolean) => setConsentState((prev) => ({ ...prev, analytics: v })),
+    [],
+  );
+  const setMarketing = useCallback(
+    (v: boolean) => setConsentState((prev) => ({ ...prev, marketing: v })),
+    [],
+  );
+
   const hasConsent = useCallback(
     (cat: ConsentCategory) =>
       cat === "necessary" ? true : cat === "analytics" ? analytics : marketing,
@@ -256,16 +272,14 @@ export default function CookieProvider({ children }: { children: React.ReactNode
   const closeDialog = useCallback(() => setDialogOpen(false), []);
 
   const acceptAll = useCallback(() => {
-    setAnalytics(true);
-    setMarketing(true);
+    setConsentState({ analytics: true, marketing: true });
     writeConsent({ granted: { necessary: true, analytics: true, marketing: true } });
     setBannerVisible(false);
     setDialogOpen(false);
   }, []);
 
   const rejectAll = useCallback(() => {
-    setAnalytics(false);
-    setMarketing(false);
+    setConsentState({ analytics: false, marketing: false });
     writeConsent({ denied: true });
     setBannerVisible(false);
     setDialogOpen(false);
@@ -279,8 +293,7 @@ export default function CookieProvider({ children }: { children: React.ReactNode
 
   const resetConsent = useCallback(() => {
     removeConsent();
-    setAnalytics(false);
-    setMarketing(false);
+    setConsentState({ analytics: false, marketing: false });
     setBannerVisible(true);
     setDialogOpen(false);
   }, []);

@@ -11,8 +11,7 @@ import { useEffect } from "react";
 
 import Appear, { AppearGroup } from "../components/animations/Appear";
 import ArticlesPreview from "../components/sections/ArticlesPreview";
-// Subfold heavy – lazy wrapper care montează la intrarea în viewport (SSR off în interior)
-import ArcGallery from "../components/sections/homepage/ArcGallery.lazy";
+// Componente homepage heavy — SSR off, lazy loaded
 import HeroIndex from "../components/sections/homepage/HeroIndex";
 import LogoBeforeIntro from "../components/sections/homepage/LogoBeforeIntro";
 import IntroSection from "../components/sections/IntroSection";
@@ -27,7 +26,10 @@ import { absoluteUrl, seoDefaults } from "../lib/config";
 import { getLatestReviews, type Review } from "../lib/reviews";
 import * as ti from "../styles/sections/tent/tentIntro.css";
 
-// Componente sub fold — SSR off, lazy loaded
+const ArcGallery = dynamic(() => import("../components/sections/homepage/ArcGallery.lazy"), {
+  ssr: false,
+  loading: () => null,
+});
 const TentAtLocationBanner = dynamic(
   () => import("../components/sections/tent/TentAtLocationBanner"),
   { ssr: false, loading: () => null },
