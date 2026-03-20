@@ -97,7 +97,7 @@ export default function HeroIndex({
             autoPlay
             loop
             playsInline
-            preload="metadata"
+            preload="none"
             onCanPlay={() => setIsVideoReady(true)}
             aria-hidden
           >

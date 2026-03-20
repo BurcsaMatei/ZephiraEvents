@@ -4,6 +4,7 @@
 // Imports
 // ==============================
 import type { GetStaticProps, NextPage } from "next";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -71,6 +72,22 @@ const Home: NextPage<HomeProps> = ({ postsPreview, reviewItems }) => {
 
   return (
     <>
+      <Head>
+        <link
+          rel="preload"
+          as="image"
+          href="/_next/image?url=%2Fimages%2Fcurrent%2Fhero.jpg&w=640&q=70"
+          imageSrcSet="
+            /_next/image?url=%2Fimages%2Fcurrent%2Fhero.jpg&w=360&q=70 360w,
+            /_next/image?url=%2Fimages%2Fcurrent%2Fhero.jpg&w=640&q=70 640w,
+            /_next/image?url=%2Fimages%2Fcurrent%2Fhero.jpg&w=768&q=70 768w,
+            /_next/image?url=%2Fimages%2Fcurrent%2Fhero.jpg&w=1024&q=70 1024w,
+            /_next/image?url=%2Fimages%2Fcurrent%2Fhero.jpg&w=1280&q=70 1280w,
+            /_next/image?url=%2Fimages%2Fcurrent%2Fhero.jpg&w=1920&q=70 1920w
+          "
+          imageSizes="100vw"
+        />
+      </Head>
       <Seo
         title="Acasă"
         description={seoDefaults.description}
