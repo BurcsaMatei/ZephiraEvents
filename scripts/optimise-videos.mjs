@@ -2,10 +2,12 @@
 //
 // Recomprimă toate MP4-urile din public/videos/ cu ffmpeg.
 //
-// Setări:
-//   Codec video : libx264, CRF 28, preset slow
-//   Audio       : eliminat (-an) — video-uri de fundal, fără sunet
-//   Faststart   : -movflags +faststart (streaming web-friendly)
+// Profile:
+//   A — Hero/banner (public/videos/current/) : CRF 30, fără scale, preset slow
+//   B — Tent gallery (public/videos/tent/)   : CRF 30, scale 854×480, preset slow
+//
+// Audio       : eliminat (-an) — video-uri de fundal, fără sunet
+// Faststart   : -movflags +faststart (streaming web-friendly)
 //
 // Backup: public/videos/_originals/ — structură identică.
 // Dacă backup-ul există deja → [SKIP] automat (re-run safe).
@@ -34,24 +36,42 @@ const VIDEOS_BASE = path.join(ROOT, "public", "videos");
 const ORIGINALS_BASE = path.join(VIDEOS_BASE, "_originals");
 
 /**
- * TASKS — directoare de procesat (shallow, fără recursie).
- * Subdirectoarele sunt listate explicit.
+ * TASKS — directoare de procesat cu profilul corespunzător.
+ * profile: "A" | "B"
+ * rel: calea relativă față de ROOT
  */
-const TASK_DIRS = ["public/videos/current", "public/videos/tent"];
-
-/** Argumente ffmpeg comune pentru toate fișierele */
-const FFMPEG_ARGS = [
-  "-c:v",
-  "libx264",
-  "-crf",
-  "28",
-  "-preset",
-  "slow",
-  "-an", // elimină audio
-  "-movflags",
-  "+faststart",
-  "-y", // suprascrie output fără confirmare
+const TASKS = [
+  { rel: "public/videos/current", profile: "A" },
+  { rel: "public/videos/tent", profile: "B" },
 ];
+
+/**
+ * Argumente ffmpeg per profil.
+ * Profil A — Hero/banner: CRF 30, fără scale, preset slow
+ * Profil B — Tent gallery: CRF 30, scale 854×480, preset slow
+ */
+const FFMPEG_ARGS = {
+  A: ["-c:v", "libx264", "-crf", "32", "-preset", "slow", "-an", "-movflags", "+faststart", "-y"],
+  B: [
+    "-c:v",
+    "libx264",
+    "-crf",
+    "32",
+    "-vf",
+    "scale=854:480",
+    "-preset",
+    "slow",
+    "-an",
+    "-movflags",
+    "+faststart",
+    "-y",
+  ],
+};
+
+const PROFILE_LABEL = {
+  A: "CRF 30, fără scale (hero/banner)",
+  B: "CRF 30, scale 854×480 (tent gallery)",
+};
 
 // ==============================
 // Helpers
@@ -89,8 +109,9 @@ async function checkFfmpeg() {
 // ==============================
 // Core: procesare un director
 // ==============================
-async function processDir(relDir, ffmpegCmd) {
+async function processDir(relDir, profile, ffmpegCmd) {
   const absDir = path.join(ROOT, relDir);
+  const args = FFMPEG_ARGS[profile];
 
   let entries;
   try {
@@ -141,7 +162,7 @@ async function processDir(relDir, ffmpegCmd) {
     const tmpPath = srcPath + ".tmp.mp4";
 
     try {
-      await execFileAsync(ffmpegCmd, ["-i", srcPath, ...FFMPEG_ARGS, tmpPath]);
+      await execFileAsync(ffmpegCmd, ["-i", srcPath, ...args, tmpPath]);
 
       // Înlocuim originalul cu fișierul optimizat
       await fs.rename(tmpPath, srcPath);
@@ -165,7 +186,7 @@ async function processDir(relDir, ffmpegCmd) {
     const name = file.padEnd(36);
 
     console.log(
-      `  ✓ ${name} ${fmtBytes(before).padStart(9)} → ${fmtBytes(after).padStart(9)}  (${sign}${Math.abs(Number(pct))}%)`,
+      `  ✓ [Profil ${profile}] ${name} ${fmtBytes(before).padStart(9)} → ${fmtBytes(after).padStart(9)}  (${sign}${Math.abs(Number(pct))}%)`,
     );
 
     totalBefore += before;
@@ -183,11 +204,12 @@ async function main() {
   console.log("════════════════════════════════════════════════════════════");
   console.log("  ZephiraEvents — Video Optimiser");
   console.log("════════════════════════════════════════════════════════════");
-  console.log("  Codec  : libx264, CRF 28, preset slow");
-  console.log("  Audio  : eliminat (-an)");
-  console.log("  Web    : -movflags +faststart");
-  console.log(`  Backup : public/videos/_originals/`);
-  console.log(`  Re-run : fișierele cu backup sunt sărite automat`);
+  console.log("  Profil A : CRF 30, fără scale     → public/videos/current/");
+  console.log("  Profil B : CRF 30, scale 854×480  → public/videos/tent/");
+  console.log("  Audio    : eliminat (-an)");
+  console.log("  Web      : -movflags +faststart");
+  console.log(`  Backup   : public/videos/_originals/`);
+  console.log(`  Re-run   : fișierele cu backup sunt sărite automat`);
   console.log("════════════════════════════════════════════════════════════\n");
 
   // Verificare ffmpeg
@@ -210,9 +232,9 @@ async function main() {
   let grandBefore = 0;
   let grandAfter = 0;
 
-  for (const relDir of TASK_DIRS) {
-    console.log(`\n📁 ${relDir}`);
-    const result = await processDir(relDir, ffmpegCmd);
+  for (const { rel, profile } of TASKS) {
+    console.log(`\n📁 ${rel}  [Profil ${profile} — ${PROFILE_LABEL[profile]}]`);
+    const result = await processDir(rel, profile, ffmpegCmd);
     grandProcessed += result.processed;
     grandSkipped += result.skipped;
     grandBefore += result.before;

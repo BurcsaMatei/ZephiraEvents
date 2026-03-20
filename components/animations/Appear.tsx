@@ -66,7 +66,7 @@ export default function Appear<T extends ElementType = "div">({
 }: AppearProps<T>) {
   const reduce = useReducedMotion();
   const Tag = (as ?? "div") as ElementType;
-  const MotionTag = motion(Tag);
+  const MotionTag = motion.create(Tag);
   const variants = makeVariants(kind, distance);
 
   const transition = reduce ? { duration: 0 } : { duration, delay, ease: EASE };
@@ -119,7 +119,7 @@ export function AppearGroup<T extends ElementType = "div">({
 }: AppearGroupProps<T>) {
   const reduce = useReducedMotion();
   const Tag = (as ?? "div") as ElementType;
-  const MotionTag = motion(Tag);
+  const MotionTag = motion.create(Tag);
 
   const mapped = React.useMemo(() => {
     if (!wrapChildren) return children;
