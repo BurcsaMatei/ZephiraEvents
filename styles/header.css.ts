@@ -348,9 +348,12 @@ export const panel = style({
   right: 0,
   bottom: 0,
   width: "75vw", // cerință: ~75% din ecran pe mobil
-  background: "linear-gradient(135deg, rgba(255,255,255,0.98), rgba(85,97,242,0.06))",
+  background: "rgba(255, 255, 255, 0.82)",
+  backdropFilter: "blur(16px) saturate(1.4)",
+  WebkitBackdropFilter: "blur(16px) saturate(1.4)",
+  borderRight: "1px solid rgba(255, 255, 255, 0.4)",
   transform: "translateX(100%)",
-  transition,
+  transition: `${transition}, background 0.2s ease`,
   boxShadow: vars.shadow.lg,
   padding: vars.space.md,
   display: "flex",
@@ -365,7 +368,9 @@ export const panel = style({
   },
   selectors: {
     [`.${darkThemeClass} &`]: {
-      background: "linear-gradient(135deg, rgba(17,18,21,0.99), rgba(123,132,255,0.08))",
+      background: "rgba(15, 15, 28, 0.85)",
+      backdropFilter: "blur(16px) saturate(1.2)",
+      WebkitBackdropFilter: "blur(16px) saturate(1.2)",
     },
   },
 });

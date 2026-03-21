@@ -328,6 +328,7 @@ export default function Header() {
                       aria-label="Submeniu Servicii"
                     >
                       <Link
+                        role="menuitem"
                         className={navSubLink}
                         href={withBase("/servicii")}
                         onClick={closeDesktopMenus}
@@ -338,6 +339,7 @@ export default function Header() {
                       <div className={navSubDivider} aria-hidden />
 
                       <button
+                        role="menuitem"
                         type="button"
                         className={navSubGroupBtn}
                         onClick={() => setServicesMenusOpen((v) => !v)}
@@ -368,6 +370,7 @@ export default function Header() {
                       <div className={navSubDivider} aria-hidden />
 
                       <Link
+                        role="menuitem"
                         className={navSubLink}
                         href={withBase(SERVICII_SUBMENU.tent.href)}
                         onClick={closeDesktopMenus}
