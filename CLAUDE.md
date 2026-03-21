@@ -1,7 +1,7 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v2
-**Data:** 2026-03-20
+**Versiune:** v3
+**Data:** 2026-03-21
 **Status:** activ
 
 ---
@@ -16,7 +16,7 @@ ZephiraEvents este un website premium de prezentare și conversie pentru o sală
 
 - **Framework:** Next.js 15 (Pages Router), React 19, TypeScript strict
 - **Styling:** Vanilla Extract (`*.css.ts`) — fără inline styling ca standard
-- **Animații:** Framer Motion, componenta `Appear` internă
+- **Animații:** Framer Motion, componenta `Appear` internă, `ReducedMotionProvider` — context global pentru `useReducedMotion()`
 - **Mail:** Nodemailer (SMTP `mail.zephiraevents.ro`)
 - **Validare:** Zod
 - **Lightbox:** yet-another-react-lightbox
@@ -31,7 +31,7 @@ ZephiraEvents este un website premium de prezentare și conversie pentru o sală
 
 ```
 components/
-  animations/          Appear, AppearGroup — animații pe scroll/viewport
+  animations/          Appear, AppearGroup — animații pe scroll/viewport; ReducedMotionProvider — context global useReducedMotion()
   blog/                BlogCard, RelatedPosts
   brand/               componente de identitate vizuală
   cookies/             CookieProvider, CookieBanner
@@ -302,6 +302,29 @@ scripts/optimise-videos.mjs
   VIDEO-URILE AU FOST OPTIMIZATE în sesiunea din 2026-03-20:
   reducere ~64.5% (≈50 MB → ≈17.8 MB) — 10 fișiere procesate.
 ```
+
+---
+
+## 10. Performance & Optimizări
+
+### Lighthouse scores (ultima măsurătoare)
+- Desktop: Performance 99, Accessibility 93, Best Practices 96, SEO 100
+- Mobil: în calibrare — optimizările TBT necesită revizie în sesiune viitoare
+
+### Ce s-a optimizat
+- OG images → statice pre-generate (zero CPU runtime)
+- Reviews → JSON static + SSG (eliminat KV/Blob)
+- Imagini comprimate cu sharp (MozJPEG q70) — reducere ~34%
+- Video-uri comprimate cu ffmpeg (CRF 26-32) — reducere ~64%
+- Hero și TentBanner → video responsive (desktop 1920×1080, mobil 854×480)
+- LCP fix — preload manual pentru imaginea hero în `pages/index.tsx`
+- TBT fix — motion cache module-level, `ReducedMotionProvider` global, `ArcGallery` lazy, cookie batching
+- Lightbox CSS scoped la `pages/galerie.tsx` și `pages/cort-evenimente-la-locatia-ta.tsx`
+
+### TODO sesiune viitoare
+- Recalibrare optimizări TBT — scorurile Lighthouse pe mobil necesită revizie
+- Accessibility 93 → 100 — atacat în sesiunea SEO
+- SEO fin — structured data, meta descriptions, canonical
 
 ---
 
