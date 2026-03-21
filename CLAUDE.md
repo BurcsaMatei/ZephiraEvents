@@ -1,7 +1,7 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v5
-**Data:** 2026-03-21
+**Versiune:** v6
+**Data:** 2026-03-22
 **Status:** activ
 
 ---
@@ -271,14 +271,23 @@ types/                 blog.ts, menu.ts, etc.
 
 ## 8. Ce este deschis / în lucru
 
-**Offer Request** (`pages/api/offer-request.ts`, `components/forms/OfferRequest.tsx`)
-Infrastructura există și funcționează în dev. Rămân neînchise: business rules finale (slugs tip eveniment, single/multi-select meniuri, personal recomandat), sumar email complet, reCAPTCHA propriu, a11y strictă.
-
 **Reviews — sistem nou (email + JSON static)**
 Recenziile sunt stocate în `data/reviews.json` (12 intrări). Formularul trimite recenzia pe email via `/api/review-submit` cu poza ca attachment base64. Pentru a publica o recenzie nouă, se editează manual `data/reviews.json` și se face un nou deploy. Nu mai există storage extern (KV/Blob).
 
-**Contact — verificare producție**
-Form + API funcționale în dev. Necesită confirmare finală `.env.local` producție: SMTP, reCAPTCHA v2, autoreply ON, test end-to-end.
+**Accessibility 93 → 100**
+Scor curent: 93. De atacat în sesiune viitoare — audit axe/VoiceOver, contrast, focus management.
+
+**Dashboard admin /admin cu Supabase**
+Planificat, neînceput. Autentificare + vizualizare solicitări ofertă și recenzii primite.
+
+**~~Contact — verificare producție~~ ✓ ÎNCHIS 2026-03-22**
+Complet: validare Zod (`lib/validation/contact.ts`), câmp telefon opțional, checkbox GDPR explicit, email template include telefonul dacă e completat. SMTP + reCAPTCHA + autoreply confirmate funcționale. PR #109.
+
+**~~Offer Request — business rules finale~~ ✓ ÎNCHIS 2026-03-22**
+Complet: validare Zod completă (`lib/validation/offerRequest.ts`), câmpuri condiționale validate server-side (rooms/nights când lodging=oferta), `eventType` non-opțional în `EmailData`, ramura defensivă eliminată, `.env.local` curățat (KV/Blob/Redis șters, `NEXT_PUBLIC_SITE_URL` = `https://zephiraevents.ro`). PR #109.
+
+**~~TBT mobil — recalibrare Lighthouse~~ ✓ ÎNCHIS**
+Rezolvat anterior: motion cache module-level, `ReducedMotionProvider` global, `ArcGallery` lazy, cookie batching, lightbox CSS scoped.
 
 **~~SEO fin — structured data, meta descriptions, canonical~~ ✓ ÎNCHIS 2026-03-21**
 Complet: `/reviews` (`<Seo>`, H1, JSON-LD LocalBusiness+AggregateRating, `og-reviews.jpg`), `/meniuri/[slug]` (JSON-LD SSR `@type: Menu`, description reală, headings semantice), homepage + galerie (descriptions dedicate), `/blog` (url normalizat), `pageMeta.ts` (câmp `description`, `/reviews` adăugat), `JsonLd.tsx` șters, `buildMenuJsonLd` eliminat din componente client-side. PR #107.
@@ -355,10 +364,16 @@ scripts/optimise-videos.mjs
 - `priority` diferențiat: 1.0 (`/`), 0.8 (servicii, contact, blog), 0.7 (cort, reviews), 0.5 (`/marca`)
 - `/galerie` scos din `STATIC_ROUTES` — acoperită exclusiv de `sitemap-gallery.xml` (cu imagini)
 
+### Forms audit 2026-03-22 (PR #109)
+
+- Contact: validare Zod (`lib/validation/contact.ts`), câmp telefon opțional, checkbox GDPR explicit
+- Offer Request: validare Zod completă cu câmpuri condiționale (rooms/nights validate când lodging=oferta), `eventType` non-opțional în `EmailData`, ramura defensivă eliminată
+- `.env.local`: KV/Blob/Redis curățat (zero utilizări în cod), `NEXT_PUBLIC_SITE_URL` = `https://zephiraevents.ro`
+
 ### TODO sesiune viitoare
 
-- Recalibrare optimizări TBT — scorurile Lighthouse pe mobil necesită revizie
 - Accessibility 93 → 100
+- Dashboard admin `/admin` cu Supabase
 
 ---
 
