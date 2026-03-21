@@ -80,7 +80,7 @@ const TentAtLocationPage: NextPage = () => {
       <section data-full-bleed="true">
         <Appear>
           <Hero
-            title="Cort de evenimente la locația ta"
+            title="Cort de evenimente premium — la locația ta din Vrancea"
             subtitle="Amplasăm cortul, organizăm, gătim, servim și coordonăm A–Z — tu alegi locația, noi ne ocupăm de restul."
             image={{
               src: "/images/current/hero-tent.jpg",

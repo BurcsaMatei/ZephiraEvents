@@ -31,6 +31,12 @@ function sanitizeBasic(html: string): string {
       .replace(/\s(href|src)\s*=\s*(['"])\s*javascript:[\s\S]*?\2/gi, ' $1="#"')
       // (4) elimină stiluri inline
       .replace(/\sstyle\s*=\s*(?:"[^"]*"|'[^']*')/gi, "")
+      // shift headings +1 nivel (H1→H2, H2→H3, H3→H4 etc.)
+      // — pagina are deja H1 în Hero; conținutul articolului nu poate depăși H6
+      .replace(
+        /<(\/?)h([1-5])(\b[^>]*)>/gi,
+        (_, slash, level, rest) => `<${slash}h${Number(level) + 1}${rest}>`,
+      )
   );
 }
 

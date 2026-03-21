@@ -7,7 +7,6 @@ import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import { getAllMenus } from "../../lib/menus";
-import { buildMenuJsonLd, type MenuData } from "../../lib/seo/menuJsonLd";
 import {
   arrowBtn,
   card,
@@ -102,7 +101,6 @@ export default function MenuOffers(props: MenuOffersProps = {}) {
     setOpenSlug((cur) => (cur === slug ? null : slug));
   }, []);
 
-  const jsonLd = useMemo(() => buildMenuJsonLd(menus as unknown as MenuData[]), [menus]);
   const sizes = "100vw"; // single-column
 
   return (
@@ -265,13 +263,6 @@ export default function MenuOffers(props: MenuOffersProps = {}) {
             );
           })}
         </div>
-
-        {/* JSON-LD inject */}
-        <script
-          type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
       </div>
     </section>
   );

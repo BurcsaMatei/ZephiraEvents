@@ -167,7 +167,10 @@ export default function CookieProvider({ children }: { children: React.ReactNode
     const onStorage = () => {
       const stored = readConsent();
       if (isGrantedConsent(stored)) {
-        setConsentState({ analytics: !!stored.granted.analytics, marketing: !!stored.granted.marketing });
+        setConsentState({
+          analytics: !!stored.granted.analytics,
+          marketing: !!stored.granted.marketing,
+        });
         setBannerVisible(false);
       } else {
         setConsentState({ analytics: false, marketing: false });

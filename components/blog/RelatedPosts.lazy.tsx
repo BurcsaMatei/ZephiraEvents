@@ -28,9 +28,9 @@ export default function RelatedPosts({ items }: RelatedPostsProps) {
 
   return (
     <section className={relatedWrapClass} aria-labelledby="related-posts-title">
-      <h3 id="related-posts-title" className={relatedTitleClass}>
+      <h2 id="related-posts-title" className={relatedTitleClass}>
         Poate te mai interesează și:
-      </h3>
+      </h2>
       <ul className={relatedListClass}>
         {items.map((p) => (
           <li key={p.slug}>

@@ -19,7 +19,9 @@ export default function MenusIntro(): JSX.Element {
       {/* Bloc text deasupra imaginilor — vizibil doar pe mobile */}
       <div className={w.textTop}>
         <span className={ti.eyebrow}>Meniurile noastre</span>
-        <h2 className={ti.heading}>Alege pachetul potrivit evenimentului tău</h2>
+        <h2 className={ti.heading} aria-hidden="true">
+          Alege pachetul potrivit evenimentului tău
+        </h2>
         <p className={ti.lede}>
           Fiecare meniu este gândit pentru un tip de eveniment — de la nunți elegante la corporate
           și petreceri private. Personalizăm orice detaliu împreună cu tine.

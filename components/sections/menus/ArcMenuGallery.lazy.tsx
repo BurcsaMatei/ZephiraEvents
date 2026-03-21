@@ -10,7 +10,6 @@ import Link from "next/link";
 import React, { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
 
 import { withBase } from "../../../lib/config";
-import { buildMenuJsonLd, type MenuData } from "../../../lib/seo/menuJsonLd";
 import * as s from "../../../styles/sections/arcMenuGallery.css";
 import * as intro from "../../../styles/sections/introSection.css";
 import type { Menu } from "../../../types/menu";
@@ -147,18 +146,6 @@ function normalizeMenuImages(menu: Menu): string[] {
   }
 
   return out;
-}
-
-function menuToMenuData(menu: Menu): MenuData {
-  return {
-    slug: menu.slug,
-    title: menu.title,
-    pricePerPers: menu.pricePerPers,
-    currency: menu.currency,
-    image: menu.image,
-    imageAlt: menu.imageAlt,
-    sections: menu.sections,
-  };
 }
 
 function hasMeaningfulPresentation(p: ArcMenuPresentation | undefined): boolean {
@@ -333,7 +320,6 @@ export default function ArcMenuGallery({
   const pointerCoarse = usePointerCoarse();
 
   const safeMenus = useMemo(() => menus ?? [], [menus]);
-  const jsonLd = useMemo(() => buildMenuJsonLd(safeMenus.map(menuToMenuData)), [safeMenus]);
 
   void intervalMs;
 
@@ -382,12 +368,6 @@ export default function ArcMenuGallery({
             );
           })}
         </div>
-
-        <script
-          type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
       </div>
     </section>
   );

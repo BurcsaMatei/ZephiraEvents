@@ -269,6 +269,15 @@ globalStyle(`${ctaRowClass} a:hover`, {
 });
 
 // ==============================
+// Page H1 (/reviews)
+// ==============================
+export const pageH1Class = style({
+  textAlign: "center",
+  maxWidth: 760,
+  marginInline: "auto",
+});
+
+// ==============================
 // LISTĂ STATICĂ (/reviews) — 1/2/4 centrat
 // ==============================
 export const listWrapClass = style({
