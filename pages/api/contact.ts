@@ -6,6 +6,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import nodemailer from "nodemailer";
 
+import { contactSchema } from "../../lib/validation/contact";
+
 type Ok = { ok: true };
 type Fail = { ok: false; message: string };
 type Resp = Ok | Fail;
@@ -14,17 +16,6 @@ type EmailProvider = "resend" | "smtp";
 
 const RATE_LIMIT = parseRateLimit(process.env.CONTACT_RATE_LIMIT || "5:600"); // 5 req / 600s
 const rateStore = new Map<string, number[]>();
-
-// ==============================
-// Types
-// ==============================
-interface ContactBody {
-  name?: string;
-  email?: string;
-  message?: string;
-  recaptchaToken?: string;
-  _hpt?: string;
-}
 
 // ==============================
 // Utils
@@ -39,28 +30,6 @@ function parseRateLimit(v: string): { max: number; windowSec: number } {
 function getIp(req: NextApiRequest): string {
   const xf = (req.headers["x-forwarded-for"] as string) || "";
   return (xf.split(",")[0] || req.socket.remoteAddress || "0.0.0.0").trim();
-}
-
-function isEmail(v: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-}
-
-function validateBody(b: unknown) {
-  const body = (b ?? {}) as ContactBody;
-  const errs: string[] = [];
-  const name = String(body.name || "").trim();
-  const email = String(body.email || "").trim();
-  const message = String(body.message || "").trim();
-  const token = String(body.recaptchaToken || "").trim();
-  const hpt = String(body._hpt || "");
-
-  if (!name) errs.push("Nume lipsă.");
-  if (!email || !isEmail(email)) errs.push("Email invalid.");
-  if (!message || message.length < 5) errs.push("Mesaj prea scurt.");
-  if (!token) errs.push("reCAPTCHA lipsă.");
-  if (hpt) errs.push("Request invalid.");
-
-  return { valid: errs.length === 0, errs, name, email, message, token };
 }
 
 async function verifyRecaptcha(token: string, ip: string): Promise<boolean> {
@@ -228,12 +197,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
 
   const body = req.body as unknown;
-  const { valid, errs, name, email, message, token } = validateBody(body);
-  if (!valid) {
-    return res.status(400).json({ ok: false, message: errs.join(" ") });
+  const result = contactSchema.safeParse(body);
+  if (!result.success) {
+    const msg = result.error.issues.map((i) => i.message).join(" ");
+    return res.status(400).json({ ok: false, message: msg });
   }
+  const { name, email, phone, message, recaptchaToken } = result.data;
 
-  const recOk = await verifyRecaptcha(token, ip);
+  const recOk = await verifyRecaptcha(recaptchaToken, ip);
   if (!recOk) {
     return res.status(400).json({ ok: false, message: "Verificarea reCAPTCHA a eșuat." });
   }
@@ -247,9 +218,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
 
   const subject = subjectLine();
-  const plain = `De la: ${name} <${email}>\nSubiect: ${subject}\n\n${message}\n`;
+  const plain =
+    `De la: ${name} <${email}>\n` +
+    (phone ? `Telefon: ${phone}\n` : "") +
+    `Subiect: ${subject}\n\n${message}\n`;
   const html =
     `<p><strong>De la:</strong> ${escapeHtml(name)} &lt;${escapeHtml(email)}&gt;</p>` +
+    (phone ? `<p><strong>Telefon:</strong> ${escapeHtml(phone)}</p>` : "") +
     `<p><strong>Subiect:</strong> ${escapeHtml(subject)}</p>` +
     `<pre style="white-space:pre-wrap;font-family:inherit">${escapeHtml(message)}</pre>`;
 

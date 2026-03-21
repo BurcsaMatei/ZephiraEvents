@@ -6,7 +6,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import nodemailer from "nodemailer";
 
 import { buildOfferEmail, type EmailData } from "../../lib/mail/offerRequestEmail";
-import { validateOfferRequest } from "../../lib/validation/offerRequest";
+import { offerRequestSchema } from "../../lib/validation/offerRequest";
 
 // ==============================
 // Types
@@ -153,10 +153,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
 
   const body = req.body as unknown;
-  const { valid, errors, data } = validateOfferRequest(body);
-  if (!valid || !data) {
-    return res.status(400).json({ ok: false, message: errors.join(" ") });
+  const result = offerRequestSchema.safeParse(body);
+  if (!result.success) {
+    const message = result.error.issues.map((i) => i.message).join(" ");
+    return res.status(400).json({ ok: false, message });
   }
+  const data = result.data;
 
   const recOk = await verifyRecaptcha(data.recaptchaToken, ip);
   if (!recOk) {
