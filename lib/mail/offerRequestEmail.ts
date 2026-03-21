@@ -16,8 +16,7 @@ export interface EmailData {
   email: string;
   eventDateYmd: string;
   participants: number;
-  // eventType este slug-ul (ex. "nunta", "botez-cununie"); poate fi adăugat treptat în API
-  eventType?: EventTypeSlug;
+  eventType: EventTypeSlug;
   // menu: slug din JSON sau "nu-sigur"
   menu: string;
   lodging: { kind: "proprie" | "oferta"; rooms: string; nights: string; notes: string };
@@ -86,17 +85,9 @@ export function buildOfferEmail(data: EmailData): {
       : "Am eu";
 
   // Mapping central: tip eveniment + meniu (din slug)
-  const eventTypeSlug = data.eventType;
-  let eventTypeLabel = "Nespecificat";
-  let menuLabel = data.menu;
-
-  if (eventTypeSlug) {
-    eventTypeLabel = getEventTypeLabel(eventTypeSlug);
-    const resolved = getMenuLabel(eventTypeSlug, data.menu);
-    if (resolved) {
-      menuLabel = resolved;
-    }
-  }
+  const eventTypeLabel = getEventTypeLabel(data.eventType);
+  const resolved = getMenuLabel(data.eventType, data.menu);
+  const menuLabel = resolved ?? data.menu;
 
   const html =
     `<div style="font:14px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;color:#111">` +

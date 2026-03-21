@@ -138,3 +138,33 @@ export const textarea = style({
 
 /* Submit */
 export const submitRow = style({ marginTop: 12 });
+
+/* Câmpuri opționale / hint */
+export const subtle = style({
+  color: vars.color.muted,
+  fontSize: "0.92rem",
+  marginLeft: 4,
+});
+
+/* Link inline */
+export const link = style({
+  color: vars.color.link,
+  selectors: {
+    "&:hover": { color: vars.color.linkHover },
+  },
+});
+
+/* GDPR */
+export const gdpr = style({ marginTop: 12 });
+
+export const checkboxLabel = style({
+  display: "inline-flex",
+  alignItems: "center",
+  gap: vars.space.sm,
+});
+
+export const checkbox = style({
+  width: 18,
+  height: 18,
+  flexShrink: 0,
+});

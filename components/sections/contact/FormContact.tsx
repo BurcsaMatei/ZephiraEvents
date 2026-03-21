@@ -57,7 +57,9 @@ export default function FormContact() {
     const fd = new FormData(f);
     const name = String(fd.get("name") || "").trim();
     const email = String(fd.get("email") || "").trim();
+    const phone = String(fd.get("phone") || "").trim();
     const message = String(fd.get("message") || "").trim();
+    const gdpr = String(fd.get("gdpr") || "") === "on";
     const hpt = String(fd.get("_hpt") || ""); // honeypot (must be empty)
 
     // pick up v2 checkbox token injected by reCAPTCHA — SCOPED LA FORMULAR
@@ -72,6 +74,11 @@ export default function FormContact() {
       setError("Te rugăm să completezi toate câmpurile obligatorii.");
       return;
     }
+    if (!gdpr) {
+      setSending(false);
+      setError("Te rugăm să accepți politica de confidențialitate.");
+      return;
+    }
     if (!recaptchaToken) {
       setSending(false);
       setError("Te rugăm să confirmi că nu ești robot (reCAPTCHA).");
@@ -82,7 +89,7 @@ export default function FormContact() {
       const res = await fetch(withBase("/api/contact"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, message, recaptchaToken, _hpt: hpt }),
+        body: JSON.stringify({ name, email, phone, message, recaptchaToken, _hpt: hpt }),
       });
       const data = (await res.json()) as ApiResponse;
 
@@ -139,6 +146,18 @@ export default function FormContact() {
             </label>
 
             <label>
+              Telefon <span className={s.subtle}>(opțional)</span>
+              <input
+                name="phone"
+                type="tel"
+                placeholder="07xx xxx xxx"
+                className={s.input}
+                maxLength={20}
+                autoComplete="tel"
+              />
+            </label>
+
+            <label>
               Mesaj
               <textarea
                 name="message"
@@ -178,6 +197,20 @@ export default function FormContact() {
                 Mulțumim! Mesajul tău a fost trimis. Îți răspundem cât de repede.
               </span>
             )}
+          </div>
+
+          {/* GDPR */}
+          <div className={s.gdpr}>
+            <label className={s.checkboxLabel}>
+              <input className={s.checkbox} type="checkbox" name="gdpr" required /> Sunt de acord.{" "}
+              <span className={s.subtle}>
+                Folosim datele doar pentru a răspunde solicitării tale, conform{" "}
+                <a className={s.link} href={withBase("/cookie-policy")}>
+                  politicii de confidențialitate
+                </a>
+                .
+              </span>
+            </label>
           </div>
 
           <div className={s.submitRow}>
