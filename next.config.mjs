@@ -63,6 +63,10 @@ const nextConfig = {
     "lodash-es": { transform: "lodash-es/{{member}}" },
   },
 
+  env: {
+    NEXT_PUBLIC_BUILD_TIMESTAMP: new Date().toISOString(),
+  },
+
   experimental: {
     optimizeCss: IS_PROD,
   },

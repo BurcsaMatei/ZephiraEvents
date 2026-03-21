@@ -288,6 +288,7 @@ Complet: H1 lipsă pe `/reviews` adăugat + centrat; coliziuni H1/H2 rezolvate p
 
 **Sitemap audit — în lucru**
 Audit complet realizat 2026-03-21. Probleme identificate, nerezolvate încă:
+
 - **CRITIC:** `sitemap-menus.xml` lipsă — cele 17 pagini `/meniuri/[slug]` absente din orice sitemap
 - **MODERAT:** `robots.txt` fără `Disallow: /api/`, `/404`, `/500`, `/_offline`
 - **MODERAT:** `lastmod` pentru pagini statice = `new Date()` la request — nu reflectă data reală; de înlocuit cu `BUILD_TIMESTAMP` injectat la build

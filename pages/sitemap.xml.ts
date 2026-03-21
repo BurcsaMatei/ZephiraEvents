@@ -18,11 +18,12 @@ function iso(d: Date | string): string {
 
 function generateIndex(baseUrl: string): string {
   const nowIso = new Date().toISOString();
+  const buildTimestamp = process.env.NEXT_PUBLIC_BUILD_TIMESTAMP ?? nowIso;
 
   // Derivăm celelalte sitemap-uri din config (excludem indexul însuși)
   const children = (SITEMAPS as readonly string[]).filter((p) => p !== "/sitemap.xml");
 
-  // Heuristic: folosim lastmod specific pentru posts; restul = now
+  // Heuristic: folosim lastmod specific pentru posts; restul = BUILD_TIMESTAMP
   let postsLastmod = nowIso;
   try {
     const posts = getAllPosts();
@@ -37,7 +38,7 @@ function generateIndex(baseUrl: string): string {
 
   const lastmodFor = (path: string): string => {
     if (path.includes("posts")) return postsLastmod;
-    return nowIso;
+    return buildTimestamp;
   };
 
   const entries = children

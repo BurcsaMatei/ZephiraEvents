@@ -265,13 +265,13 @@ export const SITEMAPS = [
   "/sitemap-pages.xml", // pagini non-blog
   "/sitemap-posts.xml", // articole blog
   "/sitemap-gallery.xml", // galerie
+  "/sitemap-menus.xml", // pagini meniuri
 ] as const;
 
 export const STATIC_ROUTES = [
   "/",
   "/servicii",
   "/cort-evenimente-la-locatia-ta",
-  "/galerie",
   "/contact",
   "/blog",
   "/reviews",
