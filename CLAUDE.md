@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v3
+**Versiune:** v4
 **Data:** 2026-03-21
 **Status:** activ
 
@@ -48,7 +48,8 @@ components/
     IntroSection.tsx   Bloc intro centrat refolosibil
     MotivationCards.tsx, Outro.tsx, OutroContact.tsx, Serviciipreview.tsx, ArticlesPreview.tsx
   ui/                  AnimatedIcon, Img, și alte componente UI mici
-  Layout.tsx, Header.tsx, Footer.tsx, Seo.tsx, JsonLd.tsx, Breadcrumbs.tsx, Button.tsx, etc.
+  Layout.tsx, Header.tsx, Footer.tsx, Seo.tsx, Breadcrumbs.tsx, Button.tsx, etc.
+  ~~JsonLd.tsx~~ — șters (2026-03-21): era client-side only; folosește prop `structuredData` pe `<Seo>`
 
 data/
   gallery.json         catalog imagini galerie (generat de scripts/build-gallery.mjs)
@@ -170,10 +171,11 @@ types/                 blog.ts, menu.ts, etc.
 
 ### SEO
 
-- Metadata centralizată în `lib/pageMeta.ts`
-- JSON-LD pe paginile relevante
+- Metadata centralizată în `lib/pageMeta.ts` (include câmp `description` per pagină)
+- JSON-LD **SSR** via prop `structuredData` pe `<Seo>` — nu injecta script tags din componente client
+- `buildMenuJsonLd` se apelează exclusiv din `pages/meniuri/[slug].tsx` (SSR/SSG), nu din componente
 - OG assets dedicate per pagină unde e cazul
-- `Seo` și `JsonLd` componente în `Layout` sau direct în pagină
+- `<Seo structuredData={[...]} />` direct în pagină — `JsonLd.tsx` a fost șters
 
 ---
 
@@ -249,13 +251,14 @@ types/                 blog.ts, menu.ts, etc.
 
 ### SEO / Metadata
 
-- `components/Seo.tsx`, `components/JsonLd.tsx`
-- `lib/pageMeta.ts`, `lib/url.ts`
-- `lib/seo/menuJsonLd.ts`
+- `components/Seo.tsx` — prop `structuredData` pentru JSON-LD SSR
+- `lib/pageMeta.ts` — metadata + description per pagină (7 rute inclusiv `/reviews`)
+- `lib/url.ts`
+- `lib/seo/menuJsonLd.ts` — apelat doar din `pages/meniuri/[slug].tsx`
 - `pages/robots.txt.ts`, `pages/sitemap*.ts`
 - `pages/api/og.tsx` — unealtă internă, nu apelată din pagini
-- OG images statice pre-generate: `public/images/og.jpg`, `og-servicii.jpg`, `og-galerie.jpg`, `og-contact.jpg`, `og-blog.jpg`, `og-cort.jpg`
-- Pentru regenerare OG: `npm run generate:og` (necesită `npm run dev` pe `:3000`)
+- OG images statice pre-generate: `public/images/og.jpg`, `og-servicii.jpg`, `og-galerie.jpg`, `og-contact.jpg`, `og-blog.jpg`, `og-cort.jpg`, `og-reviews.jpg`
+- Pentru regenerare OG: `npm run generate:og` (necesită `npm run dev` pe `:3000`) — 7 pagini înregistrate (inclusiv `/reviews`)
 
 ### Shell / Theme / Layout
 
@@ -277,11 +280,27 @@ Recenziile sunt stocate în `data/reviews.json` (12 intrări). Formularul trimit
 **Contact — verificare producție**
 Form + API funcționale în dev. Necesită confirmare finală `.env.local` producție: SMTP, reCAPTCHA v2, autoreply ON, test end-to-end.
 
+**~~SEO fin — structured data, meta descriptions, canonical~~ ✓ ÎNCHIS 2026-03-21**
+Complet: `/reviews` (`<Seo>`, H1, JSON-LD LocalBusiness+AggregateRating, `og-reviews.jpg`), `/meniuri/[slug]` (JSON-LD SSR `@type: Menu`, description reală, headings semantice), homepage + galerie (descriptions dedicate), `/blog` (url normalizat), `pageMeta.ts` (câmp `description`, `/reviews` adăugat), `JsonLd.tsx` șters, `buildMenuJsonLd` eliminat din componente client-side. PR #107.
+
+**~~Headings audit și fix complet~~ ✓ ÎNCHIS 2026-03-21**
+Complet: H1 lipsă pe `/reviews` adăugat + centrat; coliziuni H1/H2 rezolvate pe `/contact` și `/cort`; `ServiciiComplete` — `<h2>` gol eliminat (condiționat), `aria-labelledby` orfan fixat; duplicate H2 responsive (`MenusIntro`, `WaiterBarSection`, `CateringSection`) — `aria-hidden="true"` pe varianta mobilă; `/meniuri/[slug]` — titluri secțiuni meniu din `<div>` în `<h2>`; `RelatedPosts` — `<h3>` → `<h2>`; `lib/blogData.ts` — heading shift H1–H5 +1 nivel în `sanitizeBasic`; `getRelatedByTags()` activ pe `/blog/[slug]`. PR #107.
+
+**Sitemap audit — în lucru**
+Audit complet realizat 2026-03-21. Probleme identificate, nerezolvate încă:
+- **CRITIC:** `sitemap-menus.xml` lipsă — cele 17 pagini `/meniuri/[slug]` absente din orice sitemap
+- **MODERAT:** `robots.txt` fără `Disallow: /api/`, `/404`, `/500`, `/_offline`
+- **MODERAT:** `lastmod` pentru pagini statice = `new Date()` la request — nu reflectă data reală; de înlocuit cu `BUILD_TIMESTAMP` injectat la build
+- **MINOR:** `changefreq: "weekly"` uniform — de diferențiat per tip de pagină
+- **MINOR:** `priority` nediferențiat (toate 0.7 în afară de `/` și `/blog`) — `/servicii`, `/contact` merită 0.8
+- **MINOR:** `/galerie` apare în două sitemaps (`sitemap-pages.xml` + `sitemap-gallery.xml`) — de scos din `STATIC_ROUTES`
+
 ## 8a. Scripturi de optimizare
 
 ```
 scripts/generate-og.mjs
-  Generează OG images statice (Puppeteer, 1200×630 JPEG q95) pentru 6 pagini + 2 PWA screenshots.
+  Generează OG images statice (Puppeteer, 1200×630 JPEG q95) pentru 7 pagini + 2 PWA screenshots.
+  Pagini: /, /servicii, /galerie, /contact, /blog, /cort-evenimente-la-locatia-ta, /reviews
   Rulare: npm run generate:og
   Necesită: npm run dev activ pe portul 3000
 
@@ -323,11 +342,21 @@ scripts/optimise-videos.mjs
 - TBT fix — motion cache module-level, `ReducedMotionProvider` global, `ArcGallery` lazy, cookie batching
 - Lightbox CSS scoped la `pages/galerie.tsx` și `pages/cort-evenimente-la-locatia-ta.tsx`
 
+### SEO audit 2026-03-21 (PR #107)
+
+- `JsonLd.tsx` șters — era `strategy="afterInteractive"` (client-side only); JSON-LD se injectează SSR via `<Seo structuredData={[...]} />`
+- `buildMenuJsonLd` eliminat din `ArcMenuGallery.lazy.tsx` și `MenuOffers.tsx` — rămâne exclusiv SSR în `pages/meniuri/[slug].tsx`
+- `pageMeta.ts`: câmp `description` adăugat la `PageMeta`, `/reviews` înregistrat ca rută
+- `generate-og.mjs`: `/reviews` adăugat → 7 pagini acoperite
+- `/blog/[slug]`: `getRelatedByTags()` activ (înlocuiește `getAllPosts().filter().slice(0,6)`)
+- `lib/blogData.ts`: `sanitizeBasic()` — heading shift H1–H5 +1 nivel (H1→H2, H2→H3 etc.) pentru conținut articole
+- Toate paginile principale: canonical corect, descriptions unice, JSON-LD SSR
+
 ### TODO sesiune viitoare
 
 - Recalibrare optimizări TBT — scorurile Lighthouse pe mobil necesită revizie
-- Accessibility 93 → 100 — atacat în sesiunea SEO
-- SEO fin — structured data, meta descriptions, canonical
+- Accessibility 93 → 100
+- Sitemap audit — vezi secțiunea 8 (sitemap-menus.xml, robots.txt, lastmod, priority)
 
 ---
 
@@ -342,3 +371,5 @@ scripts/optimise-videos.mjs
 - Nu porni task-uri noi mari înainte de hardening pe Contact / Reviews / Offer Request
 - Nu face `git push --force` pe `main`
 - Nu sări peste `typecheck + lint + build` înainte de commit
+- Nu folosi `JsonLd.tsx` — a fost șters; JSON-LD se adaugă exclusiv via prop `structuredData` pe `<Seo>`
+- Nu injecta `buildMenuJsonLd` (sau orice JSON-LD) din componente client-side — doar din `getStaticProps` / `getServerSideProps` în pagini
