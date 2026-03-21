@@ -201,7 +201,7 @@ export default function Reviews({
       {mode === "home" ? (
         <>
           <div className={bandsWrapClass}>
-            <div className={bandClass} aria-label="Recenzii — banda 1">
+            <div role="region" className={bandClass} aria-label="Recenzii — banda 1">
               <div className={trackLeftClass} aria-hidden="true">
                 {loopTop.map((it, idx) => (
                   <ReviewCard key={`${it.id}-t-${idx}`} it={it} fixed />
@@ -209,7 +209,7 @@ export default function Reviews({
               </div>
             </div>
 
-            <div className={bandClass} aria-label="Recenzii — banda 2">
+            <div role="region" className={bandClass} aria-label="Recenzii — banda 2">
               <div className={trackRightClass} aria-hidden="true">
                 {loopBottom.map((it, idx) => (
                   <ReviewCard key={`${it.id}-b-${idx}`} it={it} fixed />
