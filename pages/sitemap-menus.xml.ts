@@ -1,17 +1,17 @@
-// pages/sitemap-pages.xml.ts
+// pages/sitemap-menus.xml.ts
 
 // ==============================
 // Imports
 // ==============================
 import type { GetServerSideProps } from "next";
 
-import { STATIC_ROUTES } from "../lib/config";
+import { getAllMenus } from "../lib/menus";
 import { getRequestBaseUrl, joinHostPath } from "../lib/url";
 
 // ==============================
 // Types
 // ==============================
-type ChangeFreq = "daily" | "weekly" | "monthly" | "yearly";
+type ChangeFreq = "daily" | "weekly" | "monthly";
 
 // ==============================
 // Constante
@@ -30,26 +30,16 @@ const urlEntry = (loc: string, lastmod: string, changefreq: ChangeFreq, priority
     <priority>${priority}</priority>
   </url>`;
 
-const changefreqFor = (path: string): ChangeFreq => {
-  if (path === "/" || path === "/blog") return "weekly";
-  if (path === "/marca") return "yearly";
-  return "monthly";
-};
-
-const priorityFor = (path: string): string => {
-  if (path === "/") return "1.0";
-  if (path === "/servicii" || path === "/contact" || path === "/blog") return "0.8";
-  if (path === "/marca") return "0.5";
-  return "0.7";
-};
-
 function generate(baseUrl: string): string {
   const buildTimestamp = process.env.NEXT_PUBLIC_BUILD_TIMESTAMP ?? new Date().toISOString();
 
-  const urls = STATIC_ROUTES.map((path) => {
-    const loc = joinHostPath(baseUrl, path);
-    return urlEntry(loc, buildTimestamp, changefreqFor(path), priorityFor(path));
-  }).join("");
+  const menus = getAllMenus();
+  const urls = menus
+    .map((menu) => {
+      const loc = joinHostPath(baseUrl, `/meniuri/${menu.slug}`);
+      return urlEntry(loc, buildTimestamp, "monthly", "0.8");
+    })
+    .join("");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -60,8 +50,8 @@ ${urls}
 // ==============================
 // Component
 // ==============================
-// Acest fișier generează un sitemap pentru paginile statice ale site-ului.
-export default function SiteMapPages() {
+// Acest fișier generează un sitemap pentru paginile de meniuri ale site-ului.
+export default function SiteMapMenus() {
   return null;
 }
 

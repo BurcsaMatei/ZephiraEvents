@@ -14,7 +14,15 @@ import { getRequestBaseUrl, joinHostPath } from "../lib/url";
 // ==============================
 function generateRobots(host: string, disallowAll: boolean, sitemaps: readonly string[]) {
   const lines = ["User-agent: *"];
-  lines.push(disallowAll ? "Disallow: /" : "Allow: /");
+  if (disallowAll) {
+    lines.push("Disallow: /");
+  } else {
+    lines.push("Allow: /");
+    lines.push("Disallow: /api/");
+    lines.push("Disallow: /404");
+    lines.push("Disallow: /500");
+    lines.push("Disallow: /_offline");
+  }
 
   // Sitemap-uri multiple
   for (const sm of sitemaps) {
