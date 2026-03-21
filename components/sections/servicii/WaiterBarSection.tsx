@@ -55,7 +55,9 @@ export default function WaiterBarSection(): JSX.Element {
       {/* Bloc text deasupra imaginilor — vizibil doar pe mobile */}
       <div className={w.textTop}>
         <span className={ti.eyebrow}>Ospătari &amp; Bar</span>
-        <h2 className={ti.heading}>Echipa care face diferența</h2>
+        <h2 className={ti.heading} aria-hidden="true">
+          Echipa care face diferența
+        </h2>
         <p className={ti.lede}>
           Ospătari profesioniști, bar complet echipat și un serviciu impecabil — de la primul
           aperitiv până la ultimul toast. Noi ne ocupăm ca fiecare invitat să se simtă special.

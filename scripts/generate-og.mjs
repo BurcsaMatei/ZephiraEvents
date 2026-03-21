@@ -28,6 +28,7 @@ const OG_PAGES = [
   { route: "/contact", out: "public/images/og-contact.jpg" },
   { route: "/blog", out: "public/images/og-blog.jpg" },
   { route: "/cort-evenimente-la-locatia-ta", out: "public/images/og-cort.jpg" },
+  { route: "/reviews", out: "public/images/og-reviews.jpg" },
 ];
 
 // ──────────────────────────────────────────────

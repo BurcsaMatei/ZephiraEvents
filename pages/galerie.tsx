@@ -22,7 +22,7 @@ import Outro from "../components/sections/Outro";
 import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
-import { absoluteAssetUrl, absoluteUrl, seoDefaults } from "../lib/config";
+import { absoluteAssetUrl, absoluteUrl } from "../lib/config";
 import { getGalleryItems } from "../lib/gallery";
 import * as ti from "../styles/sections/tent/tentIntro.css";
 
@@ -200,7 +200,7 @@ function GaleriePage() {
     <>
       <Seo
         title="Galerie"
-        description={seoDefaults.description}
+        description="Nunți, botezuri, majorate și evenimente corporate realizate la ZephiraEvents din Focșani, Vrancea — decoruri atent alese, servicii impecabile și momente care rămân. Galerie foto reală."
         image="/images/og-galerie.jpg"
         url="/galerie"
         structuredData={[breadcrumbList, imageGalleryLd]}

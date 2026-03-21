@@ -22,7 +22,7 @@ import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { getAllPosts } from "../lib/blogData";
-import { absoluteUrl, seoDefaults } from "../lib/config";
+import { absoluteUrl } from "../lib/config";
 import { getLatestReviews, type Review } from "../lib/reviews";
 import * as ti from "../styles/sections/tent/tentIntro.css";
 
@@ -101,7 +101,7 @@ const Home: NextPage<HomeProps> = ({ postsPreview, reviewItems }) => {
       </Head>
       <Seo
         title="Acasă"
-        description={seoDefaults.description}
+        description="Sală de evenimente premium în Focșani, Vrancea — nunți, botezuri, majorate și corporate. Organizare A-Z, meniuri personalizate, cort exterior la locația ta și servicii impecabile."
         url="/"
         image="/images/og.jpg"
         structuredData={[breadcrumbList]}

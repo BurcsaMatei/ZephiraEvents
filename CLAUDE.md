@@ -308,10 +308,12 @@ scripts/optimise-videos.mjs
 ## 10. Performance & Optimizări
 
 ### Lighthouse scores (ultima măsurătoare)
+
 - Desktop: Performance 99, Accessibility 93, Best Practices 96, SEO 100
 - Mobil: în calibrare — optimizările TBT necesită revizie în sesiune viitoare
 
 ### Ce s-a optimizat
+
 - OG images → statice pre-generate (zero CPU runtime)
 - Reviews → JSON static + SSG (eliminat KV/Blob)
 - Imagini comprimate cu sharp (MozJPEG q70) — reducere ~34%
@@ -322,6 +324,7 @@ scripts/optimise-videos.mjs
 - Lightbox CSS scoped la `pages/galerie.tsx` și `pages/cort-evenimente-la-locatia-ta.tsx`
 
 ### TODO sesiune viitoare
+
 - Recalibrare optimizări TBT — scorurile Lighthouse pe mobil necesită revizie
 - Accessibility 93 → 100 — atacat în sesiunea SEO
 - SEO fin — structured data, meta descriptions, canonical

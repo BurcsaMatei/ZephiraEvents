@@ -145,7 +145,7 @@ const ContactPage: NextPage = () => (
     <section data-full-bleed="true">
       <Appear>
         <Hero
-          title="Contact ZephiraEvents"
+          title="Contactează ZephiraEvents din Focșani, Vrancea"
           subtitle="Sală de evenimente în Focșani, Vrancea — scrie-ne pentru nuntă, botez, majorat sau corporate. Îți răspundem rapid cu disponibilitatea sălii și o ofertă adaptată."
           image={{
             src: "/images/current/hero-contact.jpg",

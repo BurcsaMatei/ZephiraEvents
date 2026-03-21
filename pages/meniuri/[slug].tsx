@@ -11,8 +11,10 @@ import Hero from "../../components/sections/Hero";
 import Outro from "../../components/sections/Outro";
 import Seo from "../../components/Seo";
 import Separator from "../../components/Separator";
-import { withBase } from "../../lib/config";
+import type { Json } from "../../interfaces";
+import { absoluteUrl, withBase } from "../../lib/config";
 import { getAllMenus, getEventTypeAnchorHref, getMenuBySlug } from "../../lib/menus";
+import { buildMenuJsonLd, type MenuData } from "../../lib/seo/menuJsonLd";
 import * as s from "../../styles/menus/menuDetail.css";
 import { list, sectionBlock, sectionTitle } from "../../styles/sections/menuOffers.css";
 import type { Menu } from "../../types/menu";
@@ -25,13 +27,22 @@ type PageProps = {
 };
 
 // ==============================
-// Constante
+// Helpers
 // ==============================
 function menuDescription(menu: Menu): string {
-  const parts: string[] = [];
-  if (menu.eventType) parts.push(menu.eventType);
-  parts.push(`${menu.currency} ${menu.pricePerPers}/pers.`);
-  return `${menu.title} — ${parts.join(" • ")}`;
+  return `Meniu ${menu.title} pentru ${menu.eventType} la ZephiraEvents Focșani — preparate pe 5 feluri, catering complet, servire impecabilă și coordonare A–Z. Preț: ${menu.currency} ${menu.pricePerPers}/pers.`;
+}
+
+function buildBreadcrumbList(pagePath: string, menuTitle: string): Json {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Acasă", item: absoluteUrl("/") },
+      { "@type": "ListItem", position: 2, name: "Servicii", item: absoluteUrl("/servicii") },
+      { "@type": "ListItem", position: 3, name: menuTitle, item: absoluteUrl(pagePath) },
+    ],
+  };
 }
 
 // ==============================
@@ -47,6 +58,9 @@ const MenuDetailPage: NextPage<PageProps> = ({ menu }) => {
     { name: menu.eventType ?? "Meniu", current: true },
   ];
 
+  const breadcrumbList = buildBreadcrumbList(pagePath, menu.title);
+  const menuJsonLd: Json = buildMenuJsonLd([menu as unknown as MenuData]) as unknown as Json;
+
   return (
     <>
       <Seo
@@ -54,6 +68,7 @@ const MenuDetailPage: NextPage<PageProps> = ({ menu }) => {
         description={menuDescription(menu)}
         url={pagePath}
         image={menu.image}
+        structuredData={[breadcrumbList, menuJsonLd]}
       />
 
       <section data-full-bleed="true">
@@ -91,7 +106,7 @@ const MenuDetailPage: NextPage<PageProps> = ({ menu }) => {
                 {/* Starter rece */}
                 {menu.sections.starterRece.length > 0 && (
                   <div className={sectionBlock}>
-                    <div className={sectionTitle}>Starter rece</div>
+                    <h2 className={sectionTitle}>Starter rece</h2>
                     <ul className={list}>
                       {menu.sections.starterRece.map((it, idx) => (
                         <li key={idx}>{it}</li>
@@ -103,7 +118,7 @@ const MenuDetailPage: NextPage<PageProps> = ({ menu }) => {
                 {/* Antreu cald */}
                 {menu.sections.antreuCald.trim() !== "" && (
                   <div className={sectionBlock}>
-                    <div className={sectionTitle}>Antreu cald</div>
+                    <h2 className={sectionTitle}>Antreu cald</h2>
                     <p className={s.paragraph}>{menu.sections.antreuCald}</p>
                   </div>
                 )}
@@ -111,7 +126,7 @@ const MenuDetailPage: NextPage<PageProps> = ({ menu }) => {
                 {/* Fel intermediar */}
                 {menu.sections.felIntermediar.trim() !== "" && (
                   <div className={sectionBlock}>
-                    <div className={sectionTitle}>Fel intermediar</div>
+                    <h2 className={sectionTitle}>Fel intermediar</h2>
                     <p className={s.paragraph}>{menu.sections.felIntermediar}</p>
                   </div>
                 )}
@@ -120,7 +135,7 @@ const MenuDetailPage: NextPage<PageProps> = ({ menu }) => {
                 {Array.isArray(menu.sections.felPrincipal) ? (
                   menu.sections.felPrincipal.length > 0 && (
                     <div className={sectionBlock}>
-                      <div className={sectionTitle}>Fel principal</div>
+                      <h2 className={sectionTitle}>Fel principal</h2>
                       <ul className={list}>
                         {menu.sections.felPrincipal.map((it, idx) => (
                           <li key={idx}>{it}</li>
@@ -130,7 +145,7 @@ const MenuDetailPage: NextPage<PageProps> = ({ menu }) => {
                   )
                 ) : menu.sections.felPrincipal.trim() !== "" ? (
                   <div className={sectionBlock}>
-                    <div className={sectionTitle}>Fel principal</div>
+                    <h2 className={sectionTitle}>Fel principal</h2>
                     <p className={s.paragraph}>{menu.sections.felPrincipal}</p>
                   </div>
                 ) : null}
@@ -138,7 +153,7 @@ const MenuDetailPage: NextPage<PageProps> = ({ menu }) => {
                 {/* Pachet bar */}
                 {menu.sections.pachetBar.length > 0 && (
                   <div className={sectionBlock}>
-                    <div className={sectionTitle}>Pachet bar</div>
+                    <h2 className={sectionTitle}>Pachet bar</h2>
                     <ul className={list}>
                       {menu.sections.pachetBar.map((it, idx) => (
                         <li key={idx}>{it}</li>

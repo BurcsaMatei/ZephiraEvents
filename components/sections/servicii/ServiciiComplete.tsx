@@ -102,14 +102,20 @@ export default function ServiciiComplete({
     <>
       {/* Header */}
       <div className={s.previewHeader}>
-        <h2 id="services-complete-title" className={s.h2}>
-          {title}
-        </h2>
+        {title && (
+          <h2 id="services-complete-title" className={s.h2}>
+            {title}
+          </h2>
+        )}
         <p className={s.previewSubtitle}>{subtitle}</p>
       </div>
 
       {/* Grid servicii — intrare pe rând, fără wrapper suplimentar */}
-      <ul className={s.grid} aria-labelledby="services-complete-title">
+      <ul
+        className={s.grid}
+        aria-labelledby={title ? "services-complete-title" : undefined}
+        aria-label={!title ? "Lista servicii complete" : undefined}
+      >
         {items.map((it, i) => (
           <Appear as="li" key={it.id} className={s.cardSmall} delay={0.1 * i}>
             <Link href={it.href ?? "#"} className={s.cardSmallLink} aria-label={it.title}>

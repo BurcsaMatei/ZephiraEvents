@@ -51,7 +51,9 @@ export default function CateringSection(): JSX.Element {
       {/* Bloc text deasupra imaginilor — vizibil doar pe mobile */}
       <div className={w.textTop}>
         <span className={ti.eyebrow}>Bucătărie Proprie &amp; Catering</span>
-        <h2 className={ti.heading}>Gust autentic, prezentare impecabilă</h2>
+        <h2 className={ti.heading} aria-hidden="true">
+          Gust autentic, prezentare impecabilă
+        </h2>
         <p className={ti.lede}>
           Preparăm totul în bucătăria noastră proprie — de la aperitive rafinate la deserturi
           artizanale. Fiecare meniu este gândit cu atenție pentru a completa perfect atmosfera

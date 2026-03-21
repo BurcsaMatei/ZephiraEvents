@@ -11,7 +11,7 @@ import Breadcrumbs, { type Crumb } from "../../components/Breadcrumbs";
 import Hero from "../../components/sections/Hero";
 import Seo from "../../components/Seo";
 import Separator from "../../components/Separator";
-import { getAllPosts, getPostBySlug } from "../../lib/blogData";
+import { getAllPosts, getPostBySlug, getRelatedByTags } from "../../lib/blogData";
 import { absoluteOgImage, absoluteUrl, SEO_DEFAULTS } from "../../lib/config";
 import { formatDateISOtoRo } from "../../lib/dates";
 import { proseClass } from "../../styles/prose.css";
@@ -155,10 +155,7 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
   const post = getPostBySlug(slug);
   if (!post) return { notFound: true };
 
-  const related = getAllPosts()
-    .filter((p) => p.slug !== slug)
-    .slice(0, 6)
-    .map((p) => ({ slug: p.slug, title: p.title }));
+  const related = getRelatedByTags(slug, 6).map((p) => ({ slug: p.slug, title: p.title }));
 
   return { props: { post, related } };
 };
