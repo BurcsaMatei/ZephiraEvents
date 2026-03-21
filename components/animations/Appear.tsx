@@ -4,9 +4,11 @@
 // ==============================
 // Imports
 // ==============================
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 import * as React from "react";
+
+import { useReducedMotionContext } from "./ReducedMotionProvider";
 
 // ==============================
 // Types
@@ -35,8 +37,18 @@ function makeVariants(kind: AppearKind, distance: number) {
 const EASE = [0.2, 0, 0.2, 1] as const;
 
 // ==============================
-// Motion component cache
+// Motion component cache — module-level singleton per tag string
 // ==============================
+const motionCache = new Map<string, ReturnType<typeof motion.create<typeof motion.div>>>();
+
+function getMotionTag(tag: string) {
+  if (!motionCache.has(tag)) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    motionCache.set(tag, motion.create(tag as any));
+  }
+  return motionCache.get(tag)!;
+}
+
 // ==============================
 // Component
 // ==============================
@@ -67,10 +79,9 @@ export default function Appear<T extends ElementType = "div">({
   immediate = false,
   ...rest
 }: AppearProps<T>) {
-  const reduce = useReducedMotion();
-  const Tag = (as ?? "div") as ElementType;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const MotionTag = React.useMemo(() => motion.create(Tag), [Tag]);
+  const reduce = useReducedMotionContext();
+  const Tag = (as ?? "div") as string;
+  const MotionTag = getMotionTag(Tag);
   const variants = makeVariants(kind, distance);
 
   const transition = reduce ? { duration: 0 } : { duration, delay, ease: EASE };
@@ -121,10 +132,9 @@ export function AppearGroup<T extends ElementType = "div">({
   duration = 0.48,
   ...rest
 }: AppearGroupProps<T>) {
-  const reduce = useReducedMotion();
-  const Tag = (as ?? "div") as ElementType;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const MotionTag = React.useMemo(() => motion.create(Tag), [Tag]);
+  const reduce = useReducedMotionContext();
+  const Tag = (as ?? "div") as string;
+  const MotionTag = getMotionTag(Tag);
 
   const mapped = React.useMemo(() => {
     if (!wrapChildren) return children;
