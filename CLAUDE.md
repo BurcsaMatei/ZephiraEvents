@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v4
+**Versiune:** v5
 **Data:** 2026-03-21
 **Status:** activ
 
@@ -286,15 +286,8 @@ Complet: `/reviews` (`<Seo>`, H1, JSON-LD LocalBusiness+AggregateRating, `og-rev
 **~~Headings audit și fix complet~~ ✓ ÎNCHIS 2026-03-21**
 Complet: H1 lipsă pe `/reviews` adăugat + centrat; coliziuni H1/H2 rezolvate pe `/contact` și `/cort`; `ServiciiComplete` — `<h2>` gol eliminat (condiționat), `aria-labelledby` orfan fixat; duplicate H2 responsive (`MenusIntro`, `WaiterBarSection`, `CateringSection`) — `aria-hidden="true"` pe varianta mobilă; `/meniuri/[slug]` — titluri secțiuni meniu din `<div>` în `<h2>`; `RelatedPosts` — `<h3>` → `<h2>`; `lib/blogData.ts` — heading shift H1–H5 +1 nivel în `sanitizeBasic`; `getRelatedByTags()` activ pe `/blog/[slug]`. PR #107.
 
-**Sitemap audit — în lucru**
-Audit complet realizat 2026-03-21. Probleme identificate, nerezolvate încă:
-
-- **CRITIC:** `sitemap-menus.xml` lipsă — cele 17 pagini `/meniuri/[slug]` absente din orice sitemap
-- **MODERAT:** `robots.txt` fără `Disallow: /api/`, `/404`, `/500`, `/_offline`
-- **MODERAT:** `lastmod` pentru pagini statice = `new Date()` la request — nu reflectă data reală; de înlocuit cu `BUILD_TIMESTAMP` injectat la build
-- **MINOR:** `changefreq: "weekly"` uniform — de diferențiat per tip de pagină
-- **MINOR:** `priority` nediferențiat (toate 0.7 în afară de `/` și `/blog`) — `/servicii`, `/contact` merită 0.8
-- **MINOR:** `/galerie` apare în două sitemaps (`sitemap-pages.xml` + `sitemap-gallery.xml`) — de scos din `STATIC_ROUTES`
+**~~Sitemap audit~~ ✓ ÎNCHIS 2026-03-21**
+Complet: `sitemap-menus.xml` creat (17 pagini `/meniuri/[slug]`, priority 0.8, changefreq monthly); `robots.txt` — `Disallow: /api/`, `/404`, `/500`, `/_offline` adăugate explicit; `lastmod` înlocuit cu `NEXT_PUBLIC_BUILD_TIMESTAMP` injectat în `next.config.mjs` (fix per build, nu per request); `changefreq` diferențiat: `weekly` (`/`, `/blog`), `monthly` (servicii, contact, cort, reviews), `yearly` (`/marca`); `priority` diferențiat: 1.0 (`/`), 0.8 (servicii, contact, blog), 0.7 (cort, reviews), 0.5 (`/marca`); `/galerie` scos din `STATIC_ROUTES` — acoperită exclusiv de `sitemap-gallery.xml` (cu imagini). PR #108.
 
 ## 8a. Scripturi de optimizare
 
@@ -353,11 +346,19 @@ scripts/optimise-videos.mjs
 - `lib/blogData.ts`: `sanitizeBasic()` — heading shift H1–H5 +1 nivel (H1→H2, H2→H3 etc.) pentru conținut articole
 - Toate paginile principale: canonical corect, descriptions unice, JSON-LD SSR
 
+### Sitemap audit 2026-03-21 (PR #108)
+
+- `sitemap-menus.xml` creat — 17 pagini `/meniuri/[slug]` acoperite (priority 0.8, changefreq monthly)
+- `robots.txt` — `Disallow: /api/`, `/404`, `/500`, `/_offline` adăugate explicit
+- `lastmod` — `NEXT_PUBLIC_BUILD_TIMESTAMP` injectat în `next.config.mjs` (valoare fixă per build, nu `new Date()` per request)
+- `changefreq` diferențiat: `weekly` (`/`, `/blog`), `monthly` (servicii, contact, cort, reviews), `yearly` (`/marca`)
+- `priority` diferențiat: 1.0 (`/`), 0.8 (servicii, contact, blog), 0.7 (cort, reviews), 0.5 (`/marca`)
+- `/galerie` scos din `STATIC_ROUTES` — acoperită exclusiv de `sitemap-gallery.xml` (cu imagini)
+
 ### TODO sesiune viitoare
 
 - Recalibrare optimizări TBT — scorurile Lighthouse pe mobil necesită revizie
 - Accessibility 93 → 100
-- Sitemap audit — vezi secțiunea 8 (sitemap-menus.xml, robots.txt, lastmod, priority)
 
 ---
 
