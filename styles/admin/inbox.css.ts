@@ -1,0 +1,130 @@
+// styles/admin/inbox.css.ts
+
+import { style } from "@vanilla-extract/css";
+
+export const pageTitle = style({
+  margin: "0 0 24px",
+  fontSize: "22px",
+  fontWeight: 700,
+  color: "#1a1a2e",
+  letterSpacing: "-0.02em",
+});
+
+export const empty = style({
+  color: "#888",
+  fontSize: "15px",
+  padding: "24px 0",
+});
+
+// ── List ─────────────────────────────────────────────────
+export const list = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: "6px",
+});
+
+export const item = style({
+  display: "block",
+  padding: "14px 16px",
+  backgroundColor: "#ffffff",
+  borderRadius: "10px",
+  border: "1.5px solid #e8e8f0",
+  textDecoration: "none",
+  color: "inherit",
+  transition: "border-color 0.15s, box-shadow 0.15s",
+  selectors: {
+    "&:hover": {
+      borderColor: "#b0b4f0",
+      boxShadow: "0 2px 10px rgba(85,97,242,0.08)",
+    },
+  },
+});
+
+export const itemUnread = style({
+  borderLeftWidth: "3px",
+  borderLeftColor: "#5561F2",
+  backgroundColor: "#fafafe",
+});
+
+// ── Item header row ───────────────────────────────────────
+export const itemTop = style({
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+  marginBottom: "4px",
+  flexWrap: "wrap",
+});
+
+export const itemName = style({
+  fontWeight: 600,
+  fontSize: "14px",
+  color: "#1a1a2e",
+  marginRight: "auto",
+});
+
+export const itemNameUnread = style({
+  fontWeight: 700,
+});
+
+export const itemDate = style({
+  fontSize: "12px",
+  color: "#aaa",
+  flexShrink: 0,
+});
+
+export const itemEmail = style({
+  fontSize: "12.5px",
+  color: "#888",
+  marginBottom: "6px",
+});
+
+export const itemPreview = style({
+  fontSize: "13px",
+  color: "#666",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+});
+
+// ── Badges ────────────────────────────────────────────────
+const badgeBase = style({
+  display: "inline-flex",
+  alignItems: "center",
+  padding: "2px 8px",
+  borderRadius: "20px",
+  fontSize: "11px",
+  fontWeight: 600,
+  textTransform: "uppercase",
+  letterSpacing: "0.04em",
+  flexShrink: 0,
+});
+
+export const typeBadgeContact = style([
+  badgeBase,
+  { backgroundColor: "#e8f0fe", color: "#3b5bdb" },
+]);
+
+export const typeBadgeOffer = style([
+  badgeBase,
+  { backgroundColor: "#fff4e0", color: "#d97706" },
+]);
+
+export const statusBadgeNew = style([
+  badgeBase,
+  { backgroundColor: "#fff0f0", color: "#dc2626" },
+]);
+
+export const statusBadgeRead = style([
+  badgeBase,
+  { backgroundColor: "#f1f3f5", color: "#64748b" },
+]);
+
+export const statusBadgeReplied = style([
+  badgeBase,
+  { backgroundColor: "#f0fdf4", color: "#16a34a" },
+]);
+
+export const statusBadgeArchived = style([
+  badgeBase,
+  { backgroundColor: "#f5f5f5", color: "#9ca3af" },
+]);

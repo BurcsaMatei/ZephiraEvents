@@ -3,7 +3,10 @@
 // Folosit exclusiv în API routes — nu importa din componente client-side.
 
 import crypto from "crypto";
-import type { NextApiRequest } from "next";
+
+// Duck type — acceptat de NextApiRequest (API routes) și IncomingMessage (getServerSideProps).
+// Record<string, ...> e satisfăcut de IncomingHttpHeaders care extinde NodeJS.Dict<string | string[]>.
+type RequestWithCookieHeader = { headers: Record<string, string | string[] | undefined> };
 
 // ──────────────────────────────────────────────────────────
 // Constante
@@ -44,8 +47,9 @@ function parseCookieValue(header: string, name: string): string | undefined {
   return undefined;
 }
 
-export function verifyAdminSession(req: NextApiRequest): boolean {
-  const cookieHeader = req.headers.cookie ?? "";
+export function verifyAdminSession(req: RequestWithCookieHeader): boolean {
+  const raw = req.headers["cookie"];
+  const cookieHeader = Array.isArray(raw) ? raw.join("; ") : (raw ?? "");
   const token = parseCookieValue(cookieHeader, COOKIE_NAME);
   if (!token) return false;
 
