@@ -23,6 +23,7 @@ const NAV = [
   { href: "/admin/inbox", label: "Inbox" },
   { href: "/admin/reviews", label: "Recenzii" },
   { href: "/admin/compose", label: "Compune email" },
+  { href: "/admin/analytics", label: "Analytics" },
 ] as const;
 
 // ──────────────────────────────────────────────────────────
