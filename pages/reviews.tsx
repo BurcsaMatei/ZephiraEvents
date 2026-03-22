@@ -1,38 +1,81 @@
 // pages/reviews.tsx
-// ==============================
-// Pagina recenzii — date statice din data/reviews.json
-// ==============================
-import type { GetStaticProps } from "next";
+// Pagina recenzii — date din Supabase (approved), fallback la data/reviews.json.
+
+import { createClient } from "@supabase/supabase-js";
+import type { GetServerSideProps } from "next";
 
 import Reviews from "../components/sections/reviews/Reviews";
 import Seo from "../components/Seo";
 import type { Json } from "../interfaces";
 import { absoluteUrl, SITE } from "../lib/config";
-import { getAllReviews, type Review } from "../lib/reviews";
+import { getAllReviews, type Rating, type Review } from "../lib/reviews";
 import { pageH1Class } from "../styles/sections/reviews/reviews.css";
 import * as ti from "../styles/sections/tent/tentIntro.css";
 
-// ==============================
+// ──────────────────────────────────────────────────────────
 // Types
-// ==============================
+// ──────────────────────────────────────────────────────────
 type Props = {
   items: Review[];
 };
 
-// ==============================
+// ──────────────────────────────────────────────────────────
+// Supabase fetch
+// ──────────────────────────────────────────────────────────
+async function fetchApprovedReviews(): Promise<Review[]> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY ?? "";
+  if (!url || !key) throw new Error("Supabase env vars lipsă");
+
+  const client = createClient(url, key, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+
+  const { data, error } = await client
+    .from("reviews")
+    .select("id, name, rating, text, photo_url, published_at, created_at")
+    .eq("status", "approved")
+    .order("published_at", { ascending: false });
+
+  if (error) throw error;
+
+  return (data ?? []).map((row) => {
+    const ts = row.published_at ?? row.created_at;
+    const review: Review = {
+      id: row.id as string,
+      authorName: row.name as string,
+      rating: (row.rating as number) as Rating,
+      text: row.text as string,
+      createdAt: new Date(ts as string).getTime(),
+    };
+    if (row.photo_url) review.profilePhotoUrl = row.photo_url as string;
+    return review;
+  });
+}
+
+// ──────────────────────────────────────────────────────────
 // Data fetching
-// ==============================
-export const getStaticProps: GetStaticProps<Props> = () => {
-  return {
-    props: {
-      items: getAllReviews(),
-    },
-  };
+// ──────────────────────────────────────────────────────────
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  let items: Review[];
+
+  try {
+    items = await fetchApprovedReviews();
+    // Dacă Supabase returnează gol dar JSON-ul are date, fallback
+    if (items.length === 0) {
+      items = getAllReviews();
+    }
+  } catch (err) {
+    console.error("[reviews] Supabase fetch eșuat, fallback la JSON static:", err);
+    items = getAllReviews();
+  }
+
+  return { props: { items } };
 };
 
-// ==============================
+// ──────────────────────────────────────────────────────────
 // Page
-// ==============================
+// ──────────────────────────────────────────────────────────
 export default function ReviewsPage({ items }: Props) {
   const ratingCount = items.length;
   const ratingValue =
