@@ -4,8 +4,6 @@
 
 import { createClient } from "@supabase/supabase-js";
 
-import type { Database } from "./supabase.types";
-
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
@@ -20,7 +18,9 @@ if (!supabaseUrl || !serviceRoleKey) {
  * Folosit doar în API routes, getServerSideProps, getStaticProps.
  * NICIODATĂ expus în browser.
  */
-export const supabaseAdmin = createClient<Database>(supabaseUrl, serviceRoleKey, {
+// Client fără generic Database — rezultatele se tipează explicit în fiecare API route.
+// Regenerare tipuri cu CLI: npx supabase gen types typescript --project-id edgxqqkafezdcnnpsjqm
+export const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey, {
   auth: {
     autoRefreshToken: false,
     persistSession: false,

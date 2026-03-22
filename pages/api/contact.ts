@@ -6,6 +6,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import nodemailer from "nodemailer";
 
+import { supabaseAdmin } from "../../lib/admin/supabase";
 import { contactSchema } from "../../lib/validation/contact";
 
 type Ok = { ok: true };
@@ -236,8 +237,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     }
 
     await sendAutoReply(email, from, name);
-    return res.status(200).json({ ok: true });
   } catch {
     return res.status(500).json({ ok: false, message: "Eroare la trimiterea emailului." });
   }
+
+  // Salvează în Supabase — independent de email (nu blochează răspunsul dacă Supabase pică)
+  try {
+    await supabaseAdmin.from("messages").insert({
+      type: "contact",
+      name,
+      email,
+      phone: phone ?? null,
+      message,
+    });
+  } catch {
+    // silențios — emailul a ajuns, Supabase e non-critic
+  }
+
+  return res.status(200).json({ ok: true });
 }

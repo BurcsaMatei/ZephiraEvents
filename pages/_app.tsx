@@ -9,6 +9,7 @@ import "../styles/theme.global.css"; // mapează tokens → elemente
 
 import type { AppProps } from "next/app";
 import dynamic from "next/dynamic";
+import type { ReactElement, ReactNode } from "react";
 import { createContext, useContext, useEffect, useState } from "react";
 
 // App providers / layout
@@ -27,6 +28,12 @@ type ServiceWorkerRegisterProps = React.ComponentProps<typeof ServiceWorkerRegis
 
 import type InstallAppButtonComponent from "../components/pwa/InstallAppButton";
 type InstallAppButtonProps = React.ComponentProps<typeof InstallAppButtonComponent>;
+
+// ==============================
+// Layout override — per-page getLayout
+// ==============================
+type GetLayout = (page: ReactElement) => ReactNode;
+type ComponentWithLayout = AppProps["Component"] & { getLayout?: GetLayout };
 
 // ==============================
 // Constante & Utils (SSR-safe)
@@ -184,6 +191,10 @@ export default function App({ Component, pageProps }: AppProps) {
     safeStorage.set(THEME_KEY, theme);
   }, [theme]);
 
+  const getLayout: GetLayout =
+    (Component as ComponentWithLayout).getLayout ??
+    ((page) => <Layout>{page}</Layout>);
+
   return (
     <CookieProvider>
       <ThemeContext.Provider
@@ -198,9 +209,7 @@ export default function App({ Component, pageProps }: AppProps) {
         {/* Scope global + tema implicită a containerului → afectează toate <section>-urile */}
         <div className={`${pageScope} ${containerThemeDefault}`}>
           <ReducedMotionProvider>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            {getLayout(<Component {...pageProps} />)}
           </ReducedMotionProvider>
         </div>
 
