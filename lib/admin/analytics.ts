@@ -74,13 +74,30 @@ const DEVICE_LABEL: Record<string, string> = {
 // Client factory
 // ──────────────────────────────────────────────────────────
 
-function createClient(): BetaAnalyticsDataClient {
-  const keyPath = (process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH ?? "").trim();
-  if (!keyPath) throw new Error("GOOGLE_SERVICE_ACCOUNT_KEY_PATH lipsă");
+function loadServiceAccountKey(): { client_email: string; private_key: string } {
+  // 1. Env var JSON (Vercel, CI) — prioritate
+  const keyJson = (process.env.GOOGLE_SERVICE_ACCOUNT_KEY_JSON ?? "").trim();
+  if (keyJson) {
+    return JSON.parse(keyJson) as { client_email: string; private_key: string };
+  }
 
-  const absPath = path.resolve(process.cwd(), keyPath);
-  const raw = fs.readFileSync(absPath, "utf8");
-  const key = JSON.parse(raw) as { client_email: string; private_key: string };
+  // 2. Fișier local (dev) — fallback
+  const keyPath = (process.env.GOOGLE_SERVICE_ACCOUNT_KEY_PATH ?? "").trim();
+  if (keyPath) {
+    const absPath = path.resolve(process.cwd(), keyPath);
+    return JSON.parse(fs.readFileSync(absPath, "utf8")) as {
+      client_email: string;
+      private_key: string;
+    };
+  }
+
+  throw new Error(
+    "GA4: lipsesc GOOGLE_SERVICE_ACCOUNT_KEY_JSON (Vercel) sau GOOGLE_SERVICE_ACCOUNT_KEY_PATH (local).",
+  );
+}
+
+function createClient(): BetaAnalyticsDataClient {
+  const key = loadServiceAccountKey();
 
   return new BetaAnalyticsDataClient({
     credentials: {
