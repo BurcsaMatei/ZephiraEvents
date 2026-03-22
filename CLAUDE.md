@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v6
+**Versiune:** v7
 **Data:** 2026-03-22
 **Status:** activ
 
@@ -274,11 +274,11 @@ types/                 blog.ts, menu.ts, etc.
 **Reviews — sistem nou (email + JSON static)**
 Recenziile sunt stocate în `data/reviews.json` (12 intrări). Formularul trimite recenzia pe email via `/api/review-submit` cu poza ca attachment base64. Pentru a publica o recenzie nouă, se editează manual `data/reviews.json` și se face un nou deploy. Nu mai există storage extern (KV/Blob).
 
-**Accessibility 93 → 100**
-Scor curent: 93. De atacat în sesiune viitoare — audit axe/VoiceOver, contrast, focus management.
-
 **Dashboard admin /admin cu Supabase**
 Planificat, neînceput. Autentificare + vizualizare solicitări ofertă și recenzii primite.
+
+**~~Accessibility 93 → 100~~ ✓ ÎNCHIS 2026-03-22**
+Complet: ARIA `role="menuitem"` pe copiii direcți ai `role="menu"` în submeniul Servicii desktop (`components/Header.tsx`); `role="region"` pe benzile de recenzii cu `aria-label` (`components/sections/reviews/Reviews.tsx`); HeaderPanel glassmorphism per temă — light: `rgba(255,255,255,0.82)` + `blur(16px) saturate(1.4)`, dark: `rgba(15,15,28,0.85)` + `blur(16px) saturate(1.2)` (`styles/header.css.ts`). PR #110.
 
 **~~Contact — verificare producție~~ ✓ ÎNCHIS 2026-03-22**
 Complet: validare Zod (`lib/validation/contact.ts`), câmp telefon opțional, checkbox GDPR explicit, email template include telefonul dacă e completat. SMTP + reCAPTCHA + autoreply confirmate funcționale. PR #109.
@@ -370,9 +370,15 @@ scripts/optimise-videos.mjs
 - Offer Request: validare Zod completă cu câmpuri condiționale (rooms/nights validate când lodging=oferta), `eventType` non-opțional în `EmailData`, ramura defensivă eliminată
 - `.env.local`: KV/Blob/Redis curățat (zero utilizări în cod), `NEXT_PUBLIC_SITE_URL` = `https://zephiraevents.ro`
 
+### Accessibility + UI audit 2026-03-22 (PR #110)
+
+- ARIA: `role="menuitem"` pe copiii direcți ai `role="menu"` (submeniu Servicii desktop)
+- ARIA: `role="region"` pe benzile de recenzii (`aria-label` valid pe landmark)
+- HeaderPanel: glassmorphism `blur(16px) saturate(1.4/1.2)` per temă light/dark
+- Lighthouse Accessibility: 97 mobil, 92 desktop după fix
+
 ### TODO sesiune viitoare
 
-- Accessibility 93 → 100
 - Dashboard admin `/admin` cu Supabase
 
 ---
