@@ -1,9 +1,10 @@
 // pages/admin/inbox/index.tsx
-// Lista mesaje admin — contact + oferte, ordonate desc, badge necitite.
+// Lista mesaje admin — contact + oferte + email inbound, ordonate desc.
 
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
-import type { ReactElement } from "react";
+import { useRouter } from "next/router";
+import { type ReactElement,useState } from "react";
 
 import AdminLayout from "../../../components/admin/AdminLayout";
 import { verifyAdminSession } from "../../../lib/admin/auth";
@@ -19,6 +20,12 @@ type Props = {
   unreadCount: number;
 };
 
+interface SyncResult {
+  synced: number;
+  skipped: number;
+  errors: string[];
+}
+
 // ──────────────────────────────────────────────────────────
 // Utils
 // ──────────────────────────────────────────────────────────
@@ -32,7 +39,12 @@ function formatDate(iso: string): string {
   });
 }
 
-const TYPE_LABEL: Record<MessageType, string> = { contact: "Contact", offer: "Ofertă" };
+const TYPE_LABEL: Record<MessageType, string> = {
+  contact: "Contact",
+  offer: "Ofertă",
+  email_inbound: "Email",
+};
+
 const STATUS_LABEL: Record<MessageStatus, string> = {
   new: "Nou",
   read: "Citit",
@@ -40,11 +52,13 @@ const STATUS_LABEL: Record<MessageStatus, string> = {
   archived: "Arhivat",
 };
 
-function typeBadgeClass(t: MessageType) {
-  return t === "offer" ? s.typeBadgeOffer : s.typeBadgeContact;
+function typeBadgeClass(t: MessageType): string {
+  if (t === "offer") return s.typeBadgeOffer;
+  if (t === "email_inbound") return s.typeBadgeEmail;
+  return s.typeBadgeContact;
 }
 
-function statusBadgeClass(st: MessageStatus) {
+function statusBadgeClass(st: MessageStatus): string {
   const map: Record<MessageStatus, string> = {
     new: s.statusBadgeNew,
     read: s.statusBadgeRead,
@@ -54,6 +68,13 @@ function statusBadgeClass(st: MessageStatus) {
   return map[st];
 }
 
+function getSubject(msg: MessageRow): string | null {
+  if (msg.type !== "email_inbound") return null;
+  const meta = msg.metadata as Record<string, unknown> | null;
+  const sub = meta?.["subject"];
+  return typeof sub === "string" ? sub : null;
+}
+
 // ──────────────────────────────────────────────────────────
 // Component
 // ──────────────────────────────────────────────────────────
@@ -61,11 +82,60 @@ function AdminInboxPage({
   messages,
   unreadCount,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter();
+  const [syncing, setSyncing] = useState(false);
+  const [syncResult, setSyncResult] = useState<SyncResult | null>(null);
+  const [syncError, setSyncError] = useState<string | null>(null);
+
+  async function handleSync() {
+    setSyncing(true);
+    setSyncResult(null);
+    setSyncError(null);
+    try {
+      const res = await fetch("/api/admin/imap-sync", { method: "POST" });
+      const data = (await res.json()) as SyncResult & { error?: string };
+      if (!res.ok) {
+        setSyncError(data.error ?? "Eroare necunoscută");
+      } else {
+        setSyncResult(data);
+        if (data.synced > 0) {
+          await router.replace(router.asPath);
+        }
+      }
+    } catch (err) {
+      setSyncError(err instanceof Error ? err.message : "Eroare de rețea");
+    } finally {
+      setSyncing(false);
+    }
+  }
+
   return (
     <>
-      <h1 className={s.pageTitle}>
-        Inbox{messages.length > 0 ? ` (${messages.length})` : ""}
-      </h1>
+      <div className={s.pageHeader}>
+        <h1 className={s.pageTitle}>
+          Inbox{messages.length > 0 ? ` (${messages.length})` : ""}
+        </h1>
+        <div className={s.syncArea}>
+          <button
+            className={`${s.syncBtn}${syncing ? ` ${s.syncBtnLoading}` : ""}`}
+            onClick={handleSync}
+            disabled={syncing}
+            type="button"
+          >
+            {syncing ? "Se sincronizează…" : "Sincronizează email"}
+          </button>
+          {syncResult && (
+            <span className={s.syncStatus}>
+              {syncResult.synced > 0
+                ? `${syncResult.synced} mesaj${syncResult.synced !== 1 ? "e" : ""} nou${syncResult.synced !== 1 ? "ă" : ""}`
+                : "Nimic nou"}
+              {syncResult.skipped > 0 ? `, ${syncResult.skipped} deja existente` : ""}
+              {syncResult.errors.length > 0 ? ` · ${syncResult.errors.length} erori` : ""}
+            </span>
+          )}
+          {syncError && <span className={s.syncStatusError}>{syncError}</span>}
+        </div>
+      </div>
 
       {messages.length === 0 ? (
         <p className={s.empty}>Nu există mesaje.</p>
@@ -73,7 +143,10 @@ function AdminInboxPage({
         <div className={s.list}>
           {messages.map((msg) => {
             const isNew = msg.status === "new";
-            const preview = msg.message ?? msg.event_type ?? "—";
+            const subject = getSubject(msg);
+            const preview = subject
+              ? `${subject} — ${msg.message ?? ""}`
+              : (msg.message ?? msg.event_type ?? "—");
             return (
               <Link
                 key={msg.id}

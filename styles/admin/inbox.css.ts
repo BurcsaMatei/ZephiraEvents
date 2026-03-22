@@ -2,14 +2,64 @@
 
 import { style } from "@vanilla-extract/css";
 
+// ── Header row (title + sync button) ─────────────────────
+export const pageHeader = style({
+  display: "flex",
+  alignItems: "center",
+  gap: "16px",
+  marginBottom: "24px",
+  flexWrap: "wrap",
+});
+
 export const pageTitle = style({
-  margin: "0 0 24px",
+  margin: 0,
   fontSize: "22px",
   fontWeight: 700,
   color: "#1a1a2e",
   letterSpacing: "-0.02em",
 });
 
+// ── Sync area ─────────────────────────────────────────────
+export const syncArea = style({
+  display: "flex",
+  alignItems: "center",
+  gap: "10px",
+  flexWrap: "wrap",
+});
+
+export const syncBtn = style({
+  padding: "7px 16px",
+  backgroundColor: "#5561F2",
+  color: "#fff",
+  border: "none",
+  borderRadius: "8px",
+  fontSize: "13px",
+  fontWeight: 600,
+  cursor: "pointer",
+  transition: "background-color 0.15s, opacity 0.15s",
+  selectors: {
+    "&:hover:not(:disabled)": { backgroundColor: "#4350e0" },
+    "&:disabled": { opacity: 0.6, cursor: "not-allowed" },
+  },
+});
+
+export const syncBtnLoading = style({
+  opacity: 0.75,
+});
+
+export const syncStatus = style({
+  fontSize: "12.5px",
+  color: "#16a34a",
+  fontWeight: 500,
+});
+
+export const syncStatusError = style({
+  fontSize: "12.5px",
+  color: "#dc2626",
+  fontWeight: 500,
+});
+
+// ── Empty state ───────────────────────────────────────────
 export const empty = style({
   color: "#888",
   fontSize: "15px",
@@ -107,6 +157,11 @@ export const typeBadgeContact = style([
 export const typeBadgeOffer = style([
   badgeBase,
   { backgroundColor: "#fff4e0", color: "#d97706" },
+]);
+
+export const typeBadgeEmail = style([
+  badgeBase,
+  { backgroundColor: "#f0f7ff", color: "#0369a1" },
 ]);
 
 export const statusBadgeNew = style([

@@ -55,6 +55,10 @@ export const typeBadgeOffer = style([
   badgeBase,
   { backgroundColor: "#fff4e0", color: "#d97706" },
 ]);
+export const typeBadgeEmail = style([
+  badgeBase,
+  { backgroundColor: "#f0f7ff", color: "#0369a1" },
+]);
 export const statusBadgeNew = style([
   badgeBase,
   { backgroundColor: "#fff0f0", color: "#dc2626" },

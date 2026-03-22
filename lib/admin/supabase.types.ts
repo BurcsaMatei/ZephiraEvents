@@ -5,7 +5,7 @@
 // ──────────────────────────────────────────────────────────
 // Enums
 // ──────────────────────────────────────────────────────────
-export type MessageType = "contact" | "offer";
+export type MessageType = "contact" | "offer" | "email_inbound";
 export type MessageStatus = "new" | "read" | "replied" | "archived";
 export type EmailStatus = "draft" | "sent" | "failed";
 export type ReviewStatus = "pending" | "approved" | "rejected";

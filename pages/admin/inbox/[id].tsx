@@ -40,7 +40,11 @@ function fmt(iso: string | null): string {
   });
 }
 
-const TYPE_LABEL: Record<MessageType, string> = { contact: "Contact", offer: "Ofertă" };
+const TYPE_LABEL: Record<MessageType, string> = {
+  contact: "Contact",
+  offer: "Ofertă",
+  email_inbound: "Email",
+};
 const STATUS_LABEL: Record<MessageStatus, string> = {
   new: "Nou",
   read: "Citit",
@@ -48,8 +52,10 @@ const STATUS_LABEL: Record<MessageStatus, string> = {
   archived: "Arhivat",
 };
 
-function typeBadgeClass(t: MessageType) {
-  return t === "offer" ? s.typeBadgeOffer : s.typeBadgeContact;
+function typeBadgeClass(t: MessageType): string {
+  if (t === "offer") return s.typeBadgeOffer;
+  if (t === "email_inbound") return s.typeBadgeEmail;
+  return s.typeBadgeContact;
 }
 function statusBadgeClass(st: MessageStatus) {
   const map: Record<MessageStatus, string> = {
