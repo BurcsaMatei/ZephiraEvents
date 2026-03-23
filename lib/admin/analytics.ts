@@ -114,11 +114,24 @@ function getProperty(): string {
 }
 
 // ──────────────────────────────────────────────────────────
+// Client singleton — creat o singură dată per proces, refolosit la toate request-urile.
+// ──────────────────────────────────────────────────────────
+
+let _ga4Client: BetaAnalyticsDataClient | null = null;
+
+function getClient(): BetaAnalyticsDataClient {
+  if (!_ga4Client) {
+    _ga4Client = createClient();
+  }
+  return _ga4Client;
+}
+
+// ──────────────────────────────────────────────────────────
 // Realtime
 // ──────────────────────────────────────────────────────────
 
 export async function getRealtimeData(): Promise<RealtimeData> {
-  const client = createClient();
+  const client = getClient();
   const property = getProperty();
 
   const [response] = await client.runRealtimeReport({
@@ -168,7 +181,7 @@ export async function getRealtimeData(): Promise<RealtimeData> {
 // ──────────────────────────────────────────────────────────
 
 export async function getReportData(): Promise<ReportData> {
-  const client = createClient();
+  const client = getClient();
   const property = getProperty();
   const dateRange = { startDate: "30daysAgo", endDate: "today" };
 

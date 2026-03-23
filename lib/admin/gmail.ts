@@ -143,11 +143,18 @@ export async function syncGmailMessages(): Promise<GmailSyncResult> {
       if (existing) {
         result.skipped++;
         // Marchează ca citit și în Gmail pentru consistență
-        await gmail.users.messages.modify({
-          userId: "me",
-          id: gmailId,
-          requestBody: { removeLabelIds: ["UNREAD"] },
-        });
+        try {
+          await gmail.users.messages.modify({
+            userId: "me",
+            id: gmailId,
+            requestBody: { removeLabelIds: ["UNREAD"] },
+          });
+        } catch (modifyErr) {
+          console.warn(
+            `[gmail] mark-read (skip) ${gmailId}:`,
+            modifyErr instanceof Error ? modifyErr.message : modifyErr,
+          );
+        }
         continue;
       }
 
@@ -199,11 +206,18 @@ export async function syncGmailMessages(): Promise<GmailSyncResult> {
       }
 
       // ── Marchează ca citit în Gmail ──────────────────────
-      await gmail.users.messages.modify({
-        userId: "me",
-        id: gmailId,
-        requestBody: { removeLabelIds: ["UNREAD"] },
-      });
+      try {
+        await gmail.users.messages.modify({
+          userId: "me",
+          id: gmailId,
+          requestBody: { removeLabelIds: ["UNREAD"] },
+        });
+      } catch (modifyErr) {
+        console.warn(
+          `[gmail] mark-read (new) ${gmailId}:`,
+          modifyErr instanceof Error ? modifyErr.message : modifyErr,
+        );
+      }
 
       result.synced++;
     } catch (err) {

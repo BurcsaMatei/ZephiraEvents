@@ -15,9 +15,19 @@ import * as s from "../../../styles/admin/inbox.css";
 // ──────────────────────────────────────────────────────────
 // Types
 // ──────────────────────────────────────────────────────────
+const PAGE_SIZE = 50;
+
+type MessagePreview = Pick<
+  MessageRow,
+  "id" | "type" | "status" | "name" | "email" | "message" | "event_type" | "created_at" | "metadata" | "deleted_at"
+>;
+
 type Props = {
-  messages: MessageRow[];
+  messages: MessagePreview[];
   unreadCount: number;
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
 };
 
 interface SyncResult {
@@ -68,7 +78,7 @@ function statusBadgeClass(st: MessageStatus): string {
   return map[st];
 }
 
-function getSubject(msg: MessageRow): string | null {
+function getSubject(msg: Pick<MessageRow, "type" | "metadata">): string | null {
   if (msg.type !== "email_inbound") return null;
   const meta = msg.metadata as Record<string, unknown> | null;
   const sub = meta?.["subject"];
@@ -81,6 +91,9 @@ function getSubject(msg: MessageRow): string | null {
 function AdminInboxPage({
   messages,
   unreadCount,
+  currentPage,
+  totalPages,
+  totalCount,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
   const [syncing, setSyncing] = useState(false);
@@ -210,6 +223,30 @@ function AdminInboxPage({
           })}
         </div>
       )}
+
+      {totalPages > 1 && (
+        <div className={s.pagination}>
+          {currentPage > 1 && (
+            <Link
+              href={{ pathname: "/admin/inbox", query: { page: currentPage - 1 } }}
+              className={s.paginationBtn}
+            >
+              ← Anterior
+            </Link>
+          )}
+          <span className={s.paginationInfo}>
+            Pagina {currentPage} din {totalPages} ({totalCount} mesaje)
+          </span>
+          {currentPage < totalPages && (
+            <Link
+              href={{ pathname: "/admin/inbox", query: { page: currentPage + 1 } }}
+              className={s.paginationBtn}
+            >
+              Următor →
+            </Link>
+          )}
+        </div>
+      )}
     </>
   );
 }
@@ -224,22 +261,40 @@ export default AdminInboxPage;
 // ──────────────────────────────────────────────────────────
 // SSR
 // ──────────────────────────────────────────────────────────
-export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps<Props> = async ({ req, query }) => {
   if (!verifyAdminSession(req)) {
     return { redirect: { destination: "/admin/login", permanent: false } };
   }
 
-  const { data } = (await supabaseAdmin
-    .from("messages")
-    .select("*")
-    .is("deleted_at", null)
-    .order("created_at", { ascending: false })) as {
-    data: MessageRow[] | null;
-    error: unknown;
-  };
+  const pageParam = typeof query.page === "string" ? parseInt(query.page, 10) : 1;
+  const currentPage = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
+  const offset = (currentPage - 1) * PAGE_SIZE;
 
-  const messages = data ?? [];
-  const unreadCount = messages.filter((m) => m.status === "new").length;
+  const [msgResult, unreadResult] = await Promise.all([
+    supabaseAdmin
+      .from("messages")
+      .select(
+        "id, type, status, name, email, message, event_type, created_at, metadata, deleted_at",
+        { count: "exact" },
+      )
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false })
+      .range(offset, offset + PAGE_SIZE - 1) as unknown as Promise<{
+      data: MessagePreview[] | null;
+      count: number | null;
+      error: { message: string } | null;
+    }>,
+    supabaseAdmin
+      .from("messages")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "new")
+      .is("deleted_at", null) as unknown as Promise<{ count: number | null }>,
+  ]);
 
-  return { props: { messages, unreadCount } };
+  const messages = msgResult.data ?? [];
+  const totalCount = msgResult.count ?? 0;
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+  const unreadCount = unreadResult.count ?? 0;
+
+  return { props: { messages, unreadCount, currentPage, totalPages, totalCount } };
 };

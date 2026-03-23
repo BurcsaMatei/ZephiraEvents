@@ -137,14 +137,34 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
     return { redirect: { destination: "/admin/login", permanent: false } };
   }
 
-  // composed_emails
-  const { data: emailRows } = (await supabaseAdmin
-    .from("composed_emails")
-    .select("*")
-    .eq("status", "sent")
-    .is("deleted_at", null)
-    .order("sent_at", { ascending: false })
-    .limit(200)) as { data: ComposedEmailRow[] | null };
+  // Cele 3 query-uri independente în paralel
+  const [emailResult, replyResult, unreadResult] = await Promise.all([
+    supabaseAdmin
+      .from("composed_emails")
+      .select("id, to_email, to_name, subject, body, sent_at")
+      .eq("status", "sent")
+      .is("deleted_at", null)
+      .order("sent_at", { ascending: false })
+      .limit(200) as unknown as Promise<{
+        data: Pick<ComposedEmailRow, "id" | "to_email" | "to_name" | "subject" | "body" | "sent_at">[] | null;
+      }>,
+    supabaseAdmin
+      .from("admin_replies")
+      .select("id, message_id, body, sent_at")
+      .not("sent_at", "is", null)
+      .order("sent_at", { ascending: false })
+      .limit(200) as unknown as Promise<{
+        data: Pick<AdminReplyRow, "id" | "message_id" | "body" | "sent_at">[] | null;
+      }>,
+    supabaseAdmin
+      .from("messages")
+      .select("id", { count: "exact", head: true })
+      .eq("status", "new") as unknown as Promise<{ count: number | null }>,
+  ]);
+
+  const emailRows = emailResult.data;
+  const replyRows = replyResult.data;
+  const unreadCount = unreadResult.count ?? 0;
 
   const fromEmails: SentItem[] = (emailRows ?? [])
     .filter((r) => r.sent_at !== null)
@@ -157,14 +177,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
       body: r.body,
       sent_at: r.sent_at as string,
     }));
-
-  // admin_replies + join
-  const { data: replyRows } = (await supabaseAdmin
-    .from("admin_replies")
-    .select("*")
-    .not("sent_at", "is", null)
-    .order("sent_at", { ascending: false })
-    .limit(200)) as { data: AdminReplyRow[] | null };
 
   const replies = replyRows ?? [];
   let fromReplies: SentItem[] = [];
@@ -203,13 +215,6 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
   const items = [...fromEmails, ...fromReplies].sort(
     (a, b) => new Date(b.sent_at).getTime() - new Date(a.sent_at).getTime(),
   );
-
-  // unreadCount pentru badge inbox
-  const { data: unreadData } = await supabaseAdmin
-    .from("messages")
-    .select("id")
-    .eq("status", "new");
-  const unreadCount = (unreadData ?? []).length;
 
   return { props: { items, unreadCount } };
 };
