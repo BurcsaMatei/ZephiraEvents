@@ -49,6 +49,13 @@ export interface ReportData {
 // Helpers
 // ──────────────────────────────────────────────────────────
 
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  const timeout = new Promise<never>((_, reject) =>
+    setTimeout(() => reject(new Error(`GA4 timeout după ${ms}ms`)), ms),
+  );
+  return Promise.race([promise, timeout]);
+}
+
 function calcPct(n: number, total: number): number {
   if (total === 0) return 0;
   return Math.round((n / total) * 100);
@@ -134,11 +141,14 @@ export async function getRealtimeData(): Promise<RealtimeData> {
   const client = getClient();
   const property = getProperty();
 
-  const [response] = await client.runRealtimeReport({
-    property,
-    dimensions: [{ name: "unifiedScreenName" }, { name: "country" }],
-    metrics: [{ name: "activeUsers" }],
-  });
+  const [response] = await withTimeout(
+    client.runRealtimeReport({
+      property,
+      dimensions: [{ name: "unifiedScreenName" }, { name: "country" }],
+      metrics: [{ name: "activeUsers" }],
+    }),
+    8000,
+  );
 
   const rows = response.rows ?? [];
 
@@ -190,7 +200,7 @@ export async function getReportData(): Promise<ReportData> {
     [sourcesRes],
     [devicesRes],
     [countriesRes],
-  ] = await Promise.all([
+  ] = await withTimeout(Promise.all([
     client.runReport({
       property,
       dateRanges: [dateRange],
@@ -224,7 +234,7 @@ export async function getReportData(): Promise<ReportData> {
       orderBys: [{ metric: { metricName: "sessions" }, desc: true }],
       limit: 10,
     }),
-  ]);
+  ]), 8000);
 
   // Vizitatori pe zile
   const dailyVisitors: DailyVisitor[] = (dailyRes.rows ?? []).map((row) => ({

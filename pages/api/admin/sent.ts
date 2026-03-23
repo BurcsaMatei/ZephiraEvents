@@ -4,39 +4,27 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { verifyAdminSession } from "../../../lib/admin/auth";
+import { errorResponse, okResponse } from "../../../lib/admin/response";
 import { supabaseAdmin } from "../../../lib/admin/supabase";
 import type {
   AdminReplyRow,
   ComposedEmailRow,
   MessageRow,
 } from "../../../lib/admin/supabase.types";
+import type { SentItem, SentKind } from "../../../types/admin";
 
-// ──────────────────────────────────────────────────────────
-// Types
-// ──────────────────────────────────────────────────────────
-export type SentKind = "new" | "reply";
-
-export interface SentItem {
-  id: string;
-  kind: SentKind;
-  to_email: string;
-  to_name: string | null;
-  subject: string;
-  body: string;
-  sent_at: string;
-}
+export type { SentItem, SentKind };
 
 type Ok = { ok: true; data: SentItem[] };
-type Fail = { ok: false; message: string };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Ok | Fail>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!verifyAdminSession(req)) {
-    return res.status(401).json({ ok: false, message: "Neautorizat." });
+    return res.status(401).json(errorResponse("Neautorizat."));
   }
 
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
-    return res.status(405).json({ ok: false, message: "Method Not Allowed" });
+    return res.status(405).json(errorResponse("Method Not Allowed"));
   }
 
   // ── composed_emails ───────────────────────────────────────
@@ -106,5 +94,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     (a, b) => new Date(b.sent_at).getTime() - new Date(a.sent_at).getTime(),
   );
 
-  return res.status(200).json({ ok: true, data: all });
+  return res.status(200).json(okResponse(all));
 }

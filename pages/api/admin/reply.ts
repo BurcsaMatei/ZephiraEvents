@@ -4,24 +4,21 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { verifyAdminSession } from "../../../lib/admin/auth";
+import { errorResponse, okResponse } from "../../../lib/admin/response";
 import { escapeHtml, sendAdminMail } from "../../../lib/admin/smtp";
 import { supabaseAdmin } from "../../../lib/admin/supabase";
-
-type Ok = { ok: true; dbWarning?: boolean };
-type Fail = { ok: false; message: string };
-type Resp = Ok | Fail;
 
 type MsgSnippet = { email: string; name: string | null; status: string };
 type QuerySingle<T> = { data: T | null; error: { message: string } | null };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Resp>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!verifyAdminSession(req)) {
-    return res.status(401).json({ ok: false, message: "Neautorizat." });
+    return res.status(401).json(errorResponse("Neautorizat."));
   }
 
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
-    return res.status(405).json({ ok: false, message: "Method Not Allowed" });
+    return res.status(405).json(errorResponse("Method Not Allowed"));
   }
 
   const body = req.body as { messageId?: unknown; subject?: unknown; replyBody?: unknown };
@@ -33,7 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   if (!messageId || !subject || !replyBody) {
     return res
       .status(400)
-      .json({ ok: false, message: "Câmpurile messageId, subject și replyBody sunt obligatorii." });
+      .json(errorResponse("Câmpurile messageId, subject și replyBody sunt obligatorii."));
   }
 
   // Preia adresa destinatarului din mesajul original
@@ -44,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     .single()) as QuerySingle<MsgSnippet>;
 
   if (msgErr || !msg) {
-    return res.status(404).json({ ok: false, message: "Mesaj sursă negăsit." });
+    return res.status(404).json(errorResponse("Mesaj sursă negăsit."));
   }
 
   const html =
@@ -57,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     await sendAdminMail({ to: msg.email, subject, text: replyBody, html });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Eroare la trimiterea emailului.";
-    return res.status(500).json({ ok: false, message });
+    return res.status(500).json(errorResponse(message));
   }
 
   const now = new Date().toISOString();
@@ -93,5 +90,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     dbWarning = true;
   }
 
-  return res.status(200).json(dbWarning ? { ok: true, dbWarning: true } : { ok: true });
+  return res.status(200).json(dbWarning ? { ok: true as const, dbWarning: true } : okResponse());
 }

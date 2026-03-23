@@ -4,22 +4,19 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { verifyAdminSession } from "../../../lib/admin/auth";
+import { errorResponse, okResponse } from "../../../lib/admin/response";
 import { escapeHtml, sendAdminMail } from "../../../lib/admin/smtp";
 import { supabaseAdmin } from "../../../lib/admin/supabase";
 import type { EmailStatus } from "../../../lib/admin/supabase.types";
 
-type Ok = { ok: true; saved?: boolean; warning?: string };
-type Fail = { ok: false; message: string };
-type Resp = Ok | Fail;
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Resp>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!verifyAdminSession(req)) {
-    return res.status(401).json({ ok: false, message: "Neautorizat." });
+    return res.status(401).json(errorResponse("Neautorizat."));
   }
 
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
-    return res.status(405).json({ ok: false, message: "Method Not Allowed" });
+    return res.status(405).json(errorResponse("Method Not Allowed"));
   }
 
   const body = req.body as {
@@ -37,11 +34,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   if (!to || !subject || !emailBody) {
     return res
       .status(400)
-      .json({ ok: false, message: "Câmpurile to, subject și emailBody sunt obligatorii." });
+      .json(errorResponse("Câmpurile to, subject și emailBody sunt obligatorii."));
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) {
-    return res.status(400).json({ ok: false, message: "Adresă email destinatar invalidă." });
+    return res.status(400).json(errorResponse("Adresă email destinatar invalidă."));
   }
 
   const salutation = toName
@@ -78,19 +75,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       console.error("[compose] DB insert failed status:", dbErr);
     }
     const message = err instanceof Error ? err.message : "Eroare la trimiterea emailului.";
-    return res.status(500).json({ ok: false, message });
+    return res.status(500).json(errorResponse(message));
   }
 
   try {
     await saveToDb("sent", now);
   } catch (dbErr) {
     console.error("[compose] DB insert sent status:", dbErr);
-    return res.status(200).json({
-      ok: true,
-      saved: false,
-      warning: "Email trimis dar nu salvat în Trimise",
-    });
+    return res.status(200).json({ ok: true as const, saved: false, warning: "Email trimis dar nu salvat în Trimise" });
   }
 
-  return res.status(200).json({ ok: true });
+  return res.status(200).json(okResponse());
 }
