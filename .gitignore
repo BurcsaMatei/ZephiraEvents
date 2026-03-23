@@ -52,10 +52,11 @@ yarn-error.log*
 .env*.local
 
 # ==============================
-# Google Service Account keys
+# Google Service Account keys & OAuth secrets
 # ==============================
 *-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]*.json
 zephiraevents-*.json
+client_secret_*.json
 
 # ==============================
 # vercel
