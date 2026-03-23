@@ -23,6 +23,57 @@ export const sidebar = style({
   top: 0,
   height: "100vh",
   overflowY: "auto",
+  transition: "transform 300ms ease",
+  "@media": {
+    "screen and (max-width: 767px)": {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      zIndex: 300,
+      transform: "translateX(-100%)",
+    },
+  },
+});
+
+export const sidebarOpen = style({
+  "@media": {
+    "screen and (max-width: 767px)": {
+      transform: "translateX(0)",
+    },
+  },
+});
+
+// ── Overlay (mobil, vizibil doar când sidebar deschis) ────
+export const overlay = style({
+  position: "fixed",
+  inset: 0,
+  backgroundColor: "rgba(0,0,0,0.5)",
+  zIndex: 200,
+});
+
+// ── Hamburger ────────────────────────────────────────────
+export const hamburger = style({
+  display: "none",
+  "@media": {
+    "screen and (max-width: 767px)": {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      position: "fixed",
+      top: "14px",
+      left: "14px",
+      zIndex: 200,
+      width: "38px",
+      height: "38px",
+      backgroundColor: "#12122a",
+      color: "#ffffff",
+      border: "none",
+      borderRadius: "8px",
+      fontSize: "18px",
+      cursor: "pointer",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
+    },
+  },
 });
 
 export const brand = style({
@@ -157,4 +208,9 @@ export const main = style({
   minWidth: 0,
   padding: "32px 36px",
   backgroundColor: "#f2f3f7",
+  "@media": {
+    "screen and (max-width: 767px)": {
+      padding: "68px 16px 24px",
+    },
+  },
 });
