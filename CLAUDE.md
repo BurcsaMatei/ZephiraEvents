@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v8
+**Versiune:** v9
 **Data:** 2026-03-23
 **Status:** activ
 
@@ -35,7 +35,8 @@ ZephiraEvents este un website premium de prezentare și conversie pentru o sală
 
 ```
 components/
-  admin/               AdminLayout.tsx — sidebar nav, logout; AnalyticsChart.tsx — Recharts AreaChart (dynamic, ssr:false)
+  admin/               AdminLayout.tsx — sidebar nav (Inbox/Trimise/Recenzii/Compune/Analytics), logout, manifest PWA admin
+                       AnalyticsChart.tsx — Recharts AreaChart (dynamic, ssr:false)
   animations/          Appear, AppearGroup — animații pe scroll/viewport; ReducedMotionProvider — context global useReducedMotion()
   blog/                BlogCard, RelatedPosts
   brand/               componente de identitate vizuală
@@ -90,9 +91,10 @@ pages/
   marca.tsx, cookie-policy.tsx, 404.tsx, 500.tsx, _offline.tsx
   robots.txt.ts, site.webmanifest.ts, sitemap*.ts
   admin/
-    login.tsx          Login admin (cookie httpOnly, bypass Layout public)
-    inbox/index.tsx    Lista mesaje (contact + ofertă + email_inbound) + buton IMAP sync
+    login.tsx          Login admin (cookie httpOnly, bypass Layout public, înregistrare admin-sw.js)
+    inbox/index.tsx    Lista mesaje (contact + ofertă + email_inbound) + buton IMAP sync + soft delete
     inbox/[id].tsx     Detaliu mesaj + reply form
+    sent.tsx           Mesaje trimise — union composed_emails + admin_replies, badge Reply/Nou, soft delete
     compose.tsx        Compune email standalone
     reviews.tsx        Moderare recenzii (approve/reject)
     analytics.tsx      Dashboard GA4 — realtime + grafic 30 zile + surse/device/țări
@@ -102,6 +104,8 @@ public/
   images/              current/, gallery/, blog/, motivationcards/, profiles/, servicii/
   videos/              current/, tent/
   icons/, masks/, screenshots/
+  admin-manifest.json  PWA manifest dedicat admin (name: ZephiraEvents Admin, scope: /admin/)
+  admin-sw.js          Service worker admin izolat — cache minimal /admin/*, network-first
 
 scripts/
   build-gallery.mjs    generează lib/gallery.data.ts + data/gallery.json (rulat la prebuild)
@@ -114,7 +118,7 @@ scripts/
 
 styles/
   admin/               analytics.css.ts, compose.css.ts, inbox.css.ts, layout.css.ts,
-                       login.css.ts, message.css.ts, reviews.css.ts
+                       login.css.ts, message.css.ts, reviews.css.ts, sent.css.ts
   contact/             ContactInfo.css.ts, ContactMapIframeConsent.css.ts, etc.
   forms/               offerRequest.css.ts
   menus/               menuDetail.css.ts
@@ -131,6 +135,7 @@ supabase/
   migrations/
     001_initial_schema.sql        messages, admin_replies, composed_emails, reviews
     002_add_email_inbound_type.sql extinde CHECK constraint type cu 'email_inbound'
+    003_soft_delete.sql           adaugă deleted_at timestamptz pe messages și composed_emails
 
 types/                 blog.ts, menu.ts, etc.
 ```
@@ -159,12 +164,13 @@ types/                 blog.ts, menu.ts, etc.
 
 | Pagină                  | Fișier                           | Rol                                                            |
 | ----------------------- | -------------------------------- | -------------------------------------------------------------- |
-| `/admin/login`          | `pages/admin/login.tsx`          | Autentificare — email + parolă, setează cookie sesiune         |
-| `/admin/inbox`          | `pages/admin/inbox/index.tsx`    | Lista mesaje (contact/ofertă/email_inbound) + buton IMAP sync  |
-| `/admin/inbox/[id]`     | `pages/admin/inbox/[id].tsx`     | Detaliu mesaj + istoricul reply-urilor + formular reply        |
-| `/admin/compose`        | `pages/admin/compose.tsx`        | Compune email standalone (salvat în `composed_emails`)         |
-| `/admin/reviews`        | `pages/admin/reviews.tsx`        | Moderare recenzii pending — approve / reject                   |
-| `/admin/analytics`      | `pages/admin/analytics.tsx`      | Dashboard GA4: live acum + grafic 30 zile + surse/device/țări  |
+| `/admin/login`          | `pages/admin/login.tsx`          | Autentificare — email + parolă, setează cookie sesiune; înregistrează admin-sw.js |
+| `/admin/inbox`          | `pages/admin/inbox/index.tsx`    | Lista mesaje (contact/ofertă/email_inbound) + IMAP sync + soft delete              |
+| `/admin/inbox/[id]`     | `pages/admin/inbox/[id].tsx`     | Detaliu mesaj + istoricul reply-urilor + formular reply                            |
+| `/admin/sent`           | `pages/admin/sent.tsx`           | Mesaje trimise — union composed_emails + admin_replies, badge Reply/Nou            |
+| `/admin/compose`        | `pages/admin/compose.tsx`        | Compune email standalone (salvat în `composed_emails`)                             |
+| `/admin/reviews`        | `pages/admin/reviews.tsx`        | Moderare recenzii pending — approve / reject                                       |
+| `/admin/analytics`      | `pages/admin/analytics.tsx`      | Dashboard GA4: live acum + grafic 30 zile + surse/device/țări                     |
 
 ### API Routes publice
 
@@ -184,9 +190,11 @@ types/                 blog.ts, menu.ts, etc.
 | `/api/admin/logout`                    | POST   | Șterge cookie sesiune                                             |
 | `/api/admin/messages`                  | GET    | Listează toate mesajele ordonate desc                             |
 | `/api/admin/messages/[id]`             | GET    | Detaliu mesaj + reply-uri; auto-marchează ca `read`               |
-| `/api/admin/messages/[id]`             | PATCH  | Actualizează status (new/read/replied/archived)                   |
+| `/api/admin/messages/[id]`             | PATCH  | Actualizează status sau `{ action: "delete" }` (soft delete)      |
 | `/api/admin/reply`                     | POST   | Trimite email reply + salvează în `admin_replies`                 |
 | `/api/admin/compose`                   | POST   | Trimite email standalone + salvează în `composed_emails`          |
+| `/api/admin/sent`                      | GET    | Union composed_emails + admin_replies ordonate sent_at DESC       |
+| `/api/admin/sent/[id]`                 | PATCH  | `{ action: "delete" }` soft delete pe composed_emails             |
 | `/api/admin/reviews`                   | GET    | Listează recenzii cu filtru opțional `?status=pending/...`        |
 | `/api/admin/reviews/[id]`              | PATCH  | Moderare: `{ action: "approve" | "reject" }`                      |
 | `/api/admin/imap-sync`                 | POST   | Declanșează sync IMAP → Supabase; returnează `{synced, skipped}`  |
@@ -270,10 +278,15 @@ types/                 blog.ts, menu.ts, etc.
 - `lib/admin/smtp.ts` — `sendAdminMail()` helper pentru reply/compose
 - `lib/admin/imap.ts` — `syncInboxMessages()` — IMAP UNSEEN → Supabase (imapflow, MIME parser)
 - `lib/admin/analytics.ts` — `getRealtimeData()` + `getReportData()` — GA4 Data API
-- `components/admin/AdminLayout.tsx` — sidebar: Inbox, Recenzii, Compune email, Analytics
+- `components/admin/AdminLayout.tsx` — sidebar: Inbox/Trimise/Recenzii/Compune/Analytics + manifest PWA admin
 - `components/admin/AnalyticsChart.tsx` — Recharts AreaChart (dynamic import, ssr:false)
+- `public/admin-manifest.json` — PWA manifest dedicat, scope /admin/, start_url /admin/inbox
+- `public/admin-sw.js` — service worker izolat scope /admin/, network-first, cache minimal
 - `supabase/migrations/001_initial_schema.sql` — schema completă (4 tabele)
 - `supabase/migrations/002_add_email_inbound_type.sql` — extinde CHECK tip mesaj
+- `supabase/migrations/003_soft_delete.sql` — adaugă deleted_at pe messages și composed_emails
+- **Soft delete:** inbox filtrează `deleted_at IS NULL`; PATCH `{ action: "delete" }` setează timestamp
+- **TLS fix:** toate transporturile SMTP + clientul IMAP au `rejectUnauthorized: false` (hostico.ro)
 
 ### Navigație / Header
 
@@ -345,7 +358,14 @@ types/                 blog.ts, menu.ts, etc.
 ## 8. Ce este deschis / în lucru
 
 **~~Dashboard admin /admin cu Supabase~~ ✓ ÎNCHIS 2026-03-23**
-Complet: autentificare HMAC cookie-based, inbox cu IMAP sync (imapflow), reply/compose email, moderare recenzii, analytics GA4 (realtime + raport 30 zile cu Recharts). PR #admin-dashboard. Pași 1–8 implementați.
+Complet: autentificare HMAC cookie-based, inbox cu IMAP sync (imapflow), reply/compose email, moderare recenzii, analytics GA4 (realtime + raport 30 zile cu Recharts). PR #admin-dashboard.
+
+**~~Admin improvements~~ ✓ ÎNCHIS 2026-03-23** (branch feature/admin-improvements)
+- IMAP TLS: `rejectUnauthorized: false` (hostico.ro nu are cert valid pe hostname)
+- SMTP TLS: idem `rejectUnauthorized: false` pe toate cele 4 transporturi (smtp.ts, contact, offer-request, review-submit)
+- Pagina Trimise `/admin/sent`: union `composed_emails` + `admin_replies` cu badge Reply/Nou, SSR, session check
+- Soft delete: migrație 003, buton coș pe inbox + sent, filtru `deleted_at IS NULL`, PATCH `{ action: "delete" }`
+- PWA admin: `public/admin-manifest.json` (scope /admin/), `public/admin-sw.js` (network-first), manifest link în login + AdminLayout
 
 **Reviews — sistem Supabase ✓ ACTIV**
 Recenziile noi trimise prin formular se salvează în Supabase (`status: pending`). Moderare din `/admin/reviews`. Recenziile aprobate sunt citite SSR în `pages/reviews.tsx`. `data/reviews.json` rămâne ca fallback. Migrarea inițială (12 recenzii) s-a rulat cu `npm run migrate:reviews`.
