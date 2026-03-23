@@ -212,3 +212,35 @@ export const statusBadgeArchived = style([
   badgeBase,
   { backgroundColor: "#f5f5f5", color: "#9ca3af" },
 ]);
+
+// ── Pagination ────────────────────────────────────────────
+export const pagination = style({
+  display: "flex",
+  alignItems: "center",
+  gap: "12px",
+  marginTop: "24px",
+  flexWrap: "wrap",
+});
+
+export const paginationBtn = style({
+  padding: "7px 16px",
+  backgroundColor: "#f1f3f5",
+  color: "#1a1a2e",
+  border: "1.5px solid #e8e8f0",
+  borderRadius: "8px",
+  fontSize: "13px",
+  fontWeight: 600,
+  cursor: "pointer",
+  textDecoration: "none",
+  display: "inline-flex",
+  alignItems: "center",
+  transition: "background-color 0.15s, border-color 0.15s",
+  selectors: {
+    "&:hover": { backgroundColor: "#e8e8f0", borderColor: "#b0b4f0" },
+  },
+});
+
+export const paginationInfo = style({
+  fontSize: "13px",
+  color: "#888",
+});

@@ -42,10 +42,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   // ── composed_emails ───────────────────────────────────────
   const { data: emailRows } = (await supabaseAdmin
     .from("composed_emails")
-    .select("*")
+    .select("id, to_email, to_name, subject, body, sent_at")
     .eq("status", "sent")
     .order("sent_at", { ascending: false })
-    .limit(200)) as { data: ComposedEmailRow[] | null };
+    .limit(200)) as {
+    data: Pick<ComposedEmailRow, "id" | "to_email" | "to_name" | "subject" | "body" | "sent_at">[] | null;
+  };
 
   const fromEmails: SentItem[] = (emailRows ?? [])
     .filter((r) => r.sent_at !== null)
@@ -62,10 +64,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   // ── admin_replies + join messages pentru email/subiect ────
   const { data: replyRows } = (await supabaseAdmin
     .from("admin_replies")
-    .select("*")
+    .select("id, message_id, body, sent_at")
     .not("sent_at", "is", null)
     .order("sent_at", { ascending: false })
-    .limit(200)) as { data: AdminReplyRow[] | null };
+    .limit(200)) as {
+    data: Pick<AdminReplyRow, "id" | "message_id" | "body" | "sent_at">[] | null;
+  };
 
   const replies = replyRows ?? [];
   let fromReplies: SentItem[] = [];
