@@ -61,8 +61,12 @@ export const input = style({
   borderRadius: "8px",
   fontSize: "15px",
   color: "#1a1a2e",
+  backgroundColor: "#ffffff",
   outline: "none",
   transition: "border-color 0.15s",
+  // Fix autofill background/text pe Chrome/Safari mobile
+  WebkitTextFillColor: "#1a1a2e",
+  WebkitBoxShadow: "0 0 0px 1000px #ffffff inset",
   selectors: {
     "&:focus": {
       borderColor: "#5561F2",

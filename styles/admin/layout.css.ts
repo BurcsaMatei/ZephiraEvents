@@ -100,6 +100,37 @@ export const navBadge = style({
   fontWeight: 700,
 });
 
+export const installBtn = style({
+  margin: "0 10px 8px",
+  padding: "9px 10px",
+  backgroundColor: "rgba(85,97,242,0.15)",
+  border: "1px solid rgba(85,97,242,0.35)",
+  color: "rgba(255,255,255,0.8)",
+  fontSize: "12.5px",
+  fontWeight: 600,
+  textAlign: "left",
+  cursor: "pointer",
+  borderRadius: "7px",
+  transition: "background-color 0.12s, color 0.12s",
+  selectors: {
+    "&:hover": {
+      backgroundColor: "rgba(85,97,242,0.28)",
+      color: "#ffffff",
+    },
+  },
+});
+
+export const installIosHint = style({
+  margin: "0 10px 8px",
+  padding: "9px 10px",
+  backgroundColor: "rgba(255,255,255,0.04)",
+  border: "1px solid rgba(255,255,255,0.1)",
+  borderRadius: "7px",
+  fontSize: "11.5px",
+  color: "rgba(255,255,255,0.45)",
+  lineHeight: 1.5,
+});
+
 export const logoutBtn = style({
   margin: "4px 10px 16px",
   padding: "9px 10px",

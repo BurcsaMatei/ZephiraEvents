@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import type { ReactNode } from "react";
 
 import * as s from "../../styles/admin/layout.css";
+import AdminInstallButton from "./AdminInstallButton";
 
 // ──────────────────────────────────────────────────────────
 // Types
@@ -74,6 +75,8 @@ export default function AdminLayout({ children, unreadCount = 0 }: Props) {
             );
           })}
         </nav>
+
+        <AdminInstallButton />
 
         <button type="button" onClick={handleLogout} className={s.logoutBtn}>
           Logout
