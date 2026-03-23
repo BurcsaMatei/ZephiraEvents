@@ -1,18 +1,18 @@
 // pages/api/admin/imap-sync.ts
-// POST — declanșează sync IMAP inbox → Supabase.
+// POST — declanșează sync Gmail inbox → Supabase.
 // Protejat cu sesiune admin.
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { verifyAdminSession } from "../../../lib/admin/auth";
-import type { ImapSyncResult } from "../../../lib/admin/imap";
-import { syncInboxMessages } from "../../../lib/admin/imap";
+import type { GmailSyncResult } from "../../../lib/admin/gmail";
+import { syncGmailMessages } from "../../../lib/admin/gmail";
 
 type ErrorResponse = { error: string };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<ImapSyncResult | ErrorResponse>,
+  res: NextApiResponse<GmailSyncResult | ErrorResponse>,
 ) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
@@ -24,7 +24,7 @@ export default async function handler(
   }
 
   try {
-    const result = await syncInboxMessages();
+    const result = await syncGmailMessages();
     return res.status(200).json(result);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Eroare necunoscută";
