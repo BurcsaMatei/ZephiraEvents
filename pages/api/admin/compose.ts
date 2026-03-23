@@ -8,7 +8,7 @@ import { escapeHtml, sendAdminMail } from "../../../lib/admin/smtp";
 import { supabaseAdmin } from "../../../lib/admin/supabase";
 import type { EmailStatus } from "../../../lib/admin/supabase.types";
 
-type Ok = { ok: true };
+type Ok = { ok: true; saved?: boolean; warning?: string };
 type Fail = { ok: false; message: string };
 type Resp = Ok | Fail;
 
@@ -57,8 +57,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   const now = new Date().toISOString();
   const toNameOrNull: string | null = toName || null;
 
-  async function saveToDb(status: EmailStatus, sentAt?: string) {
-    await supabaseAdmin.from("composed_emails").insert({
+  async function saveToDb(status: EmailStatus, sentAt?: string): Promise<void> {
+    const { error } = await supabaseAdmin.from("composed_emails").insert({
       to_email: to,
       to_name: toNameOrNull,
       subject,
@@ -66,16 +66,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       status,
       ...(sentAt ? { sent_at: sentAt } : {}),
     });
+    if (error) throw new Error(error.message);
   }
 
   try {
     await sendAdminMail({ to, subject, text: emailBody, html });
   } catch (err) {
-    await saveToDb("failed");
+    try {
+      await saveToDb("failed");
+    } catch (dbErr) {
+      console.error("[compose] DB insert failed status:", dbErr);
+    }
     const message = err instanceof Error ? err.message : "Eroare la trimiterea emailului.";
     return res.status(500).json({ ok: false, message });
   }
 
-  await saveToDb("sent", now);
+  try {
+    await saveToDb("sent", now);
+  } catch (dbErr) {
+    console.error("[compose] DB insert sent status:", dbErr);
+    return res.status(200).json({
+      ok: true,
+      saved: false,
+      warning: "Email trimis dar nu salvat în Trimise",
+    });
+  }
+
   return res.status(200).json({ ok: true });
 }

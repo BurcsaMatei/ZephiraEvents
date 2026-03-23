@@ -8,6 +8,7 @@ import { useState } from "react";
 
 import AdminLayout from "../../../components/admin/AdminLayout";
 import { verifyAdminSession } from "../../../lib/admin/auth";
+import { sanitizeHtml } from "../../../lib/admin/sanitize";
 import { supabaseAdmin } from "../../../lib/admin/supabase";
 import type {
   AdminReplyRow,
@@ -97,10 +98,14 @@ function AdminMessagePage({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messageId: message.id, subject, replyBody }),
       });
-      const data = (await res.json()) as { ok: boolean; message?: string };
+      const data = (await res.json()) as { ok: boolean; message?: string; dbWarning?: boolean };
 
       if (data.ok) {
-        setSuccess("Răspuns trimis cu succes.");
+        setSuccess(
+          data.dbWarning
+            ? "Răspuns trimis. Atenție: nu s-a putut salva în Trimise."
+            : "Răspuns trimis cu succes.",
+        );
         setReplyBody("");
         setReplies((prev) => [
           ...prev,
@@ -189,7 +194,11 @@ function AdminMessagePage({
         {message.message && (
           <div style={{ marginTop: "16px" }}>
             <div className={s.sectionTitle}>Mesaj</div>
-            <p className={s.messageBody}>{message.message}</p>
+            {/* sanitizeHtml: strip tags + escape entități — safe cu dangerouslySetInnerHTML */}
+            <p
+              className={s.messageBody}
+              dangerouslySetInnerHTML={{ __html: sanitizeHtml(message.message) }}
+            />
           </div>
         )}
       </div>
@@ -201,7 +210,10 @@ function AdminMessagePage({
           {replies.map((r) => (
             <div key={r.id} className={s.replyCard}>
               <div className={s.replyMeta}>{fmt(r.sent_at)} · {r.sent_by ?? "admin"}</div>
-              <div className={s.replyText}>{r.body}</div>
+              <div
+                className={s.replyText}
+                dangerouslySetInnerHTML={{ __html: sanitizeHtml(r.body) }}
+              />
             </div>
           ))}
         </div>

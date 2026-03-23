@@ -7,6 +7,7 @@ import { type ReactElement, useCallback, useState } from "react";
 
 import AdminLayout from "../../components/admin/AdminLayout";
 import { verifyAdminSession } from "../../lib/admin/auth";
+import { sanitizeHtml } from "../../lib/admin/sanitize";
 import { supabaseAdmin } from "../../lib/admin/supabase";
 import type {
   AdminReplyRow,
@@ -96,7 +97,10 @@ function AdminSentPage({
                   <span className={s.itemDate}>{formatDate(item.sent_at)}</span>
                 </div>
                 <div className={s.itemSubject}>{item.subject}</div>
-                <div className={s.itemPreview}>{item.body.slice(0, 140)}</div>
+                <div
+                  className={s.itemPreview}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.body.slice(0, 140)) }}
+                />
               </div>
               {item.kind === "new" && (
                 <button

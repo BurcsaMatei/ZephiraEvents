@@ -87,6 +87,7 @@ function AdminInboxPage({
   const [syncResult, setSyncResult] = useState<SyncResult | null>(null);
   const [syncError, setSyncError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   const handleDelete = useCallback(
     async (e: React.MouseEvent, id: string) => {
@@ -94,13 +95,21 @@ function AdminInboxPage({
       e.stopPropagation();
       if (!confirm("Ștergi acest mesaj?")) return;
       setDeleting(id);
+      setDeleteError(null);
       try {
-        await fetch(`/api/admin/messages/${id}`, {
+        const res = await fetch(`/api/admin/messages/${id}`, {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ action: "delete" }),
         });
+        if (!res.ok) {
+          const data = (await res.json()) as { error?: string };
+          setDeleteError(data.error ?? "Eroare la ștergere.");
+          return;
+        }
         await router.replace(router.asPath);
+      } catch {
+        setDeleteError("Eroare de rețea la ștergere.");
       } finally {
         setDeleting(null);
       }
@@ -157,6 +166,7 @@ function AdminInboxPage({
           {syncError && <span className={s.syncStatusError}>{syncError}</span>}
         </div>
       </div>
+      {deleteError && <p className={s.syncStatusError}>{deleteError}</p>}
 
       {messages.length === 0 ? (
         <p className={s.empty}>Nu există mesaje.</p>
