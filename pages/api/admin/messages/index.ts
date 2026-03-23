@@ -5,6 +5,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { verifyAdminSession } from "../../../../lib/admin/auth";
+import { errorResponse } from "../../../../lib/admin/response";
 import { supabaseAdmin } from "../../../../lib/admin/supabase";
 import type { MessageRow } from "../../../../lib/admin/supabase.types";
 
@@ -24,24 +25,14 @@ type MessagePreview = Pick<
   | "deleted_at"
 >;
 
-type Ok = {
-  ok: true;
-  data: MessagePreview[];
-  total: number;
-  page: number;
-  pageSize: number;
-};
-type Fail = { ok: false; message: string };
-type Resp = Ok | Fail;
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Resp>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!verifyAdminSession(req)) {
-    return res.status(401).json({ ok: false, message: "Neautorizat." });
+    return res.status(401).json(errorResponse("Neautorizat."));
   }
 
   if (req.method !== "GET") {
     res.setHeader("Allow", "GET");
-    return res.status(405).json({ ok: false, message: "Method Not Allowed" });
+    return res.status(405).json(errorResponse("Method Not Allowed"));
   }
 
   const pageParam = typeof req.query.page === "string" ? parseInt(req.query.page, 10) : 1;
@@ -63,14 +54,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   };
 
   if (error) {
-    return res.status(500).json({ ok: false, message: error.message });
+    return res.status(500).json(errorResponse(error.message));
   }
 
-  return res.status(200).json({
-    ok: true,
-    data: data ?? [],
-    total: count ?? 0,
-    page,
-    pageSize: PAGE_SIZE,
-  });
+  return res.status(200).json({ ok: true, data: data ?? [], total: count ?? 0, page, pageSize: PAGE_SIZE });
 }

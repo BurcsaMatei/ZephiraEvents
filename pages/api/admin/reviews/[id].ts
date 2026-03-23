@@ -4,28 +4,25 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { verifyAdminSession } from "../../../../lib/admin/auth";
+import { errorResponse } from "../../../../lib/admin/response";
 import { supabaseAdmin } from "../../../../lib/admin/supabase";
 import type { ReviewRow, ReviewStatus } from "../../../../lib/admin/supabase.types";
 
-type Ok = { ok: true; data: ReviewRow };
-type Fail = { ok: false; message: string };
-type Resp = Ok | Fail;
-
 type QuerySingle = { data: ReviewRow | null; error: { message: string } | null };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<Resp>) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!verifyAdminSession(req)) {
-    return res.status(401).json({ ok: false, message: "Neautorizat." });
+    return res.status(401).json(errorResponse("Neautorizat."));
   }
 
   if (req.method !== "PATCH") {
     res.setHeader("Allow", "PATCH");
-    return res.status(405).json({ ok: false, message: "Method Not Allowed" });
+    return res.status(405).json(errorResponse("Method Not Allowed"));
   }
 
   const { id } = req.query;
   if (typeof id !== "string" || !id) {
-    return res.status(400).json({ ok: false, message: "ID invalid." });
+    return res.status(400).json(errorResponse("ID invalid."));
   }
 
   const body = req.body as { action?: unknown };
@@ -34,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   if (action !== "approve" && action !== "reject") {
     return res
       .status(400)
-      .json({ ok: false, message: "Action trebuie să fie 'approve' sau 'reject'." });
+      .json(errorResponse("Action trebuie să fie 'approve' sau 'reject'."));
   }
 
   const status: ReviewStatus = action === "approve" ? "approved" : "rejected";
@@ -53,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     .single()) as QuerySingle;
 
   if (error || !data) {
-    return res.status(500).json({ ok: false, message: error?.message ?? "Eroare Supabase." });
+    return res.status(500).json(errorResponse(error?.message ?? "Eroare Supabase."));
   }
 
   return res.status(200).json({ ok: true, data });

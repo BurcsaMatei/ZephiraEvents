@@ -33,7 +33,7 @@ function AdminComposePage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ to, toName, subject, emailBody }),
       });
-      const data = (await res.json()) as { ok: boolean; message?: string };
+      const data = (await res.json()) as { ok: boolean; error?: string; saved?: boolean; warning?: string };
 
       if (data.ok) {
         setSuccess(`Email trimis cu succes către ${to}.`);
@@ -42,7 +42,7 @@ function AdminComposePage() {
         setSubject("");
         setEmailBody("");
       } else {
-        setError(data.message ?? "Eroare la trimitere.");
+        setError(data.error ?? "Eroare la trimitere.");
       }
     } catch {
       setError("Eroare de rețea. Încearcă din nou.");

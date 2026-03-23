@@ -98,7 +98,7 @@ function AdminMessagePage({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messageId: message.id, subject, replyBody }),
       });
-      const data = (await res.json()) as { ok: boolean; message?: string; dbWarning?: boolean };
+      const data = (await res.json()) as { ok: boolean; error?: string; dbWarning?: boolean };
 
       if (data.ok) {
         setSuccess(
@@ -119,7 +119,7 @@ function AdminMessagePage({
           },
         ]);
       } else {
-        setError(data.message ?? "Eroare la trimitere.");
+        setError(data.error ?? "Eroare la trimitere.");
       }
     } catch {
       setError("Eroare de rețea.");

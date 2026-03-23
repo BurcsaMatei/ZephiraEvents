@@ -15,7 +15,7 @@ import type {
   MessageRow,
 } from "../../lib/admin/supabase.types";
 import * as s from "../../styles/admin/sent.css";
-import type { SentItem, SentKind } from "../api/admin/sent";
+import type { SentItem, SentKind } from "../../types/admin";
 
 // ──────────────────────────────────────────────────────────
 // Types
