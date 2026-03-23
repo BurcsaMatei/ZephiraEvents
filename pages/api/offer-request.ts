@@ -108,7 +108,7 @@ async function sendWithSmtp(opts: {
     secure, // 587->false(STARTTLS), 465->true(SSL)
     auth: { user, pass },
     authMethod: "LOGIN",
-    tls: { servername: host, minVersion: "TLSv1.2" },
+    tls: { servername: host, minVersion: "TLSv1.2", rejectUnauthorized: false },
   });
 
   await transporter.sendMail({

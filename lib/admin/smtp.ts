@@ -36,7 +36,7 @@ export async function sendAdminMail(opts: AdminMailOptions): Promise<void> {
     secure,
     auth: { user, pass },
     authMethod: "LOGIN",
-    tls: { servername: host, minVersion: "TLSv1.2" },
+    tls: { servername: host, minVersion: "TLSv1.2", rejectUnauthorized: false },
   });
 
   await transporter.sendMail({

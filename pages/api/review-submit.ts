@@ -123,7 +123,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     secure: String(process.env.SMTP_SECURE || "true") === "true",
     auth: { user: smtpUser, pass: process.env.SMTP_PASS! },
     authMethod: "LOGIN",
-    tls: { servername: smtpHost, minVersion: "TLSv1.2" },
+    tls: { servername: smtpHost, minVersion: "TLSv1.2", rejectUnauthorized: false },
   });
 
   const attachments: nodemailer.SendMailOptions["attachments"] =
