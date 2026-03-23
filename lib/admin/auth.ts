@@ -12,7 +12,10 @@ type RequestWithCookieHeader = { headers: Record<string, string | string[] | und
 // Constante
 // ──────────────────────────────────────────────────────────
 export const COOKIE_NAME = "admin_session";
-export const SESSION_MAX_AGE = 8 * 3600; // 8 ore în secunde
+export const SESSION_MAX_AGE_SHORT = 8 * 3600;       // 8 ore în secunde
+export const SESSION_MAX_AGE_LONG  = 30 * 24 * 3600; // 30 zile în secunde
+/** @deprecated folosește SESSION_MAX_AGE_SHORT sau SESSION_MAX_AGE_LONG */
+export const SESSION_MAX_AGE = SESSION_MAX_AGE_SHORT;
 
 // ──────────────────────────────────────────────────────────
 // Token derivat din credențiale + secret

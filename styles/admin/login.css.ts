@@ -74,6 +74,28 @@ export const input = style({
   },
 });
 
+export const rememberRow = style({
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+  marginBottom: "16px",
+});
+
+export const checkbox = style({
+  width: "16px",
+  height: "16px",
+  cursor: "pointer",
+  accentColor: "#5561F2",
+  flexShrink: 0,
+});
+
+export const rememberLabel = style({
+  fontSize: "13.5px",
+  color: "#555",
+  cursor: "pointer",
+  userSelect: "none",
+});
+
 export const errorBox = style({
   padding: "10px 14px",
   backgroundColor: "#fff0f0",
