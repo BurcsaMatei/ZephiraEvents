@@ -55,11 +55,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   // ── PATCH ─────────────────────────────────────────────────
   if (req.method === "PATCH") {
-    const body = req.body as { status?: unknown };
+    const body = req.body as { status?: unknown; action?: unknown };
+
+    // Soft delete
+    if (body.action === "delete") {
+      const { data, error } = (await supabaseAdmin
+        .from("messages")
+        .update({ deleted_at: new Date().toISOString() })
+        .eq("id", id)
+        .select()
+        .single()) as QueryResult<MessageRow>;
+
+      if (error || !data) {
+        return res.status(500).json({ ok: false, message: error?.message ?? "Eroare Supabase." });
+      }
+      return res.status(200).json({ ok: true, data: { ...data, replies: [] } });
+    }
+
+    // Status update
     const status = typeof body.status === "string" ? (body.status as MessageStatus) : undefined;
 
     if (!status || !VALID_STATUSES.includes(status)) {
-      return res.status(400).json({ ok: false, message: "Status invalid." });
+      return res.status(400).json({ ok: false, message: "Status sau acțiune invalidă." });
     }
 
     const { data, error } = (await supabaseAdmin

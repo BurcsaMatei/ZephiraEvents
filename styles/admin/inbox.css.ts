@@ -73,14 +73,12 @@ export const list = style({
   gap: "6px",
 });
 
-export const item = style({
-  display: "block",
-  padding: "14px 16px",
-  backgroundColor: "#ffffff",
+export const itemWrap = style({
+  display: "flex",
+  alignItems: "stretch",
   borderRadius: "10px",
+  overflow: "hidden",
   border: "1.5px solid #e8e8f0",
-  textDecoration: "none",
-  color: "inherit",
   transition: "border-color 0.15s, box-shadow 0.15s",
   selectors: {
     "&:hover": {
@@ -90,10 +88,41 @@ export const item = style({
   },
 });
 
+export const item = style({
+  display: "block",
+  flex: 1,
+  minWidth: 0,
+  padding: "14px 16px",
+  backgroundColor: "#ffffff",
+  textDecoration: "none",
+  color: "inherit",
+});
+
 export const itemUnread = style({
-  borderLeftWidth: "3px",
-  borderLeftColor: "#5561F2",
+  borderLeft: "3px solid #5561F2",
   backgroundColor: "#fafafe",
+});
+
+export const deleteBtn = style({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  padding: "0 14px",
+  backgroundColor: "#ffffff",
+  border: "none",
+  borderLeft: "1.5px solid #e8e8f0",
+  color: "#ccc",
+  cursor: "pointer",
+  fontSize: "15px",
+  flexShrink: 0,
+  transition: "color 0.15s, background-color 0.15s",
+  selectors: {
+    "&:hover:not(:disabled)": {
+      color: "#dc2626",
+      backgroundColor: "#fff5f5",
+    },
+    "&:disabled": { opacity: 0.4, cursor: "not-allowed" },
+  },
 });
 
 // ── Item header row ───────────────────────────────────────

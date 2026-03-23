@@ -2,7 +2,8 @@
 // View mesaje trimise — composed_emails + admin_replies, ordonate sent_at DESC.
 
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
-import type { ReactElement } from "react";
+import { useRouter } from "next/router";
+import { type ReactElement, useCallback, useState } from "react";
 
 import AdminLayout from "../../components/admin/AdminLayout";
 import { verifyAdminSession } from "../../lib/admin/auth";
@@ -51,6 +52,29 @@ function AdminSentPage({
   items,
   unreadCount,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const router = useRouter();
+  const [deleting, setDeleting] = useState<string | null>(null);
+
+  const handleDelete = useCallback(
+    async (e: React.MouseEvent, item: SentItem) => {
+      e.preventDefault();
+      if (item.kind !== "new") return;
+      if (!confirm("Ștergi acest email?")) return;
+      setDeleting(item.id);
+      try {
+        await fetch(`/api/admin/sent/${item.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "delete" }),
+        });
+        await router.replace(router.asPath);
+      } finally {
+        setDeleting(null);
+      }
+    },
+    [router],
+  );
+
   return (
     <>
       <h1 className={s.pageTitle}>
@@ -74,6 +98,18 @@ function AdminSentPage({
                 <div className={s.itemSubject}>{item.subject}</div>
                 <div className={s.itemPreview}>{item.body.slice(0, 140)}</div>
               </div>
+              {item.kind === "new" && (
+                <button
+                  type="button"
+                  className={s.deleteBtn}
+                  onClick={(e) => void handleDelete(e, item)}
+                  disabled={deleting === item.id}
+                  title="Șterge email"
+                  aria-label="Șterge email"
+                >
+                  🗑
+                </button>
+              )}
             </div>
           ))}
         </div>
@@ -102,6 +138,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
     .from("composed_emails")
     .select("*")
     .eq("status", "sent")
+    .is("deleted_at", null)
     .order("sent_at", { ascending: false })
     .limit(200)) as { data: ComposedEmailRow[] | null };
 

@@ -4,7 +4,7 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { type ReactElement,useState } from "react";
+import { type ReactElement, useCallback, useState } from "react";
 
 import AdminLayout from "../../../components/admin/AdminLayout";
 import { verifyAdminSession } from "../../../lib/admin/auth";
@@ -86,6 +86,27 @@ function AdminInboxPage({
   const [syncing, setSyncing] = useState(false);
   const [syncResult, setSyncResult] = useState<SyncResult | null>(null);
   const [syncError, setSyncError] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState<string | null>(null);
+
+  const handleDelete = useCallback(
+    async (e: React.MouseEvent, id: string) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!confirm("Ștergi acest mesaj?")) return;
+      setDeleting(id);
+      try {
+        await fetch(`/api/admin/messages/${id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "delete" }),
+        });
+        await router.replace(router.asPath);
+      } finally {
+        setDeleting(null);
+      }
+    },
+    [router],
+  );
 
   async function handleSync() {
     setSyncing(true);
@@ -148,22 +169,33 @@ function AdminInboxPage({
               ? `${subject} — ${msg.message ?? ""}`
               : (msg.message ?? msg.event_type ?? "—");
             return (
-              <Link
-                key={msg.id}
-                href={`/admin/inbox/${msg.id}`}
-                className={`${s.item}${isNew ? ` ${s.itemUnread}` : ""}`}
-              >
-                <div className={s.itemTop}>
-                  <span className={`${s.itemName}${isNew ? ` ${s.itemNameUnread}` : ""}`}>
-                    {msg.name}
-                  </span>
-                  <span className={typeBadgeClass(msg.type)}>{TYPE_LABEL[msg.type]}</span>
-                  <span className={statusBadgeClass(msg.status)}>{STATUS_LABEL[msg.status]}</span>
-                  <span className={s.itemDate}>{formatDate(msg.created_at)}</span>
-                </div>
-                <div className={s.itemEmail}>{msg.email}</div>
-                <div className={s.itemPreview}>{preview.slice(0, 120)}</div>
-              </Link>
+              <div key={msg.id} className={s.itemWrap}>
+                <Link
+                  href={`/admin/inbox/${msg.id}`}
+                  className={`${s.item}${isNew ? ` ${s.itemUnread}` : ""}`}
+                >
+                  <div className={s.itemTop}>
+                    <span className={`${s.itemName}${isNew ? ` ${s.itemNameUnread}` : ""}`}>
+                      {msg.name}
+                    </span>
+                    <span className={typeBadgeClass(msg.type)}>{TYPE_LABEL[msg.type]}</span>
+                    <span className={statusBadgeClass(msg.status)}>{STATUS_LABEL[msg.status]}</span>
+                    <span className={s.itemDate}>{formatDate(msg.created_at)}</span>
+                  </div>
+                  <div className={s.itemEmail}>{msg.email}</div>
+                  <div className={s.itemPreview}>{preview.slice(0, 120)}</div>
+                </Link>
+                <button
+                  type="button"
+                  className={s.deleteBtn}
+                  onClick={(e) => void handleDelete(e, msg.id)}
+                  disabled={deleting === msg.id}
+                  title="Șterge mesaj"
+                  aria-label="Șterge mesaj"
+                >
+                  🗑
+                </button>
+              </div>
             );
           })}
         </div>
@@ -190,6 +222,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => 
   const { data } = (await supabaseAdmin
     .from("messages")
     .select("*")
+    .is("deleted_at", null)
     .order("created_at", { ascending: false })) as {
     data: MessageRow[] | null;
     error: unknown;
