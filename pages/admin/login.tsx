@@ -1,9 +1,10 @@
 // pages/admin/login.tsx
 // Pagina de autentificare admin — fără Layout public (Header/Footer).
 
+import Head from "next/head";
 import { useRouter } from "next/router";
 import type { ReactElement } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import * as s from "../../styles/admin/login.css";
 
@@ -16,6 +17,14 @@ function AdminLoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/admin-sw.js", { scope: "/admin/" })
+        .catch(() => {/* SW registration failure is non-fatal */});
+    }
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -43,7 +52,12 @@ function AdminLoginPage() {
   }
 
   return (
-    <div className={s.wrapper}>
+    <>
+      <Head>
+        <link rel="manifest" href="/admin-manifest.json" />
+        <meta name="theme-color" content="#12122a" />
+      </Head>
+      <div className={s.wrapper}>
       <div className={s.card}>
         <h1 className={s.logo}>ZephiraEvents</h1>
         <p className={s.subtitle}>Dashboard admin</p>
@@ -92,7 +106,8 @@ function AdminLoginPage() {
           </button>
         </form>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
 

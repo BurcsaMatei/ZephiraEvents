@@ -2,6 +2,7 @@
 // Layout comun pentru toate paginile admin — sidebar + main content.
 // Fără Header/Footer public.
 
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import type { ReactNode } from "react";
@@ -21,6 +22,7 @@ type Props = {
 // ──────────────────────────────────────────────────────────
 const NAV = [
   { href: "/admin/inbox", label: "Inbox" },
+  { href: "/admin/sent", label: "Trimise" },
   { href: "/admin/reviews", label: "Recenzii" },
   { href: "/admin/compose", label: "Compune email" },
   { href: "/admin/analytics", label: "Analytics" },
@@ -44,7 +46,12 @@ export default function AdminLayout({ children, unreadCount = 0 }: Props) {
   }
 
   return (
-    <div className={s.wrapper}>
+    <>
+      <Head>
+        <link rel="manifest" href="/admin-manifest.json" />
+        <meta name="theme-color" content="#12122a" />
+      </Head>
+      <div className={s.wrapper}>
       <aside className={s.sidebar}>
         <div className={s.brand}>
           <span className={s.brandName}>ZephiraEvents</span>
@@ -74,6 +81,7 @@ export default function AdminLayout({ children, unreadCount = 0 }: Props) {
       </aside>
 
       <main className={s.main}>{children}</main>
-    </div>
+      </div>
+    </>
   );
 }

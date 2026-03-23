@@ -144,7 +144,7 @@ export async function syncInboxMessages(): Promise<ImapSyncResult> {
     auth: { user, pass },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     logger: false as any,
-    tls: { rejectUnauthorized: true },
+    tls: { rejectUnauthorized: false },
   });
 
   await client.connect();

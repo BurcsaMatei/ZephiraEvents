@@ -30,6 +30,7 @@ export interface MessageRow {
   nights: number | null;
   extras: string[] | null;
   metadata: Record<string, unknown> | null;
+  deleted_at: string | null;
 }
 
 export interface MessageInsert {
@@ -49,6 +50,7 @@ export interface MessageInsert {
   nights?: number | null;
   extras?: string[] | null;
   metadata?: Record<string, unknown> | null;
+  deleted_at?: string | null;
 }
 
 export type MessageUpdate = Partial<MessageInsert>;
@@ -88,6 +90,7 @@ export interface ComposedEmailRow {
   body: string;
   status: EmailStatus;
   sent_at: string | null;
+  deleted_at: string | null;
 }
 
 export interface ComposedEmailInsert {
@@ -99,6 +102,7 @@ export interface ComposedEmailInsert {
   body: string;
   status?: EmailStatus;
   sent_at?: string | null;
+  deleted_at?: string | null;
 }
 
 export type ComposedEmailUpdate = Partial<ComposedEmailInsert>;
