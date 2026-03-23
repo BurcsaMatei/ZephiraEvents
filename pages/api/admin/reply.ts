@@ -7,7 +7,7 @@ import { verifyAdminSession } from "../../../lib/admin/auth";
 import { escapeHtml, sendAdminMail } from "../../../lib/admin/smtp";
 import { supabaseAdmin } from "../../../lib/admin/supabase";
 
-type Ok = { ok: true };
+type Ok = { ok: true; dbWarning?: boolean };
 type Fail = { ok: false; message: string };
 type Resp = Ok | Fail;
 
@@ -61,16 +61,37 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   }
 
   const now = new Date().toISOString();
+  let dbWarning = false;
 
-  await Promise.all([
-    supabaseAdmin.from("admin_replies").insert({
+  try {
+    const { error: insertErr } = await supabaseAdmin.from("admin_replies").insert({
       message_id: messageId,
       body: replyBody,
       sent_at: now,
       sent_by: process.env.ADMIN_EMAIL ?? "admin",
-    }),
-    supabaseAdmin.from("messages").update({ status: "replied" }).eq("id", messageId),
-  ]);
+    });
+    if (insertErr) {
+      console.error("[reply] DB insert admin_replies:", insertErr.message);
+      dbWarning = true;
+    }
+  } catch (err) {
+    console.error("[reply] DB insert admin_replies exception:", err);
+    dbWarning = true;
+  }
 
-  return res.status(200).json({ ok: true });
+  try {
+    const { error: updateErr } = await supabaseAdmin
+      .from("messages")
+      .update({ status: "replied" })
+      .eq("id", messageId);
+    if (updateErr) {
+      console.error("[reply] DB update messages status:", updateErr.message);
+      dbWarning = true;
+    }
+  } catch (err) {
+    console.error("[reply] DB update messages exception:", err);
+    dbWarning = true;
+  }
+
+  return res.status(200).json(dbWarning ? { ok: true, dbWarning: true } : { ok: true });
 }

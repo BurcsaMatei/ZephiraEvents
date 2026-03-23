@@ -8,6 +8,7 @@ import { useState } from "react";
 
 import AdminLayout from "../../components/admin/AdminLayout";
 import { verifyAdminSession } from "../../lib/admin/auth";
+import { sanitizeHtml } from "../../lib/admin/sanitize";
 import { supabaseAdmin } from "../../lib/admin/supabase";
 import type { ReviewRow, ReviewStatus } from "../../lib/admin/supabase.types";
 import * as s from "../../styles/admin/reviews.css";
@@ -120,7 +121,10 @@ function AdminReviewsPage({
                   <span className={s.reviewDate}>{formatDate(review.created_at)}</span>
                 </div>
 
-                <p className={s.reviewText}>{review.text}</p>
+                <p
+                  className={s.reviewText}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(review.text) }}
+                />
 
                 <div className={s.actions}>
                   {isPending ? (

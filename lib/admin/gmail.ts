@@ -23,8 +23,12 @@ export interface GmailSyncResult {
 
 function decodeBase64Url(data: string): string {
   // Gmail folosește base64url (- → +, _ → /)
-  const b64 = data.replace(/-/g, "+").replace(/_/g, "/");
-  return Buffer.from(b64, "base64").toString("utf8");
+  try {
+    const b64 = data.replace(/-/g, "+").replace(/_/g, "/");
+    return Buffer.from(b64, "base64").toString("utf8");
+  } catch {
+    return "";
+  }
 }
 
 function stripHtml(html: string): string {
