@@ -5,6 +5,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import nodemailer from "nodemailer";
 
+import { supabaseAdmin } from "../../lib/admin/supabase";
 import { buildOfferEmail, type EmailData } from "../../lib/mail/offerRequestEmail";
 import { offerRequestSchema } from "../../lib/validation/offerRequest";
 
@@ -237,8 +238,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       }
     }
 
-    return res.status(200).json({ ok: true });
   } catch {
     return res.status(500).json({ ok: false, message: "Eroare la trimiterea emailului." });
   }
+
+  // Salvează în Supabase — independent de email (non-critic)
+  try {
+    await supabaseAdmin.from("messages").insert({
+      type: "offer",
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      event_type: data.eventType,
+      event_date: data.eventDate,
+      guests: data.participants,
+      lodging: data.lodging.kind,
+      rooms: data.lodging.rooms ? Number(data.lodging.rooms) : null,
+      nights: data.lodging.nights ? Number(data.lodging.nights) : null,
+    });
+  } catch {
+    // silențios
+  }
+
+  return res.status(200).json({ ok: true });
 }

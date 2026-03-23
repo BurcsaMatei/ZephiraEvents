@@ -8,6 +8,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import nodemailer from "nodemailer";
 import { z } from "zod";
 
+import { supabaseAdmin } from "../../lib/admin/supabase";
+
 // Permitem payload mai mare pentru foto base64 (max ~7MB cu header JSON)
 export const config = {
   api: {
@@ -144,8 +146,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       html,
       attachments,
     });
-    return res.status(200).json({ ok: true });
   } catch {
     return res.status(500).json({ ok: false, message: "Eroare la trimiterea emailului." });
   }
+
+  // Salvează recenzia în Supabase cu status 'pending' — moderare din dashboard
+  try {
+    await supabaseAdmin.from("reviews").insert({
+      name,
+      rating,
+      text,
+      photo_base64: photoBase64 ?? null,
+      status: "pending",
+    });
+  } catch {
+    // silențios — emailul de notificare a ajuns deja
+  }
+
+  return res.status(200).json({ ok: true });
 }

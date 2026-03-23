@@ -52,6 +52,12 @@ yarn-error.log*
 .env*.local
 
 # ==============================
+# Google Service Account keys
+# ==============================
+*-[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]*.json
+zephiraevents-*.json
+
+# ==============================
 # vercel
 # ==============================
 .vercel

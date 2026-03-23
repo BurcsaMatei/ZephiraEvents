@@ -20,17 +20,22 @@
     "check:all": "npm run typecheck && npm run lint",
     "generate:og": "node scripts/generate-og.mjs",
     "optimise:images": "node scripts/optimise-images.mjs",
-    "optimise:videos": "node scripts/optimise-videos.mjs"
+    "optimise:videos": "node scripts/optimise-videos.mjs",
+    "migrate:reviews": "tsx scripts/migrate-reviews.ts"
   },
   "dependencies": {
+    "@google-analytics/data": "^5.2.1",
+    "@supabase/supabase-js": "^2.99.3",
     "@vanilla-extract/css": "^1.17.4",
     "@vanilla-extract/next-plugin": "^2.4.14",
     "framer-motion": "^12.23.12",
+    "imapflow": "^1.2.16",
     "next": "^15.5.7",
     "next-pwa": "^5.6.0",
     "nodemailer": "^7.0.10",
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
+    "recharts": "^3.8.0",
     "yet-another-react-lightbox": "^3.25.0",
     "zod": "^4.0.17"
   },
