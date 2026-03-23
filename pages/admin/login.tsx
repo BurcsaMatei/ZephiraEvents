@@ -15,6 +15,7 @@ function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(true);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -35,7 +36,7 @@ function AdminLoginPage() {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, rememberMe }),
       });
 
       if (res.ok) {
@@ -99,6 +100,20 @@ function AdminLoginPage() {
               required
               disabled={loading}
             />
+          </div>
+
+          <div className={s.rememberRow}>
+            <input
+              id="adm-remember"
+              type="checkbox"
+              checked={rememberMe}
+              onChange={(e) => setRememberMe(e.target.checked)}
+              disabled={loading}
+              className={s.checkbox}
+            />
+            <label htmlFor="adm-remember" className={s.rememberLabel}>
+              Ține-mă minte 30 de zile
+            </label>
           </div>
 
           <button type="submit" disabled={loading} className={s.button}>
