@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v9
+**Versiune:** v10
 **Data:** 2026-03-23
 **Status:** activ
 
@@ -23,7 +23,7 @@ ZephiraEvents este un website premium de prezentare și conversie pentru o sală
 - **Grafice:** Recharts (`AreaChart` în dashboard admin)
 - **Database:** Supabase (PostgreSQL) — `@supabase/supabase-js` service role key, server-side only
 - **Analytics:** GA4 Data API — `@google-analytics/data` + service account JSON
-- **IMAP:** imapflow — sync email inbound → Supabase
+- **Email sync:** Gmail API (`googleapis`) — OAuth2 refresh token, sync UNREAD inbox → Supabase (`email_inbound`)
 - **Deployment:** Vercel
 - **PWA:** next-pwa (activ doar în producție cu `NEXT_PUBLIC_ENABLE_PWA=1`)
 - **SEO:** metadata centralizată, JSON-LD, OG static pre-generat, sitemap/robots server-side
@@ -64,7 +64,9 @@ data/
   reviews.json         12 recenzii statice (fallback dacă Supabase nu e disponibil)
 
 lib/
-  admin/               auth.ts, supabase.ts, supabase.types.ts, smtp.ts, imap.ts, analytics.ts
+  admin/               auth.ts, supabase.ts, supabase.types.ts, smtp.ts, gmail.ts,
+                       analytics.ts, response.ts, sanitize.ts
+                       ~~imap.ts~~ — șters (2026-03-23): înlocuit cu gmail.ts
   gallery/             schema.ts — validare și tipuri galerie
   mail/                offerRequestEmail.ts — template email ofertă
   seo/                 menuJsonLd.ts — structured data meniuri
@@ -92,7 +94,7 @@ pages/
   robots.txt.ts, site.webmanifest.ts, sitemap*.ts
   admin/
     login.tsx          Login admin (cookie httpOnly, bypass Layout public, înregistrare admin-sw.js)
-    inbox/index.tsx    Lista mesaje (contact + ofertă + email_inbound) + buton IMAP sync + soft delete
+    inbox/index.tsx    Lista mesaje (contact + ofertă + email_inbound) + buton Gmail sync + soft delete + paginare
     inbox/[id].tsx     Detaliu mesaj + reply form
     sent.tsx           Mesaje trimise — union composed_emails + admin_replies, badge Reply/Nou, soft delete
     compose.tsx        Compune email standalone
@@ -111,6 +113,7 @@ scripts/
   build-gallery.mjs    generează lib/gallery.data.ts + data/gallery.json (rulat la prebuild)
   build-rss.ts         generează public/rss.xml + public/feed.xml (rulat la postbuild)
   generate-og.mjs      generează OG images statice pentru cele 6 pagini fixe (Puppeteer)
+  gmail-auth.mjs       one-time: OAuth2 flow → obține GMAIL_REFRESH_TOKEN (citește client_secret_*.json)
   migrate-reviews.ts   one-time: migrează data/reviews.json → Supabase reviews table
   optimise-images.mjs  comprimă JPEG-uri din public/images/ cu sharp (MozJPEG)
   optimise-videos.mjs  recomprimă MP4-uri din public/videos/ cu ffmpeg
@@ -137,7 +140,9 @@ supabase/
     002_add_email_inbound_type.sql extinde CHECK constraint type cu 'email_inbound'
     003_soft_delete.sql           adaugă deleted_at timestamptz pe messages și composed_emails
 
-types/                 blog.ts, menu.ts, etc.
+types/
+  admin.ts             SentKind, SentItem — tipuri comune pentru API routes + pagini admin
+  blog.ts, menu.ts, etc.
 ```
 
 ---
@@ -165,7 +170,7 @@ types/                 blog.ts, menu.ts, etc.
 | Pagină                  | Fișier                           | Rol                                                            |
 | ----------------------- | -------------------------------- | -------------------------------------------------------------- |
 | `/admin/login`          | `pages/admin/login.tsx`          | Autentificare — email + parolă, setează cookie sesiune; înregistrează admin-sw.js |
-| `/admin/inbox`          | `pages/admin/inbox/index.tsx`    | Lista mesaje (contact/ofertă/email_inbound) + IMAP sync + soft delete              |
+| `/admin/inbox`          | `pages/admin/inbox/index.tsx`    | Lista mesaje (contact/ofertă/email_inbound) + Gmail sync + soft delete + paginare (50/pagină) |
 | `/admin/inbox/[id]`     | `pages/admin/inbox/[id].tsx`     | Detaliu mesaj + istoricul reply-urilor + formular reply                            |
 | `/admin/sent`           | `pages/admin/sent.tsx`           | Mesaje trimise — union composed_emails + admin_replies, badge Reply/Nou            |
 | `/admin/compose`        | `pages/admin/compose.tsx`        | Compune email standalone (salvat în `composed_emails`)                             |
@@ -186,18 +191,18 @@ types/                 blog.ts, menu.ts, etc.
 
 | Route                                  | Metodă | Rol                                                               |
 | -------------------------------------- | ------ | ----------------------------------------------------------------- |
-| `/api/admin/login`                     | POST   | Verifică credențiale, setează cookie sesiune                      |
+| `/api/admin/login`                     | POST   | Verifică credențiale, setează cookie sesiune; rate limit 5/IP/15min |
 | `/api/admin/logout`                    | POST   | Șterge cookie sesiune                                             |
-| `/api/admin/messages`                  | GET    | Listează toate mesajele ordonate desc                             |
+| `/api/admin/messages`                  | GET    | Listează mesaje paginate (`?page=N`, 50/pagină), `deleted_at IS NULL` |
 | `/api/admin/messages/[id]`             | GET    | Detaliu mesaj + reply-uri; auto-marchează ca `read`               |
 | `/api/admin/messages/[id]`             | PATCH  | Actualizează status sau `{ action: "delete" }` (soft delete)      |
-| `/api/admin/reply`                     | POST   | Trimite email reply + salvează în `admin_replies`                 |
+| `/api/admin/reply`                     | POST   | Trimite email reply + salvează în `admin_replies`; `dbWarning` dacă DB fail |
 | `/api/admin/compose`                   | POST   | Trimite email standalone + salvează în `composed_emails`          |
 | `/api/admin/sent`                      | GET    | Union composed_emails + admin_replies ordonate sent_at DESC       |
 | `/api/admin/sent/[id]`                 | PATCH  | `{ action: "delete" }` soft delete pe composed_emails             |
 | `/api/admin/reviews`                   | GET    | Listează recenzii cu filtru opțional `?status=pending/...`        |
-| `/api/admin/reviews/[id]`              | PATCH  | Moderare: `{ action: "approve" | "reject" }`                      |
-| `/api/admin/imap-sync`                 | POST   | Declanșează sync IMAP → Supabase; returnează `{synced, skipped}`  |
+| `/api/admin/reviews/[id]`              | PATCH  | Moderare: `{ action: "approve" \| "reject" }`                     |
+| `/api/admin/imap-sync`                 | POST   | Declanșează sync Gmail → Supabase; returnează `{synced, skipped}` |
 | `/api/admin/analytics/realtime`        | GET    | Date GA4 Realtime — vizitatori activi + pagini; cache 15s         |
 | `/api/admin/analytics/report`          | GET    | Date GA4 Report 30 zile — daily/surse/device/țări; cache 10min   |
 
@@ -227,7 +232,9 @@ types/                 blog.ts, menu.ts, etc.
 - `verifyAdminSession(req)` se apelează la **fiecare** API route și `getServerSideProps` admin
 - `supabaseAdmin` (service role key) — bypass RLS — folosit exclusiv server-side
 - Sesiunile admin sunt HMAC-SHA256 derivate din `ADMIN_EMAIL + ADMIN_PASSWORD + ADMIN_SESSION_SECRET`; schimbarea oricăreia invalidează toate sesiunile active
-- `MessageType` în `supabase.types.ts` include `"email_inbound"` pentru mesajele sincronizate IMAP
+- `MessageType` în `supabase.types.ts` include `"email_inbound"` pentru mesajele sincronizate Gmail
+- **Format răspuns API:** toate API routes admin returnează `{ ok: false, error: string }` via `errorResponse()` — **nu** `{ ok: false, message: string }`; importă din `lib/admin/response.ts`
+- **XSS în admin:** orice conținut dinamic din DB randat în admin via `dangerouslySetInnerHTML` **trebuie** trecut prin `sanitizeHtml()` din `lib/admin/sanitize.ts`
 
 ### Reguli speciale descoperite în lucru
 
@@ -275,18 +282,35 @@ types/                 blog.ts, menu.ts, etc.
 - `lib/admin/auth.ts` — `verifyAdminSession()`, `verifyCredentials()`, `generateSessionToken()`
 - `lib/admin/supabase.ts` — `supabaseAdmin` (service role, bypass RLS) — server-side only
 - `lib/admin/supabase.types.ts` — tipuri pentru toate tabelele Supabase
-- `lib/admin/smtp.ts` — `sendAdminMail()` helper pentru reply/compose
-- `lib/admin/imap.ts` — `syncInboxMessages()` — IMAP UNSEEN → Supabase (imapflow, MIME parser)
-- `lib/admin/analytics.ts` — `getRealtimeData()` + `getReportData()` — GA4 Data API
+- `lib/admin/smtp.ts` — `sendAdminMail()` helper pentru reply/compose; TLS `rejectUnauthorized: false` (hostico.ro)
+- `lib/admin/gmail.ts` — `syncGmailMessages()` — Gmail API OAuth2, listează UNREAD in:inbox (max 50), deduplicare după `metadata.gmail_id`, inserare `email_inbound` în Supabase, marchează ca citit
+- `lib/admin/analytics.ts` — `getRealtimeData()` + `getReportData()` — GA4 Data API; singleton client; `withTimeout(8000ms)` pe toate apelurile API
+- `lib/admin/response.ts` — `okResponse()` / `errorResponse()` — format uniform `{ ok: true [, data] }` / `{ ok: false, error }`
+- `lib/admin/sanitize.ts` — `sanitizeHtml()` — strip tags + escape entities; folosit cu `dangerouslySetInnerHTML` în toate paginile admin
 - `components/admin/AdminLayout.tsx` — sidebar: Inbox/Trimise/Recenzii/Compune/Analytics + manifest PWA admin
 - `components/admin/AnalyticsChart.tsx` — Recharts AreaChart (dynamic import, ssr:false)
 - `public/admin-manifest.json` — PWA manifest dedicat, scope /admin/, start_url /admin/inbox
 - `public/admin-sw.js` — service worker izolat scope /admin/, network-first, cache minimal
+- `types/admin.ts` — `SentKind`, `SentItem` — tipuri comune importate în `pages/api/admin/sent.ts` și `pages/admin/sent.tsx`
 - `supabase/migrations/001_initial_schema.sql` — schema completă (4 tabele)
 - `supabase/migrations/002_add_email_inbound_type.sql` — extinde CHECK tip mesaj
 - `supabase/migrations/003_soft_delete.sql` — adaugă deleted_at pe messages și composed_emails
 - **Soft delete:** inbox filtrează `deleted_at IS NULL`; PATCH `{ action: "delete" }` setează timestamp
-- **TLS fix:** toate transporturile SMTP + clientul IMAP au `rejectUnauthorized: false` (hostico.ro)
+- **SMTP TLS:** `rejectUnauthorized: false` pe toate cele 4 transporturi (smtp.ts, contact, offer-request, review-submit) — hostico.ro nu are cert valid pe hostname
+- **Rate limiting login:** in-memory Map per IP, 5 încercări eșuate / 15 minute → 429; reset la autentificare reușită
+
+### Gmail sync — variabile de mediu necesare
+
+```
+GMAIL_CLIENT_ID=...          # din Google Cloud Console, OAuth2 "installed app"
+GMAIL_CLIENT_SECRET=...      # din Google Cloud Console
+GMAIL_REFRESH_TOKEN=...      # generat cu scripts/gmail-auth.mjs (one-time)
+GMAIL_USER=...@gmail.com     # adresa Gmail asociată (ex: zephiraevents.ro@gmail.com)
+```
+
+**Flux email inbound:** emailurile trimise la adresa de business (hostico.ro) sunt redirecționate via forwarder cPanel → `GMAIL_USER` → sincronizate în Supabase prin butonul „Sincronizează email" din `/admin/inbox` (apelează `POST /api/admin/imap-sync` → `syncGmailMessages()`).
+
+**Reînnoire refresh token:** dacă token-ul expiră sau e revocat, rulează din nou `node scripts/gmail-auth.mjs` și actualizează `GMAIL_REFRESH_TOKEN` în `.env.local` și în Vercel env vars.
 
 ### Navigație / Header
 
@@ -357,12 +381,35 @@ types/                 blog.ts, menu.ts, etc.
 
 ## 8. Ce este deschis / în lucru
 
+**~~Gmail sync (înlocuire IMAP)~~ ✓ ÎNCHIS 2026-03-23** (PR #116)
+`lib/admin/imap.ts` șters; `lib/admin/gmail.ts` creat — Gmail API OAuth2 (`googleapis`), listează UNREAD in:inbox max 50, deduplicare după `metadata.gmail_id`, insert `email_inbound` în Supabase, marchează ca citit. Script one-time `scripts/gmail-auth.mjs` pentru obținerea refresh token-ului. Flux: forwarder cPanel hostico.ro → Gmail → sync manual din `/admin/inbox`.
+
+**~~Admin hardening-1~~ ✓ ÎNCHIS 2026-03-23** (PR #117)
+- XSS: `lib/admin/sanitize.ts` creat; `sanitizeHtml()` aplicat în toate paginile admin via `dangerouslySetInnerHTML`
+- `Promise.all` în `reply.ts` → două try/catch independente; returnează `{ ok: true, dbWarning: true }` dacă DB fail după email trimis
+- `saveToDb()` în `compose.ts` aruncă la eroare Supabase; gestionat cu try/catch
+- `decodeBase64Url()` în `gmail.ts` învelit în try/catch — returnează `""` la payload malformat
+- Soft delete în inbox: verifică `res.ok` după PATCH; afișează `deleteError` în UI
+
+**~~Admin hardening-2~~ ✓ ÎNCHIS 2026-03-23** (PR #118)
+- Paginare inbox: SSR, 50/pagină, buton Anterior/Următor; SELECT coloane specifice (fără `*`)
+- GA4 client singleton: `_ga4Client` module-level, creat o singură dată per proces
+- Gmail `messages.modify()` învelit în try/catch cu `console.warn` — eșec la marcare citit nu blochează sync
+- `sent.tsx` SSR: 3 query-uri → `Promise.all([emailResult, replyResult, unreadResult])` paralel
+
+**~~Admin hardening-3~~ ✓ ÎNCHIS 2026-03-23** (PR #119)
+- Rate limiting `/api/admin/login`: in-memory Map per IP, 5 fail/15min → 429; reset la succes
+- `rememberMe`: `Boolean(body.rememberMe) === true` (cast explicit, elimină edge case truthy)
+- GA4 timeout: `withTimeout(8000ms)` pe `runRealtimeReport()` și `Promise.all([...runReport])`
+- `types/admin.ts`: `SentKind` + `SentItem` centralizate — importate în API route + pagini
+- `lib/admin/response.ts`: `okResponse()` / `errorResponse()` uniform în toate API routes admin
+- Client pages `inbox/[id]` + `compose`: `data.message` → `data.error`
+
 **~~Dashboard admin /admin cu Supabase~~ ✓ ÎNCHIS 2026-03-23**
-Complet: autentificare HMAC cookie-based, inbox cu IMAP sync (imapflow), reply/compose email, moderare recenzii, analytics GA4 (realtime + raport 30 zile cu Recharts). PR #admin-dashboard.
+Complet: autentificare HMAC cookie-based, inbox cu Gmail sync, reply/compose email, moderare recenzii, analytics GA4 (realtime + raport 30 zile cu Recharts). PR #admin-dashboard.
 
 **~~Admin improvements~~ ✓ ÎNCHIS 2026-03-23** (branch feature/admin-improvements)
-- IMAP TLS: `rejectUnauthorized: false` (hostico.ro nu are cert valid pe hostname)
-- SMTP TLS: idem `rejectUnauthorized: false` pe toate cele 4 transporturi (smtp.ts, contact, offer-request, review-submit)
+- SMTP TLS: `rejectUnauthorized: false` pe toate cele 4 transporturi (smtp.ts, contact, offer-request, review-submit)
 - Pagina Trimise `/admin/sent`: union `composed_emails` + `admin_replies` cu badge Reply/Nou, SSR, session check
 - Soft delete: migrație 003, buton coș pe inbox + sent, filtru `deleted_at IS NULL`, PATCH `{ action: "delete" }`
 - PWA admin: `public/admin-manifest.json` (scope /admin/), `public/admin-sw.js` (network-first), manifest link în login + AdminLayout
@@ -394,6 +441,15 @@ Complet: `sitemap-menus.xml` creat (17 pagini `/meniuri/[slug]`, priority 0.8, c
 ## 8a. Scripturi
 
 ```
+scripts/gmail-auth.mjs
+  One-time: obține GMAIL_REFRESH_TOKEN via OAuth2 "installed app" flow.
+  Citește client_secret_*.json din rădăcina proiectului.
+  Construiește URL autorizare, așteaptă codul de la utilizator, face exchange → token.
+  Printează GMAIL_REFRESH_TOKEN=... în terminal (copiezi manual în .env.local + Vercel).
+  Rulare: node scripts/gmail-auth.mjs
+  Necesită: client_secret_*.json în rădăcina proiectului (din Google Cloud Console)
+  Notă: client_secret_*.json e în .gitignore — nu se commitează niciodată
+
 scripts/migrate-reviews.ts
   One-time migration: data/reviews.json → Supabase reviews table.
   Idempotent — skip dacă recenzia există (name + rating + text[:50]).
@@ -448,10 +504,20 @@ scripts/optimise-videos.mjs
 
 - Supabase: 4 tabele (messages, admin_replies, composed_emails, reviews), RLS activat
 - Auth: HMAC-SHA256 cookie httpOnly, 8h TTL, timing-safe compare
-- IMAP sync: imapflow, TLS port 993, MIME parser intern (plain/html/multipart, base64/QP)
-- GA4: BetaAnalyticsDataClient cu service account JSON, realtime + report 30 zile
+- Gmail sync: `googleapis` OAuth2 refresh token, UNREAD inbox max 50, deduplicare gmail_id
+- GA4: BetaAnalyticsDataClient singleton per proces, realtime + report 30 zile, timeout 8s
 - Recharts: AreaChart cu gradient fill, dynamic import (ssr:false)
 - `pages/reviews.tsx`: SSG → SSR, citește din Supabase approved, fallback JSON
+
+### Admin hardening 2026-03-23 (PR #117–119)
+
+- XSS defense-in-depth: `sanitizeHtml()` pe toate datele din DB randate în admin
+- Error handling: reply/compose separă email send de DB write; `dbWarning` flag la eșec DB
+- Rate limiting login: 5 fail/IP/15min → 429 (in-memory Map, reset la succes)
+- GA4 timeout: `withTimeout(8000ms)` — previne blocare infinită la API call
+- Paginare inbox: SSR 50/pagină, SELECT coloane specifice (nu `SELECT *`)
+- Format erori uniform: `errorResponse()` → `{ ok: false, error }` în toate API routes admin
+- Tipuri centralizate: `types/admin.ts` — sursă unică pentru `SentKind`, `SentItem`
 
 ### SEO audit 2026-03-21 (PR #107)
 
@@ -500,5 +566,9 @@ scripts/optimise-videos.mjs
 - Nu folosi `JsonLd.tsx` — a fost șters; JSON-LD se adaugă exclusiv via prop `structuredData` pe `<Seo>`
 - Nu injecta `buildMenuJsonLd` (sau orice JSON-LD) din componente client-side — doar din `getStaticProps` / `getServerSideProps` în pagini
 - Nu importa `lib/admin/supabase.ts` la nivel de modul din pagini publice — aruncă dacă env vars lipsesc; folosește `createClient` direct în `getServerSideProps`
-- Nu apela `syncInboxMessages()` sau funcțiile GA4 din client-side — sunt exclusiv server-side
+- Nu apela `syncGmailMessages()` sau funcțiile GA4 din client-side — sunt exclusiv server-side
+- Nu re-adăuga IMAP (`imapflow`) — înlocuit definitiv cu Gmail API (PR #116); `lib/admin/imap.ts` a fost șters
+- Nu returna erori cu `{ ok: false, message }` în API routes admin — folosește `errorResponse()` din `lib/admin/response.ts` care produce `{ ok: false, error }`
+- Nu randa conținut din DB în admin fără `sanitizeHtml()` — chiar dacă React JSX auto-escapes, orice `dangerouslySetInnerHTML` trebuie trecut prin `sanitizeHtml()`
 - Nu rula `npm run migrate:reviews` de mai multe ori fără să verifici că tabela e goală — scriptul e idempotent dar verifică înainte
+- Nu commita `client_secret_*.json` — e în `.gitignore`; conține credențiale OAuth2 Google
