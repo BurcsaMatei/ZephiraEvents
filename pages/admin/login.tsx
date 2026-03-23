@@ -56,7 +56,11 @@ function AdminLoginPage() {
     <>
       <Head>
         <link rel="manifest" href="/admin-manifest.json" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />
         <meta name="theme-color" content="#12122a" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="ZE Admin" />
       </Head>
       <div className={s.wrapper}>
       <div className={s.card}>
