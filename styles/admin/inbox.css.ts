@@ -2,6 +2,8 @@
 
 import { style } from "@vanilla-extract/css";
 
+import { themeClassDark, vars } from "../theme.css";
+
 // ── Header row (title + sync button) ─────────────────────
 export const pageHeader = style({
   display: "flex",
@@ -14,8 +16,8 @@ export const pageHeader = style({
 export const pageTitle = style({
   margin: 0,
   fontSize: "22px",
-  fontWeight: 700,
-  color: "#1a1a2e",
+  fontWeight: vars.typography.weight.bold,
+  color: vars.color.text,
   letterSpacing: "-0.02em",
 });
 
@@ -29,16 +31,16 @@ export const syncArea = style({
 
 export const syncBtn = style({
   padding: "7px 16px",
-  backgroundColor: "#5561F2",
-  color: "#fff",
+  backgroundColor: vars.color.primary,
+  color: vars.color.primaryContrast,
   border: "none",
-  borderRadius: "8px",
+  borderRadius: vars.radius.sm,
   fontSize: "13px",
-  fontWeight: 600,
+  fontWeight: vars.typography.weight.semibold,
   cursor: "pointer",
-  transition: "background-color 0.15s, opacity 0.15s",
+  transition: `background-color ${vars.motion.normal}, opacity ${vars.motion.normal}`,
   selectors: {
-    "&:hover:not(:disabled)": { backgroundColor: "#4350e0" },
+    "&:hover:not(:disabled)": { backgroundColor: vars.color.primaryHover },
     "&:disabled": { opacity: 0.6, cursor: "not-allowed" },
   },
 });
@@ -50,18 +52,18 @@ export const syncBtnLoading = style({
 export const syncStatus = style({
   fontSize: "12.5px",
   color: "#16a34a",
-  fontWeight: 500,
+  fontWeight: vars.typography.weight.medium,
 });
 
 export const syncStatusError = style({
   fontSize: "12.5px",
   color: "#dc2626",
-  fontWeight: 500,
+  fontWeight: vars.typography.weight.medium,
 });
 
 // ── Empty state ───────────────────────────────────────────
 export const empty = style({
-  color: "#888",
+  color: vars.color.muted,
   fontSize: "15px",
   padding: "24px 0",
 });
@@ -76,10 +78,10 @@ export const list = style({
 export const itemWrap = style({
   display: "flex",
   alignItems: "stretch",
-  borderRadius: "10px",
+  borderRadius: vars.radius.md,
   overflow: "hidden",
-  border: "1.5px solid #e8e8f0",
-  transition: "border-color 0.15s, box-shadow 0.15s",
+  border: `1.5px solid ${vars.color.border}`,
+  transition: `border-color ${vars.motion.normal}, box-shadow ${vars.motion.normal}`,
   selectors: {
     "&:hover": {
       borderColor: "#b0b4f0",
@@ -93,14 +95,17 @@ export const item = style({
   flex: 1,
   minWidth: 0,
   padding: "14px 16px",
-  backgroundColor: "#ffffff",
+  backgroundColor: vars.color.surface,
   textDecoration: "none",
   color: "inherit",
 });
 
 export const itemUnread = style({
-  borderLeft: "3px solid #5561F2",
+  borderLeft: `3px solid ${vars.color.primary}`,
   backgroundColor: "#fafafe",
+  selectors: {
+    [`.${themeClassDark} &`]: { backgroundColor: vars.color.surfaceActive },
+  },
 });
 
 export const deleteBtn = style({
@@ -108,14 +113,14 @@ export const deleteBtn = style({
   alignItems: "center",
   justifyContent: "center",
   padding: "0 14px",
-  backgroundColor: "#ffffff",
+  backgroundColor: vars.color.surface,
   border: "none",
-  borderLeft: "1.5px solid #e8e8f0",
-  color: "#ccc",
+  borderLeft: `1.5px solid ${vars.color.border}`,
+  color: vars.color.muted,
   cursor: "pointer",
   fontSize: "15px",
   flexShrink: 0,
-  transition: "color 0.15s, background-color 0.15s",
+  transition: `color ${vars.motion.normal}, background-color ${vars.motion.normal}`,
   selectors: {
     "&:hover:not(:disabled)": {
       color: "#dc2626",
@@ -135,31 +140,31 @@ export const itemTop = style({
 });
 
 export const itemName = style({
-  fontWeight: 600,
-  fontSize: "14px",
-  color: "#1a1a2e",
+  fontWeight: vars.typography.weight.semibold,
+  fontSize: vars.typography.size.sm,
+  color: vars.color.text,
   marginRight: "auto",
 });
 
 export const itemNameUnread = style({
-  fontWeight: 700,
+  fontWeight: vars.typography.weight.bold,
 });
 
 export const itemDate = style({
-  fontSize: "12px",
-  color: "#aaa",
+  fontSize: vars.typography.size.xs,
+  color: vars.color.muted,
   flexShrink: 0,
 });
 
 export const itemEmail = style({
   fontSize: "12.5px",
-  color: "#888",
+  color: vars.color.muted,
   marginBottom: "6px",
 });
 
 export const itemPreview = style({
   fontSize: "13px",
-  color: "#666",
+  color: vars.color.muted,
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
@@ -172,7 +177,7 @@ const badgeBase = style({
   padding: "2px 8px",
   borderRadius: "20px",
   fontSize: "11px",
-  fontWeight: 600,
+  fontWeight: vars.typography.weight.semibold,
   textTransform: "uppercase",
   letterSpacing: "0.04em",
   flexShrink: 0,
@@ -225,16 +230,16 @@ export const pagination = style({
 export const paginationBtn = style({
   padding: "7px 16px",
   backgroundColor: "#f1f3f5",
-  color: "#1a1a2e",
-  border: "1.5px solid #e8e8f0",
-  borderRadius: "8px",
+  color: vars.color.text,
+  border: `1.5px solid ${vars.color.border}`,
+  borderRadius: vars.radius.sm,
   fontSize: "13px",
-  fontWeight: 600,
+  fontWeight: vars.typography.weight.semibold,
   cursor: "pointer",
   textDecoration: "none",
   display: "inline-flex",
   alignItems: "center",
-  transition: "background-color 0.15s, border-color 0.15s",
+  transition: `background-color ${vars.motion.normal}, border-color ${vars.motion.normal}`,
   selectors: {
     "&:hover": { backgroundColor: "#e8e8f0", borderColor: "#b0b4f0" },
   },
@@ -242,5 +247,5 @@ export const paginationBtn = style({
 
 export const paginationInfo = style({
   fontSize: "13px",
-  color: "#888",
+  color: vars.color.muted,
 });

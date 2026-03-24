@@ -52,5 +52,5 @@ export const bulb = style({
 export const bulbOn = style({ transform: "rotate(0deg)" });
 export const bulbOff = style({ transform: "rotate(180deg)" });
 
-export const bulbLight = style({ backgroundColor: "#FFD54A" });
-export const bulbDark = style({ backgroundColor: "#2F2F2F" });
+export const bulbLight = style({ backgroundColor: vars.color.text });
+export const bulbDark = style({ backgroundColor: vars.color.text });

@@ -2,6 +2,8 @@
 
 import { style } from "@vanilla-extract/css";
 
+import { vars } from "../theme.css";
+
 // ── Page header ───────────────────────────────────────────
 export const pageHeader = style({
   display: "flex",
@@ -13,30 +15,30 @@ export const pageHeader = style({
 export const pageTitle = style({
   margin: 0,
   fontSize: "22px",
-  fontWeight: 700,
-  color: "#1a1a2e",
+  fontWeight: vars.typography.weight.bold,
+  color: vars.color.text,
   letterSpacing: "-0.02em",
 });
 
 export const pageSub = style({
   fontSize: "13px",
-  color: "#aaa",
+  color: vars.color.muted,
   fontWeight: 400,
 });
 
 // ── Cards ─────────────────────────────────────────────────
 export const card = style({
-  backgroundColor: "#ffffff",
-  border: "1.5px solid #e8e8f0",
-  borderRadius: "12px",
+  backgroundColor: vars.color.surface,
+  border: `1.5px solid ${vars.color.border}`,
+  borderRadius: vars.radius.lg,
   padding: "20px 22px",
 });
 
 export const cardTitle = style({
   margin: "0 0 16px",
   fontSize: "13px",
-  fontWeight: 600,
-  color: "#888",
+  fontWeight: vars.typography.weight.semibold,
+  color: vars.color.muted,
   textTransform: "uppercase",
   letterSpacing: "0.06em",
 });
@@ -67,7 +69,7 @@ export const liveCount = style({
   fontSize: "52px",
   fontWeight: 800,
   lineHeight: 1,
-  color: "#1a1a2e",
+  color: vars.color.text,
   letterSpacing: "-0.04em",
 });
 
@@ -84,9 +86,9 @@ export const liveDot = style({
 export const liveLabel = style({
   display: "flex",
   alignItems: "center",
-  fontSize: "12px",
-  color: "#888",
-  fontWeight: 500,
+  fontSize: vars.typography.size.xs,
+  color: vars.color.muted,
+  fontWeight: vars.typography.weight.medium,
   marginTop: "4px",
 });
 
@@ -102,11 +104,11 @@ export const refreshBtn = style({
   padding: "5px 12px",
   backgroundColor: "#f2f3f7",
   border: "none",
-  borderRadius: "6px",
-  fontSize: "12px",
-  color: "#666",
+  borderRadius: vars.radius.xs,
+  fontSize: vars.typography.size.xs,
+  color: vars.color.muted,
   cursor: "pointer",
-  fontWeight: 500,
+  fontWeight: vars.typography.weight.medium,
   transition: "background-color 0.12s",
   selectors: {
     "&:hover": { backgroundColor: "#e8e8f0" },
@@ -116,7 +118,7 @@ export const refreshBtn = style({
 
 export const refreshTs = style({
   fontSize: "11px",
-  color: "#bbb",
+  color: vars.color.muted,
 });
 
 // ── Live pages table ───────────────────────────────────────
@@ -140,7 +142,7 @@ export const liveRow = style({
 
 export const liveRowPage = style({
   flex: 1,
-  color: "#444",
+  color: vars.color.muted,
   fontFamily: "'SFMono-Regular', 'Consolas', monospace",
   overflow: "hidden",
   textOverflow: "ellipsis",
@@ -148,20 +150,20 @@ export const liveRowPage = style({
 });
 
 export const liveRowUsers = style({
-  fontWeight: 700,
-  color: "#5561F2",
+  fontWeight: vars.typography.weight.bold,
+  color: vars.color.primary,
   flexShrink: 0,
   fontSize: "13px",
 });
 
 export const liveRowCountries = style({
-  color: "#aaa",
+  color: vars.color.muted,
   flexShrink: 0,
   fontSize: "11.5px",
 });
 
 export const liveEmpty = style({
-  color: "#aaa",
+  color: vars.color.muted,
   fontSize: "13px",
   padding: "16px 0",
   textAlign: "center",
@@ -173,6 +175,15 @@ export const chartCard = style([
     marginBottom: "16px",
   },
 ]);
+
+export const emptyChart = style({
+  height: "200px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  color: vars.color.muted,
+  fontSize: vars.typography.size.sm,
+});
 
 // ── Stats grid ────────────────────────────────────────────
 export const statsGrid = style({
@@ -207,15 +218,15 @@ export const statRowTop = style({
 
 export const statLabel = style({
   fontSize: "12.5px",
-  color: "#555",
+  color: vars.color.muted,
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
 });
 
 export const statValue = style({
-  fontSize: "12px",
-  color: "#888",
+  fontSize: vars.typography.size.xs,
+  color: vars.color.muted,
   flexShrink: 0,
   fontVariantNumeric: "tabular-nums",
 });
@@ -229,7 +240,7 @@ export const statBarBg = style({
 
 export const statBarFill = style({
   height: "100%",
-  backgroundColor: "#5561F2",
+  backgroundColor: vars.color.primary,
   borderRadius: "2px",
   transition: "width 0.4s ease",
 });
@@ -239,14 +250,14 @@ export const errorBox = style({
   padding: "16px",
   backgroundColor: "#fff5f5",
   border: "1px solid #fca5a5",
-  borderRadius: "8px",
+  borderRadius: vars.radius.sm,
   fontSize: "13px",
   color: "#dc2626",
   marginBottom: "16px",
 });
 
 export const loadingText = style({
-  color: "#aaa",
+  color: vars.color.muted,
   fontSize: "13px",
   padding: "12px 0",
 });

@@ -2,6 +2,8 @@
 
 import { style } from "@vanilla-extract/css";
 
+import { themeClassDark, vars } from "../theme.css";
+
 export const wrapper = style({
   minHeight: "100vh",
   display: "flex",
@@ -11,11 +13,14 @@ export const wrapper = style({
   backgroundColor: "#f4f5f7",
   fontFamily:
     "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+  selectors: {
+    [`.${themeClassDark} &`]: { backgroundColor: vars.color.bg },
+  },
 });
 
 export const card = style({
-  backgroundColor: "#ffffff",
-  borderRadius: "12px",
+  backgroundColor: vars.color.surface,
+  borderRadius: vars.radius.lg,
   padding: "40px",
   width: "100%",
   maxWidth: "400px",
@@ -25,8 +30,8 @@ export const card = style({
 export const logo = style({
   margin: "0 0 4px",
   fontSize: "22px",
-  fontWeight: 700,
-  color: "#1a1a2e",
+  fontWeight: vars.typography.weight.bold,
+  color: vars.color.text,
   textAlign: "center",
   letterSpacing: "-0.02em",
 });
@@ -34,7 +39,7 @@ export const logo = style({
 export const subtitle = style({
   margin: "0 0 32px",
   fontSize: "13px",
-  color: "#888",
+  color: vars.color.muted,
   textAlign: "center",
   textTransform: "uppercase",
   letterSpacing: "0.08em",
@@ -49,8 +54,8 @@ export const field = style({
 
 export const label = style({
   fontSize: "13px",
-  fontWeight: 600,
-  color: "#444",
+  fontWeight: vars.typography.weight.semibold,
+  color: vars.color.muted,
   textTransform: "uppercase",
   letterSpacing: "0.04em",
 });
@@ -58,18 +63,18 @@ export const label = style({
 export const input = style({
   padding: "10px 14px",
   border: "1.5px solid #d8d8e0",
-  borderRadius: "8px",
+  borderRadius: vars.radius.sm,
   fontSize: "15px",
-  color: "#1a1a2e",
-  backgroundColor: "#ffffff",
+  color: vars.color.text,
+  backgroundColor: vars.color.surface,
   outline: "none",
-  transition: "border-color 0.15s",
+  transition: `border-color ${vars.motion.normal}`,
   // Fix autofill background/text pe Chrome/Safari mobile
-  WebkitTextFillColor: "#1a1a2e",
-  WebkitBoxShadow: "0 0 0px 1000px #ffffff inset",
+  WebkitTextFillColor: vars.color.text,
+  WebkitBoxShadow: `0 0 0px 1000px ${vars.color.surface} inset`,
   selectors: {
     "&:focus": {
-      borderColor: "#5561F2",
+      borderColor: vars.color.primary,
     },
   },
 });
@@ -85,13 +90,13 @@ export const checkbox = style({
   width: "16px",
   height: "16px",
   cursor: "pointer",
-  accentColor: "#5561F2",
+  accentColor: vars.color.primary,
   flexShrink: 0,
 });
 
 export const rememberLabel = style({
   fontSize: "13.5px",
-  color: "#555",
+  color: vars.color.muted,
   cursor: "pointer",
   userSelect: "none",
 });
@@ -100,7 +105,7 @@ export const errorBox = style({
   padding: "10px 14px",
   backgroundColor: "#fff0f0",
   border: "1px solid #f5c6c6",
-  borderRadius: "8px",
+  borderRadius: vars.radius.sm,
   fontSize: "14px",
   color: "#b00020",
   marginBottom: "16px",
@@ -109,18 +114,18 @@ export const errorBox = style({
 export const button = style({
   width: "100%",
   padding: "12px",
-  backgroundColor: "#5561F2",
-  color: "#ffffff",
+  backgroundColor: vars.color.primary,
+  color: vars.color.primaryContrast,
   border: "none",
-  borderRadius: "8px",
+  borderRadius: vars.radius.sm,
   fontSize: "15px",
-  fontWeight: 600,
+  fontWeight: vars.typography.weight.semibold,
   cursor: "pointer",
   marginTop: "8px",
-  transition: "background-color 0.15s",
+  transition: `background-color ${vars.motion.normal}`,
   selectors: {
     "&:hover:not(:disabled)": {
-      backgroundColor: "#4450d0",
+      backgroundColor: vars.color.primaryHover,
     },
     "&:disabled": {
       opacity: 0.6,

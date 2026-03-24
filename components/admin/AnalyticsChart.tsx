@@ -13,6 +13,7 @@ import {
 } from "recharts";
 
 import type { DailyVisitor } from "../../lib/admin/analytics";
+import * as s from "../../styles/admin/analytics.css";
 
 interface Props {
   data: DailyVisitor[];
@@ -21,16 +22,7 @@ interface Props {
 export default function AnalyticsChart({ data }: Props) {
   if (data.length === 0) {
     return (
-      <div
-        style={{
-          height: 200,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "#aaa",
-          fontSize: "14px",
-        }}
-      >
+      <div className={s.emptyChart}>
         Nu există date pentru această perioadă.
       </div>
     );

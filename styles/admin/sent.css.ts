@@ -2,16 +2,18 @@
 
 import { style } from "@vanilla-extract/css";
 
+import { vars } from "../theme.css";
+
 export const pageTitle = style({
   margin: "0 0 24px",
   fontSize: "22px",
-  fontWeight: 700,
-  color: "#1a1a2e",
+  fontWeight: vars.typography.weight.bold,
+  color: vars.color.text,
   letterSpacing: "-0.02em",
 });
 
 export const empty = style({
-  color: "#888",
+  color: vars.color.muted,
   fontSize: "15px",
   padding: "24px 0",
 });
@@ -26,11 +28,11 @@ export const list = style({
 export const item = style({
   display: "flex",
   alignItems: "stretch",
-  backgroundColor: "#ffffff",
-  borderRadius: "10px",
-  border: "1.5px solid #e8e8f0",
+  backgroundColor: vars.color.surface,
+  borderRadius: vars.radius.md,
+  border: `1.5px solid ${vars.color.border}`,
   overflow: "hidden",
-  transition: "border-color 0.15s, box-shadow 0.15s",
+  transition: `border-color ${vars.motion.normal}, box-shadow ${vars.motion.normal}`,
   selectors: {
     "&:hover": {
       borderColor: "#b0b4f0",
@@ -55,21 +57,21 @@ export const itemTop = style({
 });
 
 export const itemTo = style({
-  fontWeight: 600,
-  fontSize: "14px",
-  color: "#1a1a2e",
+  fontWeight: vars.typography.weight.semibold,
+  fontSize: vars.typography.size.sm,
+  color: vars.color.text,
   marginRight: "auto",
 });
 
 export const itemDate = style({
-  fontSize: "12px",
-  color: "#aaa",
+  fontSize: vars.typography.size.xs,
+  color: vars.color.muted,
   flexShrink: 0,
 });
 
 export const itemSubject = style({
   fontSize: "13px",
-  color: "#555",
+  color: vars.color.muted,
   marginBottom: "4px",
   overflow: "hidden",
   textOverflow: "ellipsis",
@@ -78,7 +80,7 @@ export const itemSubject = style({
 
 export const itemPreview = style({
   fontSize: "12.5px",
-  color: "#888",
+  color: vars.color.muted,
   overflow: "hidden",
   textOverflow: "ellipsis",
   whiteSpace: "nowrap",
@@ -91,7 +93,7 @@ const badgeBase = style({
   padding: "2px 8px",
   borderRadius: "20px",
   fontSize: "11px",
-  fontWeight: 600,
+  fontWeight: vars.typography.weight.semibold,
   textTransform: "uppercase",
   letterSpacing: "0.04em",
   flexShrink: 0,
@@ -115,12 +117,12 @@ export const deleteBtn = style({
   padding: "0 14px",
   backgroundColor: "transparent",
   border: "none",
-  borderLeft: "1.5px solid #e8e8f0",
-  color: "#ccc",
+  borderLeft: `1.5px solid ${vars.color.border}`,
+  color: vars.color.muted,
   cursor: "pointer",
   fontSize: "16px",
   flexShrink: 0,
-  transition: "color 0.15s, background-color 0.15s",
+  transition: `color ${vars.motion.normal}, background-color ${vars.motion.normal}`,
   selectors: {
     "&:hover": {
       color: "#dc2626",
