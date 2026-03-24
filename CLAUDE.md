@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v11
+**Versiune:** v12
 **Data:** 2026-03-24
 **Status:** activ
 
@@ -288,8 +288,8 @@ types/
 - `lib/admin/supabase.ts` — `supabaseAdmin` (service role, bypass RLS) — server-side only
 - `lib/admin/supabase.types.ts` — tipuri pentru toate tabelele Supabase
 - `lib/admin/smtp.ts` — `sendAdminMail()` helper pentru reply/compose; TLS `rejectUnauthorized: false` (hostico.ro)
-- `supabase/functions/sync-imap/index.ts` — Edge Function Deno — `npm:imapflow`, IMAP SSL port 993, listează UNSEEN în INBOX (max toate), deduplicare după `metadata.message_id` (Message-ID header), inserare `email_inbound` în Supabase, marchează ca citit; apelată din `/api/admin/imap-sync` (manual) și via `pg_cron` (automat 10 min)
-- `supabase/migrations/004_pg_cron_sync.sql` — activează `pg_cron` + `pg_net`; scheduleaza POST la Edge Function sync-imap la `*/10 * * * *`
+- `supabase/functions/sync-imap/index.ts` — Edge Function Deno — `npm:imapflow`, host hardcodat `glc47.hostico.ro` (cert TLS valid), port 993 SSL, UNSEEN INBOX, deduplicare `metadata.message_id`, insert `email_inbound`, marchează citit; autentificare via `SYNC_SECRET` (Bearer token), deploy `--no-verify-jwt`; apelată din `/api/admin/imap-sync` (manual) și via `pg_cron` (automat 10 min)
+- `supabase/migrations/004_pg_cron_sync.sql` — activează `pg_cron` + `pg_net`; job `*/10 * * * *` POST la Edge Function sync-imap
 - `lib/admin/analytics.ts` — `getRealtimeData()` + `getReportData()` — GA4 Data API; singleton client; `withTimeout(8000ms)` pe toate apelurile API
 - `lib/admin/response.ts` — `okResponse()` / `errorResponse()` — format uniform `{ ok: true [, data] }` / `{ ok: false, error }`
 - `lib/admin/sanitize.ts` — `sanitizeHtml()` — strip tags + escape entities; folosit cu `dangerouslySetInnerHTML` în toate paginile admin
@@ -307,27 +307,33 @@ types/
 
 ### IMAP sync via Supabase Edge Function — variabile de mediu necesare
 
-Setate în Supabase Dashboard → Edge Functions → sync-imap → Secrets:
+**Supabase Dashboard → Edge Functions → sync-imap → Secrets:**
 
 ```
-IMAP_HOST=mail.zephiraevents.ro
+SYNC_SECRET=<secret_32_bytes_hex>   # autentificare Bearer între Next.js și Edge Function
+IMAP_HOST=mail.zephiraevents.ro     # referință; host real hardcodat în cod: glc47.hostico.ro
 IMAP_PORT=993
 IMAP_USER=info@zephiraevents.ro
-IMAP_PASSWORD=...              # parola cutiei IMAP
+IMAP_PASSWORD=...                   # parola cutiei IMAP
 ```
 
 `SUPABASE_URL` și `SUPABASE_SERVICE_ROLE_KEY` sunt injectate automat de Supabase în Edge Functions.
 
-În `.env.local` / Vercel env vars (pentru Next.js API route `/api/admin/imap-sync`):
-- `NEXT_PUBLIC_SUPABASE_URL` — deja prezent
-- `SUPABASE_SERVICE_ROLE_KEY` — deja prezent
+**`.env.local` + Vercel env vars (pentru Next.js API route `/api/admin/imap-sync`):**
 
-**Flux email inbound:** emailurile sosite la `info@zephiraevents.ro` (hostico.ro IMAP) sunt sincronizate direct via IMAP SSL → butonul „Sincronizează email" din `/admin/inbox` (apelează `POST /api/admin/imap-sync` → Edge Function `sync-imap`) sau automat via `pg_cron` la fiecare 10 minute.
+```
+SYNC_SECRET=<același secret_32_bytes_hex>   # trimis ca Bearer token către Edge Function
+NEXT_PUBLIC_SUPABASE_URL                    # deja prezent
+```
+
+**Gmail eliminat complet din arhitectură** — `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`, `GMAIL_REFRESH_TOKEN`, `GMAIL_USER` nu mai există în proiect.
+
+**Flux email inbound:** emailurile sosite la `info@zephiraevents.ro` (IMAP `glc47.hostico.ro:993`) → butonul „Sincronizează email" din `/admin/inbox` (apelează `POST /api/admin/imap-sync` → Edge Function cu `Authorization: Bearer <SYNC_SECRET>`) sau automat via `pg_cron` la fiecare 10 minute.
 
 **pg_cron setup:** după aplicarea migrației 004, setează în Supabase SQL Editor:
 ```sql
-ALTER DATABASE postgres SET app.supabase_url = 'https://<ref>.supabase.co';
-ALTER DATABASE postgres SET app.service_role_key = '<service_role_key>';
+ALTER DATABASE postgres SET app.supabase_url = 'https://edgxqqkafezdcnnpsjqm.supabase.co';
+ALTER DATABASE postgres SET app.service_role_key = '<SUPABASE_SERVICE_ROLE_KEY>';
 ```
 
 ### Navigație / Header
