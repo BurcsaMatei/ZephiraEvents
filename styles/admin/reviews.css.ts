@@ -2,11 +2,13 @@
 
 import { style } from "@vanilla-extract/css";
 
+import { vars } from "../theme.css";
+
 export const pageTitle = style({
   margin: "0 0 20px",
   fontSize: "22px",
-  fontWeight: 700,
-  color: "#1a1a2e",
+  fontWeight: vars.typography.weight.bold,
+  color: vars.color.text,
   letterSpacing: "-0.02em",
 });
 
@@ -22,29 +24,29 @@ export const tab = style({
   padding: "6px 14px",
   borderRadius: "20px",
   fontSize: "13px",
-  fontWeight: 500,
+  fontWeight: vars.typography.weight.medium,
   textDecoration: "none",
-  color: "#64748b",
-  backgroundColor: "#ffffff",
-  border: "1.5px solid #e2e8f0",
+  color: vars.color.muted,
+  backgroundColor: vars.color.surface,
+  border: `1.5px solid ${vars.color.border}`,
   transition: "border-color 0.12s, color 0.12s",
   selectors: {
-    "&:hover": { borderColor: "#b0b4f0", color: "#5561F2" },
+    "&:hover": { borderColor: "#b0b4f0", color: vars.color.primary },
   },
 });
 
 export const tabActive = style({
-  backgroundColor: "#5561F2",
-  borderColor: "#5561F2",
-  color: "#ffffff",
+  backgroundColor: vars.color.primary,
+  borderColor: vars.color.primary,
+  color: vars.color.primaryContrast,
   selectors: {
-    "&:hover": { color: "#ffffff", borderColor: "#4450d0" },
+    "&:hover": { color: vars.color.primaryContrast, borderColor: vars.color.primaryHover },
   },
 });
 
 // ── List ─────────────────────────────────────────────────
 export const empty = style({
-  color: "#888",
+  color: vars.color.muted,
   fontSize: "15px",
   padding: "24px 0",
 });
@@ -56,9 +58,9 @@ export const list = style({
 });
 
 export const card = style({
-  backgroundColor: "#ffffff",
-  border: "1.5px solid #e8e8f0",
-  borderRadius: "10px",
+  backgroundColor: vars.color.surface,
+  border: `1.5px solid ${vars.color.border}`,
+  borderRadius: vars.radius.md,
   padding: "18px 20px",
 });
 
@@ -71,9 +73,9 @@ export const cardHeader = style({
 });
 
 export const reviewerName = style({
-  fontWeight: 600,
+  fontWeight: vars.typography.weight.semibold,
   fontSize: "15px",
-  color: "#1a1a2e",
+  color: vars.color.text,
   marginRight: "auto",
 });
 
@@ -85,13 +87,13 @@ export const rating = style({
 });
 
 export const reviewDate = style({
-  fontSize: "12px",
-  color: "#aaa",
+  fontSize: vars.typography.size.xs,
+  color: vars.color.muted,
 });
 
 export const reviewText = style({
-  fontSize: "14px",
-  color: "#334155",
+  fontSize: vars.typography.size.sm,
+  color: vars.color.text,
   lineHeight: 1.6,
   marginBottom: "14px",
   whiteSpace: "pre-wrap",
@@ -104,7 +106,7 @@ const badgeBase = style({
   padding: "3px 10px",
   borderRadius: "20px",
   fontSize: "11px",
-  fontWeight: 600,
+  fontWeight: vars.typography.weight.semibold,
   textTransform: "uppercase",
   letterSpacing: "0.04em",
 });
@@ -135,7 +137,7 @@ const btnBase = style({
   padding: "7px 16px",
   borderRadius: "7px",
   fontSize: "13px",
-  fontWeight: 600,
+  fontWeight: vars.typography.weight.semibold,
   border: "none",
   cursor: "pointer",
   transition: "opacity 0.12s",

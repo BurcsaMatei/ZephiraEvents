@@ -2,15 +2,17 @@
 
 import { style } from "@vanilla-extract/css";
 
+import { vars } from "../theme.css";
+
 export const backLink = style({
   display: "inline-flex",
   alignItems: "center",
   gap: "6px",
   fontSize: "13px",
-  color: "#5561F2",
+  color: vars.color.primary,
   textDecoration: "none",
   marginBottom: "20px",
-  fontWeight: 500,
+  fontWeight: vars.typography.weight.medium,
   selectors: {
     "&:hover": { textDecoration: "underline" },
   },
@@ -24,8 +26,8 @@ export const header = style({
 export const senderName = style({
   margin: "0 0 8px",
   fontSize: "22px",
-  fontWeight: 700,
-  color: "#1a1a2e",
+  fontWeight: vars.typography.weight.bold,
+  color: vars.color.text,
   letterSpacing: "-0.02em",
 });
 
@@ -42,7 +44,7 @@ const badgeBase = style({
   padding: "3px 10px",
   borderRadius: "20px",
   fontSize: "11px",
-  fontWeight: 600,
+  fontWeight: vars.typography.weight.semibold,
   textTransform: "uppercase",
   letterSpacing: "0.04em",
 });
@@ -78,9 +80,9 @@ export const statusBadgeArchived = style([
 
 // ── Details grid ─────────────────────────────────────────
 export const card = style({
-  backgroundColor: "#ffffff",
-  border: "1.5px solid #e8e8f0",
-  borderRadius: "10px",
+  backgroundColor: vars.color.surface,
+  border: `1.5px solid ${vars.color.border}`,
+  borderRadius: vars.radius.md,
   padding: "20px",
   marginBottom: "16px",
 });
@@ -93,23 +95,23 @@ export const detailGrid = style({
 });
 
 export const detailLabel = style({
-  fontSize: "12px",
-  fontWeight: 600,
-  color: "#94a3b8",
+  fontSize: vars.typography.size.xs,
+  fontWeight: vars.typography.weight.semibold,
+  color: vars.color.muted,
   textTransform: "uppercase",
   letterSpacing: "0.06em",
   paddingTop: "2px",
 });
 
 export const detailValue = style({
-  fontSize: "14px",
-  color: "#1a1a2e",
+  fontSize: vars.typography.size.sm,
+  color: vars.color.text,
   wordBreak: "break-word",
 });
 
 export const messageBody = style({
-  fontSize: "14px",
-  color: "#334155",
+  fontSize: vars.typography.size.sm,
+  color: vars.color.text,
   lineHeight: 1.6,
   whiteSpace: "pre-wrap",
   wordBreak: "break-word",
@@ -118,9 +120,9 @@ export const messageBody = style({
 // ── Replies ───────────────────────────────────────────────
 export const sectionTitle = style({
   margin: "0 0 12px",
-  fontSize: "14px",
-  fontWeight: 700,
-  color: "#64748b",
+  fontSize: vars.typography.size.sm,
+  fontWeight: vars.typography.weight.bold,
+  color: vars.color.muted,
   textTransform: "uppercase",
   letterSpacing: "0.07em",
 });
@@ -128,20 +130,20 @@ export const sectionTitle = style({
 export const replyCard = style({
   backgroundColor: "#f0f3ff",
   border: "1.5px solid #d4d9f7",
-  borderRadius: "8px",
+  borderRadius: vars.radius.sm,
   padding: "14px 16px",
   marginBottom: "10px",
 });
 
 export const replyMeta = style({
   fontSize: "11.5px",
-  color: "#94a3b8",
+  color: vars.color.muted,
   marginBottom: "8px",
 });
 
 export const replyText = style({
-  fontSize: "14px",
-  color: "#334155",
+  fontSize: vars.typography.size.sm,
+  color: vars.color.text,
   lineHeight: 1.6,
   whiteSpace: "pre-wrap",
 });
@@ -155,9 +157,9 @@ export const formField = style({
 });
 
 export const formLabel = style({
-  fontSize: "12px",
-  fontWeight: 600,
-  color: "#64748b",
+  fontSize: vars.typography.size.xs,
+  fontWeight: vars.typography.weight.semibold,
+  color: vars.color.muted,
   textTransform: "uppercase",
   letterSpacing: "0.06em",
 });
@@ -166,15 +168,15 @@ export const formInput = style({
   padding: "9px 12px",
   border: "1.5px solid #d8d8e8",
   borderRadius: "7px",
-  fontSize: "14px",
-  color: "#1a1a2e",
-  backgroundColor: "#ffffff",
+  fontSize: vars.typography.size.sm,
+  color: vars.color.text,
+  backgroundColor: vars.color.surface,
   outline: "none",
-  transition: "border-color 0.15s",
-  WebkitTextFillColor: "#1a1a2e",
-  WebkitBoxShadow: "0 0 0px 1000px #ffffff inset",
+  transition: `border-color ${vars.motion.normal}`,
+  WebkitTextFillColor: vars.color.text,
+  WebkitBoxShadow: `0 0 0px 1000px ${vars.color.surface} inset`,
   selectors: {
-    "&:focus": { borderColor: "#5561F2" },
+    "&:focus": { borderColor: vars.color.primary },
   },
 });
 
@@ -182,34 +184,34 @@ export const formTextarea = style({
   padding: "9px 12px",
   border: "1.5px solid #d8d8e8",
   borderRadius: "7px",
-  fontSize: "14px",
-  color: "#1a1a2e",
-  backgroundColor: "#ffffff",
+  fontSize: vars.typography.size.sm,
+  color: vars.color.text,
+  backgroundColor: vars.color.surface,
   outline: "none",
   resize: "vertical",
   minHeight: "120px",
   lineHeight: 1.55,
   fontFamily: "inherit",
-  transition: "border-color 0.15s",
-  WebkitTextFillColor: "#1a1a2e",
-  WebkitBoxShadow: "0 0 0px 1000px #ffffff inset",
+  transition: `border-color ${vars.motion.normal}`,
+  WebkitTextFillColor: vars.color.text,
+  WebkitBoxShadow: `0 0 0px 1000px ${vars.color.surface} inset`,
   selectors: {
-    "&:focus": { borderColor: "#5561F2" },
+    "&:focus": { borderColor: vars.color.primary },
   },
 });
 
 export const submitBtn = style({
   padding: "10px 20px",
-  backgroundColor: "#5561F2",
-  color: "#ffffff",
+  backgroundColor: vars.color.primary,
+  color: vars.color.primaryContrast,
   border: "none",
   borderRadius: "7px",
-  fontSize: "14px",
-  fontWeight: 600,
+  fontSize: vars.typography.size.sm,
+  fontWeight: vars.typography.weight.semibold,
   cursor: "pointer",
-  transition: "background-color 0.15s",
+  transition: `background-color ${vars.motion.normal}`,
   selectors: {
-    "&:hover:not(:disabled)": { backgroundColor: "#4450d0" },
+    "&:hover:not(:disabled)": { backgroundColor: vars.color.primaryHover },
     "&:disabled": { opacity: 0.6, cursor: "not-allowed" },
   },
 });

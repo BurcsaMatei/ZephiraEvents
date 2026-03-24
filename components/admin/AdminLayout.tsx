@@ -9,7 +9,9 @@ import type { ReactNode } from "react";
 import { useState } from "react";
 
 import * as s from "../../styles/admin/layout.css";
+import ThemeSwitcher from "../ThemeSwitcher";
 import AdminInstallButton from "./AdminInstallButton";
+import AdminSearch from "./AdminSearch";
 
 // ──────────────────────────────────────────────────────────
 // Types
@@ -89,6 +91,8 @@ export default function AdminLayout({ children, unreadCount = 0 }: Props) {
             <span className={s.brandSub}>Admin</span>
           </div>
 
+          <AdminSearch />
+
           <nav className={s.nav}>
             {NAV.map(({ href, label }) => {
               const active = isActive(href);
@@ -109,9 +113,12 @@ export default function AdminLayout({ children, unreadCount = 0 }: Props) {
 
           <AdminInstallButton />
 
-          <button type="button" onClick={handleLogout} className={s.logoutBtn}>
-            Logout
-          </button>
+          <div className={s.sidebarFooter}>
+            <button type="button" onClick={handleLogout} className={s.logoutBtn}>
+              Logout
+            </button>
+            <ThemeSwitcher />
+          </div>
         </aside>
 
         <main className={s.main}>{children}</main>
