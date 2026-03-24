@@ -85,7 +85,7 @@ Deno.serve(async (req) => {
   const result: SyncResult = { synced: 0, skipped: 0, errors: [] };
 
   const client = new ImapFlow({
-    host: imapHost,
+    host: "glc47.hostico.ro", // hostname real cu cert valid; IMAP_HOST păstrat în secrets ca referință
     port: imapPort,
     secure: true,
     auth: { user: imapUser, pass: imapPassword },
