@@ -49,7 +49,17 @@ function parseFrom(from: string): { name: string; email: string } {
 // Main handler
 // ──────────────────────────────────────────────────────────
 
-Deno.serve(async () => {
+Deno.serve(async (req) => {
+  // Verifică secret dedicat — apăsă requesturile neautorizate
+  const authHeader = req.headers.get("Authorization") ?? "";
+  const expectedToken = `Bearer ${Deno.env.get("SYNC_SECRET") ?? ""}`;
+  if (authHeader !== expectedToken) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
   const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "";
   const imapHost = Deno.env.get("IMAP_HOST") ?? "";

@@ -29,12 +29,12 @@ export default async function handler(
   }
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  const syncSecret = process.env.SYNC_SECRET?.trim();
 
-  if (!supabaseUrl || !serviceRoleKey) {
+  if (!supabaseUrl || !syncSecret) {
     return res
       .status(500)
-      .json(errorResponse("NEXT_PUBLIC_SUPABASE_URL sau SUPABASE_SERVICE_ROLE_KEY lipsesc."));
+      .json(errorResponse("NEXT_PUBLIC_SUPABASE_URL sau SYNC_SECRET lipsesc."));
   }
 
   const edgeFnUrl = `${supabaseUrl}/functions/v1/sync-imap`;
@@ -44,7 +44,7 @@ export default async function handler(
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${serviceRoleKey}`,
+        Authorization: `Bearer ${syncSecret}`,
       },
       body: "{}",
     });
