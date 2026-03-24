@@ -1,33 +1,65 @@
 // pages/api/admin/imap-sync.ts
-// POST — declanșează sync Gmail inbox → Supabase.
+// POST — declanșează sync IMAP inbox → Supabase via Edge Function.
 // Protejat cu sesiune admin.
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { verifyAdminSession } from "../../../lib/admin/auth";
-import type { GmailSyncResult } from "../../../lib/admin/gmail";
-import { syncGmailMessages } from "../../../lib/admin/gmail";
+import { errorResponse } from "../../../lib/admin/response";
 
-type ErrorResponse = { error: string };
+interface ImapSyncResult {
+  synced: number;
+  skipped: number;
+  errors: string[];
+}
+
+type ErrorResponse = { ok: false; error: string };
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<GmailSyncResult | ErrorResponse>,
+  res: NextApiResponse<ImapSyncResult | ErrorResponse>,
 ) {
   if (req.method !== "POST") {
     res.setHeader("Allow", "POST");
-    return res.status(405).json({ error: "Method Not Allowed" });
+    return res.status(405).json(errorResponse("Method Not Allowed"));
   }
 
   if (!verifyAdminSession(req)) {
-    return res.status(401).json({ error: "Unauthorized" });
+    return res.status(401).json(errorResponse("Unauthorized"));
   }
 
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+
+  if (!supabaseUrl || !serviceRoleKey) {
+    return res
+      .status(500)
+      .json(errorResponse("NEXT_PUBLIC_SUPABASE_URL sau SUPABASE_SERVICE_ROLE_KEY lipsesc."));
+  }
+
+  const edgeFnUrl = `${supabaseUrl}/functions/v1/sync-imap`;
+
   try {
-    const result = await syncGmailMessages();
+    const edgeRes = await fetch(edgeFnUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${serviceRoleKey}`,
+      },
+      body: "{}",
+    });
+
+    if (!edgeRes.ok) {
+      const text = await edgeRes.text().catch(() => "răspuns necunoscut");
+      return res
+        .status(502)
+        .json(errorResponse(`Edge Function a returnat ${edgeRes.status}: ${text}`));
+    }
+
+    const result = (await edgeRes.json()) as ImapSyncResult;
     return res.status(200).json(result);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Eroare necunoscută";
-    return res.status(500).json({ error: message });
+    return res.status(500).json(errorResponse(message));
   }
 }

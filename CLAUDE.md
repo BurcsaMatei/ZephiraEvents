@@ -1,7 +1,7 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v10
-**Data:** 2026-03-23
+**Versiune:** v11
+**Data:** 2026-03-24
 **Status:** activ
 
 ---
@@ -23,7 +23,7 @@ ZephiraEvents este un website premium de prezentare și conversie pentru o sală
 - **Grafice:** Recharts (`AreaChart` în dashboard admin)
 - **Database:** Supabase (PostgreSQL) — `@supabase/supabase-js` service role key, server-side only
 - **Analytics:** GA4 Data API — `@google-analytics/data` + service account JSON
-- **Email sync:** Gmail API (`googleapis`) — OAuth2 refresh token, sync UNREAD inbox → Supabase (`email_inbound`)
+- **Email sync:** IMAP (`imapflow` via npm specifier în Deno) — Supabase Edge Function `sync-imap`, sync UNSEEN inbox → Supabase (`email_inbound`); declanșat manual din `/admin/inbox` sau automat via `pg_cron` (10 min)
 - **Deployment:** Vercel
 - **PWA:** next-pwa (activ doar în producție cu `NEXT_PUBLIC_ENABLE_PWA=1`)
 - **SEO:** metadata centralizată, JSON-LD, OG static pre-generat, sitemap/robots server-side
@@ -64,9 +64,14 @@ data/
   reviews.json         12 recenzii statice (fallback dacă Supabase nu e disponibil)
 
 lib/
-  admin/               auth.ts, supabase.ts, supabase.types.ts, smtp.ts, gmail.ts,
+  admin/               auth.ts, supabase.ts, supabase.types.ts, smtp.ts,
                        analytics.ts, response.ts, sanitize.ts
                        ~~imap.ts~~ — șters (2026-03-23): înlocuit cu gmail.ts
+                       ~~gmail.ts~~ — șters (2026-03-24): înlocuit cu supabase/functions/sync-imap/
+supabase/
+  functions/
+    sync-imap/index.ts   Edge Function Deno — sync UNSEEN IMAP inbox → Supabase; npm:imapflow
+  migrations/            001–004 (004: pg_cron job sync-imap la 10 min)
   gallery/             schema.ts — validare și tipuri galerie
   mail/                offerRequestEmail.ts — template email ofertă
   seo/                 menuJsonLd.ts — structured data meniuri
@@ -113,7 +118,7 @@ scripts/
   build-gallery.mjs    generează lib/gallery.data.ts + data/gallery.json (rulat la prebuild)
   build-rss.ts         generează public/rss.xml + public/feed.xml (rulat la postbuild)
   generate-og.mjs      generează OG images statice pentru cele 6 pagini fixe (Puppeteer)
-  gmail-auth.mjs       one-time: OAuth2 flow → obține GMAIL_REFRESH_TOKEN (citește client_secret_*.json)
+  ~~gmail-auth.mjs~~   șters (2026-03-24): nu mai e necesar — sync via IMAP Edge Function
   migrate-reviews.ts   one-time: migrează data/reviews.json → Supabase reviews table
   optimise-images.mjs  comprimă JPEG-uri din public/images/ cu sharp (MozJPEG)
   optimise-videos.mjs  recomprimă MP4-uri din public/videos/ cu ffmpeg
@@ -283,7 +288,8 @@ types/
 - `lib/admin/supabase.ts` — `supabaseAdmin` (service role, bypass RLS) — server-side only
 - `lib/admin/supabase.types.ts` — tipuri pentru toate tabelele Supabase
 - `lib/admin/smtp.ts` — `sendAdminMail()` helper pentru reply/compose; TLS `rejectUnauthorized: false` (hostico.ro)
-- `lib/admin/gmail.ts` — `syncGmailMessages()` — Gmail API OAuth2, listează UNREAD in:inbox (max 50), deduplicare după `metadata.gmail_id`, inserare `email_inbound` în Supabase, marchează ca citit
+- `supabase/functions/sync-imap/index.ts` — Edge Function Deno — `npm:imapflow`, IMAP SSL port 993, listează UNSEEN în INBOX (max toate), deduplicare după `metadata.message_id` (Message-ID header), inserare `email_inbound` în Supabase, marchează ca citit; apelată din `/api/admin/imap-sync` (manual) și via `pg_cron` (automat 10 min)
+- `supabase/migrations/004_pg_cron_sync.sql` — activează `pg_cron` + `pg_net`; scheduleaza POST la Edge Function sync-imap la `*/10 * * * *`
 - `lib/admin/analytics.ts` — `getRealtimeData()` + `getReportData()` — GA4 Data API; singleton client; `withTimeout(8000ms)` pe toate apelurile API
 - `lib/admin/response.ts` — `okResponse()` / `errorResponse()` — format uniform `{ ok: true [, data] }` / `{ ok: false, error }`
 - `lib/admin/sanitize.ts` — `sanitizeHtml()` — strip tags + escape entities; folosit cu `dangerouslySetInnerHTML` în toate paginile admin
@@ -299,18 +305,30 @@ types/
 - **SMTP TLS:** `rejectUnauthorized: false` pe toate cele 4 transporturi (smtp.ts, contact, offer-request, review-submit) — hostico.ro nu are cert valid pe hostname
 - **Rate limiting login:** in-memory Map per IP, 5 încercări eșuate / 15 minute → 429; reset la autentificare reușită
 
-### Gmail sync — variabile de mediu necesare
+### IMAP sync via Supabase Edge Function — variabile de mediu necesare
+
+Setate în Supabase Dashboard → Edge Functions → sync-imap → Secrets:
 
 ```
-GMAIL_CLIENT_ID=...          # din Google Cloud Console, OAuth2 "installed app"
-GMAIL_CLIENT_SECRET=...      # din Google Cloud Console
-GMAIL_REFRESH_TOKEN=...      # generat cu scripts/gmail-auth.mjs (one-time)
-GMAIL_USER=...@gmail.com     # adresa Gmail asociată (ex: zephiraevents.ro@gmail.com)
+IMAP_HOST=mail.zephiraevents.ro
+IMAP_PORT=993
+IMAP_USER=info@zephiraevents.ro
+IMAP_PASSWORD=...              # parola cutiei IMAP
 ```
 
-**Flux email inbound:** emailurile trimise la adresa de business (hostico.ro) sunt redirecționate via forwarder cPanel → `GMAIL_USER` → sincronizate în Supabase prin butonul „Sincronizează email" din `/admin/inbox` (apelează `POST /api/admin/imap-sync` → `syncGmailMessages()`).
+`SUPABASE_URL` și `SUPABASE_SERVICE_ROLE_KEY` sunt injectate automat de Supabase în Edge Functions.
 
-**Reînnoire refresh token:** dacă token-ul expiră sau e revocat, rulează din nou `node scripts/gmail-auth.mjs` și actualizează `GMAIL_REFRESH_TOKEN` în `.env.local` și în Vercel env vars.
+În `.env.local` / Vercel env vars (pentru Next.js API route `/api/admin/imap-sync`):
+- `NEXT_PUBLIC_SUPABASE_URL` — deja prezent
+- `SUPABASE_SERVICE_ROLE_KEY` — deja prezent
+
+**Flux email inbound:** emailurile sosite la `info@zephiraevents.ro` (hostico.ro IMAP) sunt sincronizate direct via IMAP SSL → butonul „Sincronizează email" din `/admin/inbox` (apelează `POST /api/admin/imap-sync` → Edge Function `sync-imap`) sau automat via `pg_cron` la fiecare 10 minute.
+
+**pg_cron setup:** după aplicarea migrației 004, setează în Supabase SQL Editor:
+```sql
+ALTER DATABASE postgres SET app.supabase_url = 'https://<ref>.supabase.co';
+ALTER DATABASE postgres SET app.service_role_key = '<service_role_key>';
+```
 
 ### Navigație / Header
 
@@ -382,19 +400,22 @@ GMAIL_USER=...@gmail.com     # adresa Gmail asociată (ex: zephiraevents.ro@gmai
 ## 8. Ce este deschis / în lucru
 
 **~~Gmail sync (înlocuire IMAP)~~ ✓ ÎNCHIS 2026-03-23** (PR #116)
-`lib/admin/imap.ts` șters; `lib/admin/gmail.ts` creat — Gmail API OAuth2 (`googleapis`), listează UNREAD in:inbox max 50, deduplicare după `metadata.gmail_id`, insert `email_inbound` în Supabase, marchează ca citit. Script one-time `scripts/gmail-auth.mjs` pentru obținerea refresh token-ului. Flux: forwarder cPanel hostico.ro → Gmail → sync manual din `/admin/inbox`.
+`lib/admin/imap.ts` șters; `lib/admin/gmail.ts` creat — Gmail API OAuth2 (`googleapis`), listează UNREAD in:inbox max 50. **Înlocuit complet cu IMAP via Supabase Edge Function (PR feature/supabase-imap-sync, 2026-03-24).**
+
+**~~Gmail → IMAP via Supabase Edge Function~~ ✓ ÎNCHIS 2026-03-24** (branch feature/supabase-imap-sync)
+`lib/admin/gmail.ts` șters; `supabase/functions/sync-imap/index.ts` creat — Edge Function Deno, `npm:imapflow`, IMAP SSL 993, UNSEEN INBOX, deduplicare după `metadata.message_id`, insert `email_inbound`, marchează citit. `supabase/migrations/004_pg_cron_sync.sql` — pg_cron job 10 min. `/api/admin/imap-sync.ts` — apelează Edge Function via fetch. Variabile Gmail eliminate din `.env.local`; adăugate `IMAP_HOST`, `IMAP_PORT`, `IMAP_USER`, `IMAP_PASSWORD`.
 
 **~~Admin hardening-1~~ ✓ ÎNCHIS 2026-03-23** (PR #117)
 - XSS: `lib/admin/sanitize.ts` creat; `sanitizeHtml()` aplicat în toate paginile admin via `dangerouslySetInnerHTML`
 - `Promise.all` în `reply.ts` → două try/catch independente; returnează `{ ok: true, dbWarning: true }` dacă DB fail după email trimis
 - `saveToDb()` în `compose.ts` aruncă la eroare Supabase; gestionat cu try/catch
-- `decodeBase64Url()` în `gmail.ts` învelit în try/catch — returnează `""` la payload malformat
+- `decodeBase64Url()` din `gmail.ts` (șters 2026-03-24) era învelit în try/catch — Edge Function Deno folosește `TextDecoder` direct
 - Soft delete în inbox: verifică `res.ok` după PATCH; afișează `deleteError` în UI
 
 **~~Admin hardening-2~~ ✓ ÎNCHIS 2026-03-23** (PR #118)
 - Paginare inbox: SSR, 50/pagină, buton Anterior/Următor; SELECT coloane specifice (fără `*`)
 - GA4 client singleton: `_ga4Client` module-level, creat o singură dată per proces
-- Gmail `messages.modify()` învelit în try/catch cu `console.warn` — eșec la marcare citit nu blochează sync
+- Gmail `messages.modify()` învelit în try/catch cu `console.warn` — acum înlocuit cu IMAP `messageFlagsAdd` în Edge Function (try/catch similar)
 - `sent.tsx` SSR: 3 query-uri → `Promise.all([emailResult, replyResult, unreadResult])` paralel
 
 **~~Admin hardening-3~~ ✓ ÎNCHIS 2026-03-23** (PR #119)
@@ -441,14 +462,7 @@ Complet: `sitemap-menus.xml` creat (17 pagini `/meniuri/[slug]`, priority 0.8, c
 ## 8a. Scripturi
 
 ```
-scripts/gmail-auth.mjs
-  One-time: obține GMAIL_REFRESH_TOKEN via OAuth2 "installed app" flow.
-  Citește client_secret_*.json din rădăcina proiectului.
-  Construiește URL autorizare, așteaptă codul de la utilizator, face exchange → token.
-  Printează GMAIL_REFRESH_TOKEN=... în terminal (copiezi manual în .env.local + Vercel).
-  Rulare: node scripts/gmail-auth.mjs
-  Necesită: client_secret_*.json în rădăcina proiectului (din Google Cloud Console)
-  Notă: client_secret_*.json e în .gitignore — nu se commitează niciodată
+~~scripts/gmail-auth.mjs~~ — șters (2026-03-24): nu mai e necesar; sync via IMAP Edge Function
 
 scripts/migrate-reviews.ts
   One-time migration: data/reviews.json → Supabase reviews table.
@@ -566,8 +580,9 @@ scripts/optimise-videos.mjs
 - Nu folosi `JsonLd.tsx` — a fost șters; JSON-LD se adaugă exclusiv via prop `structuredData` pe `<Seo>`
 - Nu injecta `buildMenuJsonLd` (sau orice JSON-LD) din componente client-side — doar din `getStaticProps` / `getServerSideProps` în pagini
 - Nu importa `lib/admin/supabase.ts` la nivel de modul din pagini publice — aruncă dacă env vars lipsesc; folosește `createClient` direct în `getServerSideProps`
-- Nu apela `syncGmailMessages()` sau funcțiile GA4 din client-side — sunt exclusiv server-side
-- Nu re-adăuga IMAP (`imapflow`) — înlocuit definitiv cu Gmail API (PR #116); `lib/admin/imap.ts` a fost șters
+- Nu apela funcțiile GA4 din client-side — sunt exclusiv server-side
+- Nu re-adăuga Gmail API (`googleapis`) — înlocuit definitiv cu IMAP via Supabase Edge Function (2026-03-24); `lib/admin/gmail.ts` a fost șters
+- Nu apela Edge Function `sync-imap` direct din client-side — trece prin `/api/admin/imap-sync` (sesiune verificată)
 - Nu returna erori cu `{ ok: false, message }` în API routes admin — folosește `errorResponse()` din `lib/admin/response.ts` care produce `{ ok: false, error }`
 - Nu randa conținut din DB în admin fără `sanitizeHtml()` — chiar dacă React JSX auto-escapes, orice `dangerouslySetInnerHTML` trebuie trecut prin `sanitizeHtml()`
 - Nu rula `npm run migrate:reviews` de mai multe ori fără să verifici că tabela e goală — scriptul e idempotent dar verifică înainte
