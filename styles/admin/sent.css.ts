@@ -47,6 +47,16 @@ export const itemBody = style({
   minWidth: 0,
 });
 
+// Link variant — pentru itemBody clickabil (same layout, dar <a>)
+export const itemBodyLink = style({
+  display: "block",
+  flex: 1,
+  padding: "14px 16px",
+  minWidth: 0,
+  textDecoration: "none",
+  color: "inherit",
+});
+
 // ── Item header row ───────────────────────────────────────
 export const itemTop = style({
   display: "flex",
@@ -108,6 +118,105 @@ export const badgeReply = style([
   badgeBase,
   { backgroundColor: "#e8f0fe", color: "#3b5bdb" },
 ]);
+
+// ── Detail page ───────────────────────────────────────────
+export const backLink = style({
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "6px",
+  fontSize: "13px",
+  color: vars.color.primary,
+  textDecoration: "none",
+  marginBottom: "20px",
+  fontWeight: vars.typography.weight.medium,
+  selectors: {
+    "&:hover": { textDecoration: "underline" },
+  },
+});
+
+export const detailHeader = style({
+  marginBottom: "24px",
+});
+
+export const detailTitle = style({
+  margin: "0 0 8px",
+  fontSize: "22px",
+  fontWeight: vars.typography.weight.bold,
+  color: vars.color.text,
+  letterSpacing: "-0.02em",
+});
+
+export const detailBadges = style({
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
+  flexWrap: "wrap",
+});
+
+export const detailDate = style({
+  fontSize: "12px",
+  color: vars.color.muted,
+});
+
+export const card = style({
+  backgroundColor: vars.color.surface,
+  border: `1.5px solid ${vars.color.border}`,
+  borderRadius: vars.radius.md,
+  padding: "20px",
+  marginBottom: "16px",
+});
+
+export const detailGrid = style({
+  display: "grid",
+  gridTemplateColumns: "120px 1fr",
+  gap: "10px 16px",
+  alignItems: "start",
+});
+
+export const detailLabel = style({
+  fontSize: vars.typography.size.xs,
+  fontWeight: vars.typography.weight.semibold,
+  color: vars.color.muted,
+  textTransform: "uppercase",
+  letterSpacing: "0.06em",
+  paddingTop: "2px",
+});
+
+export const detailValue = style({
+  fontSize: vars.typography.size.sm,
+  color: vars.color.text,
+  wordBreak: "break-word",
+});
+
+export const sectionTitle = style({
+  margin: "0 0 12px",
+  fontSize: vars.typography.size.sm,
+  fontWeight: vars.typography.weight.bold,
+  color: vars.color.muted,
+  textTransform: "uppercase",
+  letterSpacing: "0.07em",
+});
+
+export const messageBody = style({
+  fontSize: vars.typography.size.sm,
+  color: vars.color.text,
+  lineHeight: 1.6,
+  whiteSpace: "pre-wrap",
+  wordBreak: "break-word",
+  margin: 0,
+});
+
+export const parentRef = style({
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "6px",
+  fontSize: "13px",
+  color: vars.color.primary,
+  textDecoration: "none",
+  selectors: {
+    "&:hover": { textDecoration: "underline" },
+  },
+});
 
 // ── Delete button ─────────────────────────────────────────
 export const deleteBtn = style({
