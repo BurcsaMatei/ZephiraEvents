@@ -1,21 +1,22 @@
-// pages/admin/sent.tsx
+// pages/admin/sent/index.tsx
 // View mesaje trimise — composed_emails + admin_replies, ordonate sent_at DESC.
 
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { type ReactElement, useCallback, useState } from "react";
 
-import AdminLayout from "../../components/admin/AdminLayout";
-import { verifyAdminSession } from "../../lib/admin/auth";
-import { sanitizeHtml } from "../../lib/admin/sanitize";
-import { supabaseAdmin } from "../../lib/admin/supabase";
+import AdminLayout from "../../../components/admin/AdminLayout";
+import { verifyAdminSession } from "../../../lib/admin/auth";
+import { sanitizeHtml } from "../../../lib/admin/sanitize";
+import { supabaseAdmin } from "../../../lib/admin/supabase";
 import type {
   AdminReplyRow,
   ComposedEmailRow,
   MessageRow,
-} from "../../lib/admin/supabase.types";
-import * as s from "../../styles/admin/sent.css";
-import type { SentItem, SentKind } from "../../types/admin";
+} from "../../../lib/admin/supabase.types";
+import * as s from "../../../styles/admin/sent.css";
+import type { SentItem, SentKind } from "../../../types/admin";
 
 // ──────────────────────────────────────────────────────────
 // Types
@@ -88,7 +89,10 @@ function AdminSentPage({
         <div className={s.list}>
           {items.map((item) => (
             <div key={`${item.kind}-${item.id}`} className={s.item}>
-              <div className={s.itemBody}>
+              <Link
+                href={`/admin/sent/${item.id}?kind=${item.kind}`}
+                className={s.itemBodyLink}
+              >
                 <div className={s.itemTop}>
                   <span className={s.itemTo}>
                     {item.to_name ? `${item.to_name} <${item.to_email}>` : item.to_email}
@@ -101,7 +105,7 @@ function AdminSentPage({
                   className={s.itemPreview}
                   dangerouslySetInnerHTML={{ __html: sanitizeHtml(item.body.slice(0, 140)) }}
                 />
-              </div>
+              </Link>
               {item.kind === "new" && (
                 <button
                   type="button"
