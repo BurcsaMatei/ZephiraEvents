@@ -92,12 +92,12 @@ export const aurora = style({
   )`,
   backgroundSize: "200% 200%",
   animation: `${shimmer} 6s linear infinite`,
+  willChange: "background-position",
   opacity: 0.3,
-  filter: "blur(9px)",
   pointerEvents: "none",
   selectors: {
-    [`${themeClassLight} &`]: { opacity: 0.24, filter: "blur(8px)" },
-    [`${themeClassDark} &`]: { opacity: 0.36, filter: "blur(10px)" },
+    [`${themeClassLight} &`]: { opacity: 0.24 },
+    [`${themeClassDark} &`]: { opacity: 0.36 },
   },
 });
 
@@ -163,7 +163,6 @@ export const inner = style({
   justifyContent: "flex-end",
   minHeight: 0,
   flex: 1,
-  willChange: "transform",
   paddingBottom: "48px",
   "@media": {
     [mq.lg]: {
@@ -250,7 +249,7 @@ export const cta = style({
   zIndex: 3,
   userSelect: "none",
   touchAction: "manipulation",
-  transition: `transform ${vars.motion.normal} ${vars.motion.easing}, background ${vars.motion.normal} ${vars.motion.easing}, border-color ${vars.motion.normal} ${vars.motion.easing}`,
+  transition: `transform ${vars.motion.normal} ${vars.motion.easing.standard}, background ${vars.motion.normal} ${vars.motion.easing.standard}, border-color ${vars.motion.normal} ${vars.motion.easing.standard}`,
   "@media": {
     "(hover: hover)": {
       selectors: {
