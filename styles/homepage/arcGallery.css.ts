@@ -58,7 +58,6 @@ export const frame = style({
   background: `linear-gradient(135deg, ${vars.color.primary}, ${vars.color.secondary})`,
   boxShadow: "0 18px 22px rgba(0,0,0,0.12)",
   isolation: "isolate",
-  willChange: "transform",
   transformStyle: "preserve-3d",
 });
 
@@ -122,8 +121,8 @@ export const aurora = style({
   )`,
   backgroundSize: "200% 200%",
   animation: `${shimmer} 6s linear infinite`,
+  willChange: "background-position",
   opacity: 0.28,
-  filter: "blur(9px)",
   pointerEvents: "none",
 });
 
@@ -144,8 +143,8 @@ export const openBtn = style({
   background: `linear-gradient(135deg, ${vars.color.primary} 0%, ${vars.color.secondary} 100%)`,
   color: "#fff",
   boxShadow: "0 12px 22px rgba(0,0,0,0.18)",
-  transition: `transform ${vars.motion.normal} ${vars.motion.easing},
-               box-shadow ${vars.motion.normal} ${vars.motion.easing}`,
+  transition: `transform ${vars.motion.normal} ${vars.motion.easing.standard},
+               box-shadow ${vars.motion.normal} ${vars.motion.easing.standard}`,
   selectors: {
     "&:hover": { transform: "scale(0.98)", boxShadow: "0 16px 28px rgba(0,0,0,0.22)" },
     "&:focus": { outline: "none" },

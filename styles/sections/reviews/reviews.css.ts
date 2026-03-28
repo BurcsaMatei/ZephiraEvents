@@ -69,6 +69,7 @@ export const trackClass = style({
   animationDuration: "45s",
   animationTimingFunction: "linear",
   animationIterationCount: "infinite",
+  willChange: "transform",
   "@media": {
     "(prefers-reduced-motion: reduce)": { animation: "none" },
   },

@@ -132,11 +132,13 @@ export const aurora = style({
   )`,
   backgroundSize: "200% 200%",
   opacity: 0.32,
-  filter: "blur(10px)",
   pointerEvents: "none",
   mixBlendMode: "screen",
   "@media": {
-    "(prefers-reduced-motion: no-preference)": { animation: `${shimmer} 6s linear infinite` },
+    "(prefers-reduced-motion: no-preference)": {
+      animation: `${shimmer} 6s linear infinite`,
+      willChange: "background-position",
+    },
   },
 });
 
@@ -150,7 +152,6 @@ export const glowBand = style({
   zIndex: 1,
   background:
     "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.16) 50%, rgba(255,255,255,0) 100%)",
-  filter: "blur(26px)",
   transform: "rotate(135deg)",
   willChange: "transform",
   opacity: 0.23,
