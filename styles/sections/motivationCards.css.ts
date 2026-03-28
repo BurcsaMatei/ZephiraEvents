@@ -3,17 +3,9 @@
 // ==============================
 // Imports
 // ==============================
-import { globalStyle, keyframes, style } from "@vanilla-extract/css";
+import { globalStyle, style } from "@vanilla-extract/css";
 
 import { mq, themeClassDark, themeClassLight, vars } from "../theme.css";
-
-// ==============================
-// Keyframes
-// ==============================
-const shimmer = keyframes({
-  "0%": { backgroundPosition: "0% 50%" },
-  "100%": { backgroundPosition: "200% 50%" },
-});
 
 // ==============================
 // Layout: Grid
@@ -91,8 +83,6 @@ export const aurora = style({
     ${vars.color.primary}
   )`,
   backgroundSize: "200% 200%",
-  animation: `${shimmer} 6s linear infinite`,
-  willChange: "background-position",
   opacity: 0.3,
   pointerEvents: "none",
   selectors: {
