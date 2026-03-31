@@ -32,7 +32,7 @@ const urlEntry = (loc: string, lastmod: string, changefreq: ChangeFreq, priority
 
 const changefreqFor = (path: string): ChangeFreq => {
   if (path === "/" || path === "/blog") return "weekly";
-  if (path === "/marca") return "yearly";
+  if (path === "/marca" || path === "/cookie-policy") return "yearly";
   return "monthly";
 };
 
@@ -40,6 +40,7 @@ const priorityFor = (path: string): string => {
   if (path === "/") return "1.0";
   if (path === "/servicii" || path === "/contact" || path === "/blog") return "0.8";
   if (path === "/marca") return "0.5";
+  if (path === "/cookie-policy") return "0.3";
   return "0.7";
 };
 

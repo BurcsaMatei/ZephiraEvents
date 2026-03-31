@@ -46,7 +46,7 @@ function buildBlogPosting(post: BasePost, canonical: string) {
     "@type": "BlogPosting",
     headline: post.title,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.modifiedDate ?? post.date,
     description: post.excerpt,
     url: canonical,
     mainEntityOfPage: canonical,
@@ -99,6 +99,7 @@ const BlogPostPage: NextPage<Props> = ({ post, related }) => {
         description={post.excerpt}
         url={canonical}
         image={absoluteOgImage(post.coverImage)}
+        {...(post.author ? { twitterCreator: post.author } : {})}
         structuredData={[breadcrumbList, blogPosting]}
       />
 

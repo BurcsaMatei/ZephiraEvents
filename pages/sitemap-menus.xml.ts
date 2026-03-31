@@ -5,6 +5,7 @@
 // ==============================
 import type { GetServerSideProps } from "next";
 
+import { absoluteAssetUrl } from "../lib/config";
 import { getAllMenus } from "../lib/menus";
 import { getRequestBaseUrl, joinHostPath } from "../lib/url";
 
@@ -22,12 +23,36 @@ const XML_ESC = (s: string) =>
 // ==============================
 // Utils
 // ==============================
-const urlEntry = (loc: string, lastmod: string, changefreq: ChangeFreq, priority: string) => `
+const isAbs = (s: string) => /^https?:\/\//i.test(s);
+const toAbsoluteAsset = (baseUrl: string, pathOrUrl: string): string =>
+  !pathOrUrl
+    ? pathOrUrl
+    : isAbs(pathOrUrl)
+      ? pathOrUrl
+      : (() => {
+          const viaCdn = absoluteAssetUrl(pathOrUrl);
+          return isAbs(viaCdn) ? viaCdn : joinHostPath(baseUrl, pathOrUrl);
+        })();
+
+const imageEntry = (loc: string, title?: string) => `
+    <image:image>
+      <image:loc>${XML_ESC(loc)}</image:loc>${
+        title ? `\n      <image:title>${XML_ESC(title)}</image:title>` : ""
+      }
+    </image:image>`;
+
+const urlEntry = (
+  loc: string,
+  lastmod: string,
+  changefreq: ChangeFreq,
+  priority: string,
+  imagesXml = "",
+) => `
   <url>
     <loc>${XML_ESC(loc)}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>${changefreq}</changefreq>
-    <priority>${priority}</priority>
+    <priority>${priority}</priority>${imagesXml}
   </url>`;
 
 function generate(baseUrl: string): string {
@@ -37,12 +62,17 @@ function generate(baseUrl: string): string {
   const urls = menus
     .map((menu) => {
       const loc = joinHostPath(baseUrl, `/meniuri/${menu.slug}`);
-      return urlEntry(loc, buildTimestamp, "monthly", "0.8");
+      const imagesXml = menu.image
+        ? imageEntry(toAbsoluteAsset(baseUrl, menu.image), menu.imageAlt)
+        : "";
+      return urlEntry(loc, buildTimestamp, "monthly", "0.8", imagesXml);
     })
     .join("");
 
   return `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${urls}
 </urlset>`;
 }

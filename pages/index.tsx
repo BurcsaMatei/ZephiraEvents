@@ -22,7 +22,7 @@ import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { getAllPosts } from "../lib/blogData";
-import { absoluteUrl } from "../lib/config";
+import { absoluteOgImage, absoluteUrl, CONTACT, SITE, SOCIAL_URLS } from "../lib/config";
 import { getLatestReviews, type Review } from "../lib/reviews";
 import * as ti from "../styles/sections/tent/tentIntro.css";
 
@@ -53,6 +53,64 @@ const breadcrumbList = {
   "@type": "BreadcrumbList",
   itemListElement: [{ "@type": "ListItem", position: 1, name: "Acasă", item: absoluteUrl("/") }],
 } as const satisfies Json;
+
+// Colectăm sameAs doar din URL-urile non-goale (Facebook lipsește momentan)
+const sameAsLinks = [SOCIAL_URLS.instagram, SOCIAL_URLS.tiktok].filter(
+  (u): u is string => typeof u === "string" && u.length > 0,
+);
+
+const localBusinessLd = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "@id": `${SITE.url}/#business`,
+  name: SITE.name,
+  url: absoluteUrl("/"),
+  logo: {
+    "@type": "ImageObject",
+    url: absoluteUrl("/logo-dedicat.png"),
+  },
+  image: absoluteOgImage(SITE.ogImage) || absoluteUrl("/images/og.jpg"),
+  telephone: CONTACT.phone,
+  email: CONTACT.email,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: CONTACT.address.street,
+    addressLocality: CONTACT.address.city,
+    addressRegion: CONTACT.address.region,
+    postalCode: CONTACT.address.postal,
+    addressCountry: CONTACT.address.country,
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: CONTACT.geo.lat,
+    longitude: CONTACT.geo.lng,
+  },
+  openingHoursSpecification: [
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+      opens: "09:00",
+      closes: "21:00",
+    },
+  ],
+  ...(sameAsLinks.length > 0 ? { sameAs: sameAsLinks } : {}),
+} satisfies Json;
+
+const webSiteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${SITE.url}/#website`,
+  name: SITE.name,
+  url: absoluteUrl("/"),
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${SITE.url}/blog?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
+} satisfies Json;
 
 // ==============================
 // Component
@@ -104,7 +162,7 @@ const Home: NextPage<HomeProps> = ({ postsPreview, reviewItems }) => {
         description="Sală de evenimente premium în Focșani, Vrancea — nunți, botezuri, majorate și corporate. Organizare A-Z, meniuri personalizate, cort exterior la locația ta și servicii impecabile."
         url="/"
         image="/images/og.jpg"
-        structuredData={[breadcrumbList]}
+        structuredData={[breadcrumbList, localBusinessLd, webSiteLd]}
       />
 
       {/* HERO FULL-BLEED, FĂRĂ SECTION/CONTAINER (fără niciun padding lateral) */}

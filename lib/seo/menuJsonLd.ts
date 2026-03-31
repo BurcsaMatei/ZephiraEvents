@@ -29,7 +29,11 @@ function toMenuItems(names: string[]) {
 // ==============================
 // Builder
 // ==============================
-export function buildMenuJsonLd(menus: MenuData[]) {
+export function buildMenuJsonLd(
+  menus: MenuData[],
+  pageUrl?: string,
+  toAbsoluteImage?: (src: string) => string,
+) {
   const hasMenuSection = menus.map((m) => {
     const items: { "@type": "MenuSection"; name: string; hasMenuItem: unknown[] }[] = [];
 
@@ -70,7 +74,7 @@ export function buildMenuJsonLd(menus: MenuData[]) {
     return {
       "@type": "MenuSection",
       name: m.title,
-      image: m.image,
+      image: toAbsoluteImage ? toAbsoluteImage(m.image) : m.image,
       description: `Meniu ${m.title} — ${m.currency} ${m.pricePerPers}/pers.`,
       offers: {
         "@type": "Offer",
@@ -85,6 +89,7 @@ export function buildMenuJsonLd(menus: MenuData[]) {
     "@context": "https://schema.org",
     "@type": "Menu",
     name: "Oferte de meniu — ZephiraEvents",
+    ...(pageUrl ? { url: pageUrl } : {}),
     hasMenuSection,
   };
 }

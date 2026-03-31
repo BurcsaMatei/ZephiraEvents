@@ -33,6 +33,7 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
+  trailingSlash: false,
 
   images: {
     qualities: [70, 75, 80, 85, 90],

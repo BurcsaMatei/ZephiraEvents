@@ -3,11 +3,10 @@
 // ==============================
 // Dev utils
 // ==============================
-function isDev(): boolean {
-  return typeof process !== "undefined" && process.env?.NODE_ENV !== "production";
-}
+const IS_DEV = typeof process !== "undefined" && process.env?.NODE_ENV !== "production";
+
 function devWarn(msg: string, ...args: unknown[]) {
-  if (isDev()) {
+  if (IS_DEV) {
     // eslint-disable-next-line no-console
     console.warn(`[config.ts] ${msg}`, ...args);
   }
@@ -121,9 +120,14 @@ const DEFAULTS = {
 };
 
 export const THEME = {
-  // Manifest (accent) — păstrăm aliasul pentru compat
+  /**
+   * @deprecated Folosește `pwaThemeColorLight` — păstrat doar pentru compatibilitate
+   * cu consumatorii vechi care importau `THEME.pwaThemeColor`.
+   */
   pwaThemeColor: RAW_PWA_LIGHT || DEFAULTS.pwaLight,
+  /** Culoare accent PWA (manifest + theme-color) pentru tema light — valoarea oficială. */
   pwaThemeColorLight: RAW_PWA_LIGHT || DEFAULTS.pwaLight,
+  /** Culoare accent PWA pentru tema dark (opțional). */
   pwaThemeColorDark: RAW_PWA_DARK || DEFAULTS.pwaDark,
 
   // Browser UI (meta theme-color)
@@ -141,10 +145,20 @@ export const CONTACT = {
   address: {
     street: (process.env.NEXT_PUBLIC_CONTACT_STREET || "").trim(),
     city: (process.env.NEXT_PUBLIC_CONTACT_CITY || "").trim(),
+    /** Folosit doar pentru afișare UI; nu are corespondent în Schema.org PostalAddress */
     commune: (process.env.NEXT_PUBLIC_CONTACT_COMMUNE || "").trim(),
     region: (process.env.NEXT_PUBLIC_CONTACT_REGION || "").trim(),
     postal: (process.env.NEXT_PUBLIC_CONTACT_POSTAL || "").trim(),
     country: (process.env.NEXT_PUBLIC_CONTACT_COUNTRY || "").trim(),
+  },
+  /**
+   * Coordonate GPS — folosite în JSON-LD (Schema.org GeoCoordinates).
+   * Derivate din NEXT_PUBLIC_CONTACT_MAP_EMBED dar stocate explicit
+   * pentru a evita parsarea URL-ului la runtime.
+   */
+  geo: {
+    lat: 45.7267486405454,
+    lng: 27.12549853325499,
   },
   mapEmbed: (process.env.NEXT_PUBLIC_CONTACT_MAP_EMBED || "").trim(),
 } as const;
@@ -221,10 +235,15 @@ export function absoluteUrl(path: string): string {
   const suffix: string = cut === -1 ? "" : path.slice(cut);
 
   const withBaseNoQuery = (p: string): string => applyBasePath(p, BASE_PATH);
-  const mainWithBase = withBaseNoQuery(main);
+  const mainWithBase = alignTrailingSlash(withBaseNoQuery(main));
   return joinUrl(SITE.url, mainWithBase) + suffix;
 }
 
+/**
+ * Returnează URL-ul unui asset cu prefix CDN (dacă ASSET_BASE e setat).
+ * Fallback (fără CDN): returnează path RELATIV prefixat cu BASE_PATH.
+ * Folosit pentru atribute `src` în componente client (nu necesită URL absolut).
+ */
 export function assetUrl(path: string): string {
   if (!path) return path;
   if (isExternal(path)) return path;
@@ -232,6 +251,12 @@ export function assetUrl(path: string): string {
   return withBase(path);
 }
 
+/**
+ * Returnează URL-ul ABSOLUT al unui asset cu prefix CDN (dacă ASSET_BASE e setat).
+ * Fallback (fără CDN): returnează URL absolut construit cu SITE.url.
+ * Folosit pentru JSON-LD, OG tags, sitemaps — oriunde e necesar un URL absolut.
+ * @see assetUrl — varianta relativă, fără SITE.url în fallback
+ */
 export function absoluteAssetUrl(path: string): string {
   if (!path) return path;
   if (isExternal(path)) return path;
@@ -254,9 +279,6 @@ export const SEO_DEFAULTS = {
   twitterHandle: SITE.twitterHandle,
 } as const;
 
-// lib/config.ts
-// ... (fișierul rămâne identic, doar STATIC_ROUTES se extinde)
-
 // ==============================
 // Sitemap / Routes / Limits
 // ==============================
@@ -276,12 +298,7 @@ export const STATIC_ROUTES = [
   "/blog",
   "/reviews",
   "/marca",
+  "/cookie-policy",
 ] as const;
 
-export const GALLERY_ATTACH_LIMIT = 100 as const;
 
-// ==============================
-// Compat exporturi
-// ==============================
-export const seoDefaults = SEO_DEFAULTS;
-export { SITE_URL };

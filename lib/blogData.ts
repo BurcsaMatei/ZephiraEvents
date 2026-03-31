@@ -63,6 +63,7 @@ export const BlogPostSchema = z
       })
       .optional(),
     author: z.string().trim().min(1).max(80).optional(),
+    modifiedDate: z.string().trim().datetime({ offset: true }).optional(),
     tags: z.array(z.string().trim().min(1)).optional(),
     contentHtml: z.string().trim().min(1),
     readingTime: z.string().trim().min(1).max(20).optional(),

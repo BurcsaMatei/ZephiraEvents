@@ -38,7 +38,7 @@ const urlEntry = (
   </url>`;
 
 const imageEntry = (loc: string, title?: string, caption?: string) => `
-    <image:image xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+    <image:image>
       <image:loc>${XML_ESC(loc)}</image:loc>${
         title ? `\n      <image:title>${XML_ESC(title)}</image:title>` : ""
       }${caption ? `\n      <image:caption>${XML_ESC(caption)}</image:caption>` : ""}

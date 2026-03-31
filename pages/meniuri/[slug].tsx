@@ -12,7 +12,7 @@ import Outro from "../../components/sections/Outro";
 import Seo from "../../components/Seo";
 import Separator from "../../components/Separator";
 import type { Json } from "../../interfaces";
-import { absoluteUrl, withBase } from "../../lib/config";
+import { absoluteOgImage, absoluteUrl, withBase } from "../../lib/config";
 import { getAllMenus, getEventTypeAnchorHref, getMenuBySlug } from "../../lib/menus";
 import { buildMenuJsonLd, type MenuData } from "../../lib/seo/menuJsonLd";
 import * as s from "../../styles/menus/menuDetail.css";
@@ -59,7 +59,11 @@ const MenuDetailPage: NextPage<PageProps> = ({ menu }) => {
   ];
 
   const breadcrumbList = buildBreadcrumbList(pagePath, menu.title);
-  const menuJsonLd: Json = buildMenuJsonLd([menu as unknown as MenuData]) as unknown as Json;
+  const menuJsonLd: Json = buildMenuJsonLd(
+    [menu as unknown as MenuData],
+    absoluteUrl(pagePath),
+    (src) => absoluteOgImage(src) || absoluteUrl(src),
+  ) as unknown as Json;
 
   return (
     <>

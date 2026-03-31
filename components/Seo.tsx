@@ -38,6 +38,9 @@ type Props = {
   /** alternate hreflang links */
   alternates?: SeoAlternates;
 
+  /** Twitter creator handle (ex: "@autor") — util pe pagini de articol */
+  twitterCreator?: string;
+
   // ✅ acceptăm și readonly arrays
   structuredData?: Json | Json[] | readonly Json[];
   children?: ReactNode;
@@ -58,6 +61,16 @@ function toIso(input?: string | Date): string | undefined {
   if (!input) return undefined;
   if (input instanceof Date) return input.toISOString();
   return input;
+}
+
+/** Derivează MIME type din extensia URL-ului imaginii OG */
+function deriveImageType(src?: string): string | undefined {
+  if (!src) return undefined;
+  if (/\.jpe?g($|\?)/i.test(src)) return "image/jpeg";
+  if (/\.png($|\?)/i.test(src)) return "image/png";
+  if (/\.webp($|\?)/i.test(src)) return "image/webp";
+  if (/\.avif($|\?)/i.test(src)) return "image/avif";
+  return undefined;
 }
 
 /** Construiește <title> pe baza template-ului din SITE */
@@ -123,12 +136,14 @@ export default function Seo({
   // hreflang
   alternates,
 
+  twitterCreator,
   structuredData,
   children,
 }: Props) {
   const pageUrl = absoluteAligned(url) ?? alignTrailingSlash(SITE.url || "/")!;
   const canonicalHref = canonical ? canonicalFor(canonical) : pageUrl;
   const ogImage = absoluteOgImage(image) || undefined; // OG absolut (respectă CDN)
+  const ogImageType = deriveImageType(ogImage);
   const fullTitle = buildTitleLocal(title);
 
   const schemas: Json[] = toJsonArray(structuredData);
@@ -173,6 +188,7 @@ export default function Seo({
       {typeof imageHeight === "number" && (
         <meta property="og:image:height" content={String(imageHeight)} />
       )}
+      {ogImage && ogImageType && <meta property="og:image:type" content={ogImageType} />}
       {SITE.locale && <meta property="og:locale" content={SITE.locale} />}
       {updatedForOg && <meta property="og:updated_time" content={updatedForOg} />}
 
@@ -200,6 +216,7 @@ export default function Seo({
       {ogImage && <meta name="twitter:image" content={ogImage} />}
       {imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
       {SITE.twitterHandle && <meta name="twitter:site" content={SITE.twitterHandle} />}
+      {twitterCreator && <meta name="twitter:creator" content={twitterCreator} />}
 
       {/* JSON-LD */}
       {schemas.map((schema, i) => (

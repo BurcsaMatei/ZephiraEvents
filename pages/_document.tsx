@@ -95,6 +95,11 @@ export default class MyDocument extends Document<ExtraProps> {
           {/* Manifest PWA (basePath-aware) — randat DOAR dacă PWA este activ în producție */}
           {ENABLE_PWA ? <link rel="manifest" href={withBase("/site.webmanifest")} /> : null}
 
+          {/* Favicon */}
+          <link rel="icon" type="image/png" sizes="32x32" href={withBase("/icons/favicon-32x32.png")} />
+          <link rel="icon" type="image/png" sizes="16x16" href={withBase("/icons/favicon-16x16.png")} />
+          <link rel="shortcut icon" href={withBase("/icons/favicon.png")} />
+
           {/* Apple touch icon */}
           <link
             rel="apple-touch-icon"

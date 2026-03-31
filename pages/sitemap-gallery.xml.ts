@@ -5,7 +5,7 @@
 // ==============================
 import type { GetServerSideProps } from "next";
 
-import { absoluteAssetUrl, GALLERY_ATTACH_LIMIT } from "../lib/config";
+import { absoluteAssetUrl } from "../lib/config";
 import { getGalleryItems } from "../lib/gallery";
 import { getRequestBaseUrl, joinHostPath } from "../lib/url";
 
@@ -17,6 +17,9 @@ type ChangeFreq = "daily" | "weekly" | "monthly";
 // ==============================
 // Constante
 // ==============================
+/** Număr maxim de imagini atașate în sitemap-ul galeriei. */
+const GALLERY_ATTACH_LIMIT = 100 as const;
+
 const XML_ESC = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
@@ -56,7 +59,7 @@ const toAbsoluteAsset = (baseUrl: string, pathOrUrl: string): string =>
         })();
 
 function generate(baseUrl: string): string {
-  const nowIso = new Date().toISOString();
+  const buildTimestamp = process.env.NEXT_PUBLIC_BUILD_TIMESTAMP ?? new Date().toISOString();
   const loc = joinHostPath(baseUrl, "/galerie");
 
   const galleryItems = getGalleryItems();
@@ -74,7 +77,7 @@ function generate(baseUrl: string): string {
 <urlset
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
-${urlEntry(loc, nowIso, "weekly", "0.7", imagesXml)}
+${urlEntry(loc, buildTimestamp, "weekly", "0.7", imagesXml)}
 </urlset>`;
 }
 

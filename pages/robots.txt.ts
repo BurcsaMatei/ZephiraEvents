@@ -17,7 +17,7 @@ function generateRobots(host: string, disallowAll: boolean, sitemaps: readonly s
   if (disallowAll) {
     lines.push("Disallow: /");
   } else {
-    lines.push("Allow: /");
+    lines.push("Disallow: /admin/");
     lines.push("Disallow: /api/");
     lines.push("Disallow: /404");
     lines.push("Disallow: /500");

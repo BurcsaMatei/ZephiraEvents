@@ -7,7 +7,7 @@ import type { GetServerSideProps } from "next";
 import Reviews from "../components/sections/reviews/Reviews";
 import Seo from "../components/Seo";
 import type { Json } from "../interfaces";
-import { absoluteUrl, SITE } from "../lib/config";
+import { absoluteOgImage, absoluteUrl, CONTACT, SITE } from "../lib/config";
 import { getAllReviews, type Rating, type Review } from "../lib/reviews";
 import { pageH1Class } from "../styles/sections/reviews/reviews.css";
 import * as ti from "../styles/sections/tent/tentIntro.css";
@@ -95,8 +95,19 @@ export default function ReviewsPage({ items }: Props) {
   const localBusinessLd: Json = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
+    "@id": `${SITE.url}/#business`,
     name: SITE.name,
     url: absoluteUrl("/"),
+    telephone: CONTACT.phone,
+    image: absoluteOgImage(SITE.ogImage) || absoluteUrl("/images/og.jpg"),
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: CONTACT.address.street,
+      addressLocality: CONTACT.address.city,
+      addressRegion: CONTACT.address.region,
+      postalCode: CONTACT.address.postal,
+      addressCountry: CONTACT.address.country,
+    },
     aggregateRating: {
       "@type": "AggregateRating",
       ratingValue,
