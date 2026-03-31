@@ -1,7 +1,7 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v12
-**Data:** 2026-03-24
+**Versiune:** v13
+**Data:** 2026-03-31
 **Status:** activ
 
 ---
@@ -113,6 +113,8 @@ public/
   icons/, masks/, screenshots/
   admin-manifest.json  PWA manifest dedicat admin (name: ZephiraEvents Admin, scope: /admin/)
   admin-sw.js          Service worker admin izolat — cache minimal /admin/*, network-first
+  llms.txt             Index pentru crawlere AI (llms.txt standard) — actualizat manual la schimbări majore de conținut
+  llms-full.txt        (DE CREAT) Versiunea extinsă cu conținut complet — include texte lungi, meniuri detaliate, articole blog
 
 scripts/
   build-gallery.mjs    generează lib/gallery.data.ts + data/gallery.json (rulat la prebuild)
@@ -252,9 +254,15 @@ types/
 
 - Metadata centralizată în `lib/pageMeta.ts` (include câmp `description` per pagină)
 - JSON-LD **SSR** via prop `structuredData` pe `<Seo>` — nu injecta script tags din componente client
-- `buildMenuJsonLd` se apelează exclusiv din `pages/meniuri/[slug].tsx` (SSR/SSG), nu din componente
+- `buildMenuJsonLd` se apelează exclusiv din `pages/meniuri/[slug].tsx` (SSR/SSG), nu din componente; acceptă `pageUrl` și `toAbsoluteImage` ca parametri opționali
 - OG assets dedicate per pagină unde e cazul
 - `<Seo structuredData={[...]} />` direct în pagină — `JsonLd.tsx` a fost șters
+- `CONTACT.geo` în `lib/config.ts` este sursa de adevăr pentru coordonatele GPS — nu hardcoda lat/lng în pagini
+- `og:image:type` se derivă automat din extensia URL în `components/Seo.tsx` — nu îl adăuga manual
+- `twitter:creator` se transmite via prop pe `<Seo>` (ex: din `post.author` în `/blog/[slug]`)
+- `trailingSlash: false` explicit în `next.config.mjs` — `canonical()` și `absoluteUrl()` sunt aliniate
+- `canonical` este omis automat de `<Seo>` când `noindex={true}` — nu adăuga `noindex` și `canonical` simultan
+- `public/llms.txt` — actualizează-l la fiecare schimbare majoră de conținut (meniuri noi, pagini noi, prețuri modificate); `public/llms-full.txt` rămâne de creat
 
 ---
 
@@ -385,14 +393,17 @@ ALTER DATABASE postgres SET app.service_role_key = '<SUPABASE_SERVICE_ROLE_KEY>'
 
 ### SEO / Metadata
 
-- `components/Seo.tsx` — prop `structuredData` pentru JSON-LD SSR
+- `components/Seo.tsx` — prop `structuredData` pentru JSON-LD SSR; `og:image:type` auto-derivat; prop `twitterCreator`; canonical omis când `noindex=true`; `max-image-preview:large` pe paginile indexate; `og:image:secure_url` emis alături de `og:image`
 - `lib/pageMeta.ts` — metadata + description per pagină (7 rute inclusiv `/reviews`)
 - `lib/url.ts`
-- `lib/seo/menuJsonLd.ts` — apelat doar din `pages/meniuri/[slug].tsx`
+- `lib/seo/menuJsonLd.ts` — apelat doar din `pages/meniuri/[slug].tsx`; parametri opționali: `pageUrl` (URL absolut pagină) și `toAbsoluteImage` (callback absolutizare imagine)
+- `lib/config.ts` — `CONTACT.geo` cu `lat`/`lng` GPS; `absoluteUrl()` aliniată trailing slash cu `canonical()`; `THEME.pwaThemeColor` marcat `@deprecated`; `IS_DEV` constant module-level
 - `pages/robots.txt.ts`, `pages/sitemap*.ts`
 - `pages/api/og.tsx` — unealtă internă, nu apelată din pagini
 - OG images statice pre-generate: `public/images/og.jpg`, `og-servicii.jpg`, `og-galerie.jpg`, `og-contact.jpg`, `og-blog.jpg`, `og-cort.jpg`, `og-reviews.jpg`
 - Pentru regenerare OG: `npm run generate:og` (necesită `npm run dev` pe `:3000`) — 7 pagini înregistrate (inclusiv `/reviews`)
+- `public/llms.txt` — index AI crawlere; `public/llms-full.txt` — DE CREAT (versiunea extinsă)
+- `public/logo-dedicat.png` — logo PNG dedicat JSON-LD `LocalBusiness`; trackat în git
 
 ### Shell / Theme / Layout
 
@@ -404,6 +415,24 @@ ALTER DATABASE postgres SET app.service_role_key = '<SUPABASE_SERVICE_ROLE_KEY>'
 ---
 
 ## 8. Ce este deschis / în lucru
+
+**~~SEO audit complet — robots, sitemaps, config, JSON-LD, llms.txt~~ ✓ ÎNCHIS 2026-03-31** (PR #125, branch fix/robots-sitemap-optimizations)
+- `robots.txt`: `Disallow: /admin/` adăugat; `Allow: /` redundant eliminat
+- `sitemap-gallery.xml`: `lastmod` = `buildTimestamp`; `changefreq: monthly`
+- `sitemap-posts.xml`: `xmlns:image` duplicat eliminat din `imageEntry`
+- `sitemap-pages.xml`: `/cookie-policy` adăugat (priority 0.3, yearly)
+- `sitemap-menus.xml`: image sitemap extension (`xmlns:image`, `<image:image>` per meniu)
+- `next.config.mjs`: `trailingSlash: false` explicit
+- `lib/config.ts`: `absoluteUrl()` aliniată trailing slash; `CONTACT.geo` centralizat; `seoDefaults` alias eliminat; `export { SITE_URL }` eliminat; `THEME.pwaThemeColor` `@deprecated`; `IS_DEV` constant; `GALLERY_ATTACH_LIMIT` mutat în sitemap-gallery; JSDoc pe `assetUrl`/`absoluteAssetUrl`
+- `components/Seo.tsx`: `og:image:type` auto-derivat; `og:image:secure_url`; `twitter:creator` prop; `max-image-preview:large`; canonical omis când `noindex=true`
+- `pages/index.tsx`: `LocalBusiness` + `WebSite` JSON-LD complete (sameAs, geo, ore, logo)
+- `pages/reviews.tsx`: `LocalBusiness` completat (`@id`, telephone, image, address)
+- `pages/blog/[slug].tsx`: `dateModified` real + `twitterCreator` din `post.author`
+- `pages/meniuri/[slug].tsx`: URL absolut + imagine absolutizată în `buildMenuJsonLd`
+- `pages/_document.tsx`: favicon declarat explicit (32×32, 16×16, shortcut)
+- `public/llms.txt`: creat (llms.txt standard pentru AI crawlere)
+- `public/logo-dedicat.png`: trackat în git
+- **TODO rămas:** `public/llms-full.txt` — versiunea extinsă cu conținut complet (de creat într-o sesiune viitoare)
 
 **~~Gmail sync (înlocuire IMAP)~~ ✓ ÎNCHIS 2026-03-23** (PR #116)
 `lib/admin/imap.ts` șters; `lib/admin/gmail.ts` creat — Gmail API OAuth2 (`googleapis`), listează UNREAD in:inbox max 50. **Înlocuit complet cu IMAP via Supabase Edge Function (PR feature/supabase-imap-sync, 2026-03-24).**
@@ -571,6 +600,16 @@ scripts/optimise-videos.mjs
 - HeaderPanel: glassmorphism `blur(16px) saturate(1.4/1.2)` per temă light/dark
 - Lighthouse Accessibility: 97 mobil, 92 desktop după fix
 
+### SEO audit profund 2026-03-31 (PR #125, branch fix/robots-sitemap-optimizations)
+
+- `robots.txt`: `Disallow: /admin/` adăugat; `Allow: /` eliminat
+- Sitemaps: image extension în menus; `buildTimestamp` consistent în gallery; `xmlns:image` deduplificat în posts; `/cookie-policy` în pages sitemap
+- `lib/config.ts`: trailing slash aliniat între `absoluteUrl()` și `canonical()`; `CONTACT.geo` centralizat; alias-uri moarte eliminate
+- `Seo.tsx`: `og:image:type` auto-derivat; `og:image:secure_url`; `twitter:creator`; `max-image-preview:large`; canonical omis la `noindex=true`
+- JSON-LD complet: `LocalBusiness` cu geo/address/telephone/sameAs pe homepage și reviews; `WebSite` + `SearchAction` pe homepage; `dateModified` în BlogPosting; imagini absolute în meniu
+- `public/llms.txt` creat; `public/logo-dedicat.png` trackat în git
+- **TODO:** `public/llms-full.txt` — de creat (versiunea extinsă pentru AI crawlere)
+
 ---
 
 ## 9. Ce să nu faci
@@ -593,3 +632,8 @@ scripts/optimise-videos.mjs
 - Nu randa conținut din DB în admin fără `sanitizeHtml()` — chiar dacă React JSX auto-escapes, orice `dangerouslySetInnerHTML` trebuie trecut prin `sanitizeHtml()`
 - Nu rula `npm run migrate:reviews` de mai multe ori fără să verifici că tabela e goală — scriptul e idempotent dar verifică înainte
 - Nu commita `client_secret_*.json` — e în `.gitignore`; conține credențiale OAuth2 Google
+- Nu hardcoda coordonate GPS în pagini — folosește `CONTACT.geo.lat` / `CONTACT.geo.lng` din `lib/config.ts`
+- Nu adăuga `export { SITE_URL }` sau alte alias-uri moarte în `lib/config.ts` — `SITE.url` este sursa canonică
+- Nu adăuga `og:image:type` manual în pagini — se derivă automat în `components/Seo.tsx`
+- Nu pune `canonical` și `noindex` simultan — `<Seo>` omite canonical automat când `noindex=true`
+- Nu lăsa `public/llms.txt` desincronizat la schimbări majore (meniuri noi, pagini noi, prețuri modificate)
