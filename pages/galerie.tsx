@@ -213,7 +213,7 @@ function GaleriePage() {
             title="Galerie ZephiraEvents — sală de evenimente în Focșani, Vrancea"
             subtitle="Nunți, botezuri, majorate și evenimente corporate realizate în sala noastră de evenimente din Focșani — servicii impecabile, decoruri atent alese și momente care rămân."
             image={{
-              src: "/images/current/hero-gallery.jpg",
+              src: "/images/current/hero-gallery.webp",
               alt: "Colaj de imagini din evenimente organizate la ZephiraEvents, Focșani",
             }}
             height="md"
@@ -304,7 +304,7 @@ function GaleriePage() {
                       "Decor, foto-video & DJ din rețeaua noastră de parteneri",
                       "Servicii de ospitalitate impecabile pentru invitați",
                     ],
-                    mediaSrc: "/images/motivationcards/mc-05.jpg",
+                    mediaSrc: "/images/motivationcards/mc-05.webp",
                     ctaHref: "/servicii#meniuri-nunta",
                     backMsg: "Vezi meniurile complete pentru nuntă.",
                   },
@@ -315,7 +315,7 @@ function GaleriePage() {
                       "Meniu adaptat și program flexibil pentru familie",
                       "Scenografie foto și momente speciale incluse",
                     ],
-                    mediaSrc: "/images/motivationcards/mc-06.jpg",
+                    mediaSrc: "/images/motivationcards/mc-06.webp",
                     ctaHref: "/servicii#meniuri-botez-cununie",
                     backMsg: "Explorează pachetele pentru botez și cununie.",
                   },
@@ -326,7 +326,7 @@ function GaleriePage() {
                       "Logistică, tehnic & protocol la standarde înalte",
                       "Acces facil în Focșani, parcare și semnalistică",
                     ],
-                    mediaSrc: "/images/motivationcards/mc-07.jpg",
+                    mediaSrc: "/images/motivationcards/mc-07.webp",
                     ctaHref: "/servicii#meniuri-corporate-team-building",
                     backMsg: "Descoperă soluțiile noastre corporate.",
                   },
@@ -337,7 +337,7 @@ function GaleriePage() {
                       "Ofertă clară, fără costuri ascunse",
                       "Coordonare A-Z și suport înainte/după eveniment",
                     ],
-                    mediaSrc: "/images/motivationcards/mc-08.jpg",
+                    mediaSrc: "/images/motivationcards/mc-08.webp",
                     ctaHref: "/galerie",
                     backMsg: "Explorează galeria completă.",
                   },

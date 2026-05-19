@@ -83,7 +83,7 @@ const BlogPostPage: NextPage<Props> = ({ post, related }) => {
   const reading = formatReadingTime(post.readingTime as unknown as string | number | undefined);
   const lede = `${formatDateISOtoRo(post.date)}${reading ? ` · ${reading}` : ""}`;
 
-  const coverSrc = post.coverImage ?? "/images/blog/placeholder.jpg";
+  const coverSrc = post.coverImage ?? "/images/blog/placeholder.webp";
 
   const crumbs: Crumb[] = [
     { name: "Acasă", href: "/" },

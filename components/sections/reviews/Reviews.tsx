@@ -125,7 +125,7 @@ function ReviewCard({
       )}
 
       <Image
-        src={it.profilePhotoUrl || "/images/profiles/profile-01.jpg"}
+        src={it.profilePhotoUrl || "/images/profiles/profile-01.webp"}
         alt=""
         width={48}
         height={48}

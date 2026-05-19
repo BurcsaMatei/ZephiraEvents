@@ -69,7 +69,7 @@ export default function WaiterBarSection(): JSX.Element {
         {/* Coloana stânga — ospătar */}
         <div className={w.imageCol}>
           <Image
-            src="/images/servicii/servicii/waiter.png"
+            src="/images/servicii/servicii/waiter.webp"
             alt="Ospătar profesionist ZephiraEvents"
             fill
             style={{ objectFit: "contain", objectPosition: "bottom" }}
@@ -107,7 +107,7 @@ export default function WaiterBarSection(): JSX.Element {
         {/* Coloana dreapta — bucătar */}
         <div className={w.imageCol}>
           <Image
-            src="/images/servicii/servicii/cook.png"
+            src="/images/servicii/servicii/cook.webp"
             alt="Bucătar ZephiraEvents"
             fill
             style={{ objectFit: "contain", objectPosition: "bottom" }}

@@ -31,7 +31,7 @@ export type HeroIndexProps = {
 // Constante
 // ==============================
 const FALLBACK_IMG: ImgLike = {
-  src: "/images/current/hero.jpg",
+  src: "/images/current/hero.webp",
   alt: "",
   priority: true,
 };
