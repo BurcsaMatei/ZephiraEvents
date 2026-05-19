@@ -1,5 +1,5 @@
 // pages/admin/reviews.tsx
-// Lista recenzii primite — filtru pending/approved/rejected, butoane Aprobă/Respinge.
+// Lista recenzii — filtru pending/approved/rejected, butoane Aprobă/Respinge via GitHub API.
 
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
@@ -8,16 +8,16 @@ import { useState } from "react";
 
 import AdminLayout from "../../components/admin/AdminLayout";
 import { verifyAdminSession } from "../../lib/admin/auth";
+import { getFile, listFiles } from "../../lib/admin/github";
 import { sanitizeHtml } from "../../lib/admin/sanitize";
-import { supabaseAdmin } from "../../lib/admin/supabase";
-import type { ReviewRow, ReviewStatus } from "../../lib/admin/supabase.types";
 import * as s from "../../styles/admin/reviews.css";
+import type { ReviewJson, ReviewStatus } from "../api/admin/reviews/index";
 
 // ──────────────────────────────────────────────────────────
 // Types
 // ──────────────────────────────────────────────────────────
 type Props = {
-  reviews: ReviewRow[];
+  reviews: ReviewJson[];
   activeStatus: ReviewStatus | "all";
 };
 
@@ -59,7 +59,7 @@ function AdminReviewsPage({
   reviews: initialReviews,
   activeStatus,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const [reviews, setReviews] = useState<ReviewRow[]>(initialReviews);
+  const [reviews, setReviews] = useState<ReviewJson[]>(initialReviews);
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
   async function handleAction(id: string, action: "approve" | "reject") {
@@ -70,16 +70,9 @@ function AdminReviewsPage({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action }),
       });
-      const data = (await res.json()) as { ok: boolean };
-      if (data.ok) {
-        const newStatus: ReviewStatus = action === "approve" ? "approved" : "rejected";
-        setReviews((prev) =>
-          prev.map((r) =>
-            r.id === id
-              ? { ...r, status: newStatus, published_at: action === "approve" ? new Date().toISOString() : r.published_at }
-              : r,
-          ),
-        );
+      const data = (await res.json()) as { ok: boolean; data?: ReviewJson };
+      if (data.ok && data.data) {
+        setReviews((prev) => prev.map((r) => (r.id === id ? (data.data as ReviewJson) : r)));
       }
     } finally {
       setLoadingId(null);
@@ -115,10 +108,7 @@ function AdminReviewsPage({
                 <div className={s.cardHeader}>
                   <span className={s.reviewerName}>{review.name}</span>
                   <span className={s.rating}>{stars(review.rating)}</span>
-                  {review.event_type && (
-                    <span style={{ fontSize: "12px", color: "#94a3b8" }}>{review.event_type}</span>
-                  )}
-                  <span className={s.reviewDate}>{formatDate(review.created_at)}</span>
+                  <span className={s.reviewDate}>{formatDate(review.createdAt)}</span>
                 </div>
 
                 <p
@@ -182,13 +172,25 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, query
     ? (statusParam as ReviewStatus)
     : "all";
 
-  let dbQuery = supabaseAdmin.from("reviews").select("*").order("created_at", { ascending: false });
+  try {
+    const entries = await listFiles("data/reviews");
+    const jsonFiles = entries.filter(
+      (e) => e.type === "file" && e.name.endsWith(".json") && e.name !== ".gitkeep",
+    );
 
-  if (activeStatus !== "all") {
-    dbQuery = dbQuery.eq("status", activeStatus);
+    const all = await Promise.all(
+      jsonFiles.map(async (entry) => {
+        const { content } = await getFile(entry.path);
+        return JSON.parse(content) as ReviewJson;
+      }),
+    );
+
+    const reviews = (activeStatus === "all" ? all : all.filter((r) => r.status === activeStatus))
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+    return { props: { reviews, activeStatus } };
+  } catch (err) {
+    console.error("[admin/reviews] GitHub fetch error:", err);
+    return { props: { reviews: [], activeStatus } };
   }
-
-  const { data } = (await dbQuery) as { data: ReviewRow[] | null; error: unknown };
-
-  return { props: { reviews: data ?? [], activeStatus } };
 };

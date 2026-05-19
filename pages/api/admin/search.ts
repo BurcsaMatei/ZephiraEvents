@@ -1,24 +1,25 @@
 // pages/api/admin/search.ts
-// GET ?q= — caută simultan în messages și reviews.
-// Protejat cu sesiune admin.
+// GET ?q= — caută simultan în messages și reviews din Git.
+// Filtrare în memorie după query.
 
 import type { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
 
 import { verifyAdminSession } from "../../../lib/admin/auth";
+import { getFile, listFiles } from "../../../lib/admin/github";
 import { errorResponse, okResponse } from "../../../lib/admin/response";
-import { supabaseAdmin } from "../../../lib/admin/supabase";
-import type { MessageType, ReviewStatus } from "../../../lib/admin/supabase.types";
+import type { MessageJson } from "./messages/index";
+import type { ReviewJson, ReviewStatus } from "./reviews/index";
 
 // ──────────────────────────────────────────────────────────
-// Tipuri publice — importate via `import type` în AdminSearch
+// Tipuri publice
 // ──────────────────────────────────────────────────────────
 export interface SearchMessage {
   id: string;
   name: string;
   email: string;
   preview: string;
-  type: MessageType;
+  type: MessageJson["type"];
   created_at: string;
 }
 
@@ -45,9 +46,8 @@ const querySchema = z.object({
   q: z.string().min(2).max(100),
 });
 
-// Elimină caractere care pot sparge sintaxa filterului PostgREST .or()
-function sanitize(s: string): string {
-  return s.replace(/[%_\\,()'"/]/g, "").trim();
+function matches(haystack: string, needle: string): boolean {
+  return haystack.toLowerCase().includes(needle.toLowerCase());
 }
 
 // ──────────────────────────────────────────────────────────
@@ -65,51 +65,65 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   const parsed = querySchema.safeParse(req.query);
   if (!parsed.success) {
-    return res
-      .status(400)
-      .json(errorResponse(parsed.error.issues.map((i) => i.message).join(" ")));
+    return res.status(400).json(errorResponse(parsed.error.issues.map((i) => i.message).join(" ")));
   }
 
-  const q = sanitize(parsed.data.q);
+  const q = parsed.data.q.trim();
   if (q.length < 2) {
     return res.status(200).json(okResponse({ messages: [], reviews: [] }));
   }
 
-  const p = `%${q}%`;
+  try {
+    const [msgEntries, revEntries] = await Promise.all([
+      listFiles("data/messages"),
+      listFiles("data/reviews"),
+    ]);
 
-  const [msgRes, revRes] = await Promise.all([
-    supabaseAdmin
-      .from("messages")
-      .select("id, name, email, message, type, created_at")
-      .or(`name.ilike.${p},email.ilike.${p},message.ilike.${p}`)
-      .is("deleted_at", null)
-      .order("created_at", { ascending: false })
-      .limit(5),
-    supabaseAdmin
-      .from("reviews")
-      .select("id, name, text, rating, status, created_at")
-      .or(`name.ilike.${p},text.ilike.${p}`)
-      .order("created_at", { ascending: false })
-      .limit(5),
-  ]);
+    const msgFiles = msgEntries.filter(
+      (e) => e.type === "file" && e.name.endsWith(".json") && e.name !== ".gitkeep",
+    );
+    const revFiles = revEntries.filter(
+      (e) => e.type === "file" && e.name.endsWith(".json") && e.name !== ".gitkeep",
+    );
 
-  const messages: SearchMessage[] = (msgRes.data ?? []).map((m) => ({
-    id: String(m.id),
-    name: String(m.name),
-    email: String(m.email),
-    preview: String(m.message ?? "").slice(0, 80),
-    type: m.type as MessageType,
-    created_at: String(m.created_at),
-  }));
+    const [allMessages, allReviews] = await Promise.all([
+      Promise.all(msgFiles.map(async (e) => JSON.parse((await getFile(e.path)).content) as MessageJson)),
+      Promise.all(revFiles.map(async (e) => JSON.parse((await getFile(e.path)).content) as ReviewJson)),
+    ]);
 
-  const reviews: SearchReview[] = (revRes.data ?? []).map((r) => ({
-    id: String(r.id),
-    name: String(r.name),
-    preview: String(r.text ?? "").slice(0, 80),
-    rating: Number(r.rating),
-    status: r.status as ReviewStatus,
-    created_at: String(r.created_at),
-  }));
+    const messages: SearchMessage[] = allMessages
+      .filter(
+        (m) =>
+          !m.deleted &&
+          (matches(m.name, q) || matches(m.email, q) || matches(m.message ?? "", q)),
+      )
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, 5)
+      .map((m) => ({
+        id: m.id,
+        name: m.name,
+        email: m.email,
+        preview: (m.message ?? m.eventType ?? "").slice(0, 80),
+        type: m.type,
+        created_at: m.createdAt,
+      }));
 
-  return res.status(200).json(okResponse({ messages, reviews }));
+    const reviews: SearchReview[] = allReviews
+      .filter((r) => matches(r.name, q) || matches(r.text, q))
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, 5)
+      .map((r) => ({
+        id: r.id,
+        name: r.name,
+        preview: r.text.slice(0, 80),
+        rating: r.rating,
+        status: r.status,
+        created_at: r.createdAt,
+      }));
+
+    return res.status(200).json(okResponse({ messages, reviews }));
+  } catch (err) {
+    console.error("[admin/search] error:", err);
+    return res.status(500).json(errorResponse("Eroare la căutare."));
+  }
 }
