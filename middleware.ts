@@ -59,7 +59,7 @@ export function middleware(req: NextRequest) {
     "blob:",
     ...(ASSET_ORIGIN ? [ASSET_ORIGIN] : []),
   ];
-  const fontSrc: string[] = ["'self'", "https:", "data:"];
+  const fontSrc: string[] = ["'self'", "data:"];
   const connectSrc: string[] = [
     "'self'",
     ...(isProd ? [] : ["ws:"]),
