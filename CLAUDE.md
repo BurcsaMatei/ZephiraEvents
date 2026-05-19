@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v14
+**Versiune:** v15
 **Data:** 2026-05-19
 **Status:** activ
 
@@ -28,6 +28,7 @@ ZephiraEvents este un website premium de prezentare și conversie pentru o sală
 - **Deployment:** Vercel
 - **PWA:** next-pwa (activ doar în producție cu `NEXT_PUBLIC_ENABLE_PWA=1`); `public/sw.js`, `public/workbox-*.js`, `public/fallback-*.js` sunt generate la build și sunt în `.gitignore`
 - **SEO:** metadata centralizată, JSON-LD, OG static pre-generat, sitemap/robots server-side
+- **Assets media:** imagini servite nativ ca **WebP** (conversie one-shot 2026-05-19, fără pipeline runtime); video-uri servite nativ ca **MP4 H.264** (deja optimizate CRF 28, mai eficiente decât VP9 pe conținut pre-comprimat); excepții: `og*.jpg` rămân JPG (compatibilitate OG social), `public/icons/*.png` + favicon + screenshots + `logo-dedicat.png` rămân PNG (PWA/JSON-LD)
 - **devDependencies notabile:** `sharp` (optimizare imagini + procesare foto profil recenzii), `puppeteer` (generare OG screenshots)
 
 ---
@@ -455,6 +456,15 @@ ALTER DATABASE postgres SET app.service_role_key = '<SUPABASE_SERVICE_ROLE_KEY>'
 - **Migrare rulată 2026-05-19**: 12 recenzii din `data/reviews.json` → `data/reviews/` (12 fișiere JSON)
 - `ReviewJson` interface: extins cu `profilePhotoUrl?` și `deleted?`
 
+**~~Assets media WebP/MP4 nativ~~ ✓ ÎNCHIS 2026-05-19** (branch feat/webp-webm-native, issue #128)
+- 124 fișiere JPG/PNG convertite la WebP cu `sharp` one-shot; originalele șterse
+- Toate referințele actualizate în cod, JSON data, `data/reviews/*.json`
+- `scripts/build-gallery.mjs`: `IMG_EXT` → doar `.webp`/`.avif`; `lib/gallery.data.ts` regenerat
+- `scripts/optimise-images.mjs` rescris: utilitar selectiv WebP→WebP
+- `scripts/optimise-videos.mjs` rescris: utilitar selectiv MP4→MP4 (H.264 CRF 28)
+- VP9/WebM abandonat: re-encodare pe H.264 CRF 28 pre-comprimat produce fișiere +60% mai mari
+- Excepții documentate: `og*.jpg`, `icons/*.png`, favicon, `logo-dedicat.png`
+
 **~~PWA generated files — .gitignore~~ ✓ ÎNCHIS 2026-05-19**
 - `.gitignore` actualizat: adăugate `public/sw.js`, `public/workbox-*.js`, `public/fallback-*.js` (generate de next-pwa la build, nu se commitează)
 
@@ -578,12 +588,20 @@ scripts/optimise-videos.mjs
 
 - OG images → statice pre-generate (zero CPU runtime)
 - Reviews → GitHub API SSR (JSON files în git, fără DB round-trip)
-- Imagini comprimate cu sharp (MozJPEG q70) — reducere ~34%
-- Video-uri comprimate cu ffmpeg (CRF 26-32) — reducere ~64%
+- Imagini convertite la **WebP nativ** (2026-05-19, 124 fișiere JPG/PNG → WebP q80/q90 cu sharp); `og*.jpg` rămân JPG; icon/favicon/screenshot rămân PNG; reducere totală ~11% pe imagini convertite (câștig real pe PNG → WebP: ~80%)
+- Video-uri comprimate cu ffmpeg H.264 CRF 28 -preset slow (reducere ~64% față de surse raw); MP4 rămân format final — VP9/WebM abandonat (re-encodarea produce fișiere mai mari pe conținut pre-comprimat CRF 28)
 - Hero și TentBanner → video responsive (desktop 1920×1080, mobil 854×480)
 - LCP fix — preload manual pentru imaginea hero în `pages/index.tsx`
 - TBT fix — motion cache module-level, `ReducedMotionProvider` global, `ArcGallery` lazy, cookie batching
 - Lightbox CSS scoped la `pages/galerie.tsx` și `pages/cort-evenimente-la-locatia-ta.tsx`
+
+### Assets media WebP/MP4 nativ 2026-05-19 (branch feat/webp-webm-native)
+
+- **Imagini:** 124 fișiere JPG/PNG → WebP one-shot cu `scripts/convert-to-webp.mjs` (șters după conversie); surse noi se adaugă direct ca WebP; `scripts/optimise-images.mjs` rescris ca utilitar selectiv WebP→WebP
+- **Video-uri:** rămân MP4 H.264 CRF 28; VP9/WebM abandonat — re-encodarea pe conținut pre-comprimat produce fișiere +60% mai mari; `scripts/optimise-videos.mjs` rescris ca utilitar selectiv MP4→MP4
+- **Excepții documentate:** `og*.jpg` (OG social — Facebook/Twitter/WhatsApp incompatibili cu WebP); `public/icons/*.png` + `favicon*.png` + `public/screenshots/*.png` (PWA/iOS); `public/logo-dedicat.png` (JSON-LD logo)
+- **`data/reviews/*.json`:** `profilePhotoUrl` actualizat `.jpg` → `.webp`; `data/reviews.json` (legacy) actualizat pentru consistență
+- **`scripts/build-gallery.mjs`:** `IMG_EXT` actualizat să accepte doar `.webp` și `.avif`
 
 ### Reviews — persistență GitHub API 2026-05-19 (PR #131 + #133)
 
@@ -682,3 +700,6 @@ scripts/optimise-videos.mjs
 - Nu lăsa `public/llms.txt` desincronizat la schimbări majore (meniuri noi, pagini noi, prețuri modificate)
 - Nu scrie recenzii în Supabase `reviews` table — persistența e acum în Git (`data/reviews/*.json` via GitHub API)
 - Nu committa `public/sw.js`, `public/workbox-*.js`, `public/fallback-*.js` — sunt generate de next-pwa la build și sunt în `.gitignore`
+- Nu adăuga assets imagine în `public/images/` ca JPG sau PNG — folosește WebP; excepții: `og*.jpg` (OG social), `public/icons/*.png` (PWA), `favicon*.png`, `public/logo-dedicat.png` (JSON-LD)
+- Nu adăuga video-uri în `public/videos/` ca WebM VP9 — rămân MP4 H.264; VP9 re-encodat pe H.264 CRF 28 produce fișiere mai mari (testat și abandonat 2026-05-19)
+- Nu modifica `IMG_EXT` din `scripts/build-gallery.mjs` să accepte `.jpg`/`.jpeg`/`.png` — galeria e acum 100% WebP

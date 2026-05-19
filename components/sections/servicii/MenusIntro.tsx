@@ -33,7 +33,7 @@ export default function MenusIntro(): JSX.Element {
         {/* Coloana stânga */}
         <div className={w.imageCol}>
           <Image
-            src="/images/servicii/servicii/menus-left.png"
+            src="/images/servicii/servicii/menus-left.webp"
             alt="Meniuri ZephiraEvents"
             fill
             style={{ objectFit: "contain", objectPosition: "bottom" }}
@@ -59,7 +59,7 @@ export default function MenusIntro(): JSX.Element {
         {/* Coloana dreapta */}
         <div className={w.imageCol}>
           <Image
-            src="/images/servicii/servicii/menus-right.png"
+            src="/images/servicii/servicii/menus-right.webp"
             alt="Preparate meniu ZephiraEvents"
             fill
             style={{ objectFit: "contain", objectPosition: "bottom" }}

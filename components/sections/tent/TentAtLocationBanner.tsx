@@ -14,7 +14,7 @@ import HeroLCPImage from "../../HeroLCPImage";
 // ==============================
 // Constante
 // ==============================
-const POSTER_SRC = "/images/current/hero-services.jpg";
+const POSTER_SRC = "/images/current/hero-services.webp";
 const VIDEO_SRC_MOBILE = "/videos/current/your-location-tent-video-mobile.mp4";
 const VIDEO_SRC_DESKTOP = "/videos/current/your-location-tent-video.mp4";
 

@@ -13,7 +13,7 @@ const OUT_TS = path.join(ROOT, "lib", "gallery.data.ts");
 const OUT_JSON = path.join(ROOT, "data", "gallery.json");
 const CAPTIONS_JSON = path.join(ROOT, "data", "galleryCaptions.json");
 
-const IMG_EXT = new Set([".jpg", ".jpeg", ".png", ".webp", ".avif"]);
+const IMG_EXT = new Set([".webp", ".avif"]);
 
 // Title-case minimal din numele fișierului
 function toTitle(s) {
@@ -98,7 +98,7 @@ function hashId(src) {
     const items = files.map((abs) => {
       const relFromPublic = path.relative(PUBLIC_DIR, abs).replace(/\\/g, "/"); // normalizează pe '/'
       const src = `/${relFromPublic}`;
-      const base = path.basename(abs); // ex: g-001.jpg
+      const base = path.basename(abs); // ex: g-001.webp
       const baseNoExt = path.basename(abs, path.extname(abs)).toLowerCase();
 
       const id = hashId(src);

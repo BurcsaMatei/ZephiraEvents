@@ -123,7 +123,7 @@ const POSTS_RAW = [
     date: "2025-08-12T09:00:00Z",
     excerpt:
       "Palete glamour, lumini calde și aranjamente aerisite: cum creezi o atmosferă elegantă pentru o nuntă memorabilă în Focsani.",
-    coverImage: "/images/blog/cover-2.jpg",
+    coverImage: "/images/blog/cover-2.webp",
     author: "ZephiraEvents",
     tags: ["nunti", "design", "tendinte"],
     readingTime: "5 min",
@@ -144,7 +144,7 @@ const POSTS_RAW = [
     date: "2025-08-10T09:00:00Z",
     excerpt:
       "Buget clar, cronologie bine pusă la punct și furnizori verificați. Rețeta pentru o zi fără stres la ZephiraEvents.",
-    coverImage: "/images/blog/cover-1.jpg",
+    coverImage: "/images/blog/cover-1.webp",
     author: "Redacția",
     tags: ["organizare", "nunti", "checklist"],
     readingTime: "5 min",
@@ -166,7 +166,7 @@ const POSTS_RAW = [
     date: "2025-08-05T08:30:00Z",
     excerpt:
       "Sincronizează fără grabă pregătirile, ceremonia și petrecerea. Un flux clar garantează energie bună până la final.",
-    coverImage: "/images/blog/cover-3.jpg",
+    coverImage: "/images/blog/cover-3.webp",
     author: "ZephiraEvents",
     tags: ["planificare", "cronologie", "nunti"],
     readingTime: "4 min",
@@ -188,7 +188,7 @@ const POSTS_RAW = [
     date: "2025-08-01T10:00:00Z",
     excerpt:
       "Plan B pentru vreme, iluminat ambiental și flow natural între ceremonie și party. Tot ce trebuie să știi.",
-    coverImage: "/images/blog/cover-4.jpg",
+    coverImage: "/images/blog/cover-4.webp",
     author: "Redacția",
     tags: ["outdoor", "nunti", "planning"],
     readingTime: "4 min",
@@ -210,7 +210,7 @@ const POSTS_RAW = [
     date: "2025-07-20T09:15:00Z",
     excerpt:
       "Confortul și logistica primează. Interior pentru control total, grădină pentru cadru romantic – alege în funcție de sezon și număr de invitați.",
-    coverImage: "/images/blog/cover-5.jpg",
+    coverImage: "/images/blog/cover-5.webp",
     author: "ZephiraEvents",
     tags: ["locații", "nunti", "focsani"],
     readingTime: "4 min",
@@ -231,7 +231,7 @@ const POSTS_RAW = [
     date: "2025-07-10T07:45:00Z",
     excerpt:
       "Fotografii memorabile cer lumină bună, un decor coerent și un plan simplu pentru momentele-cheie.",
-    coverImage: "/images/blog/cover-6.jpg",
+    coverImage: "/images/blog/cover-6.webp",
     author: "Redacția",
     tags: ["foto", "video", "nunti"],
     readingTime: "3 min",
@@ -252,7 +252,7 @@ const POSTS_RAW = [
     date: "2025-06-28T11:10:00Z",
     excerpt:
       "Save the date, RSVP, dress code și program: comunică clar în 6–10 cuvinte, fără jargon.",
-    coverImage: "/images/blog/cover-7.jpg",
+    coverImage: "/images/blog/cover-7.webp",
     author: "ZephiraEvents",
     tags: ["invitații", "comunicare", "nunti"],
     readingTime: "3 min",
@@ -273,7 +273,7 @@ const POSTS_RAW = [
     date: "2025-06-15T08:00:00Z",
     excerpt:
       "Confirmări, plan B, brief furnizori și timeline imprimat. Totul sub control pentru o seară perfectă.",
-    coverImage: "/images/blog/cover-8.jpg",
+    coverImage: "/images/blog/cover-8.webp",
     author: "Redacția",
     tags: ["checklist", "ultimasaptamana", "nunti"],
     readingTime: "3 min",

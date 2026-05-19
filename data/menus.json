@@ -4,7 +4,7 @@
     "title": "Oferta Meniu Basic",
     "pricePerPers": 56,
     "currency": "EUR",
-    "image": "/images/servicii/meniu/meniu-01.jpg",
+    "image": "/images/servicii/meniu/meniu-01.webp",
     "imageAlt": "Meniu Basic — platouri reci, salau butter lemon, sarmalute, cotlet porc",
     "eventType": "Nunta",
     "sections": {
@@ -34,7 +34,7 @@
     "title": "Oferta Meniu Gold",
     "pricePerPers": 68,
     "currency": "EUR",
-    "image": "/images/servicii/meniu/meniu-02.jpg",
+    "image": "/images/servicii/meniu/meniu-02.webp",
     "imageAlt": "Meniu Gold — platouri reci, pastrav risotto, sarmalute, ceafa porc",
     "eventType": "Nunta",
     "sections": {
@@ -67,7 +67,7 @@
     "title": "Oferta Meniu Traditional",
     "pricePerPers": 76,
     "currency": "EUR",
-    "image": "/images/servicii/meniu/meniu-03.jpg",
+    "image": "/images/servicii/meniu/meniu-03.webp",
     "imageAlt": "Meniu Traditional — platouri reci traditionale, pastrav risotto, sarmalute mixte, fel principal cu porc si pui",
     "eventType": "Nunta",
     "sections": {
@@ -108,7 +108,7 @@
     "title": "Oferta Meniu Platinum",
     "pricePerPers": 80,
     "currency": "EUR",
-    "image": "/images/servicii/meniu/meniu-04.jpg",
+    "image": "/images/servicii/meniu/meniu-04.webp",
     "imageAlt": "Meniu Platinum — platouri reci, somon migdale, sarmalute mixte, fel principal complet",
     "eventType": "Nunta",
     "sections": {
@@ -154,7 +154,7 @@
     "title": "Oferta Meniu Diamond",
     "pricePerPers": 100,
     "currency": "EUR",
-    "image": "/images/servicii/meniu/meniu-05.jpg",
+    "image": "/images/servicii/meniu/meniu-05.webp",
     "imageAlt": "Meniu Diamond — platouri reci premium, somon risotto, sarmalute mixte, fel principal gourmet",
     "eventType": "Nunta",
     "sections": {
@@ -201,7 +201,7 @@
     "title": "Meniu Botez & Cununie — BASIC",
     "pricePerPers": 46,
     "currency": "EUR",
-    "image": "/images/servicii/meniu/meniu-06.jpg",
+    "image": "/images/servicii/meniu/meniu-06.webp",
     "imageAlt": "Meniu Botez & Cununie BASIC — antreu rece, sarmale și fel principal",
     "eventType": "Botez & Cununie",
     "sections": {
@@ -230,7 +230,7 @@
     "title": "Meniu Botez & Cununie — ZEPHIRA I",
     "pricePerPers": 50,
     "currency": "EUR",
-    "image": "/images/servicii/meniu/meniu-07.jpg",
+    "image": "/images/servicii/meniu/meniu-07.webp",
     "imageAlt": "Meniu Botez & Cununie ZEPHIRA I — antreu rece, pește și fel principal",
     "eventType": "Botez & Cununie",
     "sections": {
@@ -262,7 +262,7 @@
     "title": "Meniu Botez & Cununie — ZEPHIRA II",
     "pricePerPers": 52,
     "currency": "EUR",
-    "image": "/images/servicii/meniu/meniu-08.jpg",
+    "image": "/images/servicii/meniu/meniu-08.webp",
     "imageAlt": "Meniu Botez & Cununie ZEPHIRA II — antreu rece, pește și fel principal",
     "eventType": "Botez & Cununie",
     "sections": {
@@ -294,7 +294,7 @@
     "title": "Meniu Botez & Cununie — ZEPHIRA III",
     "pricePerPers": 52,
     "currency": "EUR",
-    "image": "/images/servicii/meniu/meniu-09.jpg",
+    "image": "/images/servicii/meniu/meniu-09.webp",
     "imageAlt": "Meniu Botez & Cununie ZEPHIRA III — antreu rece, fel tradițional și fel principal",
     "eventType": "Botez & Cununie",
     "sections": {
@@ -326,7 +326,7 @@
     "title": "Meniu Botez & Cununie — TRADITIONAL I",
     "pricePerPers": 55,
     "currency": "EUR",
-    "image": "/images/servicii/meniu/meniu-10.jpg",
+    "image": "/images/servicii/meniu/meniu-10.webp",
     "imageAlt": "Meniu Botez & Cununie TRADITIONAL I — antreu rece, pește și fel principal",
     "eventType": "Botez & Cununie",
     "sections": {
@@ -357,7 +357,7 @@
     "title": "Meniu Botez & Cununie — TRADIȚIONAL II",
     "pricePerPers": 60,
     "currency": "EUR",
-    "image": "/images/servicii/meniu/meniu-11.jpg",
+    "image": "/images/servicii/meniu/meniu-11.webp",
     "imageAlt": "Meniu Botez & Cununie TRADIȚIONAL II — antreu rece, fel tradițional și fel principal",
     "eventType": "Botez & Cununie",
     "sections": {
@@ -388,7 +388,7 @@
     "title": "Meniu: Corporate & Team Building — BASIC",
     "pricePerPers": 180,
     "currency": "RON",
-    "image": "/images/servicii/meniu/meniu-12.jpg",
+    "image": "/images/servicii/meniu/meniu-12.webp",
     "imageAlt": "Meniu Corporate & Team Building BASIC — antreu rece, fel principal și băuturi răcoritoare",
     "eventType": "Corporate & Team Building",
     "sections": {
@@ -417,7 +417,7 @@
     "title": "Meniu: Corporate & Team Building — ZEPHIRA / GLAMOUR",
     "pricePerPers": 250,
     "currency": "RON",
-    "image": "/images/servicii/meniu/meniu-13.jpg",
+    "image": "/images/servicii/meniu/meniu-13.webp",
     "imageAlt": "Meniu Corporate & Team Building ZEPHIRA / GLAMOUR — antreu rece, fel principal și cocktail bar",
     "eventType": "Corporate & Team Building",
     "sections": {
@@ -457,7 +457,7 @@
     "title": "Meniu: Corporate & Team Building — TRADIȚIONAL",
     "pricePerPers": 250,
     "currency": "RON",
-    "image": "/images/servicii/meniu/meniu-14.jpg",
+    "image": "/images/servicii/meniu/meniu-14.webp",
     "imageAlt": "Meniu Corporate & Team Building TRADIȚIONAL — antreu rece, fel principal și cocktail bar",
     "eventType": "Corporate & Team Building",
     "sections": {
@@ -500,7 +500,7 @@
     "title": "Meniu: Petreceri Private & Majorate — BASIC",
     "pricePerPers": 180,
     "currency": "RON",
-    "image": "/images/servicii/meniu/meniu-15.jpg",
+    "image": "/images/servicii/meniu/meniu-15.webp",
     "imageAlt": "Meniu Petreceri Private & Majorate BASIC — antreu rece, fel principal și băuturi răcoritoare",
     "eventType": "Petreceri Private & Majorate",
     "sections": {
@@ -529,7 +529,7 @@
     "title": "Meniu: petreceri Petreceri Private & Majorate — ZEPHIRA / GLAMOUR",
     "pricePerPers": 250,
     "currency": "RON",
-    "image": "/images/servicii/meniu/meniu-16.jpg",
+    "image": "/images/servicii/meniu/meniu-16.webp",
     "imageAlt": "Meniu Petreceri Private & Majorate ZEPHIRA / GLAMOUR — antreu rece, fel principal și cocktail bar",
     "eventType": "Petreceri Private & Majorate",
     "sections": {
@@ -569,7 +569,7 @@
     "title": "Meniu: petreceri private / banchete / majorate — TRADIȚIONAL",
     "pricePerPers": 250,
     "currency": "RON",
-    "image": "/images/servicii/meniu/meniu-17.jpg",
+    "image": "/images/servicii/meniu/meniu-17.webp",
     "imageAlt": "Meniu Petreceri Private & Majorate TRADIȚIONAL — antreu rece, fel principal și cocktail bar",
     "eventType": "Petreceri Private & Majorate",
     "sections": {

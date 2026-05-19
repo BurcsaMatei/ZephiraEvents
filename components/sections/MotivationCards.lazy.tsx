@@ -32,10 +32,10 @@ export type MotivationCardsProps = {
 // Constants
 // ==============================
 const DEFAULT_MEDIA = [
-  "/images/motivationcards/mc-01.jpg",
-  "/images/motivationcards/mc-02.jpg",
-  "/images/motivationcards/mc-03.jpg",
-  "/images/motivationcards/mc-04.jpg",
+  "/images/motivationcards/mc-01.webp",
+  "/images/motivationcards/mc-02.webp",
+  "/images/motivationcards/mc-03.webp",
+  "/images/motivationcards/mc-04.webp",
 ] as const;
 
 const BACK_MESSAGE = "Planifică evenimentul ideal la Zephira — servicii complete și flexibile.";
@@ -121,7 +121,7 @@ function Card({
 
   const liPoints = Array.isArray(points) ? points.slice(0, 5) : [];
   const media =
-    mediaSrc ?? DEFAULT_MEDIA[index % DEFAULT_MEDIA.length] ?? "/images/motivationcards/mc-01.jpg";
+    mediaSrc ?? DEFAULT_MEDIA[index % DEFAULT_MEDIA.length] ?? "/images/motivationcards/mc-01.webp";
   const bgStyle = { backgroundImage: `url("${media}")` };
 
   return (

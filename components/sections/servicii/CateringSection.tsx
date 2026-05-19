@@ -66,7 +66,7 @@ export default function CateringSection(): JSX.Element {
         {/* Coloana stânga */}
         <div className={w.imageCol}>
           <Image
-            src="/images/servicii/servicii/waiter-cat-2.png"
+            src="/images/servicii/servicii/waiter-cat-2.webp"
             alt="Catering ZephiraEvents"
             fill
             style={{ objectFit: "contain", objectPosition: "bottom" }}
@@ -97,7 +97,7 @@ export default function CateringSection(): JSX.Element {
         {/* Coloana dreapta */}
         <div className={w.imageCol}>
           <Image
-            src="/images/servicii/servicii/waiter-cat-1.png"
+            src="/images/servicii/servicii/waiter-cat-1.webp"
             alt="Preparate catering ZephiraEvents"
             fill
             style={{ objectFit: "contain", objectPosition: "bottom" }}

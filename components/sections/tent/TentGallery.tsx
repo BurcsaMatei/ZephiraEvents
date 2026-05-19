@@ -15,7 +15,7 @@ import Appear from "../../animations/Appear";
 // Constante
 // ==============================
 const IMAGES = Array.from({ length: 20 }, (_, i) => ({
-  src: `/images/gallery/tent/g-${String(i + 1).padStart(3, "0")}.jpg`,
+  src: `/images/gallery/tent/g-${String(i + 1).padStart(3, "0")}.webp`,
   alt: `Cort evenimente la locația ta — ${i + 1}`,
 }));
 

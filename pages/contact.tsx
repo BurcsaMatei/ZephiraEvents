@@ -148,7 +148,7 @@ const ContactPage: NextPage = () => (
           title="Contactează ZephiraEvents din Focșani, Vrancea"
           subtitle="Sală de evenimente în Focșani, Vrancea — scrie-ne pentru nuntă, botez, majorat sau corporate. Îți răspundem rapid cu disponibilitatea sălii și o ofertă adaptată."
           image={{
-            src: "/images/current/hero-contact.jpg",
+            src: "/images/current/hero-contact.webp",
             alt: "Contact sală de evenimente ZephiraEvents, Focșani",
           }}
           height="md"
@@ -258,7 +258,7 @@ const ContactPage: NextPage = () => (
                     "Plan dedicat pentru nuntă, botez, majorat",
                     "Coordonare A-Z în ziua evenimentului",
                   ],
-                  mediaSrc: "/images/motivationcards/mc-17.jpg",
+                  mediaSrc: "/images/motivationcards/mc-17.webp",
                   ctaHref: "/servicii",
                   backMsg: "Descoperă toate serviciile noastre.",
                 },
@@ -269,7 +269,7 @@ const ContactPage: NextPage = () => (
                     "Parteneri DJ, foto-video & decor",
                     "Setup clasic, modern sau corporate",
                   ],
-                  mediaSrc: "/images/motivationcards/mc-18.jpg",
+                  mediaSrc: "/images/motivationcards/mc-18.webp",
                   ctaHref: "/servicii#meniuri-nunta",
                   backMsg: "Vezi meniurile noastre pentru nuntă.",
                 },
@@ -280,7 +280,7 @@ const ContactPage: NextPage = () => (
                     "Zone foto & momente memorabile",
                     "Acces facil, parcare, semnalistică",
                   ],
-                  mediaSrc: "/images/motivationcards/mc-19.jpg",
+                  mediaSrc: "/images/motivationcards/mc-19.webp",
                   ctaHref: "/galerie",
                   backMsg: "Explorează galeria evenimentelor noastre.",
                 },
@@ -291,7 +291,7 @@ const ContactPage: NextPage = () => (
                     "Timeline asumat și check-listuri",
                     "Suport prompt înainte/după eveniment",
                   ],
-                  mediaSrc: "/images/motivationcards/mc-20.jpg",
+                  mediaSrc: "/images/motivationcards/mc-20.webp",
                   ctaHref: "/blog",
                   backMsg: "Citește articolele noastre pe blog.",
                 },

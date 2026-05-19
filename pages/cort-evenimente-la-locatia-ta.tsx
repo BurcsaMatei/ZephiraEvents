@@ -83,7 +83,7 @@ const TentAtLocationPage: NextPage = () => {
             title="Cort de evenimente premium — la locația ta din Vrancea"
             subtitle="Amplasăm cortul, organizăm, gătim, servim și coordonăm A–Z — tu alegi locația, noi ne ocupăm de restul."
             image={{
-              src: "/images/current/hero-tent.jpg",
+              src: "/images/current/hero-tent.webp",
               alt: "Cort de evenimente — servicii ZephiraEvents",
             }}
             height="md"
@@ -208,7 +208,7 @@ const TentAtLocationPage: NextPage = () => {
                       "Decor personalizat și coordonare completă",
                       "Meniu și catering la standarde înalte",
                     ],
-                    mediaSrc: "/images/motivationcards/mc-21.jpg",
+                    mediaSrc: "/images/motivationcards/mc-21.webp",
                     ctaHref: "/servicii#meniuri-nunta",
                     backMsg: "Vezi meniurile complete pentru nunta ta.",
                   },
@@ -219,7 +219,7 @@ const TentAtLocationPage: NextPage = () => {
                       "Echipă de servire + coordonare în ziua mare",
                       "Meniu adaptat și program flexibil",
                     ],
-                    mediaSrc: "/images/motivationcards/mc-22.jpg",
+                    mediaSrc: "/images/motivationcards/mc-22.webp",
                     ctaHref: "/servicii#meniuri-botez-cununie",
                     backMsg: "Explorează pachetele pentru botez și cununie.",
                   },
@@ -230,7 +230,7 @@ const TentAtLocationPage: NextPage = () => {
                       "Logistică, tehnic și protocol la cheie",
                       "Accesibil oriunde în județ",
                     ],
-                    mediaSrc: "/images/motivationcards/mc-23.jpg",
+                    mediaSrc: "/images/motivationcards/mc-23.webp",
                     ctaHref: "/servicii#meniuri-corporate-team-building",
                     backMsg: "Descoperă soluțiile noastre corporate.",
                   },
@@ -241,7 +241,7 @@ const TentAtLocationPage: NextPage = () => {
                       "Organizare A–Z fără bătăi de cap",
                       "Transparență totală la ofertă",
                     ],
-                    mediaSrc: "/images/motivationcards/mc-24.jpg",
+                    mediaSrc: "/images/motivationcards/mc-24.webp",
                     ctaHref: "/cort-evenimente-la-locatia-ta",
                     backMsg: "Află mai multe despre serviciul de cort la locația ta.",
                   },

@@ -117,7 +117,7 @@ const ServicesPage: NextPage = () => {
             title="Servicii ZephiraEvents"
             subtitle="Sală de evenimente în Focșani, Vrancea — organizare completă pentru nunți, botezuri, majorate și corporate, cu servicii impecabile și coordonare A–Z."
             image={{
-              src: "/images/current/hero-services.jpg",
+              src: "/images/current/hero-services.webp",
               alt: "Sală de evenimente ZephiraEvents din Focșani",
             }}
             height="md"
@@ -322,7 +322,7 @@ const ServicesPage: NextPage = () => {
                       "Coordonare A–Z în ziua evenimentului",
                       "Parteneri: DJ, foto-video, decor",
                     ],
-                    mediaSrc: "/images/motivationcards/mc-09.jpg",
+                    mediaSrc: "/images/motivationcards/mc-09.webp",
                     ctaHref: "/contact",
                     backMsg: "Contactează-ne și stabilim detaliile împreună.",
                   },
@@ -333,7 +333,7 @@ const ServicesPage: NextPage = () => {
                       "Meniu personalizat & servire impecabilă",
                       "Setup flexibil: clasic, modern, corporate",
                     ],
-                    mediaSrc: "/images/motivationcards/mc-10.jpg",
+                    mediaSrc: "/images/motivationcards/mc-10.webp",
                     ctaHref: "/servicii#meniuri-nunta",
                     backMsg: "Explorează meniurile noastre pentru nuntă.",
                   },
@@ -344,7 +344,7 @@ const ServicesPage: NextPage = () => {
                       "Zone foto & momente speciale",
                       "Acces facil, parcare, semnalistică",
                     ],
-                    mediaSrc: "/images/motivationcards/mc-11.jpg",
+                    mediaSrc: "/images/motivationcards/mc-11.webp",
                     ctaHref: "/galerie",
                     backMsg: "Vezi imagini reale din evenimentele noastre.",
                   },
@@ -355,7 +355,7 @@ const ServicesPage: NextPage = () => {
                       "Timeline asumat și check-listuri",
                       "Suport prompt înainte și după eveniment",
                     ],
-                    mediaSrc: "/images/motivationcards/mc-12.jpg",
+                    mediaSrc: "/images/motivationcards/mc-12.webp",
                     ctaHref: "/blog",
                     backMsg: "Citește articolele noastre despre organizarea evenimentelor.",
                   },
