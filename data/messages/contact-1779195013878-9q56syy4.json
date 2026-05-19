@@ -1,0 +1,10 @@
+{
+  "id": "contact-1779195013878-9q56syy4",
+  "type": "contact",
+  "name": "Burcsa Matei",
+  "email": "burcsamatei@outlook.com",
+  "phone": "+40756795162",
+  "message": "Acesta este un mesaj de test si trebuie tratat ca atare. Am migrat de la supabase la git intern fara sa mai avem dependinte externe inutile.",
+  "createdAt": "2026-05-19T12:50:13.878Z",
+  "read": false
+}
