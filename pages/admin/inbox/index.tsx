@@ -1,5 +1,5 @@
 // pages/admin/inbox/index.tsx
-// Lista mesaje admin — contact + oferte + email inbound, ordonate desc.
+// Lista mesaje admin — contact + oferte din data/messages/, ordonate desc.
 
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
@@ -8,33 +8,17 @@ import { type ReactElement, useCallback, useState } from "react";
 
 import AdminLayout from "../../../components/admin/AdminLayout";
 import { verifyAdminSession } from "../../../lib/admin/auth";
-import { supabaseAdmin } from "../../../lib/admin/supabase";
-import type { MessageRow, MessageStatus, MessageType } from "../../../lib/admin/supabase.types";
+import { getFile, listFiles } from "../../../lib/admin/github";
 import * as s from "../../../styles/admin/inbox.css";
+import type { MessageJson } from "../../api/admin/messages/index";
 
 // ──────────────────────────────────────────────────────────
 // Types
 // ──────────────────────────────────────────────────────────
-const PAGE_SIZE = 50;
-
-type MessagePreview = Pick<
-  MessageRow,
-  "id" | "type" | "status" | "name" | "email" | "message" | "event_type" | "created_at" | "metadata" | "deleted_at"
->;
-
 type Props = {
-  messages: MessagePreview[];
+  messages: MessageJson[];
   unreadCount: number;
-  currentPage: number;
-  totalPages: number;
-  totalCount: number;
 };
-
-interface SyncResult {
-  synced: number;
-  skipped: number;
-  errors: string[];
-}
 
 // ──────────────────────────────────────────────────────────
 // Utils
@@ -49,40 +33,13 @@ function formatDate(iso: string): string {
   });
 }
 
-const TYPE_LABEL: Record<MessageType, string> = {
+const TYPE_LABEL: Record<MessageJson["type"], string> = {
   contact: "Contact",
   offer: "Ofertă",
-  email_inbound: "Email",
 };
 
-const STATUS_LABEL: Record<MessageStatus, string> = {
-  new: "Nou",
-  read: "Citit",
-  replied: "Răspuns",
-  archived: "Arhivat",
-};
-
-function typeBadgeClass(t: MessageType): string {
-  if (t === "offer") return s.typeBadgeOffer;
-  if (t === "email_inbound") return s.typeBadgeEmail;
-  return s.typeBadgeContact;
-}
-
-function statusBadgeClass(st: MessageStatus): string {
-  const map: Record<MessageStatus, string> = {
-    new: s.statusBadgeNew,
-    read: s.statusBadgeRead,
-    replied: s.statusBadgeReplied,
-    archived: s.statusBadgeArchived,
-  };
-  return map[st];
-}
-
-function getSubject(msg: Pick<MessageRow, "type" | "metadata">): string | null {
-  if (msg.type !== "email_inbound") return null;
-  const meta = msg.metadata as Record<string, unknown> | null;
-  const sub = meta?.["subject"];
-  return typeof sub === "string" ? sub : null;
+function typeBadgeClass(t: MessageJson["type"]): string {
+  return t === "offer" ? s.typeBadgeOffer : s.typeBadgeContact;
 }
 
 // ──────────────────────────────────────────────────────────
@@ -90,15 +47,8 @@ function getSubject(msg: Pick<MessageRow, "type" | "metadata">): string | null {
 // ──────────────────────────────────────────────────────────
 function AdminInboxPage({
   messages,
-  unreadCount,
-  currentPage,
-  totalPages,
-  totalCount,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter();
-  const [syncing, setSyncing] = useState(false);
-  const [syncResult, setSyncResult] = useState<SyncResult | null>(null);
-  const [syncError, setSyncError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<string | null>(null);
   const [deleteError, setDeleteError] = useState<string | null>(null);
 
@@ -130,54 +80,12 @@ function AdminInboxPage({
     [router],
   );
 
-  async function handleSync() {
-    setSyncing(true);
-    setSyncResult(null);
-    setSyncError(null);
-    try {
-      const res = await fetch("/api/admin/imap-sync", { method: "POST" });
-      const data = (await res.json()) as SyncResult & { error?: string };
-      if (!res.ok) {
-        setSyncError(data.error ?? "Eroare necunoscută");
-      } else {
-        setSyncResult(data);
-        if (data.synced > 0) {
-          await router.replace(router.asPath);
-        }
-      }
-    } catch (err) {
-      setSyncError(err instanceof Error ? err.message : "Eroare de rețea");
-    } finally {
-      setSyncing(false);
-    }
-  }
-
   return (
     <>
       <div className={s.pageHeader}>
         <h1 className={s.pageTitle}>
           Inbox{messages.length > 0 ? ` (${messages.length})` : ""}
         </h1>
-        <div className={s.syncArea}>
-          <button
-            className={`${s.syncBtn}${syncing ? ` ${s.syncBtnLoading}` : ""}`}
-            onClick={handleSync}
-            disabled={syncing}
-            type="button"
-          >
-            {syncing ? "Se sincronizează…" : "Sincronizează email"}
-          </button>
-          {syncResult && (
-            <span className={s.syncStatus}>
-              {syncResult.synced > 0
-                ? `${syncResult.synced} mesaj${syncResult.synced !== 1 ? "e" : ""} nou${syncResult.synced !== 1 ? "ă" : ""}`
-                : "Nimic nou"}
-              {syncResult.skipped > 0 ? `, ${syncResult.skipped} deja existente` : ""}
-              {syncResult.errors.length > 0 ? ` · ${syncResult.errors.length} erori` : ""}
-            </span>
-          )}
-          {syncError && <span className={s.syncStatusError}>{syncError}</span>}
-        </div>
       </div>
       {deleteError && <p className={s.syncStatusError}>{deleteError}</p>}
 
@@ -186,11 +94,8 @@ function AdminInboxPage({
       ) : (
         <div className={s.list}>
           {messages.map((msg) => {
-            const isNew = msg.status === "new";
-            const subject = getSubject(msg);
-            const preview = subject
-              ? `${subject} — ${msg.message ?? ""}`
-              : (msg.message ?? msg.event_type ?? "—");
+            const isNew = !msg.read;
+            const preview = msg.message ?? msg.eventType ?? "—";
             return (
               <div key={msg.id} className={s.itemWrap}>
                 <Link
@@ -202,8 +107,10 @@ function AdminInboxPage({
                       {msg.name}
                     </span>
                     <span className={typeBadgeClass(msg.type)}>{TYPE_LABEL[msg.type]}</span>
-                    <span className={statusBadgeClass(msg.status)}>{STATUS_LABEL[msg.status]}</span>
-                    <span className={s.itemDate}>{formatDate(msg.created_at)}</span>
+                    <span className={isNew ? s.statusBadgeNew : s.statusBadgeRead}>
+                      {isNew ? "Nou" : "Citit"}
+                    </span>
+                    <span className={s.itemDate}>{formatDate(msg.createdAt)}</span>
                   </div>
                   <div className={s.itemEmail}>{msg.email}</div>
                   <div className={s.itemPreview}>{preview.slice(0, 120)}</div>
@@ -223,30 +130,6 @@ function AdminInboxPage({
           })}
         </div>
       )}
-
-      {totalPages > 1 && (
-        <div className={s.pagination}>
-          {currentPage > 1 && (
-            <Link
-              href={{ pathname: "/admin/inbox", query: { page: currentPage - 1 } }}
-              className={s.paginationBtn}
-            >
-              ← Anterior
-            </Link>
-          )}
-          <span className={s.paginationInfo}>
-            Pagina {currentPage} din {totalPages} ({totalCount} mesaje)
-          </span>
-          {currentPage < totalPages && (
-            <Link
-              href={{ pathname: "/admin/inbox", query: { page: currentPage + 1 } }}
-              className={s.paginationBtn}
-            >
-              Următor →
-            </Link>
-          )}
-        </div>
-      )}
     </>
   );
 }
@@ -261,40 +144,33 @@ export default AdminInboxPage;
 // ──────────────────────────────────────────────────────────
 // SSR
 // ──────────────────────────────────────────────────────────
-export const getServerSideProps: GetServerSideProps<Props> = async ({ req, query }) => {
+export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
   if (!verifyAdminSession(req)) {
     return { redirect: { destination: "/admin/login", permanent: false } };
   }
 
-  const pageParam = typeof query.page === "string" ? parseInt(query.page, 10) : 1;
-  const currentPage = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
-  const offset = (currentPage - 1) * PAGE_SIZE;
+  try {
+    const entries = await listFiles("data/messages");
+    const jsonFiles = entries.filter(
+      (e) => e.type === "file" && e.name.endsWith(".json") && e.name !== ".gitkeep",
+    );
 
-  const [msgResult, unreadResult] = await Promise.all([
-    supabaseAdmin
-      .from("messages")
-      .select(
-        "id, type, status, name, email, message, event_type, created_at, metadata, deleted_at",
-        { count: "exact" },
-      )
-      .is("deleted_at", null)
-      .order("created_at", { ascending: false })
-      .range(offset, offset + PAGE_SIZE - 1) as unknown as Promise<{
-      data: MessagePreview[] | null;
-      count: number | null;
-      error: { message: string } | null;
-    }>,
-    supabaseAdmin
-      .from("messages")
-      .select("id", { count: "exact", head: true })
-      .eq("status", "new")
-      .is("deleted_at", null) as unknown as Promise<{ count: number | null }>,
-  ]);
+    const all = await Promise.all(
+      jsonFiles.map(async (entry) => {
+        const { content } = await getFile(entry.path);
+        return JSON.parse(content) as MessageJson;
+      }),
+    );
 
-  const messages = msgResult.data ?? [];
-  const totalCount = msgResult.count ?? 0;
-  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
-  const unreadCount = unreadResult.count ?? 0;
+    const messages = all
+      .filter((m) => !m.deleted)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-  return { props: { messages, unreadCount, currentPage, totalPages, totalCount } };
+    const unreadCount = messages.filter((m) => !m.read).length;
+
+    return { props: { messages, unreadCount } };
+  } catch (err) {
+    console.error("[admin/inbox] GitHub fetch error:", err);
+    return { props: { messages: [], unreadCount: 0 } };
+  }
 };

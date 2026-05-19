@@ -1,31 +1,19 @@
 // pages/api/offer-request.ts
-// ==============================
-// Imports
-// ==============================
-import type { NextApiRequest, NextApiResponse } from "next";
-import nodemailer from "nodemailer";
 
-import { supabaseAdmin } from "../../lib/admin/supabase";
-import { buildOfferEmail, type EmailData } from "../../lib/mail/offerRequestEmail";
+import type { NextApiRequest, NextApiResponse } from "next";
+
+import { createFile } from "../../lib/admin/github";
 import { offerRequestSchema } from "../../lib/validation/offerRequest";
 
-// ==============================
-// Types
-// ==============================
 type Ok = { ok: true };
 type Fail = { ok: false; message: string };
 type Resp = Ok | Fail;
-
-type EmailProvider = "resend" | "smtp";
 
 interface RateCfg {
   max: number;
   windowSec: number;
 }
 
-// ==============================
-// Rate limit (in-memory)
-// ==============================
 const RATE_LIMIT = parseRate(process.env.OFFER_RATE_LIMIT || "3:3600");
 const rlStore = new Map<string, number[]>();
 
@@ -52,79 +40,6 @@ function isLimited(ip: string): boolean {
   return false;
 }
 
-// ==============================
-// Email provider
-// ==============================
-function provider(): EmailProvider | null {
-  if ((process.env.RESEND_API_KEY || "").trim()) return "resend";
-  if ((process.env.SMTP_HOST || "").trim() && (process.env.SMTP_USER || "").trim()) return "smtp";
-  return null;
-}
-
-async function sendWithResend(opts: {
-  to: string[];
-  from: string;
-  replyTo: string;
-  subject: string;
-  text: string;
-  html: string;
-  bcc?: string[];
-}) {
-  const apiKey = process.env.RESEND_API_KEY!;
-  const res = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from: opts.from,
-      to: opts.to,
-      bcc: opts.bcc,
-      subject: opts.subject,
-      reply_to: opts.replyTo,
-      text: opts.text,
-      html: opts.html,
-    }),
-  });
-  if (!res.ok) throw new Error("Resend failed");
-}
-
-async function sendWithSmtp(opts: {
-  to: string[];
-  from: string;
-  replyTo: string;
-  subject: string;
-  text: string;
-  html: string;
-  bcc?: string[];
-}) {
-  const host = process.env.SMTP_HOST!;
-  const port = Number(process.env.SMTP_PORT || 465);
-  const user = process.env.SMTP_USER!;
-  const pass = process.env.SMTP_PASS!;
-  const secure = String(process.env.SMTP_SECURE || "true") === "true";
-
-  const transporter = nodemailer.createTransport({
-    host,
-    port,
-    secure, // 587->false(STARTTLS), 465->true(SSL)
-    auth: { user, pass },
-    authMethod: "LOGIN",
-    tls: { servername: host, minVersion: "TLSv1.2", rejectUnauthorized: false },
-  });
-
-  await transporter.sendMail({
-    from: opts.from,
-    to: opts.to,
-    bcc: opts.bcc,
-    subject: opts.subject,
-    replyTo: opts.replyTo,
-    text: opts.text,
-    html: opts.html,
-  });
-}
-
-// ==============================
-// reCAPTCHA verify
-// ==============================
 async function verifyRecaptcha(token: string, ip: string): Promise<boolean> {
   const secret = (process.env.RECAPTCHA_SECRET_KEY || "").trim();
   if (!secret) return false;
@@ -138,9 +53,10 @@ async function verifyRecaptcha(token: string, ip: string): Promise<boolean> {
   return !!data?.success;
 }
 
-// ==============================
-// Handler
-// ==============================
+function nanoid8(): string {
+  return Math.random().toString(36).slice(2, 10);
+}
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Resp>) {
   if (req.method !== "POST") {
     return res.status(405).json({ ok: false, message: "Method Not Allowed" });
@@ -148,9 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
   const ip = clientIp(req);
   if (isLimited(ip)) {
-    return res
-      .status(429)
-      .json({ ok: false, message: "Prea multe solicitări. Încearcă mai târziu." });
+    return res.status(429).json({ ok: false, message: "Prea multe solicitări. Încearcă mai târziu." });
   }
 
   const body = req.body as unknown;
@@ -166,98 +80,54 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
     return res.status(400).json({ ok: false, message: "Verificarea reCAPTCHA a eșuat." });
   }
 
-  const prov = provider();
-  const from = (process.env.CONTACT_FROM_EMAIL || "").trim();
-  const bcc = (process.env.OFFER_BCC_EMAIL || "").trim();
-  if (!prov || !from) {
-    return res.status(500).json({ ok: false, message: "Configurare email incompletă." });
-  }
+  const now = new Date().toISOString();
+  const ts = Date.now();
+  const id = `offer-${ts}-${nanoid8()}`;
+  const filePath = `data/messages/${id}.json`;
 
-  // Build email (către utilizator, cu BCC intern) — normalizează sub-obiectele la câmpuri obligatorii
-  const lodging: EmailData["lodging"] = {
-    kind: data.lodging.kind || "proprie",
-    rooms: data.lodging.rooms || "",
-    nights: data.lodging.nights || "",
-    notes: data.lodging.notes || "",
-  };
-
-  const music: EmailData["music"] = {
-    kind: data.music.kind || "am-eu",
-    prefs: data.music.prefs || "",
-    genre: data.music.genre || "",
-    interval: data.music.interval || "",
-  };
-
-  const photoVideo: EmailData["photoVideo"] = {
-    kind: data.photoVideo.kind || "am-eu",
-    package: data.photoVideo.package || "",
-    duration: data.photoVideo.duration || "",
-    deliverables: data.photoVideo.deliverables || "",
-  };
-
-  const emailData: EmailData = {
-    name: data.name,
-    address: data.address,
-    phone: data.phone,
-    whatsapp: data.whatsapp,
-    email: data.email,
-    eventDateYmd: data.eventDate,
-    participants: data.participants,
-    eventType: data.eventType,
-    menu: data.menu, // slug-ul meniului, folosit pentru mapping în buildOfferEmail
-    lodging,
-    music,
-    photoVideo,
-    details: data.details || "",
-  };
-
-  const { subject, html, text } = buildOfferEmail(emailData);
-
-  try {
-    const base = {
-      to: [data.email],
-      from,
-      replyTo: data.email,
-      subject,
-      text,
-      html,
-    };
-
-    if (prov === "resend") {
-      // IMPORTANT: cu exactOptionalPropertyTypes, omitem proprietatea când nu avem BCC
-      if (bcc) {
-        await sendWithResend({ ...base, bcc: [bcc] });
-      } else {
-        await sendWithResend(base);
-      }
-    } else {
-      if (bcc) {
-        await sendWithSmtp({ ...base, bcc: [bcc] });
-      } else {
-        await sendWithSmtp(base);
-      }
-    }
-
-  } catch {
-    return res.status(500).json({ ok: false, message: "Eroare la trimiterea emailului." });
-  }
-
-  // Salvează în Supabase — independent de email (non-critic)
-  try {
-    await supabaseAdmin.from("messages").insert({
+  const payload = JSON.stringify(
+    {
+      id,
       type: "offer",
       name: data.name,
       email: data.email,
       phone: data.phone,
-      event_type: data.eventType,
-      event_date: data.eventDate,
+      eventType: data.eventType,
+      eventDate: data.eventDate,
       guests: data.participants,
-      lodging: data.lodging.kind,
-      rooms: data.lodging.rooms ? Number(data.lodging.rooms) : null,
-      nights: data.lodging.nights ? Number(data.lodging.nights) : null,
-    });
-  } catch {
-    // silențios
+      address: data.address,
+      whatsapp: data.whatsapp,
+      details: data.details || "",
+      lodging: {
+        kind: data.lodging.kind,
+        rooms: data.lodging.rooms || "",
+        nights: data.lodging.nights || "",
+        notes: data.lodging.notes || "",
+      },
+      music: {
+        kind: data.music.kind,
+        prefs: data.music.prefs || "",
+        genre: data.music.genre || "",
+        interval: data.music.interval || "",
+      },
+      photoVideo: {
+        kind: data.photoVideo.kind,
+        package: data.photoVideo.package || "",
+        duration: data.photoVideo.duration || "",
+        deliverables: data.photoVideo.deliverables || "",
+      },
+      createdAt: now,
+      read: false,
+    },
+    null,
+    2,
+  );
+
+  try {
+    await createFile(filePath, payload);
+  } catch (err) {
+    console.error("[offer-request] GitHub createFile error:", err);
+    return res.status(500).json({ ok: false, message: "Eroare la salvarea solicitării." });
   }
 
   return res.status(200).json({ ok: true });

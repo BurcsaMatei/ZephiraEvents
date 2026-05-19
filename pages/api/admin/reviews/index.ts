@@ -1,14 +1,23 @@
 // pages/api/admin/reviews/index.ts
-// GET — lista recenziilor din Supabase, cu filtru opțional ?status=pending|approved|rejected.
+// GET — lista recenziilor din data/reviews/, cu filtru opțional ?status=pending|approved|rejected.
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { verifyAdminSession } from "../../../../lib/admin/auth";
+import { getFile, listFiles } from "../../../../lib/admin/github";
 import { errorResponse } from "../../../../lib/admin/response";
-import { supabaseAdmin } from "../../../../lib/admin/supabase";
-import type { ReviewRow, ReviewStatus } from "../../../../lib/admin/supabase.types";
 
-type QueryResult = { data: ReviewRow[] | null; error: { message: string } | null };
+export type ReviewStatus = "pending" | "approved" | "rejected";
+
+export interface ReviewJson {
+  id: string;
+  name: string;
+  rating: number;
+  text: string;
+  status: ReviewStatus;
+  createdAt: string;
+  publishedAt?: string;
+}
 
 const VALID_STATUSES: ReviewStatus[] = ["pending", "approved", "rejected"];
 
@@ -23,25 +32,35 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const statusParam = req.query["status"];
-  const status =
+  const statusFilter =
     typeof statusParam === "string" && VALID_STATUSES.includes(statusParam as ReviewStatus)
       ? (statusParam as ReviewStatus)
       : undefined;
 
-  let query = supabaseAdmin
-    .from("reviews")
-    .select("*")
-    .order("created_at", { ascending: false });
+  try {
+    const entries = await listFiles("data/reviews");
+    const jsonFiles = entries.filter(
+      (e) => e.type === "file" && e.name.endsWith(".json") && e.name !== ".gitkeep",
+    );
 
-  if (status) {
-    query = query.eq("status", status);
+    const reviews = await Promise.all(
+      jsonFiles.map(async (entry) => {
+        const { content } = await getFile(entry.path);
+        return JSON.parse(content) as ReviewJson;
+      }),
+    );
+
+    const filtered = statusFilter
+      ? reviews.filter((r) => r.status === statusFilter)
+      : reviews;
+
+    const sorted = filtered.sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
+
+    return res.status(200).json({ ok: true, data: sorted });
+  } catch (err) {
+    console.error("[admin/reviews] list error:", err);
+    return res.status(500).json(errorResponse("Eroare la citirea recenziilor."));
   }
-
-  const { data, error } = (await query) as QueryResult;
-
-  if (error) {
-    return res.status(500).json(errorResponse(error.message));
-  }
-
-  return res.status(200).json({ ok: true, data: data ?? [] });
 }

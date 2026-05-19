@@ -1,29 +1,26 @@
 // pages/api/admin/messages/index.ts
-// GET — lista mesajelor din Supabase, paginate, ordonate by created_at desc.
-// Query params: ?page=N (default 1), page size 50.
+// GET — lista mesajelor din data/messages/, sortate descrescător după createdAt.
 
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { verifyAdminSession } from "../../../../lib/admin/auth";
+import { getFile, listFiles } from "../../../../lib/admin/github";
 import { errorResponse } from "../../../../lib/admin/response";
-import { supabaseAdmin } from "../../../../lib/admin/supabase";
-import type { MessageRow } from "../../../../lib/admin/supabase.types";
 
-const PAGE_SIZE = 50;
-
-type MessagePreview = Pick<
-  MessageRow,
-  | "id"
-  | "type"
-  | "status"
-  | "name"
-  | "email"
-  | "message"
-  | "event_type"
-  | "created_at"
-  | "metadata"
-  | "deleted_at"
->;
+export interface MessageJson {
+  id: string;
+  type: "contact" | "offer";
+  name: string;
+  email: string;
+  phone: string | null;
+  message?: string;
+  eventType?: string;
+  eventDate?: string;
+  guests?: number;
+  createdAt: string;
+  read: boolean;
+  deleted?: boolean;
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!verifyAdminSession(req)) {
@@ -35,27 +32,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json(errorResponse("Method Not Allowed"));
   }
 
-  const pageParam = typeof req.query.page === "string" ? parseInt(req.query.page, 10) : 1;
-  const page = isNaN(pageParam) || pageParam < 1 ? 1 : pageParam;
-  const offset = (page - 1) * PAGE_SIZE;
+  try {
+    const entries = await listFiles("data/messages");
+    const jsonFiles = entries.filter(
+      (e) => e.type === "file" && e.name.endsWith(".json") && e.name !== ".gitkeep",
+    );
 
-  const { data, count, error } = (await supabaseAdmin
-    .from("messages")
-    .select(
-      "id, type, status, name, email, message, event_type, created_at, metadata, deleted_at",
-      { count: "exact" },
-    )
-    .is("deleted_at", null)
-    .order("created_at", { ascending: false })
-    .range(offset, offset + PAGE_SIZE - 1)) as {
-    data: MessagePreview[] | null;
-    count: number | null;
-    error: { message: string } | null;
-  };
+    const messages = await Promise.all(
+      jsonFiles.map(async (entry) => {
+        const { content } = await getFile(entry.path);
+        return JSON.parse(content) as MessageJson;
+      }),
+    );
 
-  if (error) {
-    return res.status(500).json(errorResponse(error.message));
+    const sorted = messages
+      .filter((m) => !m.deleted)
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+    return res.status(200).json({ ok: true, data: sorted, total: sorted.length });
+  } catch (err) {
+    console.error("[admin/messages] list error:", err);
+    return res.status(500).json(errorResponse("Eroare la citirea mesajelor."));
   }
-
-  return res.status(200).json({ ok: true, data: data ?? [], total: count ?? 0, page, pageSize: PAGE_SIZE });
 }
