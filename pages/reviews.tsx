@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
     );
 
     items = all
-      .filter((r) => r.status === "approved")
+      .filter((r) => r.status === "approved" && !r.deleted)
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
       .map((r) => ({
         id: r.id,
@@ -48,6 +48,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
         rating: r.rating as Rating,
         text: r.text,
         createdAt: new Date(r.publishedAt ?? r.createdAt).getTime(),
+        ...(r.profilePhotoUrl ? { profilePhotoUrl: r.profilePhotoUrl } : {}),
       }));
   } catch (err) {
     console.error("[reviews] GitHub fetch eșuat:", err);

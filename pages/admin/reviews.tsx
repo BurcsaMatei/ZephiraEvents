@@ -62,7 +62,8 @@ function AdminReviewsPage({
   const [reviews, setReviews] = useState<ReviewJson[]>(initialReviews);
   const [loadingId, setLoadingId] = useState<string | null>(null);
 
-  async function handleAction(id: string, action: "approve" | "reject") {
+  async function handleAction(id: string, action: "approve" | "reject" | "delete") {
+    if (action === "delete" && !confirm("Ștergi definitiv această recenzie?")) return;
     setLoadingId(id);
     try {
       const res = await fetch(`/api/admin/reviews/${id}`, {
@@ -71,8 +72,12 @@ function AdminReviewsPage({
         body: JSON.stringify({ action }),
       });
       const data = (await res.json()) as { ok: boolean; data?: ReviewJson };
-      if (data.ok && data.data) {
-        setReviews((prev) => prev.map((r) => (r.id === id ? (data.data as ReviewJson) : r)));
+      if (data.ok) {
+        if (action === "delete") {
+          setReviews((prev) => prev.filter((r) => r.id !== id));
+        } else if (data.data) {
+          setReviews((prev) => prev.map((r) => (r.id === id ? (data.data as ReviewJson) : r)));
+        }
       }
     } finally {
       setLoadingId(null);
@@ -141,6 +146,15 @@ function AdminReviewsPage({
                       {review.status === "approved" ? "Aprobat" : "Respins"}
                     </span>
                   )}
+                  <button
+                    type="button"
+                    className={s.rejectBtn}
+                    disabled={isLoading}
+                    onClick={() => void handleAction(review.id, "delete")}
+                    title="Șterge recenzie"
+                  >
+                    {isLoading ? "..." : "🗑 Șterge"}
+                  </button>
                 </div>
               </div>
             );
@@ -186,6 +200,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, query
     );
 
     const reviews = (activeStatus === "all" ? all : all.filter((r) => r.status === activeStatus))
+      .filter((r) => !r.deleted)
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return { props: { reviews, activeStatus } };

@@ -17,6 +17,8 @@ export interface ReviewJson {
   status: ReviewStatus;
   createdAt: string;
   publishedAt?: string;
+  profilePhotoUrl?: string;
+  deleted?: boolean;
 }
 
 const VALID_STATUSES: ReviewStatus[] = ["pending", "approved", "rejected"];
@@ -50,9 +52,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }),
     );
 
-    const filtered = statusFilter
+    const filtered = (statusFilter
       ? reviews.filter((r) => r.status === statusFilter)
-      : reviews;
+      : reviews
+    ).filter((r) => !r.deleted);
 
     const sorted = filtered.sort(
       (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),

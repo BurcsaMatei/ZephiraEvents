@@ -26,8 +26,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const body = req.body as { action?: unknown };
   const action = typeof body.action === "string" ? body.action : "";
 
-  if (action !== "approve" && action !== "reject") {
-    return res.status(400).json(errorResponse("Action trebuie să fie 'approve' sau 'reject'."));
+  if (action !== "approve" && action !== "reject" && action !== "delete") {
+    return res.status(400).json(errorResponse("Action trebuie să fie 'approve', 'reject' sau 'delete'."));
   }
 
   try {
@@ -37,6 +37,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const { content, sha } = await getFile(entry.path);
     const review = JSON.parse(content) as ReviewJson;
+
+    if (action === "delete") {
+      const updated: ReviewJson = { ...review, deleted: true };
+      await updateFile(entry.path, JSON.stringify(updated, null, 2), sha);
+      return res.status(200).json({ ok: true, data: updated });
+    }
 
     const status: ReviewStatus = action === "approve" ? "approved" : "rejected";
     const now = new Date().toISOString();
