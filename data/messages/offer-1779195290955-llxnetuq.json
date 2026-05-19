@@ -1,0 +1,33 @@
+{
+  "id": "offer-1779195290955-llxnetuq",
+  "type": "offer",
+  "name": "Burcsa Matei",
+  "email": "burcsamatei@outlook.com",
+  "phone": "+40756795162",
+  "eventType": "botez-cununie",
+  "eventDate": "2026-09-25",
+  "guests": 120,
+  "address": "Matei",
+  "whatsapp": true,
+  "details": "Am sa va rog sa ma contacti la m odul urgent cu o oferta disponibila pentru ceea ce am completat in formular. NOTA: acesta este un mesaj de test trimis direct din formularuyl de oferte. Am migrat complet de la supabase la git intern fara a avea dependinte inutile.",
+  "lodging": {
+    "kind": "proprie",
+    "rooms": "",
+    "nights": "",
+    "notes": ""
+  },
+  "music": {
+    "kind": "am-eu",
+    "prefs": "",
+    "genre": "",
+    "interval": ""
+  },
+  "photoVideo": {
+    "kind": "am-eu",
+    "package": "",
+    "duration": "",
+    "deliverables": ""
+  },
+  "createdAt": "2026-05-19T12:54:50.955Z",
+  "read": false
+}
