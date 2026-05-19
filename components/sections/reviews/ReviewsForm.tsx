@@ -64,8 +64,8 @@ export default function ReviewsForm({ onCreated }: Props) {
     setAvatarFile(file);
     setAvatarPreview(null);
     if (!file) return;
-    if (!/^image\//.test(file.type) || file.size > 5 * 1024 * 1024) {
-      alert("Poza trebuie să fie o imagine de maxim 5MB.");
+    if (!/^image\//.test(file.type) || file.size > 2 * 1024 * 1024) {
+      alert("Poza trebuie să fie o imagine de maxim 2MB.");
       return;
     }
     const url = URL.createObjectURL(file);
@@ -236,7 +236,7 @@ export default function ReviewsForm({ onCreated }: Props) {
           </div>
         )}
         <p className={fileHintClass}>
-          Imagine, max 5MB. Ajunge ca atașament — o salvăm noi manual.
+          Imagine JPG/PNG/WebP, max 2MB. Opțional.
         </p>
       </div>
 

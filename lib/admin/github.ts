@@ -112,6 +112,33 @@ export async function updateFile(
   }
 }
 
+// ── uploadImage ───────────────────────────────────────────────────────────────
+// Creează un fișier binar (imagine) în Git. `base64Content` = base64 pur, fără prefix.
+
+export async function uploadImage(
+  path: string,
+  base64Content: string,
+): Promise<string> {
+  const { pat, owner, repo, branch } = cfg();
+
+  const res = await fetch(url(owner, repo, path), {
+    method: "PUT",
+    headers: headers(pat),
+    body: JSON.stringify({
+      message: `assets: add ${path}`,
+      content: base64Content,
+      branch,
+    }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`GitHub uploadImage ${path} → ${res.status}: ${text}`);
+  }
+
+  return path;
+}
+
 // ── listFiles ─────────────────────────────────────────────────────────────────
 
 export interface GitFileEntry {
