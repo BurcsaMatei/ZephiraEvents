@@ -215,6 +215,23 @@ export const sidebarFooter = style({
   borderTop: `1px solid ${vars.color.border}`,  // nou
 });
 
+// ── Buton Șterge — stil unitar pentru toate paginile admin ──
+export const deleteBtn = style({
+  padding: "6px 12px",
+  backgroundColor: vars.color.danger,
+  color: vars.color.primaryContrast,
+  border: "none",
+  borderRadius: vars.radius.sm,
+  fontSize: "12.5px",
+  fontWeight: vars.typography.weight.semibold,
+  cursor: "pointer",
+  transition: `opacity ${vars.motion.normal}`,
+  selectors: {
+    "&:hover:not(:disabled)": { opacity: 0.88 },
+    "&:disabled": { opacity: 0.4, cursor: "not-allowed" },
+  },
+});
+
 // ── Main content ──────────────────────────────────────────
 export const main = style({
   flex: 1,

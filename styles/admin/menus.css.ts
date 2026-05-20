@@ -141,22 +141,6 @@ export const editBtn = style({
   },
 });
 
-export const deleteBtn = style({
-  padding: "6px 12px",
-  backgroundColor: "transparent",
-  color: "#dc2626",
-  border: `1.5px solid #fecaca`,
-  borderRadius: vars.radius.sm,
-  fontSize: "12.5px",
-  fontWeight: vars.typography.weight.semibold,
-  cursor: "pointer",
-  transition: `background-color ${vars.motion.normal}`,
-  selectors: {
-    "&:hover:not(:disabled)": { backgroundColor: "#fff5f5" },
-    "&:disabled": { opacity: 0.4, cursor: "not-allowed" },
-  },
-});
-
 export const restoreBtn = style({
   padding: "6px 12px",
   backgroundColor: "transparent",

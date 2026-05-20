@@ -10,6 +10,7 @@ import { useState } from "react";
 import AdminLayout from "../../../components/admin/AdminLayout";
 import { verifyAdminSession } from "../../../lib/admin/auth";
 import { getAllMenusAdmin } from "../../../lib/menus.server";
+import * as lay from "../../../styles/admin/layout.css";
 import * as s from "../../../styles/admin/menus.css";
 import type { Menu } from "../../../types/menu";
 
@@ -115,7 +116,7 @@ export default function AdminMenusPage({
               {!menu.deleted ? (
                 <button
                   type="button"
-                  className={s.deleteBtn}
+                  className={lay.deleteBtn}
                   disabled={loadingSlug === menu.slug}
                   onClick={() => void handleDelete(menu.slug)}
                 >

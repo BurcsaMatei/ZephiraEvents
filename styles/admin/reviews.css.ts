@@ -167,3 +167,15 @@ export const rejectBtn = style([
     },
   },
 ]);
+
+export const deleteBtn = style([
+  btnBase,
+  {
+    backgroundColor: vars.color.danger,
+    color: vars.color.primaryContrast,
+    border: "none",
+    selectors: {
+      "&:hover:not(:disabled)": { opacity: 0.88 },
+    },
+  },
+]);

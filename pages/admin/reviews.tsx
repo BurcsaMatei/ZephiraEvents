@@ -148,12 +148,12 @@ function AdminReviewsPage({
                   )}
                   <button
                     type="button"
-                    className={s.rejectBtn}
+                    className={s.deleteBtn}
                     disabled={isLoading}
                     onClick={() => void handleAction(review.id, "delete")}
                     title="Șterge recenzie"
                   >
-                    {isLoading ? "..." : "🗑 Șterge"}
+                    {isLoading ? "..." : "Șterge"}
                   </button>
                 </div>
               </div>

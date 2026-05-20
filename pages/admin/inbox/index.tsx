@@ -123,7 +123,7 @@ function AdminInboxPage({
                   title="Șterge mesaj"
                   aria-label="Șterge mesaj"
                 >
-                  🗑
+                  {deleting === msg.id ? "..." : "Șterge"}
                 </button>
               </div>
             );

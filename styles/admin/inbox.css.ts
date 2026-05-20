@@ -76,6 +76,7 @@ export const list = style({
 });
 
 export const itemWrap = style({
+  position: "relative",
   display: "flex",
   alignItems: "stretch",
   borderRadius: vars.radius.md,
@@ -94,7 +95,7 @@ export const item = style({
   display: "block",
   flex: 1,
   minWidth: 0,
-  padding: "14px 16px",
+  padding: "14px 90px 14px 16px",
   backgroundColor: vars.color.surface,
   textDecoration: "none",
   color: "inherit",
@@ -109,23 +110,20 @@ export const itemUnread = style({
 });
 
 export const deleteBtn = style({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  padding: "0 14px",
-  backgroundColor: vars.color.surface,
+  position: "absolute",
+  top: 14,
+  right: 16,
+  padding: "4px 10px",
+  backgroundColor: vars.color.danger,
+  color: vars.color.primaryContrast,
   border: "none",
-  borderLeft: `1.5px solid ${vars.color.border}`,
-  color: vars.color.muted,
+  borderRadius: vars.radius.sm,
+  fontSize: "12px",
+  fontWeight: vars.typography.weight.semibold,
   cursor: "pointer",
-  fontSize: "15px",
-  flexShrink: 0,
-  transition: `color ${vars.motion.normal}, background-color ${vars.motion.normal}`,
+  transition: `opacity ${vars.motion.normal}`,
   selectors: {
-    "&:hover:not(:disabled)": {
-      color: "#dc2626",
-      backgroundColor: "#fff5f5",
-    },
+    "&:hover:not(:disabled)": { opacity: 0.88 },
     "&:disabled": { opacity: 0.4, cursor: "not-allowed" },
   },
 });
