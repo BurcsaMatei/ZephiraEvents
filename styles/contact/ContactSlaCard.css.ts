@@ -83,41 +83,6 @@ export const actions = style({
   alignItems: "center",
 });
 
-// mini card
-export const miniCard = style({
-  display: "grid",
-  gridTemplateColumns: "auto 1fr",
-  alignItems: "center",
-  gap: vars.space.md,
-  padding: vars.space.md,
-  border: `1px solid ${vars.color.border}`,
-  borderRadius: vars.radius.md,
-  background: vars.color.surface,
-});
-
-export const miniIcon = style({
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  width: 34,
-  height: 34,
-  color: vars.color.primary,
-});
-
-export const miniBody = style({
-  display: "grid",
-  gap: 4,
-});
-
-export const miniTitle = style({
-  fontWeight: 700,
-  color: vars.color.text,
-});
-
-export const miniText = style({
-  color: vars.color.muted,
-});
-
 // notă GDPR
 export const privacyNote = style({
   margin: 0,
