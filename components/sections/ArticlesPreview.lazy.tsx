@@ -7,7 +7,7 @@
 import Link from "next/link";
 import React, { useMemo } from "react";
 
-import { type BlogPost } from "../../lib/blogData";
+import { type BlogPost } from "../../lib/blog.server";
 import { withBase } from "../../lib/config";
 import { btn, primary as btnPrimary } from "../../styles/button.css";
 import {

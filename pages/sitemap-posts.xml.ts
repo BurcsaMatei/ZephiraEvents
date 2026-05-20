@@ -5,7 +5,7 @@
 // ==============================
 import type { GetServerSideProps } from "next";
 
-import { getAllPosts } from "../lib/blogData";
+import { getAllPosts } from "../lib/blog.server";
 import { absoluteAssetUrl } from "../lib/config";
 import { getRequestBaseUrl, joinHostPath } from "../lib/url";
 

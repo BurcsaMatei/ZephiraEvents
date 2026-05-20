@@ -29,6 +29,8 @@
     "@vanilla-extract/next-plugin": "^2.4.14",
     "framer-motion": "^12.23.12",
     "googleapis": "^171.4.0",
+    "gray-matter": "^4.0.3",
+    "marked": "^18.0.4",
     "next": "^15.5.7",
     "next-pwa": "^5.6.0",
     "react": "^19.2.1",

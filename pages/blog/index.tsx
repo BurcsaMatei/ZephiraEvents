@@ -16,7 +16,7 @@ import Outro from "../../components/sections/Outro";
 import Seo from "../../components/Seo";
 import Separator from "../../components/Separator";
 import type { Json } from "../../interfaces";
-import { getAllPosts } from "../../lib/blogData";
+import { getAllPosts } from "../../lib/blog.server";
 import { absoluteUrl } from "../../lib/config";
 import * as ti from "../../styles/sections/tent/tentIntro.css";
 import type { Post } from "../../types/blog";
@@ -64,7 +64,7 @@ const BlogIndex: NextPage<Props> = ({ posts }) => {
             title="Blog ZephiraEvents"
             subtitle="Ghiduri, liste de verificare și inspirație pentru nunți, botezuri, majorate și corporate în Focșani, Vrancea — sală de evenimente, organizare A-Z și servicii impecabile."
             image={{
-              src: "/images/current/hero-index-blog.jpg",
+              src: "/images/current/hero-index-blog.webp",
               alt: "Blog ZephiraEvents — idei pentru evenimente în Focșani",
             }}
             height="md"
