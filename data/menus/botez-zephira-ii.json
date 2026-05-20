@@ -1,0 +1,33 @@
+{
+  "slug": "botez-zephira-ii",
+  "title": "Meniu Botez & Cununie — ZEPHIRA II",
+  "pricePerPers": 52,
+  "currency": "EUR",
+  "image": "/images/servicii/meniu/meniu-08.webp",
+  "imageAlt": "Meniu Botez & Cununie ZEPHIRA II — antreu rece, pește și fel principal",
+  "eventType": "Botez & Cununie",
+  "deleted": false,
+  "sections": {
+    "starterRece": [
+      "Prăjitură de curcan în straturi",
+      "Simfonie pescărească",
+      "Frigărui capresse",
+      "Specialitate de brânzeturi cu struguri și alune",
+      "Parfait de ficat cu dulceață de ardei",
+      "Terină de pui cu mușchiuleț de porc",
+      "Ruladă mozaic cu prosciutto și brânzeturi",
+      "Telemea în kataif cu dulceață și roșii",
+      "Terină de pui cu cabanos",
+      "Tortuleț cu mezeluri și cașcaval",
+      "Buchet de legume"
+    ],
+    "antreuCald": "File de șalău pe pat de risotto cu parmezan, acompaniat de tagliatelle de legume și sos lemon-butter",
+    "felIntermediar": "Sărmăluțe în foi de viță și de varză cu mămăliguță, smântână și ardei iute",
+    "felPrincipal": [
+      "Buturugă de porc (ceafă)",
+      "Delicii din pulpă de pui umplute",
+      "Cartofi zdrobiți gratinați cu cașcaval, sos brun și salată de ardei copt"
+    ],
+    "pachetBar": []
+  }
+}

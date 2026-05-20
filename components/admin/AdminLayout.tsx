@@ -27,6 +27,7 @@ type Props = {
 const NAV = [
   { href: "/admin/inbox", label: "Inbox" },
   { href: "/admin/reviews", label: "Recenzii" },
+  { href: "/admin/menus", label: "Meniuri" },
   { href: "/admin/analytics", label: "Analytics" },
 ] as const;
 

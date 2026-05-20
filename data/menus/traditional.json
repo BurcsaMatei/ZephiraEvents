@@ -1,0 +1,42 @@
+{
+  "slug": "traditional",
+  "title": "Oferta Meniu Traditional",
+  "pricePerPers": 76,
+  "currency": "EUR",
+  "image": "/images/servicii/meniu/meniu-03.webp",
+  "imageAlt": "Meniu Traditional — platouri reci traditionale, pastrav risotto, sarmalute mixte, fel principal cu porc si pui",
+  "eventType": "Nunta",
+  "deleted": false,
+  "sections": {
+    "starterRece": [
+      "Ceafa de porc afumat, castravete, ardei gras",
+      "Salam crud uscat",
+      "Chiftelute de pui",
+      "Mini snitele din piept de curcan",
+      "Frigarui Capresse",
+      "Carnati afumati",
+      "Rulada de pui cu legume",
+      "Mix de branzeturi, masline asortate",
+      "Bulete de cascaval"
+    ],
+    "antreuCald": "File de pastrav pe pat de risotto cu parmezan, tagliatele de legume si sos lemon-butter",
+    "felIntermediar": "Sarmalute in foi de vita si de varza cu mamaliguta, smantana si ardei iute",
+    "felPrincipal": [
+      "Buturuga de porc cu sos brun",
+      "Rulouri de pui in bacon",
+      "Cartofi aurii cu rozmarin",
+      "Salata verde"
+    ],
+    "pachetBar": [
+      "Apa plata/minerala — nelimitat",
+      "Cola/Fanta — nelimitat",
+      "Suc natural — nelimitat",
+      "Cafea — nelimitat",
+      "Whisky Ballantine's Finest — nelimitat",
+      "Crema de whiskey — nelimitat",
+      "Vin spumant (primire invitati) — nelimitat",
+      "Fructe pe mese — design nou",
+      "Gheata frapiera — nelimitat, paine/chifle"
+    ]
+  }
+}

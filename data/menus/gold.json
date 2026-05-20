@@ -1,0 +1,36 @@
+{
+  "slug": "gold",
+  "title": "Oferta Meniu Gold",
+  "pricePerPers": 68,
+  "currency": "EUR",
+  "image": "/images/servicii/meniu/meniu-02.webp",
+  "imageAlt": "Meniu Gold — platouri reci, pastrav risotto, sarmalute, ceafa porc",
+  "eventType": "Nunta",
+  "deleted": false,
+  "sections": {
+    "starterRece": [
+      "Prajitura de curcan in straturi",
+      "Simfonie pescareasca",
+      "Frigarui Capresse",
+      "Specialitate de branzeturi cu struguri si alune",
+      "Parfait de ficat cu dulceata de ardei",
+      "Terina de pui cu muschiulet de porc",
+      "Rulada mozaic cu prosciutto si branzeturi",
+      "Telemea in kataif cu dulceata si rosii",
+      "Terina de pui cu cabanos",
+      "Tortulet cu mezeluri si cascaval",
+      "Buchet de legume"
+    ],
+    "antreuCald": "File de pastrav pe pat de risotto cu parmezan, tagliatele de legume si sos lemon-butter",
+    "felIntermediar": "Sarmalute traditionale mixte (vie si varza) cu mamaliguta, smantana si ardei iute",
+    "felPrincipal": [
+      "Buturuga delicioasa de porc (ceafa) cu sos brun, rulouri de pui in bacon, cartofi zdrobiti gratinati cu cascaval si salata verde"
+    ],
+    "pachetBar": [
+      "Apa plata/minerala — nelimitat",
+      "Pepsi/Mirinda — nelimitat",
+      "Suc natural — nelimitat",
+      "Gheata frapiera — nelimitat, paine/chifle"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "slug": "botez-basic",
+  "title": "Meniu Botez & Cununie — BASIC",
+  "pricePerPers": 46,
+  "currency": "EUR",
+  "image": "/images/servicii/meniu/meniu-06.webp",
+  "imageAlt": "Meniu Botez & Cununie BASIC — antreu rece, sarmale și fel principal",
+  "eventType": "Botez & Cununie",
+  "deleted": false,
+  "sections": {
+    "starterRece": [
+      "Terină de pui cu brânzeturi",
+      "Evantai de mușchi file",
+      "Trandafir cașcaval în ardei cu măsline",
+      "Floare din salam bănățean",
+      "Frigărui capresse",
+      "Ruladă de spanac cu brânzeturi",
+      "Turnuleț de castravete",
+      "Mousse de avocado cu somon"
+    ],
+    "antreuCald": "",
+    "felIntermediar": "Sărmăluțe în frunză de varză servite cu mămăliguță, ardei iute și smântână",
+    "felPrincipal": [
+      "Cotlet de porc la cuptor",
+      "Rulouri de pui în bacon",
+      "Cartofi zdrobiți și salată verde"
+    ],
+    "pachetBar": []
+  }
+}

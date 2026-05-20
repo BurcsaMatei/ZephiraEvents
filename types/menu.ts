@@ -25,7 +25,7 @@ export interface Menu {
   slug: string;
   title: string;
   pricePerPers: number;
-  currency: string; // ex. "EUR" | "RON"
+  currency: string; // ex. “EUR” | “RON”
   image: string;
   imageAlt: string;
 
@@ -37,6 +37,7 @@ export interface Menu {
 
   eventType: EventType;
   sections: MenuSections;
+  deleted?: boolean;
 }
 
 export const EVENT_TYPES: EventType[] = [

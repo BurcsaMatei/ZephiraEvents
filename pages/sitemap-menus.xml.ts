@@ -6,7 +6,7 @@
 import type { GetServerSideProps } from "next";
 
 import { absoluteAssetUrl } from "../lib/config";
-import { getAllMenus } from "../lib/menus";
+import { getAllMenusFromGit } from "../lib/menus.server";
 import { getRequestBaseUrl, joinHostPath } from "../lib/url";
 
 // ==============================
@@ -55,10 +55,10 @@ const urlEntry = (
     <priority>${priority}</priority>${imagesXml}
   </url>`;
 
-function generate(baseUrl: string): string {
+async function generate(baseUrl: string): Promise<string> {
   const buildTimestamp = process.env.NEXT_PUBLIC_BUILD_TIMESTAMP ?? new Date().toISOString();
 
-  const menus = getAllMenus();
+  const menus = await getAllMenusFromGit();
   const urls = menus
     .map((menu) => {
       const loc = joinHostPath(baseUrl, `/meniuri/${menu.slug}`);
@@ -90,7 +90,7 @@ export default function SiteMapMenus() {
 // ==============================
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
   const SITE_URL = getRequestBaseUrl(req);
-  const xml = generate(SITE_URL);
+  const xml = await generate(SITE_URL);
 
   res.statusCode = 200;
   res.setHeader("Content-Type", "application/xml; charset=utf-8");

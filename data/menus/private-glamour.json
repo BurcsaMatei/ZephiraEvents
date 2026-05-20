@@ -1,0 +1,41 @@
+{
+  "slug": "private-glamour",
+  "title": "Meniu: petreceri Petreceri Private & Majorate — ZEPHIRA / GLAMOUR",
+  "pricePerPers": 250,
+  "currency": "RON",
+  "image": "/images/servicii/meniu/meniu-16.webp",
+  "imageAlt": "Meniu Petreceri Private & Majorate ZEPHIRA / GLAMOUR — antreu rece, fel principal și cocktail bar",
+  "eventType": "Petreceri Private & Majorate",
+  "deleted": false,
+  "sections": {
+    "starterRece": [
+      "Prăjitură de curcan în straturi",
+      "Simfonie pescărească",
+      "Frigărui capresse",
+      "Specialitate de brânzeturi cu struguri și alune",
+      "Parfait de ficat cu dulceață de ardei",
+      "Terină de pui cu mușchiuleț de porc",
+      "Ruladă mozaic cu prosciutto și brânzeturi",
+      "Telemea în kataif cu dulceață și roșii",
+      "Terină de pui cu cabanos",
+      "Tortuleț cu mezeluri și cașcaval",
+      "Buchet de legume"
+    ],
+    "antreuCald": "",
+    "felIntermediar": "",
+    "felPrincipal": [
+      "Pork Wellington",
+      "Involtini de pui cu piure de cartofi, acompaniat de sos alb cu hribi"
+    ],
+    "pachetBar": [
+      "Apă plată / minerală – nelimitat",
+      "Cafea – nelimitat",
+      "Cola / Fanta / suc natural – nelimitat",
+      "Ballantine’s Finest – nelimitat",
+      "Cremă de whiskey – nelimitat",
+      "Fructe pe mese – design nou",
+      "Gheață / frapieră – nelimitat",
+      "Pâine și chifle"
+    ]
+  }
+}

@@ -1,0 +1,87 @@
+[
+  {
+    "slug": "basic",
+    "title": "Oferta Meniu Basic",
+    "eventType": "Nunta"
+  },
+  {
+    "slug": "botez-basic",
+    "title": "Meniu Botez & Cununie — BASIC",
+    "eventType": "Botez & Cununie"
+  },
+  {
+    "slug": "botez-traditional-i",
+    "title": "Meniu Botez & Cununie — TRADITIONAL I",
+    "eventType": "Botez & Cununie"
+  },
+  {
+    "slug": "botez-traditional-ii",
+    "title": "Meniu Botez & Cununie — TRADIȚIONAL II",
+    "eventType": "Botez & Cununie"
+  },
+  {
+    "slug": "botez-zephira-i",
+    "title": "Meniu Botez & Cununie — ZEPHIRA I",
+    "eventType": "Botez & Cununie"
+  },
+  {
+    "slug": "botez-zephira-ii",
+    "title": "Meniu Botez & Cununie — ZEPHIRA II",
+    "eventType": "Botez & Cununie"
+  },
+  {
+    "slug": "botez-zephira-iii",
+    "title": "Meniu Botez & Cununie — ZEPHIRA III",
+    "eventType": "Botez & Cununie"
+  },
+  {
+    "slug": "corporate-basic",
+    "title": "Meniu: Corporate & Team Building — BASIC",
+    "eventType": "Corporate & Team Building"
+  },
+  {
+    "slug": "corporate-glamour",
+    "title": "Meniu: Corporate & Team Building — ZEPHIRA / GLAMOUR",
+    "eventType": "Corporate & Team Building"
+  },
+  {
+    "slug": "corporate-traditional",
+    "title": "Meniu: Corporate & Team Building — TRADIȚIONAL",
+    "eventType": "Corporate & Team Building"
+  },
+  {
+    "slug": "diamond",
+    "title": "Oferta Meniu Diamond",
+    "eventType": "Nunta"
+  },
+  {
+    "slug": "gold",
+    "title": "Oferta Meniu Gold",
+    "eventType": "Nunta"
+  },
+  {
+    "slug": "platinum",
+    "title": "Oferta Meniu Platinum",
+    "eventType": "Nunta"
+  },
+  {
+    "slug": "private-basic",
+    "title": "Meniu: Petreceri Private & Majorate — BASIC",
+    "eventType": "Petreceri Private & Majorate"
+  },
+  {
+    "slug": "private-glamour",
+    "title": "Meniu: petreceri Petreceri Private & Majorate — ZEPHIRA / GLAMOUR",
+    "eventType": "Petreceri Private & Majorate"
+  },
+  {
+    "slug": "private-traditional",
+    "title": "Meniu: petreceri private / banchete / majorate — TRADIȚIONAL",
+    "eventType": "Petreceri Private & Majorate"
+  },
+  {
+    "slug": "traditional",
+    "title": "Oferta Meniu Traditional",
+    "eventType": "Nunta"
+  }
+]
