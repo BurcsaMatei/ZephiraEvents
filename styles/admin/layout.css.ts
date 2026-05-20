@@ -114,7 +114,7 @@ export const nav = style({
 export const navLink = style({
   display: "flex",
   alignItems: "center",
-  justifyContent: "space-between",
+  gap: vars.space.sm,
   padding: "9px 10px",
   borderRadius: "7px",
   color: vars.color.muted,              // era rgba(255,255,255,0.55)
@@ -140,10 +140,21 @@ export const navLinkActive = style({
   },
 });
 
+export const navIcon = style({
+  display: "flex",
+  alignItems: "center",
+  flexShrink: 0,
+  opacity: 0.75,
+  selectors: {
+    [`${navLinkActive} &`]: { opacity: 1 },
+  },
+});
+
 export const navBadge = style({
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
+  marginLeft: "auto",
   minWidth: "19px",
   height: "19px",
   padding: "0 5px",
