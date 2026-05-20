@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v16
+**Versiune:** v17
 **Data:** 2026-05-20
 **Status:** activ
 
@@ -128,7 +128,7 @@ public/
   admin-manifest.json  PWA manifest dedicat admin (name: ZephiraEvents Admin, scope: /admin/)
   admin-sw.js          Service worker admin izolat — cache minimal /admin/*, network-first
   llms.txt             Index pentru crawlere AI (llms.txt standard) — actualizat manual la schimbări majore de conținut
-  llms-full.txt        (DE CREAT) Versiunea extinsă cu conținut complet — include texte lungi, meniuri detaliate, articole blog
+  llms-full.txt        Versiunea extinsă cu conținut complet — include meniuri detaliate, articole blog, recenzii, FAQ (creat 2026-05-20)
   ~~sw.js~~            generat de next-pwa la build — în .gitignore
   ~~workbox-*.js~~     generat de next-pwa la build — în .gitignore
   ~~fallback-*.js~~    generat de next-pwa la build — în .gitignore
@@ -288,7 +288,7 @@ types/
 - `twitter:creator` se transmite via prop pe `<Seo>` (ex: din `post.author` în `/blog/[slug]`)
 - `trailingSlash: false` explicit în `next.config.mjs` — `canonical()` și `absoluteUrl()` sunt aliniate
 - `canonical` este omis automat de `<Seo>` când `noindex={true}` — nu adăuga `noindex` și `canonical` simultan
-- `public/llms.txt` — actualizează-l la fiecare schimbare majoră de conținut (meniuri noi, pagini noi, prețuri modificate); `public/llms-full.txt` rămâne de creat
+- `public/llms.txt` — actualizează-l la fiecare schimbare majoră de conținut (meniuri noi, pagini noi, prețuri modificate); `public/llms-full.txt` conține meniuri detaliate, blog, recenzii și FAQ — actualizează simultan
 
 ---
 
@@ -452,7 +452,7 @@ ALTER DATABASE postgres SET app.service_role_key = '<SUPABASE_SERVICE_ROLE_KEY>'
 - `pages/api/og.tsx` — unealtă internă, nu apelată din pagini
 - OG images statice pre-generate: `public/images/og.jpg`, `og-servicii.jpg`, `og-galerie.jpg`, `og-contact.jpg`, `og-blog.jpg`, `og-cort.jpg`, `og-reviews.jpg`
 - Pentru regenerare OG: `npm run generate:og` (necesită `npm run dev` pe `:3000`) — 7 pagini înregistrate (inclusiv `/reviews`)
-- `public/llms.txt` — index AI crawlere; `public/llms-full.txt` — DE CREAT (versiunea extinsă)
+- `public/llms.txt` — index AI crawlere; `public/llms-full.txt` — versiunea extinsă cu meniuri detaliate, blog, recenzii, FAQ (creat 2026-05-20 PR #141)
 - `public/logo-dedicat.png` — logo PNG dedicat JSON-LD `LocalBusiness`; trackat în git
 
 ### Shell / Theme / Layout
@@ -525,7 +525,7 @@ ALTER DATABASE postgres SET app.service_role_key = '<SUPABASE_SERVICE_ROLE_KEY>'
 - `pages/_document.tsx`: favicon declarat explicit (32×32, 16×16, shortcut)
 - `public/llms.txt`: creat (llms.txt standard pentru AI crawlere)
 - `public/logo-dedicat.png`: trackat în git
-- **TODO rămas:** `public/llms-full.txt` — versiunea extinsă cu conținut complet (de creat într-o sesiune viitoare)
+- `public/llms-full.txt` creat (2026-05-20, PR #141) — versiunea extinsă cu conținut complet
 
 **~~Gmail sync (înlocuire IMAP)~~ ✓ ÎNCHIS 2026-03-23** (PR #116)
 `lib/admin/imap.ts` șters; `lib/admin/gmail.ts` creat — Gmail API OAuth2 (`googleapis`), listează UNREAD in:inbox max 50. **Înlocuit complet cu IMAP via Supabase Edge Function (PR feature/supabase-imap-sync, 2026-03-24).**
@@ -719,8 +719,8 @@ scripts/optimise-videos.mjs
 - `lib/config.ts`: trailing slash aliniat între `absoluteUrl()` și `canonical()`; `CONTACT.geo` centralizat; alias-uri moarte eliminate
 - `Seo.tsx`: `og:image:type` auto-derivat; `og:image:secure_url`; `twitter:creator`; `max-image-preview:large`; canonical omis la `noindex=true`
 - JSON-LD complet: `LocalBusiness` cu geo/address/telephone/sameAs pe homepage și reviews; `WebSite` + `SearchAction` pe homepage; `dateModified` în BlogPosting; imagini absolute în meniu
-- `public/llms.txt` creat; `public/logo-dedicat.png` trackat în git
-- **TODO:** `public/llms-full.txt` — de creat (versiunea extinsă pentru AI crawlere)
+- `public/llms.txt` creat și îmbunătățit; `public/logo-dedicat.png` trackat în git
+- `public/llms-full.txt` creat (2026-05-20, PR #141) — versiunea extinsă cu toate meniurile, blog, recenzii, FAQ
 
 ---
 
