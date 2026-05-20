@@ -35,6 +35,8 @@ export const vars = createThemeContract({
 
     // Nou: culoare de bază pentru umbre (pt. color-mix)
     shadow: null,
+
+    danger: null,
   },
 
   typography: {
@@ -90,6 +92,8 @@ export const themeClass = createTheme(vars, {
 
     // bază pentru color-mix în umbre subtile
     shadow: "rgb(0 0 0)",
+
+    danger: "#dc2626",
   },
 
   typography: {
@@ -155,6 +159,8 @@ export const darkThemeClass = createTheme(vars, {
     cardText: "#f5f5f5",
 
     shadow: "rgb(0 0 0)",
+
+    danger: "#f87171",
   },
 
   typography: {

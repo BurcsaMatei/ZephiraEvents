@@ -8,6 +8,36 @@ import { useRouter } from "next/router";
 import type { ReactNode } from "react";
 import { useState } from "react";
 
+// ──────────────────────────────────────────────────────────
+// Nav icons (inline SVG, currentColor)
+// ──────────────────────────────────────────────────────────
+const IconInbox = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="2" y="4" width="20" height="16" rx="2"/>
+    <path d="M2 10h5l2 3h6l2-3h5"/>
+  </svg>
+);
+
+const IconReviews = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z"/>
+  </svg>
+);
+
+const IconMenus = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M3 11V3a1 1 0 0 1 2 0v3h2V3a1 1 0 0 1 2 0v8a4 4 0 0 1-3 3.87V21a1 1 0 0 1-2 0v-6.13A4 4 0 0 1 3 11z"/>
+    <path d="M16 3v7c0 1.66 1.34 3 3 3v8a1 1 0 0 1-2 0V3a1 1 0 0 1 2 0z"/>
+  </svg>
+);
+
+const IconBlog = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M12 20h9"/>
+    <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/>
+  </svg>
+);
+
 import * as s from "../../styles/admin/layout.css";
 import ThemeSwitcher from "../ThemeSwitcher";
 import AdminInstallButton from "./AdminInstallButton";
@@ -25,11 +55,11 @@ type Props = {
 // Nav items
 // ──────────────────────────────────────────────────────────
 const NAV = [
-  { href: "/admin/inbox", label: "Inbox" },
-  { href: "/admin/reviews", label: "Recenzii" },
-  { href: "/admin/menus", label: "Meniuri" },
-  { href: "/admin/blog", label: "Blog" },
-] as const;
+  { href: "/admin/inbox", label: "Inbox", icon: <IconInbox /> },
+  { href: "/admin/reviews", label: "Recenzii", icon: <IconReviews /> },
+  { href: "/admin/menus", label: "Meniuri", icon: <IconMenus /> },
+  { href: "/admin/blog", label: "Blog", icon: <IconBlog /> },
+];
 
 // ──────────────────────────────────────────────────────────
 // Component
@@ -93,7 +123,7 @@ export default function AdminLayout({ children, unreadCount = 0 }: Props) {
           <AdminSearch />
 
           <nav className={s.nav}>
-            {NAV.map(({ href, label }) => {
+            {NAV.map(({ href, label, icon }) => {
               const active = isActive(href);
               const badge = href === "/admin/inbox" && unreadCount > 0 ? unreadCount : 0;
               return (
@@ -103,6 +133,7 @@ export default function AdminLayout({ children, unreadCount = 0 }: Props) {
                   className={`${s.navLink}${active ? ` ${s.navLinkActive}` : ""}`}
                   onClick={closeSidebar}
                 >
+                  <span className={s.navIcon}>{icon}</span>
                   {label}
                   {badge > 0 && <span className={s.navBadge}>{badge}</span>}
                 </Link>

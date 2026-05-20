@@ -12,6 +12,7 @@ import { verifyAdminSession } from "../../../lib/admin/auth";
 import { type BlogPostAdmin,getAllPostsAdmin } from "../../../lib/blog.server";
 import { formatDateISOtoRo } from "../../../lib/dates";
 import * as s from "../../../styles/admin/blog.css";
+import * as lay from "../../../styles/admin/layout.css";
 
 // ──────────────────────────────────────────────────────────
 // SSR
@@ -123,7 +124,7 @@ export default function AdminBlogPage({
               {!post.deleted ? (
                 <button
                   type="button"
-                  className={s.deleteBtn}
+                  className={lay.deleteBtn}
                   disabled={loadingSlug === post.slug}
                   onClick={() => void handleDelete(post.slug, post.title)}
                 >
