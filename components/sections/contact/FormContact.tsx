@@ -12,6 +12,7 @@ import * as s from "../../../styles/contact/FormContact.css";
 import Appear from "../../animations/Appear";
 import Button from "../../Button";
 import AnimatedIcon from "../../ui/AnimatedIcon";
+import Img from "../../ui/Img";
 
 // ==============================
 // Types
@@ -254,6 +255,16 @@ export default function FormContact() {
                 </a>
               </p>
             </div>
+          </div>
+
+          {/* Imagine locație */}
+          <div className={s.locationImg}>
+            <Img
+              src="/images/current/hero-contact.webp"
+              alt="Sală de evenimente ZephiraEvents, Focșani"
+              variant="card"
+              fit="cover"
+            />
           </div>
 
           {/* notă GDPR / privacy */}

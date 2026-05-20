@@ -83,7 +83,7 @@ function ddmmyyyyFromYmd(ymd: string): string {
 // ==============================
 // Component
 // ==============================
-export default function OfferRequest() {
+export default function OfferRequest({ hideHeading = false }: { hideHeading?: boolean }) {
   // State
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -337,18 +337,27 @@ export default function OfferRequest() {
   // Render
   // ==============================
   return (
-    <div className={s.wrap} aria-labelledby="offer-form-title">
-      <h2 id="offer-form-title" className={s.title}>
-        Solicită ofertă
-      </h2>
+    <div
+      className={s.wrap}
+      {...(hideHeading
+        ? { "aria-label": "Solicită ofertă" }
+        : { "aria-labelledby": "offer-form-title" })}
+    >
+      {!hideHeading && (
+        <h2 id="offer-form-title" className={s.title}>
+          Solicită ofertă
+        </h2>
+      )}
 
-      <p className={s.lead}>
-        Completează formularul, iar noi îți trimitem o propunere personalizată.{" "}
-        <span className={s.hint}>
-          Dacă nu ești sigur de meniu, vei putea consulta meniurile în funcție de tipul de eveniment
-          ales.
-        </span>
-      </p>
+      {!hideHeading && (
+        <p className={s.lead}>
+          Completează formularul, iar noi îți trimitem o propunere personalizată.{" "}
+          <span className={s.hint}>
+            Dacă nu ești sigur de meniu, vei putea consulta meniurile în funcție de tipul de
+            eveniment ales.
+          </span>
+        </p>
+      )}
 
       <form
         ref={formRef}
