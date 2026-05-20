@@ -4,6 +4,7 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactElement } from "react";
 import { useState } from "react";
 
 import AdminLayout from "../../../components/admin/AdminLayout";
@@ -73,7 +74,7 @@ export default function AdminMenusPage({
   }
 
   return (
-    <AdminLayout>
+    <>
       <div className={s.pageHeader}>
         <h1 className={s.pageTitle}>Meniuri ({menus.filter((m) => !m.deleted).length})</h1>
         <Link href="/admin/menus/new" className={s.newBtn}>
@@ -134,6 +135,10 @@ export default function AdminMenusPage({
           </div>
         ))}
       </div>
-    </AdminLayout>
+    </>
   );
 }
+
+AdminMenusPage.getLayout = function getLayout(page: ReactElement) {
+  return <AdminLayout>{page}</AdminLayout>;
+};

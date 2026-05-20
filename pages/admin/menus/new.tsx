@@ -4,6 +4,7 @@
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import type { ReactElement } from "react";
 import { useRef, useState } from "react";
 
 import AdminLayout from "../../../components/admin/AdminLayout";
@@ -117,7 +118,7 @@ export default function AdminMenuNewPage() {
   }
 
   return (
-    <AdminLayout>
+    <>
       <div className={s.pageHeader}>
         <h1 className={s.pageTitle}>Meniu nou</h1>
       </div>
@@ -297,6 +298,10 @@ export default function AdminMenuNewPage() {
           </div>
         </div>
       </form>
-    </AdminLayout>
+    </>
   );
 }
+
+AdminMenuNewPage.getLayout = function getLayout(page: ReactElement) {
+  return <AdminLayout>{page}</AdminLayout>;
+};
