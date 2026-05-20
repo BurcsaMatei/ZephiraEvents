@@ -6,7 +6,7 @@
 import React from "react";
 
 import { CONTACT, withBase } from "../../../lib/config";
-import { btn, link as btnLink, secondary as btnSecondary } from "../../../styles/button.css";
+import { btn, secondary as btnSecondary } from "../../../styles/button.css";
 import * as s from "../../../styles/contact/ContactSlaCard.css";
 import Appear from "../../animations/Appear";
 import Button from "../../Button";
@@ -17,16 +17,12 @@ import AnimatedIcon from "../../ui/AnimatedIcon";
 // ==============================
 type Props = {
   whatsapp?: string;
-  guideHref?: string;
 };
 
 // ==============================
 // Component
 // ==============================
-export default function ContactSlaCard({
-  whatsapp,
-  guideHref = "/downloads/ghid-pregatire-continut.pdf",
-}: Props) {
+export default function ContactSlaCard({ whatsapp }: Props) {
   const phoneRaw = (whatsapp || CONTACT.phone).trim();
   const waHref = `https://wa.me/${phoneRaw.replace(/[^\d]/g, "")}`;
 
@@ -75,23 +71,6 @@ export default function ContactSlaCard({
           </span>
           WhatsApp (urgent)
         </Button>
-      </div>
-
-      <div className={s.miniCard}>
-        <div className={s.miniIcon} aria-hidden>
-          <AnimatedIcon src={withBase("/icons/contact/download.svg")} size={22} hoverTilt />
-        </div>
-        <div className={s.miniBody}>
-          <div className={s.miniTitle}>Ghid pregătire conținut</div>
-          <div className={s.miniText}>Checklist scurt ca să pornim rapid.</div>
-          <Button
-            href={withBase(guideHref)}
-            className={`${btn} ${btnLink}`}
-            aria-label="Descarcă ghidul de pregătire a conținutului"
-          >
-            Descarcă
-          </Button>
-        </div>
       </div>
 
       <p className={s.privacyNote}>

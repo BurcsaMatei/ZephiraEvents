@@ -83,21 +83,6 @@ export const listItem = style({
   selectors: { "&:hover": { background: vars.color.surfaceActive } },
 });
 
-// Mini card + note
-export const miniCard = style({
-  marginTop: "auto",
-  padding: vars.space.md,
-  borderRadius: vars.radius.md,
-  border: `1px dashed ${vars.color.border}`,
-  display: "grid",
-  gridTemplateColumns: "auto 1fr",
-  gap: vars.space.sm,
-  alignItems: "center",
-  transition: `border-color ${vars.motion.normal} ${vars.motion.easing}, background ${vars.motion.normal} ${vars.motion.easing}`,
-  selectors: {
-    "&:hover": { borderColor: vars.color.primary, background: vars.color.surfaceHover },
-  },
-});
 export const note = style({
   marginTop: vars.space.sm,
   color: vars.color.muted,

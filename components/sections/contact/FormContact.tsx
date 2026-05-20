@@ -256,20 +256,6 @@ export default function FormContact() {
             </div>
           </div>
 
-          {/* mini-card de download ghid */}
-          <a
-            className={s.miniCard}
-            href={withBase("/downloads/ghid-pregatire-continut.pdf")}
-            download
-            aria-label="Descarcă Ghid pregătire conținut (PDF)"
-          >
-            <AnimatedIcon src={withBase("/icons/contact/download.svg")} size={22} hoverTilt />
-            <div>
-              <strong>Ghid pregătire conținut</strong>
-              <div className={s.note}>PDF — checklist rapid pentru texte & imagini</div>
-            </div>
-          </a>
-
           {/* notă GDPR / privacy */}
           <p className={s.note}>
             <AnimatedIcon src={withBase("/icons/contact/shield.svg")} size={18} hoverTilt /> Folosim
