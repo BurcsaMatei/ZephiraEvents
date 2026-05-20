@@ -10,7 +10,6 @@ import type { Crumb } from "../components/Breadcrumbs";
 import Breadcrumbs from "../components/Breadcrumbs";
 import OfferRequest from "../components/forms/OfferRequest";
 import ContactInfo from "../components/sections/contact/ContactInfo";
-import ContactMapAddress from "../components/sections/contact/ContactMapAddress";
 import ContactMapIframeConsent from "../components/sections/contact/ContactMapIframeConsent";
 import FormContact from "../components/sections/contact/FormContact";
 import Hero from "../components/sections/Hero";
@@ -21,6 +20,7 @@ import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { absoluteUrl, CONTACT, SITE } from "../lib/config";
+import { btn, secondary as btnSecondary } from "../styles/button.css";
 import * as ti from "../styles/sections/tent/tentIntro.css";
 
 // ==============================
@@ -66,6 +66,10 @@ const addressLine = [
 ]
   .filter(Boolean)
   .join(", ");
+
+const mapsUrl = addressLine
+  ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addressLine)}`
+  : null;
 
 // ==============================
 // Breadcrumbs
@@ -191,7 +195,15 @@ const ContactPage: NextPage = () => (
       {/* ==== «Solicită ofertă» — după formularul de contact existent ==== */}
       <section id="oferta" className="section">
         <div className="container">
-          <OfferRequest />
+          <Appear>
+            <IntroSection
+              eyebrow="Ofertă personalizată"
+              title="Solicită o ofertă personalizată"
+              lede="Completează formularul — revenim cu o propunere adaptată tipului de eveniment și numărului de invitați."
+            />
+          </Appear>
+          <Separator />
+          <OfferRequest hideHeading />
         </div>
       </section>
       <Separator />
@@ -201,7 +213,23 @@ const ContactPage: NextPage = () => (
         <section className="section" aria-label="Hartă locație">
           <div className="container">
             <Appear>
-              <ContactMapAddress />
+              <IntroSection
+                eyebrow="Locație"
+                title="Ne găsești la Focșani, Vrancea"
+                lede="Calea Odobești 408, Cîmpineanca, Județul Vrancea, 627055."
+              >
+                {mapsUrl && (
+                  <a
+                    href={mapsUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`${btn} ${btnSecondary}`}
+                  >
+                    Vezi locația exactă
+                  </a>
+                )}
+              </IntroSection>
+              <Separator />
               <ContactMapIframeConsent src={contactData.mapEmbedUrl} />
             </Appear>
           </div>

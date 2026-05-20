@@ -139,6 +139,15 @@ export const link = style({
   },
 });
 
+/* Imagine locație în coloana dreaptă */
+export const locationImg = style({
+  position: "relative",
+  borderRadius: vars.radius.md,
+  overflow: "hidden",
+  flex: 1,
+  minHeight: 160,
+});
+
 /* GDPR */
 export const gdpr = style({ marginTop: 12 });
 
