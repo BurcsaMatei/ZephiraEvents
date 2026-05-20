@@ -1,7 +1,7 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v15
-**Data:** 2026-05-19
+**Versiune:** v16
+**Data:** 2026-05-20
 **Status:** activ
 
 ---
@@ -62,7 +62,10 @@ components/
 data/
   gallery.json         catalog imagini galerie (generat de scripts/build-gallery.mjs)
   galleryCaptions.json capțiuni galerie
-  menus.json           catalog meniuri
+  menus/               directorul activ de persistență meniuri — 17 fișiere JSON individuale ({slug}.json)
+                       populat one-time prin scripts/migrate-menus.mjs (2026-05-20); creat/editat/șters via GitHub API din admin
+  menus-index.json     index generat la prebuild (scripts/build-menus-index.mjs) — [{slug, title, eventType}], fără deleted; importat client-safe în lib/menus.public.ts
+  ~~menus.json~~       șters (2026-05-20) — înlocuit cu data/menus/*.json individuale
   reviews.json         12 recenzii statice originale — sursă one-time pentru migrare; NU mai e sursa activă
   reviews/             directorul activ de persistență recenzii — fișiere JSON individuale (review-{ts}-{id}.json)
                        populate inițial prin scripts/migrate-reviews.ts; creat prin formular + moderare admin
@@ -84,7 +87,9 @@ supabase/
   blogData.ts          helper citire articole blog (MDX/fișiere)
   config.ts            centrul de adevăr: SITE, CONTACT, THEME, SOCIAL_URLS, BASE_PATH, helpers URL
   gallery.ts / gallery.data.ts / gallery.store.ts   parsing, mapare, store galerie
-  menus.ts / menus.public.ts   logică domeniu meniuri
+  menus.ts             logică domeniu meniuri — pur, client-safe (doar getEventTypeAnchorHref)
+  menus.server.ts      server-only (fs la build-time + GitHub API la runtime): getAllMenus, getAllMenusAdmin, getMenuBySlug, getAllMenusFromGit, getMenuBySlugFromGit
+  menus.public.ts      client-safe — importă data/menus-index.json (generat la prebuild)
   nav.ts               NAV, SERVICII_SUBMENU, SOCIAL — navigație centralizată
   pageMeta.ts          metadata centralizată per pagină
   reviews.ts           logică domeniu recenzii (tip Review, tip Rating)
@@ -110,6 +115,9 @@ pages/
     compose.tsx        Compune email standalone
     reviews.tsx        Moderare recenzii — approve / reject / delete (soft delete via `deleted: true`)
     analytics.tsx      Dashboard GA4 — realtime + grafic 30 zile + surse/device/țări
+    menus/index.tsx    Lista meniuri (SSR fs) + butoane Edit/Șterge/Restaurează (soft delete)
+    menus/new.tsx      Formular creare meniu nou — POST via GitHub API
+    menus/[slug].tsx   Formular editare meniu (SSR fs prefill) — PATCH via GitHub API; upload imagine separat
   api/                 (vezi secțiunea 4)
 
 public/
@@ -127,9 +135,11 @@ public/
 
 scripts/
   build-gallery.mjs    generează lib/gallery.data.ts + data/gallery.json (rulat la prebuild)
+  build-menus-index.mjs generează data/menus-index.json din data/menus/*.json (rulat la prebuild, filtru deleted)
   build-rss.ts         generează public/rss.xml + public/feed.xml (rulat la postbuild)
   generate-og.mjs      generează OG images statice pentru cele 7 pagini fixe (Puppeteer)
   ~~gmail-auth.mjs~~   șters (2026-03-24): nu mai e necesar — sync via IMAP Edge Function
+  migrate-menus.mjs    one-time: migrează data/menus.json → data/menus/*.json (RULAT 2026-05-20)
   migrate-reviews.ts   one-time: migrează data/reviews.json → data/reviews/*.json via GitHub API (RULAT 2026-05-19)
   optimise-images.mjs  comprimă JPEG-uri din public/images/ cu sharp (MozJPEG)
   optimise-videos.mjs  recomprimă MP4-uri din public/videos/ cu ffmpeg
@@ -137,7 +147,7 @@ scripts/
 
 styles/
   admin/               analytics.css.ts, compose.css.ts, inbox.css.ts, layout.css.ts,
-                       login.css.ts, message.css.ts, reviews.css.ts, sent.css.ts
+                       login.css.ts, message.css.ts, menus.css.ts, reviews.css.ts, sent.css.ts
   contact/             ContactInfo.css.ts, ContactMapIframeConsent.css.ts, etc.
   forms/               offerRequest.css.ts
   menus/               menuDetail.css.ts
@@ -192,6 +202,9 @@ types/
 | `/admin/compose`        | `pages/admin/compose.tsx`        | Compune email standalone (salvat în `composed_emails`)                             |
 | `/admin/reviews`        | `pages/admin/reviews.tsx`        | Moderare recenzii pending — approve / reject / delete (soft delete)                |
 | `/admin/analytics`      | `pages/admin/analytics.tsx`      | Dashboard GA4: live acum + grafic 30 zile + surse/device/țări                     |
+| `/admin/menus`          | `pages/admin/menus/index.tsx`    | Lista meniuri (SSR fs, include deleted) + soft delete / restaurare                 |
+| `/admin/menus/new`      | `pages/admin/menus/new.tsx`      | Formular creare meniu nou — POST via GitHub API                                    |
+| `/admin/menus/[slug]`   | `pages/admin/menus/[slug].tsx`   | Formular editare (SSR fs prefill) — PATCH câmpuri + upload imagine via GitHub API  |
 
 ### API Routes publice
 
@@ -221,6 +234,10 @@ types/
 | `/api/admin/imap-sync`                 | POST   | Declanșează sync IMAP → Supabase; returnează `{synced, skipped}` |
 | `/api/admin/analytics/realtime`        | GET    | Date GA4 Realtime — vizitatori activi + pagini; cache 15s         |
 | `/api/admin/analytics/report`          | GET    | Date GA4 Report 30 zile — daily/surse/device/țări; cache 10min   |
+| `/api/admin/menus`                     | GET    | Listează toate meniurile (fs local, include deleted), sortate slug |
+| `/api/admin/menus`                     | POST   | Creează meniu nou — `createFile` via GitHub API                    |
+| `/api/admin/menus/[slug]`              | GET    | Detaliu meniu (fs local, include deleted)                          |
+| `/api/admin/menus/[slug]`              | PATCH  | Editare câmpuri \| `{ action: "delete" }` soft delete \| `{ action: "uploadImage" }` — toate via GitHub API |
 
 ---
 
@@ -367,13 +384,23 @@ ALTER DATABASE postgres SET app.service_role_key = '<SUPABASE_SERVICE_ROLE_KEY>'
 
 ### Meniuri
 
-- `data/menus.json` — datele meniurilor
-- `lib/menus.ts`, `lib/menus.public.ts` — logică domeniu
-- `types/menu.ts`
+- `data/menus/` — 17 fișiere JSON individuale (`{slug}.json`); câmp `deleted?: boolean` pentru soft delete
+- `data/menus-index.json` — generat la prebuild; array `[{slug, title, eventType}]` fără deleted; sursă pentru client bundle
+- `lib/menus.ts` — pur, client-safe; exportă `getEventTypeAnchorHref(eventType)`
+- `lib/menus.server.ts` — server-only (fs + GitHub API); `getAllMenus()` (fără deleted), `getAllMenusAdmin()` (cu deleted), `getMenuBySlug(slug, { includeDeleted? })`, `getAllMenusFromGit()`, `getMenuBySlugFromGit()`
+- `lib/menus.public.ts` — client-safe; importă `data/menus-index.json`
+- `types/menu.ts` — `Menu` interface include `deleted?: boolean`
 - `lib/seo/menuJsonLd.ts` — structured data
+- `scripts/build-menus-index.mjs` — generează `data/menus-index.json` la prebuild
+- `scripts/migrate-menus.mjs` — one-time migration (RULAT 2026-05-20); NU rula din nou
 - `components/sections/menus/ArcMenuGallery.lazy.tsx`
-- `pages/meniuri/[slug].tsx`
+- `pages/meniuri/[slug].tsx` — SSG (getStaticProps + getStaticPaths via fs)
+- `pages/servicii.tsx` — SSG (getStaticProps via `getAllMenus()` din `lib/menus.server.ts`)
+- `pages/admin/menus/index.tsx`, `new.tsx`, `[slug].tsx` — CRUD admin
+- `pages/api/admin/menus/index.ts`, `[slug].ts` — API routes admin (GET = fs; WRITE = GitHub API)
+- `styles/admin/menus.css.ts` — stiluri pagini admin meniuri
 - `styles/menus/menuDetail.css.ts`
+- **Principiu READ/WRITE meniuri admin:** GET citește din fs local (`lib/menus.server.ts`) — rapid, fără GitHub API; WRITE (createFile, updateFile, uploadImage) merge via GitHub API → persistă în `data/menus/` pe `main`
 
 ### Galerie
 
@@ -438,6 +465,20 @@ ALTER DATABASE postgres SET app.service_role_key = '<SUPABASE_SERVICE_ROLE_KEY>'
 ---
 
 ## 8. Ce este deschis / în lucru
+
+**~~Admin meniuri CRUD via GitHub API~~ ✓ ÎNCHIS 2026-05-20** (PR #142, branch feature/admin-menus)
+- `data/menus.json` migrat → 17 fișiere `data/menus/*.json` individuale (one-shot via `scripts/migrate-menus.mjs`)
+- `data/menus-index.json` generat la prebuild (`scripts/build-menus-index.mjs`) — client-safe, fără deleted
+- `lib/menus.ts` rescris pur (client-safe); `lib/menus.server.ts` creat (fs + GitHub API, server-only)
+- `lib/menus.public.ts` actualizat să importe `menus-index.json` în loc de `menus.json`
+- `types/menu.ts`: adăugat `deleted?: boolean` pe `Menu`
+- `pages/servicii.tsx`: migrat la `getStaticProps` + `getAllMenus()` din `lib/menus.server.ts`
+- `components/sections/MenuOffers.tsx`: eliminat import `getAllMenus` (nu mai apelează fs din componentă)
+- Pagini admin noi: `pages/admin/menus/index.tsx`, `new.tsx`, `[slug].tsx`
+- API routes admin noi: `pages/api/admin/menus/index.ts` (GET fs / POST GitHub API), `[slug].ts` (GET fs / PATCH GitHub API)
+- `styles/admin/menus.css.ts`: stiluri Vanilla Extract pentru toate paginile admin meniuri
+- `components/admin/AdminLayout.tsx`: adăugat „Meniuri" în sidebar nav
+- **Principiu aplicat:** GET = fs local (rapid, fără GitHub API rate limit); WRITE = GitHub API (persistență în `main`)
 
 **~~Reviews — migrare persistență Supabase → GitHub API~~ ✓ ÎNCHIS 2026-05-19** (PR #131)
 - `pages/reviews.tsx`: nu mai citește din Supabase; folosește `listFiles`/`getFile` din `lib/admin/github.ts`
@@ -545,6 +586,16 @@ Complet: `sitemap-menus.xml` creat (17 pagini `/meniuri/[slug]`, priority 0.8, c
 
 ```
 ~~scripts/gmail-auth.mjs~~ — șters (2026-03-24): nu mai e necesar; sync via IMAP Edge Function
+
+scripts/build-menus-index.mjs
+  Generează data/menus-index.json din data/menus/*.json.
+  Filtru: exclude deleted. Output: [{slug, title, eventType}] — 17 intrări.
+  Rulat automat la prebuild (npm run build).
+
+scripts/migrate-menus.mjs
+  One-time migration: data/menus.json → data/menus/*.json.
+  RULAT 2026-05-20 — 17 meniuri migrate. NU rula din nou.
+  Standardizează felPrincipal → string[], adaugă deleted: false.
 
 scripts/migrate-reviews.ts
   One-time migration: data/reviews.json → data/reviews/*.json via GitHub API.
@@ -676,7 +727,7 @@ scripts/optimise-videos.mjs
 ## 9. Ce să nu faci
 
 - Nu transforma proiectul în booking engine sau admin panel suplimentar — dashboard-ul admin e complet
-- Nu hardcoda conținut care are deja structură data-driven (`data/menus.json`, `data/gallery.json`)
+- Nu hardcoda conținut care are deja structură data-driven (`data/menus/`, `data/gallery.json`)
 - Nu pune inline styling permanent — Vanilla Extract pentru tot
 - Nu omite `immediate` pe `<Appear>` când wrappezi grid-uri sau galerii
 - Nu înfășura `<Hero>` în `.section` sau `.container` — strică full-bleed
@@ -692,6 +743,9 @@ scripts/optimise-videos.mjs
 - Nu returna erori cu `{ ok: false, message }` în API routes admin — folosește `errorResponse()` din `lib/admin/response.ts` care produce `{ ok: false, error }`
 - Nu randa conținut din Git/DB în admin fără `sanitizeHtml()` — orice `dangerouslySetInnerHTML` trebuie trecut prin `sanitizeHtml()`
 - Nu rula `scripts/migrate-reviews.ts` din nou — a fost rulat 2026-05-19 și `data/reviews/` e deja populat; o a doua rulare ar crea duplicate
+- Nu rula `scripts/migrate-menus.mjs` din nou — a fost rulat 2026-05-20 și `data/menus/` e deja populat; o a doua rulare ar suprascrie modificările admin
+- Nu importa `lib/menus.server.ts` din componente client sau pagini fără `getStaticProps`/`getServerSideProps` — conține `import fs` la nivel de modul și va cauza `Module not found: Can't resolve 'fs'` în bundle-ul client
+- Nu folosi GitHub API pentru READ în paginile admin de meniuri — GET citește din fs local (`lib/menus.server.ts`); GitHub API exclusiv pentru WRITE (createFile, updateFile, uploadImage)
 - Nu commita `client_secret_*.json` — e în `.gitignore`; conține credențiale OAuth2 Google
 - Nu hardcoda coordonate GPS în pagini — folosește `CONTACT.geo.lat` / `CONTACT.geo.lng` din `lib/config.ts`
 - Nu adăuga `export { SITE_URL }` sau alte alias-uri moarte în `lib/config.ts` — `SITE.url` este sursa canonică
