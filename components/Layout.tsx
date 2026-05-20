@@ -4,7 +4,6 @@
 // Imports
 // ==============================
 import Head from "next/head";
-import Script from "next/script";
 import type { ReactNode } from "react";
 
 import { SITE, withBase } from "../lib/config";
@@ -12,11 +11,6 @@ import Footer from "./Footer";
 import Header from "./Header";
 import SkipLink from "./SkipLink";
 import BackToTop from "./ui/BackToTop";
-
-// ==============================
-// Constante
-// ==============================
-const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID || "";
 
 // ==============================
 // Types
@@ -70,18 +64,6 @@ function Layout({ children }: LayoutProps) {
       {/* UI: Back to Top (fixed; apare după pragul de scroll) */}
       <BackToTop />
 
-      {/* Google Analytics 4 — încărcat afterInteractive, numai dacă ID-ul e configurat */}
-      {GA4_ID && (
-        <>
-          <Script
-            src={`https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`}
-            strategy="afterInteractive"
-          />
-          <Script id="ga4-init" strategy="afterInteractive">
-            {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA4_ID}',{page_path:window.location.pathname});`}
-          </Script>
-        </>
-      )}
     </div>
   );
 }

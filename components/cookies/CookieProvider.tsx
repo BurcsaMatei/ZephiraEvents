@@ -6,7 +6,7 @@
 // Imports
 // ==============================
 import dynamic from "next/dynamic";
-import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useState } from "react";
 
 import { isGrantedConsent, readConsent, removeConsent, writeConsent } from "../../lib/cookies";
 import { btn, btnGhost, btnPrimary, btnPrimaryOutline } from "../../styles/cookieBanner.css";
@@ -43,90 +43,6 @@ type ConsentCtx = {
   hasConsent: (cat: ConsentCategory) => boolean;
 };
 
-// Augmentări sigure pentru obiectul global window (fără any)
-declare global {
-  interface Window {
-    dataLayer?: unknown[];
-    gtag?: (...args: unknown[]) => void;
-    fbq?: (...args: unknown[]) => void;
-  }
-}
-
-// ==============================
-// ENV
-// ==============================
-const GTM_ID = (process.env.NEXT_PUBLIC_GTM_ID || "").trim();
-const GA_MEASUREMENT_ID = (
-  process.env.NEXT_PUBLIC_GA4_ID ||
-  process.env.NEXT_PUBLIC_GA_ID ||
-  ""
-).trim();
-const FB_PIXEL_ID = (process.env.NEXT_PUBLIC_FB_PIXEL_ID || "").trim();
-
-// ==============================
-// Utils
-// ==============================
-function getNonce(): string | undefined {
-  if (typeof document === "undefined") return undefined;
-  const s = document.querySelector<HTMLScriptElement>("script[nonce]");
-  return s?.nonce;
-}
-
-function ensureDataLayer(): void {
-  if (!Array.isArray(window.dataLayer)) {
-    window.dataLayer = [];
-  }
-  if (typeof window.gtag !== "function") {
-    window.gtag = (...args: unknown[]) => {
-      // gtag tipic împinge arguments în dataLayer
-      window.dataLayer!.push(args);
-    };
-  }
-}
-
-function injectScript(src: string, id: string): void {
-  if (typeof document === "undefined") return;
-  if (document.getElementById(id)) return;
-  const el = document.createElement("script");
-  el.async = true;
-  el.src = src;
-  el.id = id;
-  const nonce = getNonce();
-  if (nonce) el.setAttribute("nonce", nonce);
-  document.head.appendChild(el);
-}
-
-function injectInline(code: string, id: string): void {
-  if (typeof document === "undefined") return;
-  if (document.getElementById(id)) return;
-  const el = document.createElement("script");
-  el.id = id;
-  const nonce = getNonce();
-  if (nonce) el.setAttribute("nonce", nonce);
-  el.text = code;
-  document.head.appendChild(el);
-}
-
-function gtagConsentUpdate(opts: { analytics: boolean; marketing: boolean }): void {
-  const val = {
-    analytics_storage: opts.analytics ? "granted" : "denied",
-    ad_storage: opts.marketing ? "granted" : "denied",
-  } as const;
-  try {
-    window.gtag?.("consent", "update", val);
-  } catch {
-    /* no-op */
-  }
-}
-
-function fbqConsentUpdate(granted: boolean): void {
-  try {
-    window.fbq?.("consent", granted ? "grant" : "revoke");
-  } catch {
-    /* no-op */
-  }
-}
-
 // ==============================
 // Context
 // ==============================
@@ -143,8 +59,6 @@ export default function CookieProvider({ children }: { children: React.ReactNode
   const [bannerVisible, setBannerVisible] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-
-  const loadedRef = useRef({ gtm: false, ga: false, fb: false });
 
   // init din storage + mount gate pentru CookieDialog/Banner
   useEffect(() => {
@@ -180,80 +94,6 @@ export default function CookieProvider({ children }: { children: React.ReactNode
     window.addEventListener("storage", onStorage);
     return () => window.removeEventListener("storage", onStorage);
   }, []);
-
-  // gating + inject – analytics (setTimeout defer — nu blochează main thread la mount)
-  useEffect(() => {
-    const id = setTimeout(() => {
-      if (!analytics) {
-        gtagConsentUpdate({ analytics: false, marketing });
-        return;
-      }
-
-      if (GTM_ID && !loadedRef.current.gtm) {
-        ensureDataLayer();
-        window.gtag?.("consent", "default", {
-          analytics_storage: "denied",
-          ad_storage: marketing ? "granted" : "denied",
-        });
-        injectScript(
-          `https://www.googletagmanager.com/gtm.js?id=${encodeURIComponent(GTM_ID)}`,
-          "gtm-js",
-        );
-        loadedRef.current.gtm = true;
-      } else if (GA_MEASUREMENT_ID && !loadedRef.current.ga) {
-        ensureDataLayer();
-        injectScript(
-          `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(GA_MEASUREMENT_ID)}`,
-          "ga4-js",
-        );
-        injectInline(
-          [
-            "window.dataLayer=window.dataLayer||[];",
-            "function gtag(){dataLayer.push(arguments);}",
-            "gtag('js', new Date());",
-            "gtag('consent','default',{analytics_storage:'denied',ad_storage:'denied'});",
-            `gtag('config','${GA_MEASUREMENT_ID}',{anonymize_ip:true,transport_type:'beacon'});`,
-          ].join(""),
-          "ga4-init",
-        );
-        loadedRef.current.ga = true;
-      }
-
-      gtagConsentUpdate({ analytics: true, marketing });
-    }, 0);
-    return () => clearTimeout(id);
-  }, [analytics, marketing]);
-
-  // gating + inject – marketing (setTimeout defer — nu blochează main thread la mount)
-  useEffect(() => {
-    const id = setTimeout(() => {
-      if (!marketing) {
-        fbqConsentUpdate(false);
-        return;
-      }
-      if (!FB_PIXEL_ID || loadedRef.current.fb) {
-        fbqConsentUpdate(true);
-        return;
-      }
-      injectInline(
-        [
-          "!function(f,b,e,v,n,t,s){",
-          "if(f.fbq)return;n=f.fbq=function(){n.callMethod?",
-          "n.callMethod.apply(n,arguments):n.queue.push(arguments)};",
-          "if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';",
-          "n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;",
-          "s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)",
-          "}(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');",
-          `fbq('init','${FB_PIXEL_ID}');`,
-          "fbq('consent','revoke');",
-        ].join(""),
-        "fb-init",
-      );
-      loadedRef.current.fb = true;
-      fbqConsentUpdate(true);
-    }, 0);
-    return () => clearTimeout(id);
-  }, [marketing]);
 
   // API
   const setAnalytics = useCallback(

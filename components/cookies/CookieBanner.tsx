@@ -13,7 +13,6 @@ import {
   actions,
   banner,
   btn,
-  btnGhost,
   btnPrimary,
   linkClass,
   srOnly,
@@ -42,7 +41,7 @@ const fixedOverlayStyle: CSSProperties = {
 // Component
 // ==============================
 export default function CookieBanner() {
-  const { bannerVisible, acceptAll, rejectAll, openSettings } = useCookieConsent();
+  const { bannerVisible, acceptAll } = useCookieConsent();
 
   // IDs înainte de early return
   const titleId = useId();
@@ -65,7 +64,8 @@ export default function CookieBanner() {
       </h2>
 
       <p id={descId} className={text}>
-        Folosim cookie-uri pentru funcționare și analiză. Vezi{" "}
+        Singurul cookie funcțional este reCAPTCHA (protecție anti-spam pentru formulare). Site-ul
+        nu folosește cookies de tracking sau analytics. Vezi{" "}
         <Link href={withBase("/cookie-policy")} className={linkClass}>
           politica cookie
         </Link>
@@ -73,14 +73,8 @@ export default function CookieBanner() {
       </p>
 
       <div className={actions}>
-        <button type="button" onClick={rejectAll} className={`${btn} ${btnGhost}`}>
-          Refuză tot
-        </button>
         <button type="button" onClick={acceptAll} className={`${btn} ${btnPrimary}`}>
-          Acceptă tot
-        </button>
-        <button type="button" onClick={openSettings} className={`${btn} ${btnGhost}`}>
-          Setări
+          Am înțeles
         </button>
       </div>
     </div>,
