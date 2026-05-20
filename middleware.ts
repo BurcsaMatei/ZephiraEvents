@@ -23,10 +23,6 @@ function makeNonce(len = 16): string {
 export function middleware(req: NextRequest) {
   const isProd = process.env.NODE_ENV === "production";
 
-  const HAS_GTM = !!(process.env.NEXT_PUBLIC_GTM_ID || "").trim();
-  const HAS_GA = !!(process.env.NEXT_PUBLIC_GA4_ID || process.env.NEXT_PUBLIC_GA_ID || "").trim();
-  const HAS_FB = !!(process.env.NEXT_PUBLIC_FB_PIXEL_ID || "").trim();
-
   let ASSET_ORIGIN = "";
   const cdn = (process.env.NEXT_PUBLIC_ASSET_BASE || "").trim();
   if (cdn) {
@@ -43,9 +39,6 @@ export function middleware(req: NextRequest) {
     "'self'",
     "'unsafe-inline'",
     ...(isProd ? [] : ["'unsafe-eval'"]),
-    ...(HAS_GTM ? ["https://www.googletagmanager.com"] : []),
-    ...(HAS_GA ? ["https://www.google-analytics.com"] : []),
-    ...(HAS_FB ? ["https://connect.facebook.net"] : []),
     // ✅ reCAPTCHA
     "https://www.google.com",
     "https://www.gstatic.com",
@@ -63,9 +56,6 @@ export function middleware(req: NextRequest) {
   const connectSrc: string[] = [
     "'self'",
     ...(isProd ? [] : ["ws:"]),
-    ...(HAS_GA ? ["https://www.google-analytics.com", "https://region1.google-analytics.com"] : []),
-    ...(HAS_GTM ? ["https://www.googletagmanager.com"] : []),
-    ...(HAS_FB ? ["https://graph.facebook.com", "https://connect.facebook.net"] : []),
     // ✅ reCAPTCHA verify/site assets
     "https://www.google.com",
     "https://www.gstatic.com",
