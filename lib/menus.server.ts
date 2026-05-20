@@ -28,13 +28,11 @@ function devWarn(msg: string, ...args: unknown[]): void {
 
 // ── Sync API (fs, SSG build-time) ─────────────────────────────────────────────
 
-export function getAllMenus(): Menu[] {
+function readAllMenusFromDisk(): Menu[] {
   const dir = menusDir();
   let files: string[];
   try {
-    files = fs.readdirSync(dir).filter(
-      (f) => f.endsWith(".json") && f !== ".gitkeep",
-    );
+    files = fs.readdirSync(dir).filter((f) => f.endsWith(".json") && f !== ".gitkeep");
   } catch {
     devWarn("Nu am putut citi directorul %s", dir);
     return [];
@@ -43,8 +41,7 @@ export function getAllMenus(): Menu[] {
   for (const file of files) {
     try {
       const raw = fs.readFileSync(path.join(dir, file), "utf8");
-      const menu = JSON.parse(raw) as Menu;
-      if (menu.deleted !== true) menus.push(menu);
+      menus.push(JSON.parse(raw) as Menu);
     } catch {
       devWarn("Nu am putut citi fișierul %s", file);
     }
@@ -52,16 +49,29 @@ export function getAllMenus(): Menu[] {
   return menus;
 }
 
+export function getAllMenus(): Menu[] {
+  return readAllMenusFromDisk().filter((m) => m.deleted !== true);
+}
+
+// Admin: include și meniurile soft-deleted
+export function getAllMenusAdmin(): Menu[] {
+  return readAllMenusFromDisk();
+}
+
 export function getMenusByEventType(eventType: EventType): Menu[] {
   return getAllMenus().filter((m) => m.eventType === eventType);
 }
 
-export function getMenuBySlug(slug: string): Menu | null {
+export function getMenuBySlug(
+  slug: string,
+  opts: { includeDeleted?: boolean } = {},
+): Menu | null {
   const filePath = path.join(menusDir(), `${slug}.json`);
   try {
     const raw = fs.readFileSync(filePath, "utf8");
     const menu = JSON.parse(raw) as Menu;
-    return menu.deleted === true ? null : menu;
+    if (menu.deleted === true && !opts.includeDeleted) return null;
+    return menu;
   } catch {
     if (isDev()) devWarn("Nu am găsit meniu pentru slug=%s", slug);
     return null;

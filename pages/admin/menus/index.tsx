@@ -8,7 +8,7 @@ import { useState } from "react";
 
 import AdminLayout from "../../../components/admin/AdminLayout";
 import { verifyAdminSession } from "../../../lib/admin/auth";
-import { getFile, listFiles } from "../../../lib/admin/github";
+import { getAllMenusAdmin } from "../../../lib/menus.server";
 import * as s from "../../../styles/admin/menus.css";
 import type { Menu } from "../../../types/menu";
 
@@ -20,16 +20,7 @@ export const getServerSideProps: GetServerSideProps<{ menus: Menu[] }> = async (
     return { redirect: { destination: "/admin/login", permanent: false } };
   }
   try {
-    const entries = await listFiles("data/menus");
-    const jsonFiles = entries.filter(
-      (e) => e.type === "file" && e.name.endsWith(".json") && e.name !== ".gitkeep",
-    );
-    const menus = await Promise.all(
-      jsonFiles.map(async (entry) => {
-        const { content } = await getFile(entry.path);
-        return JSON.parse(content) as Menu;
-      }),
-    );
+    const menus = getAllMenusAdmin();
     const sorted = menus.sort((a, b) => a.slug.localeCompare(b.slug));
     return { props: { menus: sorted } };
   } catch {

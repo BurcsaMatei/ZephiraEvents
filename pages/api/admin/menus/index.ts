@@ -5,8 +5,9 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
 import { verifyAdminSession } from "../../../../lib/admin/auth";
-import { createFile, getFile,listFiles } from "../../../../lib/admin/github";
+import { createFile } from "../../../../lib/admin/github";
 import { errorResponse, okResponse } from "../../../../lib/admin/response";
+import { getAllMenusAdmin } from "../../../../lib/menus.server";
 import type { Menu } from "../../../../types/menu";
 
 function toKebab(str: string): string {
@@ -25,17 +26,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === "GET") {
     try {
-      const entries = await listFiles("data/menus");
-      const jsonFiles = entries.filter(
-        (e) => e.type === "file" && e.name.endsWith(".json") && e.name !== ".gitkeep",
-      );
-      const menus = await Promise.all(
-        jsonFiles.map(async (entry) => {
-          const { content } = await getFile(entry.path);
-          return JSON.parse(content) as Menu;
-        }),
-      );
       // Admin vede și meniurile șterse (soft delete)
+      const menus = getAllMenusAdmin();
       const sorted = menus.sort((a, b) => a.slug.localeCompare(b.slug));
       return res.status(200).json(okResponse(sorted));
     } catch (err) {

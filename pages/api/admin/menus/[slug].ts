@@ -8,6 +8,7 @@ import sharp from "sharp";
 import { verifyAdminSession } from "../../../../lib/admin/auth";
 import { getFile, updateFile, uploadImage } from "../../../../lib/admin/github";
 import { errorResponse, okResponse } from "../../../../lib/admin/response";
+import { getMenuBySlug } from "../../../../lib/menus.server";
 import type { Menu } from "../../../../types/menu";
 
 export const config = {
@@ -25,12 +26,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const filePath = `data/menus/${slug}.json`;
 
   if (req.method === "GET") {
-    try {
-      const { content } = await getFile(filePath);
-      return res.status(200).json(okResponse(JSON.parse(content) as Menu));
-    } catch {
-      return res.status(404).json(errorResponse("Meniu negăsit."));
-    }
+    // Admin poate vedea și meniurile soft-deleted — citim raw de pe disk
+    const menu = getMenuBySlug(slug, { includeDeleted: true });
+    if (!menu) return res.status(404).json(errorResponse("Meniu negăsit."));
+    return res.status(200).json(okResponse(menu));
   }
 
   if (req.method === "PATCH") {

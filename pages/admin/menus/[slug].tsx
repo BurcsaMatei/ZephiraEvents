@@ -8,7 +8,7 @@ import { useRef, useState } from "react";
 
 import AdminLayout from "../../../components/admin/AdminLayout";
 import { verifyAdminSession } from "../../../lib/admin/auth";
-import { getFile } from "../../../lib/admin/github";
+import { getMenuBySlug } from "../../../lib/menus.server";
 import * as s from "../../../styles/admin/menus.css";
 import type { Menu } from "../../../types/menu";
 import { EVENT_TYPES } from "../../../types/menu";
@@ -20,13 +20,10 @@ export const getServerSideProps: GetServerSideProps<{ menu: Menu }> = async ({ r
   if (!verifyAdminSession(req)) {
     return { redirect: { destination: "/admin/login", permanent: false } };
   }
-  const slug = Array.isArray(params?.["slug"]) ? params["slug"][0] : (params?.["slug"] ?? "");
-  try {
-    const { content } = await getFile(`data/menus/${slug}.json`);
-    return { props: { menu: JSON.parse(content) as Menu } };
-  } catch {
-    return { notFound: true };
-  }
+  const slug = String(Array.isArray(params?.["slug"]) ? params["slug"][0] : (params?.["slug"] ?? ""));
+  const menu = getMenuBySlug(slug, { includeDeleted: true });
+  if (!menu) return { notFound: true };
+  return { props: { menu } };
 };
 
 // ──────────────────────────────────────────────────────────
