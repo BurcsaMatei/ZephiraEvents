@@ -21,7 +21,7 @@ import { Serviciipreview } from "../components/sections/Serviciipreview";
 import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
-import { getAllPosts } from "../lib/blogData";
+import { getAllPosts } from "../lib/blog.server";
 import { absoluteOgImage, absoluteUrl, CONTACT, SITE, SOCIAL_URLS } from "../lib/config";
 import { getLatestReviews, type Review } from "../lib/reviews";
 import * as ti from "../styles/sections/tent/tentIntro.css";

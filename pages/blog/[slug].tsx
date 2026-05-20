@@ -11,7 +11,7 @@ import Breadcrumbs, { type Crumb } from "../../components/Breadcrumbs";
 import Hero from "../../components/sections/Hero";
 import Seo from "../../components/Seo";
 import Separator from "../../components/Separator";
-import { getAllPosts, getPostBySlug, getRelatedByTags } from "../../lib/blogData";
+import { getAllPosts, getPostBySlug, getRelatedByTags } from "../../lib/blog.server";
 import { absoluteOgImage, absoluteUrl, SEO_DEFAULTS } from "../../lib/config";
 import { formatDateISOtoRo } from "../../lib/dates";
 import { proseClass } from "../../styles/prose.css";

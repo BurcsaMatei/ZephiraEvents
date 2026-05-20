@@ -58,7 +58,7 @@ type BlogPost = {
 // ==============================
 // Import date blog
 // ==============================
-import * as blog from "../lib/blogData";
+import * as blog from "../lib/blog.server";
 
 type BlogModuleShape = {
   BLOG_POSTS?: unknown;
