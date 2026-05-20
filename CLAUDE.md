@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v17
+**Versiune:** v18
 **Data:** 2026-05-20
 **Status:** activ
 
@@ -17,19 +17,14 @@ ZephiraEvents este un website premium de prezentare și conversie pentru o sală
 - **Framework:** Next.js 15 (Pages Router), React 19, TypeScript strict
 - **Styling:** Vanilla Extract (`*.css.ts`) — fără inline styling ca standard
 - **Animații:** Framer Motion, componenta `Appear` internă, `ReducedMotionProvider` — context global pentru `useReducedMotion()`
-- **Mail:** Nodemailer (SMTP `mail.zephiraevents.ro`)
 - **Validare:** Zod
 - **Lightbox:** yet-another-react-lightbox
-- **Grafice:** Recharts (`AreaChart` în dashboard admin)
-- **Database:** Supabase (PostgreSQL) — `@supabase/supabase-js` service role key, server-side only; **reviews NU mai folosesc Supabase** — persistate în Git via GitHub Contents API
-- **Persistență recenzii:** GitHub Contents API (PAT) — fișiere JSON în `data/reviews/`, citite SSR; `lib/admin/github.ts` pentru toate operațiunile
-- **Analytics:** GA4 Data API — `@google-analytics/data` + service account JSON
-- **Email sync:** IMAP (`imapflow` via npm specifier în Deno) — Supabase Edge Function `sync-imap`, sync UNSEEN inbox → Supabase (`email_inbound`); declanșat manual din `/admin/inbox` sau automat via `pg_cron` (10 min)
+- **Persistență universală:** GitHub Contents API (PAT) — fișiere JSON în `data/messages/`, `data/reviews/`, `data/menus/`; articole blog în `data/blog/*.md`; `lib/admin/github.ts` pentru toate operațiunile de scriere
 - **Deployment:** Vercel
 - **PWA:** next-pwa (activ doar în producție cu `NEXT_PUBLIC_ENABLE_PWA=1`); `public/sw.js`, `public/workbox-*.js`, `public/fallback-*.js` sunt generate la build și sunt în `.gitignore`
 - **SEO:** metadata centralizată, JSON-LD, OG static pre-generat, sitemap/robots server-side
 - **Assets media:** imagini servite nativ ca **WebP** (conversie one-shot 2026-05-19, fără pipeline runtime); video-uri servite nativ ca **MP4 H.264** (deja optimizate CRF 28, mai eficiente decât VP9 pe conținut pre-comprimat); excepții: `og*.jpg` rămân JPG (compatibilitate OG social), `public/icons/*.png` + favicon + screenshots + `logo-dedicat.png` rămân PNG (PWA/JSON-LD)
-- **devDependencies notabile:** `sharp` (optimizare imagini + procesare foto profil recenzii), `puppeteer` (generare OG screenshots)
+- **devDependencies notabile:** `sharp` (optimizare imagini + procesare foto profil recenzii), `puppeteer` (generare OG screenshots), `gray-matter` + `marked` (parsare articole blog Markdown)
 
 ---
 
@@ -37,16 +32,19 @@ ZephiraEvents este un website premium de prezentare și conversie pentru o sală
 
 ```
 components/
-  admin/               AdminLayout.tsx — sidebar nav (Inbox/Trimise/Recenzii/Compune/Analytics), logout, manifest PWA admin
-                       AnalyticsChart.tsx — Recharts AreaChart (dynamic, ssr:false)
+  admin/               AdminLayout.tsx — sidebar nav cu iconițe SVG inline (Inbox/Recenzii/Meniuri/Blog), logout, manifest PWA admin
+                       AdminSearch.tsx — câmp de căutare global admin (mesaje + recenzii)
+                       AdminInstallButton.tsx — buton PWA install (apare în sidebar)
   animations/          Appear, AppearGroup — animații pe scroll/viewport; ReducedMotionProvider — context global useReducedMotion()
   blog/                BlogCard, RelatedPosts
   brand/               componente de identitate vizuală
   cookies/             CookieProvider, CookieBanner
-  forms/               OfferRequest — formular solicitare ofertă
+  forms/               OfferRequest — formular solicitare ofertă; prop `hideHeading?: boolean` ascunde h2+lead intern (când e wrapat în IntroSection extern)
   pwa/                 InstallAppButton, PwaInstallCta, ServiceWorkerRegister (+ .inner)
   sections/
-    contact/           ContactInfo, ContactMapAddress, ContactMapIframeConsent, ContactSlaCard, FormContact
+    contact/           ContactInfo, ContactMapIframeConsent, FormContact
+                       ~~ContactMapAddress~~ — eliminată (2026-05-20, PR #148): adresa e acum în IntroSection lede pe pagina /contact
+                       ContactSlaCard — componentă orfană (neutilizată în prezent)
     homepage/          ArcGallery, HeroIndex, LogoBeforeIntro
     menus/             ArcMenuGallery — galerie carduri meniuri cu autoplay
     reviews/           Reviews, ReviewsForm
@@ -62,29 +60,37 @@ components/
 data/
   gallery.json         catalog imagini galerie (generat de scripts/build-gallery.mjs)
   galleryCaptions.json capțiuni galerie
+  blog/                articole blog — fișiere Markdown cu front-matter gray-matter (`*.md`); citite via `lib/blog.server.ts`
+                       creat/editat/șters via GitHub API din admin (`pages/admin/blog/`)
   menus/               directorul activ de persistență meniuri — 17 fișiere JSON individuale ({slug}.json)
                        populat one-time prin scripts/migrate-menus.mjs (2026-05-20); creat/editat/șters via GitHub API din admin
   menus-index.json     index generat la prebuild (scripts/build-menus-index.mjs) — [{slug, title, eventType}], fără deleted; importat client-safe în lib/menus.public.ts
+  messages/            directorul activ de persistență mesaje — fișiere JSON individuale (contact-{ts}-{id}.json, offer-{ts}-{id}.json)
+                       salvate de `pages/api/contact.ts` și `pages/api/offer-request.ts` via GitHub API; citite admin via `lib/admin/github.ts`
   ~~menus.json~~       șters (2026-05-20) — înlocuit cu data/menus/*.json individuale
   reviews.json         12 recenzii statice originale — sursă one-time pentru migrare; NU mai e sursa activă
   reviews/             directorul activ de persistență recenzii — fișiere JSON individuale (review-{ts}-{id}.json)
                        populate inițial prin scripts/migrate-reviews.ts; creat prin formular + moderare admin
 
 lib/
-  admin/               auth.ts, supabase.ts, supabase.types.ts, smtp.ts,
-                       analytics.ts, response.ts, sanitize.ts
+  admin/               auth.ts, response.ts, sanitize.ts, search.ts, login.ts, logout.ts
                        github.ts — GitHub Contents API (createFile, getFile, updateFile, listFiles, uploadImage)
-                       ~~imap.ts~~ — șters (2026-03-23): înlocuit cu gmail.ts
-                       ~~gmail.ts~~ — șters (2026-03-24): înlocuit cu supabase/functions/sync-imap/
-supabase/
-  functions/
-    sync-imap/index.ts   Edge Function Deno — sync UNSEEN IMAP inbox → Supabase; npm:imapflow
-  migrations/            001–004 (004: pg_cron job sync-imap la 10 min)
+                       blog/ — helper-e server-side admin pentru blog
+                       menus/ — helper-e server-side admin pentru meniuri
+                       messages/ — helper-e server-side admin pentru mesaje
+                       reviews/ — helper-e server-side admin pentru recenzii
+                       ~~supabase.ts~~ — șters: Supabase eliminat complet din proiect
+                       ~~supabase.types.ts~~ — șters
+                       ~~smtp.ts~~ — șters: trimitere email eliminată
+                       ~~analytics.ts~~ — șters: GA4 eliminat
+                       ~~imap.ts~~ — șters (2026-03-23)
+                       ~~gmail.ts~~ — șters (2026-03-24)
   gallery/             schema.ts — validare și tipuri galerie
   mail/                offerRequestEmail.ts — template email ofertă
   seo/                 menuJsonLd.ts — structured data meniuri
   validation/          offerRequest.ts — validare Zod pentru ofertă
-  blogData.ts          helper citire articole blog (MDX/fișiere)
+  blog.server.ts       server-only — citire articole blog din `data/blog/*.md` (fs + gray-matter + marked); exportă `getAllPosts`, `getPostBySlug`, `getAllPostsAdmin`, `getRelatedByTags`, `buildMarkdownFile`, `titleToSlug`
+                       ~~blogData.ts~~ — înlocuit cu `lib/blog.server.ts`
   config.ts            centrul de adevăr: SITE, CONTACT, THEME, SOCIAL_URLS, BASE_PATH, helpers URL
   gallery.ts / gallery.data.ts / gallery.store.ts   parsing, mapare, store galerie
   menus.ts             logică domeniu meniuri — pur, client-safe (doar getEventTypeAnchorHref)
@@ -109,15 +115,15 @@ pages/
   robots.txt.ts, site.webmanifest.ts, sitemap*.ts
   admin/
     login.tsx          Login admin (cookie httpOnly, bypass Layout public, înregistrare admin-sw.js)
-    inbox/index.tsx    Lista mesaje (contact + ofertă + email_inbound) + buton IMAP sync + soft delete + paginare
-    inbox/[id].tsx     Detaliu mesaj + istoricul reply-urilor + formular reply
-    sent.tsx           Mesaje trimise — union composed_emails + admin_replies, badge Reply/Nou, soft delete
-    compose.tsx        Compune email standalone
+    inbox/index.tsx    Lista mesaje (contact + ofertă din data/messages/) + soft delete + paginare
+    inbox/[id].tsx     Detaliu mesaj + buton mailto: pentru răspuns extern
     reviews.tsx        Moderare recenzii — approve / reject / delete (soft delete via `deleted: true`)
-    analytics.tsx      Dashboard GA4 — realtime + grafic 30 zile + surse/device/țări
     menus/index.tsx    Lista meniuri (SSR fs) + butoane Edit/Șterge/Restaurează (soft delete)
     menus/new.tsx      Formular creare meniu nou — POST via GitHub API
     menus/[slug].tsx   Formular editare meniu (SSR fs prefill) — PATCH via GitHub API; upload imagine separat
+    blog/index.tsx     Lista articole blog (SSR fs) + butoane Edit/Șterge/Restaurează
+    blog/new.tsx       Formular creare articol nou — POST via GitHub API
+    blog/[slug].tsx    Formular editare articol (SSR fs prefill) — PATCH via GitHub API
   api/                 (vezi secțiunea 4)
 
 public/
@@ -146,8 +152,11 @@ scripts/
   project-tree.ps1     utilitar explorare structură (PowerShell)
 
 styles/
-  admin/               analytics.css.ts, compose.css.ts, inbox.css.ts, layout.css.ts,
-                       login.css.ts, message.css.ts, menus.css.ts, reviews.css.ts, sent.css.ts
+  admin/               blog.css.ts, compose.css.ts, inbox.css.ts, layout.css.ts,
+                       login.css.ts, message.css.ts, menus.css.ts, reviews.css.ts, search.css.ts
+                       `layout.css.ts` conține `deleteBtn` centralizat (folosit de toate paginile admin) și token `vars.color.danger`
+                       ~~analytics.css.ts~~ — șters: GA4 eliminat
+                       ~~sent.css.ts~~ — șters (2026-05-20, PR #150): orfan — `sent.tsx` nu există
   contact/             ContactInfo.css.ts, ContactMapIframeConsent.css.ts, etc.
   forms/               offerRequest.css.ts
   menus/               menuDetail.css.ts
@@ -160,15 +169,11 @@ styles/
     arcMenuGallery.css.ts, logoBeforeIntro.css.ts, motivationCards.css.ts, waiterBarSection.css.ts
   theme.css.ts, theme.global.css.ts, globals.css, header.css.ts, hero.css.ts, services.css.ts, etc.
 
-supabase/
-  migrations/
-    001_initial_schema.sql        messages, admin_replies, composed_emails, reviews
-    002_add_email_inbound_type.sql extinde CHECK constraint type cu 'email_inbound'
-    003_soft_delete.sql           adaugă deleted_at timestamptz pe messages și composed_emails
+~~supabase/~~ — directorul a fost eliminat complet; Supabase nu mai este folosit în proiect
 
 types/
-  admin.ts             SentKind, SentItem — tipuri comune pentru API routes + pagini admin
-  blog.ts, menu.ts, etc.
+  blog.ts, global.d.ts, menu.ts, etc.
+  ~~admin.ts~~ — șters: SentKind/SentItem nu mai sunt necesare (sent/analytics eliminate)
 ```
 
 ---
@@ -196,22 +201,22 @@ types/
 | Pagină                  | Fișier                           | Rol                                                            |
 | ----------------------- | -------------------------------- | -------------------------------------------------------------- |
 | `/admin/login`          | `pages/admin/login.tsx`          | Autentificare — email + parolă, setează cookie sesiune; înregistrează admin-sw.js |
-| `/admin/inbox`          | `pages/admin/inbox/index.tsx`    | Lista mesaje (contact/ofertă/email_inbound) + IMAP sync + soft delete + paginare (50/pagină) |
-| `/admin/inbox/[id]`     | `pages/admin/inbox/[id].tsx`     | Detaliu mesaj + istoricul reply-urilor + formular reply                            |
-| `/admin/sent`           | `pages/admin/sent.tsx`           | Mesaje trimise — union composed_emails + admin_replies, badge Reply/Nou            |
-| `/admin/compose`        | `pages/admin/compose.tsx`        | Compune email standalone (salvat în `composed_emails`)                             |
+| `/admin/inbox`          | `pages/admin/inbox/index.tsx`    | Lista mesaje (contact/ofertă din `data/messages/`) + soft delete + paginare       |
+| `/admin/inbox/[id]`     | `pages/admin/inbox/[id].tsx`     | Detaliu mesaj + buton mailto: pentru răspuns extern                                |
 | `/admin/reviews`        | `pages/admin/reviews.tsx`        | Moderare recenzii pending — approve / reject / delete (soft delete)                |
-| `/admin/analytics`      | `pages/admin/analytics.tsx`      | Dashboard GA4: live acum + grafic 30 zile + surse/device/țări                     |
 | `/admin/menus`          | `pages/admin/menus/index.tsx`    | Lista meniuri (SSR fs, include deleted) + soft delete / restaurare                 |
 | `/admin/menus/new`      | `pages/admin/menus/new.tsx`      | Formular creare meniu nou — POST via GitHub API                                    |
 | `/admin/menus/[slug]`   | `pages/admin/menus/[slug].tsx`   | Formular editare (SSR fs prefill) — PATCH câmpuri + upload imagine via GitHub API  |
+| `/admin/blog`           | `pages/admin/blog/index.tsx`     | Lista articole blog (SSR fs, include deleted) + soft delete / restaurare           |
+| `/admin/blog/new`       | `pages/admin/blog/new.tsx`       | Formular creare articol nou — POST via GitHub API                                  |
+| `/admin/blog/[slug]`    | `pages/admin/blog/[slug].tsx`    | Formular editare articol (SSR fs prefill) — PATCH via GitHub API                  |
 
 ### API Routes publice
 
 | Route                     | Fișier                       | Rol                                                                   |
 | ------------------------- | ---------------------------- | --------------------------------------------------------------------- |
-| `POST /api/contact`       | `pages/api/contact.ts`       | Trimite email contact via SMTP + autoreply + salvează în Supabase     |
-| `POST /api/offer-request` | `pages/api/offer-request.ts` | Procesează solicitare ofertă, trimite email + salvează în Supabase    |
+| `POST /api/contact`       | `pages/api/contact.ts`       | Validare Zod + reCAPTCHA; salvează JSON în `data/messages/` via GitHub API |
+| `POST /api/offer-request` | `pages/api/offer-request.ts` | Validare Zod + reCAPTCHA; salvează JSON în `data/messages/` via GitHub API |
 | `POST /api/review-submit` | `pages/api/review-submit.ts` | Formular recenzie — procesează foto (sharp → WebP), salvează JSON în `data/reviews/` via GitHub API (status: pending) |
 | `GET /api/og`             | `pages/api/og.tsx`           | Unealtă internă pentru `npm run generate:og` — nu e apelat din pagini |
 | `POST /api/csp-report`    | `pages/api/csp-report.ts`    | Colectare rapoarte Content-Security-Policy                            |
@@ -222,22 +227,20 @@ types/
 | -------------------------------------- | ------ | ----------------------------------------------------------------- |
 | `/api/admin/login`                     | POST   | Verifică credențiale, setează cookie sesiune; rate limit 5/IP/15min |
 | `/api/admin/logout`                    | POST   | Șterge cookie sesiune                                             |
-| `/api/admin/messages`                  | GET    | Listează mesaje paginate (`?page=N`, 50/pagină), `deleted_at IS NULL` |
-| `/api/admin/messages/[id]`             | GET    | Detaliu mesaj + reply-uri; auto-marchează ca `read`               |
-| `/api/admin/messages/[id]`             | PATCH  | Actualizează status sau `{ action: "delete" }` (soft delete)      |
-| `/api/admin/reply`                     | POST   | Trimite email reply + salvează în `admin_replies`; `dbWarning` dacă DB fail |
-| `/api/admin/compose`                   | POST   | Trimite email standalone + salvează în `composed_emails`          |
-| `/api/admin/sent`                      | GET    | Union composed_emails + admin_replies ordonate sent_at DESC       |
-| `/api/admin/sent/[id]`                 | PATCH  | `{ action: "delete" }` soft delete pe composed_emails             |
+| `/api/admin/search`                    | GET    | Căutare globală în mesaje + recenzii (GitHub API)                 |
+| `/api/admin/messages`                  | GET    | Listează mesaje din `data/messages/` via GitHub API, filtrate `!deleted` |
+| `/api/admin/messages/[id]`             | GET    | Detaliu mesaj; auto-marchează ca `read` via GitHub API             |
+| `/api/admin/messages/[id]`             | PATCH  | `{ action: "delete" }` soft delete — `deleted: true` în JSON via GitHub API |
 | `/api/admin/reviews`                   | GET    | Listează recenzii (GitHub API `data/reviews/`) cu filtru opțional `?status=` |
 | `/api/admin/reviews/[id]`              | PATCH  | Moderare: `{ action: "approve" \| "reject" \| "delete" }` — scrie JSON via GitHub API |
-| `/api/admin/imap-sync`                 | POST   | Declanșează sync IMAP → Supabase; returnează `{synced, skipped}` |
-| `/api/admin/analytics/realtime`        | GET    | Date GA4 Realtime — vizitatori activi + pagini; cache 15s         |
-| `/api/admin/analytics/report`          | GET    | Date GA4 Report 30 zile — daily/surse/device/țări; cache 10min   |
 | `/api/admin/menus`                     | GET    | Listează toate meniurile (fs local, include deleted), sortate slug |
 | `/api/admin/menus`                     | POST   | Creează meniu nou — `createFile` via GitHub API                    |
 | `/api/admin/menus/[slug]`              | GET    | Detaliu meniu (fs local, include deleted)                          |
 | `/api/admin/menus/[slug]`              | PATCH  | Editare câmpuri \| `{ action: "delete" }` soft delete \| `{ action: "uploadImage" }` — toate via GitHub API |
+| `/api/admin/blog`                      | GET    | Listează articole (fs local, include deleted)                      |
+| `/api/admin/blog`                      | POST   | Creează articol nou — `createFile` via GitHub API                  |
+| `/api/admin/blog/[slug]`               | GET    | Detaliu articol (fs local, include deleted)                        |
+| `/api/admin/blog/[slug]`               | PATCH  | Editare câmpuri \| `{ action: "delete" }` soft delete via GitHub API |
 
 ---
 
@@ -261,13 +264,12 @@ types/
 
 ### Admin — reguli specifice
 
-- `lib/admin/supabase.ts` aruncă la inițializare dacă env vars lipsesc — nu importa la nivel de modul din pagini publice
 - `verifyAdminSession(req)` se apelează la **fiecare** API route și `getServerSideProps` admin
-- `supabaseAdmin` (service role key) — bypass RLS — folosit exclusiv server-side
 - Sesiunile admin sunt HMAC-SHA256 derivate din `ADMIN_EMAIL + ADMIN_PASSWORD + ADMIN_SESSION_SECRET`; schimbarea oricăreia invalidează toate sesiunile active
-- `MessageType` în `supabase.types.ts` include `"email_inbound"` pentru mesajele sincronizate IMAP
 - **Format răspuns API:** toate API routes admin returnează `{ ok: false, error: string }` via `errorResponse()` — **nu** `{ ok: false, message: string }`; importă din `lib/admin/response.ts`
 - **XSS în admin:** orice conținut dinamic randat în admin via `dangerouslySetInnerHTML` **trebuie** trecut prin `sanitizeHtml()` din `lib/admin/sanitize.ts`
+- **Butoane Șterge:** folosește `lay.deleteBtn` din `styles/admin/layout.css.ts` — NU adăuga un `deleteBtn` local în fiecare pagină admin
+- **Culoare pericol:** folosește `vars.color.danger` din theme (light: `#dc2626`, dark: `#f87171`) — NU hardcoda roșu în stiluri admin
 
 ### Reguli speciale descoperite în lucru
 
@@ -319,41 +321,22 @@ types/
 ### Admin dashboard
 
 - `lib/admin/auth.ts` — `verifyAdminSession()`, `verifyCredentials()`, `generateSessionToken()`
-- `lib/admin/supabase.ts` — `supabaseAdmin` (service role, bypass RLS) — server-side only
-- `lib/admin/supabase.types.ts` — tipuri pentru toate tabelele Supabase
-- `lib/admin/smtp.ts` — `sendAdminMail()` helper pentru reply/compose; TLS `rejectUnauthorized: false` (hostico.ro)
-- `lib/admin/github.ts` — GitHub Contents API (PAT): `createFile`, `getFile`, `updateFile`, `listFiles`, `uploadImage`; folosit pentru persistența recenziilor în `data/reviews/` și upload foto profil în `public/images/profiles/`
-- `supabase/functions/sync-imap/index.ts` — Edge Function Deno — `npm:imapflow`, host hardcodat `glc47.hostico.ro` (cert TLS valid), port 993 SSL, UNSEEN INBOX, deduplicare `metadata.message_id`, insert `email_inbound`, marchează citit; autentificare via `SYNC_SECRET` (Bearer token), deploy `--no-verify-jwt`; apelată din `/api/admin/imap-sync` (manual) și via `pg_cron` (automat 10 min)
-- `supabase/migrations/004_pg_cron_sync.sql` — activează `pg_cron` + `pg_net`; job `*/10 * * * *` POST la Edge Function sync-imap
-- `lib/admin/analytics.ts` — `getRealtimeData()` + `getReportData()` — GA4 Data API; singleton client; `withTimeout(8000ms)` pe toate apelurile API
+- `lib/admin/github.ts` — GitHub Contents API (PAT): `createFile`, `getFile`, `updateFile`, `listFiles`, `uploadImage`; sursa unică pentru TOATE operațiunile de persistență (mesaje, recenzii, meniuri, blog, foto profil)
 - `lib/admin/response.ts` — `okResponse()` / `errorResponse()` — format uniform `{ ok: true [, data] }` / `{ ok: false, error }`
 - `lib/admin/sanitize.ts` — `sanitizeHtml()` — strip tags + escape entities; folosit cu `dangerouslySetInnerHTML` în toate paginile admin
-- `components/admin/AdminLayout.tsx` — sidebar: Inbox/Trimise/Recenzii/Compune/Analytics + manifest PWA admin
-- `components/admin/AnalyticsChart.tsx` — Recharts AreaChart (dynamic import, ssr:false)
+- `lib/admin/search.ts` — căutare globală în `data/messages/` + `data/reviews/` via GitHub API
+- `components/admin/AdminLayout.tsx` — sidebar cu iconițe SVG inline: Inbox / Recenzii / Meniuri / Blog + logout + ThemeSwitcher; manifest PWA admin
+- `components/admin/AdminSearch.tsx` — componentă de căutare globală în sidebar
+- `components/admin/AdminInstallButton.tsx` — buton PWA install în sidebar
 - `public/admin-manifest.json` — PWA manifest dedicat, scope /admin/, start_url /admin/inbox
 - `public/admin-sw.js` — service worker izolat scope /admin/, network-first, cache minimal
-- `types/admin.ts` — `SentKind`, `SentItem` — tipuri comune importate în `pages/api/admin/sent.ts` și `pages/admin/sent.tsx`
-- `supabase/migrations/001_initial_schema.sql` — schema completă (4 tabele)
-- `supabase/migrations/002_add_email_inbound_type.sql` — extinde CHECK tip mesaj
-- `supabase/migrations/003_soft_delete.sql` — adaugă deleted_at pe messages și composed_emails
-- **Soft delete mesaje:** inbox filtrează `deleted_at IS NULL`; PATCH `{ action: "delete" }` setează timestamp
+- **Soft delete mesaje:** câmpul `deleted: true` în JSON-ul mesajului; citirile filtrează `!m.deleted`; PATCH `{ action: "delete" }` scrie JSON actualizat via GitHub API
 - **Soft delete recenzii:** câmpul `deleted: true` în JSON-ul recenziei; citirile filtrează `!r.deleted`; PATCH `{ action: "delete" }` scrie JSON actualizat via GitHub API
-- **SMTP TLS:** `rejectUnauthorized: false` pe toate cele 4 transporturi (smtp.ts, contact, offer-request, review-submit) — hostico.ro nu are cert valid pe hostname
+- **`deleteBtn` centralizat:** `styles/admin/layout.css.ts` exportă `deleteBtn` folosit de toate paginile admin; stilizat cu `vars.color.danger`
+- **`vars.color.danger`:** token Vanilla Extract — light: `#dc2626`, dark: `#f87171` — sursa unică pentru culoarea butoanelor de ștergere
 - **Rate limiting login:** in-memory Map per IP, 5 încercări eșuate / 15 minute → 429; reset la autentificare reușită
 
-### IMAP sync via Supabase Edge Function — variabile de mediu necesare
-
-**Supabase Dashboard → Edge Functions → sync-imap → Secrets:**
-
-```
-SYNC_SECRET=<secret_32_bytes_hex>   # autentificare Bearer între Next.js și Edge Function
-IMAP_HOST=mail.zephiraevents.ro     # referință; host real hardcodat în cod: glc47.hostico.ro
-IMAP_PORT=993
-IMAP_USER=info@zephiraevents.ro
-IMAP_PASSWORD=...                   # parola cutiei IMAP
-```
-
-`SUPABASE_URL` și `SUPABASE_SERVICE_ROLE_KEY` sunt injectate automat de Supabase în Edge Functions.
+### Variabile de mediu necesare
 
 **`.env.local` + Vercel env vars:**
 
@@ -362,19 +345,14 @@ GITHUB_PAT=...                      # GitHub Personal Access Token (repo scope)
 GITHUB_OWNER=BurcsaMatei
 GITHUB_REPO=ZephiraEvents
 GITHUB_BRANCH=main
-SYNC_SECRET=<același secret_32_bytes_hex>   # trimis ca Bearer token către Edge Function
-NEXT_PUBLIC_SUPABASE_URL                    # deja prezent
+ADMIN_EMAIL=...                     # credențiale login admin
+ADMIN_PASSWORD=...
+ADMIN_SESSION_SECRET=...            # secret HMAC-SHA256 pentru cookie sesiune
+RECAPTCHA_SECRET_KEY=...            # Google reCAPTCHA v3
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=...
 ```
 
-**Gmail eliminat complet din arhitectură** — `GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`, `GMAIL_REFRESH_TOKEN`, `GMAIL_USER` nu mai există în proiect.
-
-**Flux email inbound:** emailurile sosite la `info@zephiraevents.ro` (IMAP `glc47.hostico.ro:993`) → butonul „Sincronizează email" din `/admin/inbox` (apelează `POST /api/admin/imap-sync` → Edge Function cu `Authorization: Bearer <SYNC_SECRET>`) sau automat via `pg_cron` la fiecare 10 minute.
-
-**pg_cron setup:** după aplicarea migrației 004, setează în Supabase SQL Editor:
-```sql
-ALTER DATABASE postgres SET app.supabase_url = 'https://edgxqqkafezdcnnpsjqm.supabase.co';
-ALTER DATABASE postgres SET app.service_role_key = '<SUPABASE_SERVICE_ROLE_KEY>';
-```
+**Complet eliminate din arhitectură:** Supabase (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`), SMTP (`SMTP_*`), Gmail (`GMAIL_*`), IMAP (`IMAP_*`, `SYNC_SECRET`), GA4 (`GOOGLE_APPLICATION_CREDENTIALS`, `GA4_PROPERTY_ID`).
 
 ### Navigație / Header
 
@@ -412,17 +390,30 @@ ALTER DATABASE postgres SET app.service_role_key = '<SUPABASE_SERVICE_ROLE_KEY>'
 ### Contact
 
 - `components/sections/contact/ContactInfo.tsx`, `FormContact.tsx`, `ContactMapIframeConsent.tsx`
-- `pages/contact.tsx` — are `id="oferta"` pe secțiunea OfferRequest
-- `pages/api/contact.ts`
-- `.env.local` — SMTP, reCAPTCHA
+- `pages/contact.tsx` — structură curentă (PR #148): secțiunea Ofertă cu `<IntroSection>` extern + `<OfferRequest hideHeading />`; secțiunea Hartă cu `<IntroSection>` care include adresa + buton „Vezi locația exactă"; `ContactMapAddress` eliminat — adresa e în `lede` al `IntroSection`; `mapsUrl` calculat local din `addressLine` via `https://www.google.com/maps/search/...`
+- `components/forms/OfferRequest.tsx` — prop `hideHeading?: boolean`: când `true`, ascunde `<h2>` intern și `<p>` lead, folosind `aria-label` în loc de `aria-labelledby`
+- `pages/api/contact.ts` — salvează JSON în `data/messages/` via `createFile()`; fără SMTP
+- `pages/api/offer-request.ts` — salvează JSON în `data/messages/` via `createFile()`; fără SMTP
+- `.env.local` — reCAPTCHA (`RECAPTCHA_SECRET_KEY`, `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`)
 
 ### Solicitare ofertă
 
-- `components/forms/OfferRequest.tsx`
-- `pages/api/offer-request.ts`
-- `lib/mail/offerRequestEmail.ts`
+- `components/forms/OfferRequest.tsx` — prop `hideHeading?: boolean` (default `false`)
+- `pages/api/offer-request.ts` — salvează în `data/messages/` via GitHub API
 - `lib/validation/offerRequest.ts`
 - `styles/forms/offerRequest.css.ts`
+- ~~`lib/mail/offerRequestEmail.ts`~~ — șters: trimitere email eliminată
+
+### Blog
+
+- `data/blog/` — articole Markdown cu front-matter gray-matter (`*.md`); creat/editat/șters via admin
+- `lib/blog.server.ts` — server-only; `getAllPosts()`, `getPostBySlug()`, `getAllPostsAdmin()`, `getRelatedByTags()`, `buildMarkdownFile()`, `titleToSlug()`; conține `import fs` — **NU importa din client**
+- `pages/blog/index.tsx` — lista articole (SSG via `getStaticProps`)
+- `pages/blog/[slug].tsx` — articol individual cu Hero full-bleed (SSG)
+- `pages/admin/blog/index.tsx`, `new.tsx`, `[slug].tsx` — CRUD admin
+- `pages/api/admin/blog/index.ts` (GET fs / POST GitHub API), `[slug].ts` (GET fs / PATCH GitHub API)
+- `styles/admin/blog.css.ts` — stiluri pagini admin blog
+- **Principiu READ/WRITE blog:** GET citește din fs local (`lib/blog.server.ts`) — rapid; WRITE merge via GitHub API → persistă în `data/blog/` pe `main`
 
 ### Recenzii
 
@@ -465,6 +456,22 @@ ALTER DATABASE postgres SET app.service_role_key = '<SUPABASE_SERVICE_ROLE_KEY>'
 ---
 
 ## 8. Ce este deschis / în lucru
+
+**~~Admin butoane Șterge uniformizare + iconițe nav~~ ✓ ÎNCHIS 2026-05-20** (PR #150, branch fix/admin-delete-buttons)
+- `vars.color.danger` token adăugat în `styles/theme.css.ts` (light: `#dc2626`, dark: `#f87171`)
+- `deleteBtn` centralizat în `styles/admin/layout.css.ts`; paginile admin folosesc `lay.deleteBtn` în loc de clase locale
+- `styles/admin/menus.css.ts`, `styles/admin/blog.css.ts`: `deleteBtn` local șters
+- `styles/admin/sent.css.ts`: șters (fișier orfan — `sent.tsx` nu există)
+- `pages/admin/reviews.tsx`: buton Șterge folosea eronat clasa `rejectBtn` — corectat la `s.deleteBtn`
+- `styles/admin/inbox.css.ts`: `deleteBtn` mutat la `position: absolute` (top-right în card); `itemWrap` cu `position: relative`
+- `components/admin/AdminLayout.tsx`: iconițe SVG inline (currentColor) adăugate în fiecare item din nav; gap uniform pe `navLink`, `marginLeft: auto` pe `navBadge`
+
+**~~Contact page polish~~ ✓ ÎNCHIS 2026-05-20** (PR #148, branch fix/contact-polish)
+- Secțiunea Ofertă: `<IntroSection>` extern + `<OfferRequest hideHeading />`; eliminat titlul duplicat din formular
+- Secțiunea Hartă: `<IntroSection>` cu adresa completă (incl. cod poștal) + buton „Vezi locația exactă" ca `children`; `ContactMapAddress` eliminat din pagină
+- `components/forms/OfferRequest.tsx`: prop `hideHeading?: boolean` adăugat
+- `components/sections/contact/FormContact.tsx`: imagine locație adăugată în coloana dreaptă (`locationImg`)
+- `pages/contact.tsx`: `mapsUrl` calculat local din `addressLine`; import `ContactMapAddress` eliminat
 
 **~~Admin meniuri CRUD via GitHub API~~ ✓ ÎNCHIS 2026-05-20** (PR #142, branch feature/admin-menus)
 - `data/menus.json` migrat → 17 fișiere `data/menus/*.json` individuale (one-shot via `scripts/migrate-menus.mjs`)
@@ -662,23 +669,16 @@ scripts/optimise-videos.mjs
 - Moderare admin: approve / reject / delete via `getFile` + `updateFile` GitHub API
 - Migrare date: 12 recenzii din `data/reviews.json` → `data/reviews/*.json` (rulat 2026-05-19)
 
-### Admin dashboard 2026-03-23
+### Admin dashboard 2026-03-23 (arhivă — starea curentă diferă semnificativ)
 
-- Supabase: 4 tabele (messages, admin_replies, composed_emails, reviews*), RLS activat
-  (*reviews table există în schemă dar nu mai e folosit activ — persistența e în Git)
-- Auth: HMAC-SHA256 cookie httpOnly, 8h TTL, timing-safe compare
-- GA4: BetaAnalyticsDataClient singleton per proces, realtime + report 30 zile, timeout 8s
-- Recharts: AreaChart cu gradient fill, dynamic import (ssr:false)
+- Auth: HMAC-SHA256 cookie httpOnly, 8h TTL, timing-safe compare (rămas)
+- Supabase, GA4, Recharts, SMTP, IMAP — toate eliminate ulterior (PRs #144–#150)
 
-### Admin hardening 2026-03-23 (PR #117–119)
+### Admin hardening 2026-03-23 (PR #117–119) — elemente rămase active
 
-- XSS defense-in-depth: `sanitizeHtml()` pe toate datele din DB randate în admin
-- Error handling: reply/compose separă email send de DB write; `dbWarning` flag la eșec DB
+- XSS defense-in-depth: `sanitizeHtml()` pe toate datele randate în admin
 - Rate limiting login: 5 fail/IP/15min → 429 (in-memory Map, reset la succes)
-- GA4 timeout: `withTimeout(8000ms)` — previne blocare infinită la API call
-- Paginare inbox: SSR 50/pagină, SELECT coloane specifice (nu `SELECT *`)
 - Format erori uniform: `errorResponse()` → `{ ok: false, error }` în toate API routes admin
-- Tipuri centralizate: `types/admin.ts` — sursă unică pentru `SentKind`, `SentItem`
 
 ### SEO audit 2026-03-21 (PR #107)
 
@@ -727,6 +727,10 @@ scripts/optimise-videos.mjs
 ## 9. Ce să nu faci
 
 - Nu transforma proiectul în booking engine sau admin panel suplimentar — dashboard-ul admin e complet
+- Nu re-adăuga Supabase, SMTP, Recharts, GA4 sau IMAP — toate au fost eliminate definitiv; persistența e exclusiv via GitHub Contents API
+- Nu adăuga un `deleteBtn` local în paginile admin — folosește `lay.deleteBtn` din `styles/admin/layout.css.ts`
+- Nu hardcoda culori roșii pentru ștergere (`#dc2626`, `rgba(220,38,38,...)`, etc.) — folosește `vars.color.danger` din theme
+- Nu importa `lib/blog.server.ts` din componente client sau pagini fără `getStaticProps`/`getServerSideProps` — conține `import fs` și va cauza eroare în bundle-ul client
 - Nu hardcoda conținut care are deja structură data-driven (`data/menus/`, `data/gallery.json`)
 - Nu pune inline styling permanent — Vanilla Extract pentru tot
 - Nu omite `immediate` pe `<Appear>` când wrappezi grid-uri sau galerii
@@ -736,10 +740,6 @@ scripts/optimise-videos.mjs
 - Nu sări peste `typecheck + lint + build` înainte de commit
 - Nu folosi `JsonLd.tsx` — a fost șters; JSON-LD se adaugă exclusiv via prop `structuredData` pe `<Seo>`
 - Nu injecta `buildMenuJsonLd` (sau orice JSON-LD) din componente client-side — doar din `getStaticProps` / `getServerSideProps` în pagini
-- Nu importa `lib/admin/supabase.ts` la nivel de modul din pagini publice — aruncă dacă env vars lipsesc
-- Nu apela funcțiile GA4 din client-side — sunt exclusiv server-side
-- Nu re-adăuga Gmail API (`googleapis`) — înlocuit definitiv cu IMAP via Supabase Edge Function (2026-03-24); `lib/admin/gmail.ts` a fost șters
-- Nu apela Edge Function `sync-imap` direct din client-side — trece prin `/api/admin/imap-sync` (sesiune verificată)
 - Nu returna erori cu `{ ok: false, message }` în API routes admin — folosește `errorResponse()` din `lib/admin/response.ts` care produce `{ ok: false, error }`
 - Nu randa conținut din Git/DB în admin fără `sanitizeHtml()` — orice `dangerouslySetInnerHTML` trebuie trecut prin `sanitizeHtml()`
 - Nu rula `scripts/migrate-reviews.ts` din nou — a fost rulat 2026-05-19 și `data/reviews/` e deja populat; o a doua rulare ar crea duplicate
@@ -752,7 +752,7 @@ scripts/optimise-videos.mjs
 - Nu adăuga `og:image:type` manual în pagini — se derivă automat în `components/Seo.tsx`
 - Nu pune `canonical` și `noindex` simultan — `<Seo>` omite canonical automat când `noindex=true`
 - Nu lăsa `public/llms.txt` desincronizat la schimbări majore (meniuri noi, pagini noi, prețuri modificate)
-- Nu scrie recenzii în Supabase `reviews` table — persistența e acum în Git (`data/reviews/*.json` via GitHub API)
+- Nu scrie recenzii în Supabase — Supabase a fost eliminat complet; persistența e exclusiv în Git (`data/reviews/*.json` via GitHub API)
 - Nu committa `public/sw.js`, `public/workbox-*.js`, `public/fallback-*.js` — sunt generate de next-pwa la build și sunt în `.gitignore`
 - Nu adăuga assets imagine în `public/images/` ca JPG sau PNG — folosește WebP; excepții: `og*.jpg` (OG social), `public/icons/*.png` (PWA), `favicon*.png`, `public/logo-dedicat.png` (JSON-LD)
 - Nu adăuga video-uri în `public/videos/` ca WebM VP9 — rămân MP4 H.264; VP9 re-encodat pe H.264 CRF 28 produce fișiere mai mari (testat și abandonat 2026-05-19)
