@@ -6,7 +6,6 @@
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { getAllMenus } from "../../lib/menus";
 import {
   arrowBtn,
   card,
@@ -60,7 +59,7 @@ export default function MenuOffers(props: MenuOffersProps = {}) {
   const rootRef = useRef<HTMLElement | null>(null);
   const bottomBtnRefs = useRef<BtnRefMap>({});
 
-  const menus = useMemo<Menu[]>(() => menusProp ?? getAllMenus(), [menusProp]);
+  const menus = useMemo<Menu[]>(() => menusProp ?? [], [menusProp]);
 
   const headingId = id ? `${id}-title` : "menu-offers-title";
 

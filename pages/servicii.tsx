@@ -3,7 +3,7 @@
 // ==============================
 // Imports
 // ==============================
-import type { NextPage } from "next";
+import type { GetStaticProps, NextPage } from "next";
 
 import Appear, { AppearGroup } from "../components/animations/Appear";
 import Breadcrumbs, { type Crumb } from "../components/Breadcrumbs";
@@ -21,9 +21,10 @@ import Seo from "../components/Seo";
 import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { absoluteUrl } from "../lib/config";
-import { getMenusByEventType } from "../lib/menus";
+import { getAllMenus } from "../lib/menus.server";
 import * as tent from "../styles/sections/tent/tentAtLocationBanner.css";
 import * as ti from "../styles/sections/tent/tentIntro.css";
+import type { Menu } from "../types/menu";
 
 // ==============================
 // Constante
@@ -92,13 +93,24 @@ const servicesItemList = {
 } as const satisfies Json;
 
 // ==============================
+// Types
+// ==============================
+type ServicesPageProps = {
+  nuntaMenus: Menu[];
+  botezMenus: Menu[];
+  privateMenus: Menu[];
+  corporateMenus: Menu[];
+};
+
+// ==============================
 // Component
 // ==============================
-const ServicesPage: NextPage = () => {
-  const nuntaMenus = getMenusByEventType("Nunta");
-  const botezMenus = getMenusByEventType("Botez & Cununie");
-  const privateMenus = getMenusByEventType("Petreceri Private & Majorate");
-  const corporateMenus = getMenusByEventType("Corporate & Team Building");
+const ServicesPage: NextPage<ServicesPageProps> = ({
+  nuntaMenus,
+  botezMenus,
+  privateMenus,
+  corporateMenus,
+}) => {
 
   return (
     <>
@@ -382,6 +394,21 @@ const ServicesPage: NextPage = () => {
       </AppearGroup>
     </>
   );
+};
+
+// ==============================
+// SSG
+// ==============================
+export const getStaticProps: GetStaticProps<ServicesPageProps> = async () => {
+  const all = getAllMenus();
+  return {
+    props: {
+      nuntaMenus: all.filter((m) => m.eventType === "Nunta"),
+      botezMenus: all.filter((m) => m.eventType === "Botez & Cununie"),
+      privateMenus: all.filter((m) => m.eventType === "Petreceri Private & Majorate"),
+      corporateMenus: all.filter((m) => m.eventType === "Corporate & Team Building"),
+    },
+  };
 };
 
 // ==============================

@@ -1,0 +1,34 @@
+{
+  "slug": "corporate-basic",
+  "title": "Meniu: Corporate & Team Building — BASIC",
+  "pricePerPers": 180,
+  "currency": "RON",
+  "image": "/images/servicii/meniu/meniu-12.webp",
+  "imageAlt": "Meniu Corporate & Team Building BASIC — antreu rece, fel principal și băuturi răcoritoare",
+  "eventType": "Corporate & Team Building",
+  "deleted": false,
+  "sections": {
+    "starterRece": [
+      "Terină de pui cu brânzeturi",
+      "Evantai de mușchi file",
+      "Trandafir cașcaval în ardei cu măsline",
+      "Floare din salam bănățean",
+      "Frigărui caprese",
+      "Ruladă de spanac cu brânzeturi",
+      "Turnuleț de castravete",
+      "Mousse de avocado cu somon"
+    ],
+    "antreuCald": "",
+    "felIntermediar": "",
+    "felPrincipal": [
+      "Cotlet de porc la cuptor",
+      "Rulouri de pui în bacon",
+      "Cartofi zdrobiți și salată verde"
+    ],
+    "pachetBar": [
+      "Apă plată / minerală",
+      "Pepsi / Mirinda",
+      "Suc natural"
+    ]
+  }
+}

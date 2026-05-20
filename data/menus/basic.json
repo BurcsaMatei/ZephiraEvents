@@ -1,0 +1,33 @@
+{
+  "slug": "basic",
+  "title": "Oferta Meniu Basic",
+  "pricePerPers": 56,
+  "currency": "EUR",
+  "image": "/images/servicii/meniu/meniu-01.webp",
+  "imageAlt": "Meniu Basic — platouri reci, salau butter lemon, sarmalute, cotlet porc",
+  "eventType": "Nunta",
+  "deleted": false,
+  "sections": {
+    "starterRece": [
+      "Terina de pui cu branzeturi",
+      "Evantai de muschi file",
+      "Trandafir cascaval in ardei cu masline",
+      "Floare din salam banatean",
+      "Frigarui Capresse",
+      "Rulada de spanac cu branzeturi",
+      "Turnulet de castravete",
+      "Mousse de avocado cu somon"
+    ],
+    "antreuCald": "File de salau de Nil cu sos butter lemon, orez black and white si legume sote",
+    "felIntermediar": "Sarmalute in frunza de varza cu mamaliguta, ardei iute si smantana",
+    "felPrincipal": [
+      "Cotlet de porc la cuptor, rulouri de pui in bacon, cartofi zdrobiti cu rozmarin si salata verde"
+    ],
+    "pachetBar": [
+      "Apa plata/minerala — nelimitat",
+      "Pepsi/Mirinda — nelimitat",
+      "Suc natural — nelimitat",
+      "Gheata frapiera — nelimitat, paine/chifle"
+    ]
+  }
+}

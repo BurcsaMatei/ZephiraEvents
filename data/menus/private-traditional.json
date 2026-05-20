@@ -1,0 +1,44 @@
+{
+  "slug": "private-traditional",
+  "title": "Meniu: petreceri private / banchete / majorate — TRADIȚIONAL",
+  "pricePerPers": 250,
+  "currency": "RON",
+  "image": "/images/servicii/meniu/meniu-17.webp",
+  "imageAlt": "Meniu Petreceri Private & Majorate TRADIȚIONAL — antreu rece, fel principal și cocktail bar",
+  "eventType": "Petreceri Private & Majorate",
+  "deleted": false,
+  "sections": {
+    "starterRece": [
+      "Platou tradițional asortat (șuncă, cârnați, jumări, brânză, legume)",
+      "Ceafă de porc afumată",
+      "Salam crud uscat",
+      "Chifteluțe de pui",
+      "Mini șnițele din piept de curcan",
+      "Frigărui caprezze",
+      "Cârnați afumați",
+      "Ruladă de pui cu legume",
+      "Mix de brânzeturi, măsline asortate",
+      "Bulete de cașcaval"
+    ],
+    "antreuCald": "",
+    "felIntermediar": "",
+    "felPrincipal": [
+      "Ceafă de porc la cuptor",
+      "Pulpe de pui dezosate la cuptor",
+      "Cartofi aurii cu rozmarin",
+      "Salată de varză"
+    ],
+    "pachetBar": [
+      "Apă plată / minerală – nelimitat",
+      "Cafea – nelimitat",
+      "Cola / Fanta – nelimitat",
+      "Suc natural – nelimitat",
+      "Ballantine’s Finest – nelimitat",
+      "Cremă de whiskey – nelimitat",
+      "Fructe pe mese – design nou",
+      "Gheață / frapieră – nelimitat",
+      "Pâine și chifle",
+      "Tortul sărbătoritei – cadou"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "slug": "botez-traditional-i",
+  "title": "Meniu Botez & Cununie — TRADITIONAL I",
+  "pricePerPers": 55,
+  "currency": "EUR",
+  "image": "/images/servicii/meniu/meniu-10.webp",
+  "imageAlt": "Meniu Botez & Cununie TRADITIONAL I — antreu rece, pește și fel principal",
+  "eventType": "Botez & Cununie",
+  "deleted": false,
+  "sections": {
+    "starterRece": [
+      "Ceafă de porc afumat, castravete, ardei gras",
+      "Salam crud uscat",
+      "Chifteluțe de pui",
+      "Mini șnițele din piept de curcan",
+      "Frigărui caprezze",
+      "Cârnați afumați",
+      "Ruladă de pui cu legume",
+      "Mix de brânzeturi, măsline asortate",
+      "Bulete de cașcaval"
+    ],
+    "antreuCald": "File de șalău pe pat de risotto cu parmezan, tagliatelle de legume și sos lemon-butter",
+    "felIntermediar": "",
+    "felPrincipal": [
+      "Buturugă de porc cu sos brun",
+      "Rulouri de pui în bacon",
+      "Cartofi aurii cu rozmarin",
+      "Salată verde"
+    ],
+    "pachetBar": []
+  }
+}

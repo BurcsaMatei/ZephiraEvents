@@ -1,0 +1,47 @@
+{
+  "slug": "platinum",
+  "title": "Oferta Meniu Platinum",
+  "pricePerPers": 80,
+  "currency": "EUR",
+  "image": "/images/servicii/meniu/meniu-04.webp",
+  "imageAlt": "Meniu Platinum — platouri reci, somon migdale, sarmalute mixte, fel principal complet",
+  "eventType": "Nunta",
+  "deleted": false,
+  "sections": {
+    "starterRece": [
+      "Rulada de pui cu spanac si bacon",
+      "Prajitura de ciuperci",
+      "Terina cu ciolan afumat",
+      "Rosii cherry si castravete",
+      "Rulada cu spanac si branza",
+      "File de porc",
+      "Mousse de avocado",
+      "Terina din piept de curcan cu branza feta",
+      "Prajitura de branzeturi in straturi",
+      "Pate de ficat",
+      "Vafa cu icre si lamaie"
+    ],
+    "antreuCald": "File de somon cu fulgi de migdale, tagliatele de legume si sos de lamaie",
+    "felIntermediar": "Sarmalute mixte cu bacon crocant, varza calita, mamaliguta, ardei iute si smantana",
+    "felPrincipal": [
+      "Buturuga din ceafa",
+      "Caprese de pui",
+      "Cartofi gratinati",
+      "Salata de ardei copt",
+      "Sos demiglace cu ceapa rosie"
+    ],
+    "pachetBar": [
+      "Apa plata/minerala — nelimitat",
+      "Cola/Fanta — nelimitat",
+      "Suc natural — nelimitat",
+      "Cafea — nelimitat",
+      "Whisky Ballantine's Finest — nelimitat",
+      "Crema de whiskey — nelimitat",
+      "Vin spumant (primire invitati) — nelimitat",
+      "Cocktail bar",
+      "Fructe pe mese — design nou",
+      "Gheata frapiera — nelimitat, paine/chifle",
+      "Tortul mirilor inclus"
+    ]
+  }
+}

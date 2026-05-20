@@ -1,0 +1,48 @@
+{
+  "slug": "diamond",
+  "title": "Oferta Meniu Diamond",
+  "pricePerPers": 100,
+  "currency": "EUR",
+  "image": "/images/servicii/meniu/meniu-05.webp",
+  "imageAlt": "Meniu Diamond — platouri reci premium, somon risotto, sarmalute mixte, fel principal gourmet",
+  "eventType": "Nunta",
+  "deleted": false,
+  "sections": {
+    "starterRece": [
+      "Simfonie pescareasca",
+      "Prajitura de ciuperci",
+      "Terina cu ciolan afumat cu bacon",
+      "Rosii cherry si castravete",
+      "Mousse de branza cu jeleu de ardei rosu si rulou de pui",
+      "Salata Calabrese",
+      "File de porc",
+      "Terina din piept de curcan cu branza feta",
+      "Chiftea in crusta de seminte",
+      "Pate de ficat",
+      "Terina de pui cu mix de legume"
+    ],
+    "antreuCald": "Medalion de somon pe pat de risotto cu legume sote si sos de lamaie (sau varianta cu butter lemon si legume posate)",
+    "felIntermediar": "Sarmalute mixte cu bacon crocant, varza calita, mamaliguta, ardei iute si smantana",
+    "felPrincipal": [
+      "Ceafa inconto",
+      "Wellington de legume",
+      "Confit pulpa de rata in kataif sau deliciu de pui cu ciuperci",
+      "Salata calda de varza rosie",
+      "Sos Tao Tao"
+    ],
+    "pachetBar": [
+      "Apa plata/minerala — nelimitat",
+      "Cola/Fanta — nelimitat",
+      "Suc natural — nelimitat",
+      "Cafea — nelimitat",
+      "Whisky Ballantine's / J&B — nelimitat",
+      "Crema de whiskey — nelimitat",
+      "Vin spumant (primire invitati) — nelimitat",
+      "Cocktail bar",
+      "Fructe pe mese — model nou",
+      "Gheata frapiera — nelimitat, paine/chifle",
+      "Tortul si prajiturile incluse",
+      "Vinul casei inclus"
+    ]
+  }
+}

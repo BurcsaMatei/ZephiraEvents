@@ -3,7 +3,7 @@
 // ==============================
 // Imports
 // ==============================
-import rawMenus from "../data/menus.json";
+import rawMenus from "../data/menus-index.json";
 
 // ==============================
 // Types
