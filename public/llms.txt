@@ -1,10 +1,14 @@
 # ZephiraEvents
 
-> Sală de evenimente premium în Focșani, județul Vrancea, România — organizare completă A–Z pentru nunți, botezuri, majorate și evenimente corporate. Meniuri personalizate, cort exterior la locația ta și servicii impecabile.
+> Sală de evenimente premium în Focșani, județul Vrancea, România — organizare completă A–Z pentru nunți, botezuri, majorate, petreceri private, banchete și evenimente corporate. 17 meniuri personalizate, cort exterior la locația ta, catering, decor, foto-video, DJ/MC și coordonare în ziua evenimentului.
 
 ## Despre
 
-ZephiraEvents este o sală de evenimente situată la Calea Odobești 408, Cîmpineanca, județul Vrancea (lângă Focșani), România. Oferă organizare completă pentru evenimente private și corporate: locație, meniu & catering, decor, foto-video, DJ/MC și coordonare în ziua evenimentului.
+ZephiraEvents este o sală de evenimente situată la Calea Odobești 408, Cîmpineanca, județul Vrancea (lângă Focșani), România. Coordonate GPS: 45.726749°N, 27.125499°E.
+
+Tipuri de evenimente organizate: nunți, botezuri, cununii civile, majorate, petreceri private, banchete, events corporate, team building.
+
+Servicii incluse în pachetul complet: locație sală, catering & meniuri personalizate (17 variante), decor tematic, foto-video, DJ/MC, ospătari și personal de serviciu, coordonare completă în ziua evenimentului. Disponibil și serviciu cort exterior — amplasare la locația clientului, oriunde în județ.
 
 - **Telefon:** +40 769 990 800 (WhatsApp disponibil)
 - **Email:** info@zephiraevents.ro
@@ -15,51 +19,55 @@ ZephiraEvents este o sală de evenimente situată la Calea Odobești 408, Cîmpi
 
 ## Pagini principale
 
-- https://zephiraevents.ro/ — Homepage: prezentare brand, servicii, galerie, recenzii
+- https://zephiraevents.ro/ — Homepage: prezentare brand, servicii, galerie, recenzii clienți
 - https://zephiraevents.ro/servicii — Servicii complete: sală, meniuri, catering, decor, ospătari, bar, foto-video, DJ, corporate
 - https://zephiraevents.ro/galerie — Galerie foto reală: nunți, botezuri, majorate, corporate
-- https://zephiraevents.ro/contact — Contact, hartă, formular ofertă personalizată
+- https://zephiraevents.ro/contact — Contact, hartă interactivă, formular ofertă personalizată
 - https://zephiraevents.ro/cort-evenimente-la-locatia-ta — Serviciu cort exterior: amplasare la locația clientului, organizare A–Z
-- https://zephiraevents.ro/reviews — Recenzii reale de la clienți
+- https://zephiraevents.ro/reviews — Recenzii reale verificate de la clienți
 - https://zephiraevents.ro/blog — Articole și ghiduri pentru organizarea evenimentelor
 
 ## Meniuri disponibile
 
 ### Nuntă
-- https://zephiraevents.ro/meniuri/basic — Meniu Basic (EUR 56/pers)
-- https://zephiraevents.ro/meniuri/gold — Meniu Gold (EUR 68/pers)
-- https://zephiraevents.ro/meniuri/traditional — Meniu Tradițional (EUR 76/pers)
-- https://zephiraevents.ro/meniuri/platinum — Meniu Platinum (EUR 80/pers)
-- https://zephiraevents.ro/meniuri/diamond — Meniu Diamond (EUR 100/pers)
+- https://zephiraevents.ro/meniuri/basic — Oferta Meniu Basic (EUR 56/pers)
+- https://zephiraevents.ro/meniuri/gold — Oferta Meniu Gold (EUR 68/pers)
+- https://zephiraevents.ro/meniuri/traditional — Oferta Meniu Tradițional (EUR 76/pers)
+- https://zephiraevents.ro/meniuri/platinum — Oferta Meniu Platinum (EUR 80/pers)
+- https://zephiraevents.ro/meniuri/diamond — Oferta Meniu Diamond (EUR 100/pers)
 
 ### Botez & Cununie
-- https://zephiraevents.ro/meniuri/botez-basic — Basic (EUR 46/pers)
-- https://zephiraevents.ro/meniuri/botez-zephira-i — Zephira I (EUR 50/pers)
-- https://zephiraevents.ro/meniuri/botez-zephira-ii — Zephira II (EUR 52/pers)
-- https://zephiraevents.ro/meniuri/botez-zephira-iii — Zephira III (EUR 52/pers)
-- https://zephiraevents.ro/meniuri/botez-traditional-i — Tradițional I (EUR 55/pers)
-- https://zephiraevents.ro/meniuri/botez-traditional-ii — Tradițional II (EUR 60/pers)
+- https://zephiraevents.ro/meniuri/botez-basic — Meniu Botez Basic (EUR 46/pers)
+- https://zephiraevents.ro/meniuri/botez-zephira-i — Meniu Botez Zephira I (EUR 50/pers)
+- https://zephiraevents.ro/meniuri/botez-zephira-ii — Meniu Botez Zephira II (EUR 52/pers)
+- https://zephiraevents.ro/meniuri/botez-zephira-iii — Meniu Botez Zephira III (EUR 52/pers)
+- https://zephiraevents.ro/meniuri/botez-traditional-i — Meniu Botez Tradițional I (EUR 55/pers)
+- https://zephiraevents.ro/meniuri/botez-traditional-ii — Meniu Botez Tradițional II (EUR 60/pers)
 
 ### Corporate & Team Building
-- https://zephiraevents.ro/meniuri/corporate-basic — Basic (RON 180/pers)
-- https://zephiraevents.ro/meniuri/corporate-glamour — Zephira / Glamour (RON 250/pers)
-- https://zephiraevents.ro/meniuri/corporate-traditional — Tradițional (RON 250/pers)
+- https://zephiraevents.ro/meniuri/corporate-basic — Meniu Corporate Basic (RON 180/pers)
+- https://zephiraevents.ro/meniuri/corporate-glamour — Meniu Corporate Zephira / Glamour (RON 250/pers)
+- https://zephiraevents.ro/meniuri/corporate-traditional — Meniu Corporate Tradițional (RON 250/pers)
 
 ### Petreceri Private & Majorate
-- https://zephiraevents.ro/meniuri/private-basic — Basic (RON 180/pers)
-- https://zephiraevents.ro/meniuri/private-glamour — Zephira / Glamour (RON 250/pers)
-- https://zephiraevents.ro/meniuri/private-traditional — Tradițional (RON 250/pers)
+- https://zephiraevents.ro/meniuri/private-basic — Meniu Private Basic (RON 180/pers)
+- https://zephiraevents.ro/meniuri/private-glamour — Meniu Private Zephira / Glamour (RON 250/pers)
+- https://zephiraevents.ro/meniuri/private-traditional — Meniu Private Tradițional (RON 250/pers)
 
 ## Articole blog
 
-- https://zephiraevents.ro/blog/nunta-ca-la-carte-tendinte-2025-decor-design — Nuntă ca la carte: tendințe 2025 în decor & design
-- https://zephiraevents.ro/blog/ghid-nunta-reusita-pasi-esentiali-2025 — Ghid pentru o nuntă reușită: pașii esențiali 2025
+- https://zephiraevents.ro/blog/nunta-ca-la-carte-tendinte-2025-decor-design — Nuntă ca la carte: tendințe 2026 în decor & design
+- https://zephiraevents.ro/blog/ghid-nunta-reusita-pasi-esentiali-2025 — Ghid pentru o nuntă reușită: pașii esențiali 2026
 - https://zephiraevents.ro/blog/cronologia-perfecta-nunta-ritm-fara-stres — Cronologia perfectă pentru ziua nunții: ritm fără stres
 - https://zephiraevents.ro/blog/ghid-nunta-aer-liber — Ghid pentru o nuntă reușită în aer liber
 - https://zephiraevents.ro/blog/cum-iti-alegi-sala-de-evenimente-interior-vs-gradina — Cum îți alegi sala de evenimente: interior vs. grădină
 - https://zephiraevents.ro/blog/album-nunta-lumina-cadre-colt-foto — Album care strălucește: lumină, cadre și colțul foto
 - https://zephiraevents.ro/blog/mesaje-catre-invitati-text-scurt-efect-mare — Mesaje către invitați: text scurt, efect mare
 - https://zephiraevents.ro/blog/checklist-final-7-zile-pana-la-petrecere — Checklist final: 7 zile până la petrecere
+
+## Conținut extins
+
+- https://zephiraevents.ro/llms-full.txt — Versiunea completă cu toate meniurile detaliate, articolele blog, recenzii și FAQ
 
 ## Pagini secundare
 
