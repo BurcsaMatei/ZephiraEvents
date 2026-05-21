@@ -196,6 +196,11 @@ export const fieldRow = style({
   gridTemplateColumns: "1fr 1fr",
   gap: "14px",
   marginBottom: "14px",
+  "@media": {
+    "(max-width: 540px)": {
+      gridTemplateColumns: "1fr",
+    },
+  },
 });
 
 export const label = style({
