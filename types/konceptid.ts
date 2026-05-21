@@ -11,6 +11,10 @@ export type ContractJson = {
   stripePriceId: string;
   paymentMethod: string;
   status: "active" | "cancelled" | "paused";
+  billingCycle: "monthly" | "biannual" | "annual";
+  paymentLinkMonthly: string;
+  paymentLinkBiannual: string;
+  paymentLinkAnnual: string;
 };
 
 export type InvoiceJson = {
