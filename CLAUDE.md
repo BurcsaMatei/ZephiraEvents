@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v24
+**Versiune:** v25
 **Data:** 2026-05-21
 **Status:** activ
 
@@ -341,6 +341,7 @@ types/
 - **Soft delete mesaje:** câmpul `deleted: true` în JSON-ul mesajului; citirile filtrează `!m.deleted`; PATCH `{ action: "delete" }` scrie JSON actualizat via GitHub API
 - **Soft delete recenzii:** câmpul `deleted: true` în JSON-ul recenziei; citirile filtrează `!r.deleted`; PATCH `{ action: "delete" }` scrie JSON actualizat via GitHub API
 - **`deleteBtn` centralizat:** `styles/admin/layout.css.ts` exportă `deleteBtn` folosit de toate paginile admin; stilizat cu `vars.color.danger`
+- **Sidebar layout:** `position: fixed`, `top: 0`, `left: 0`, `height: 100vh`, `zIndex: 100` — rămâne fix la scroll; `main` compensează cu `marginLeft: 232px` (resetat la 0 pe mobil)
 - **`vars.color.danger`:** token Vanilla Extract — light: `#dc2626`, dark: `#f87171` — sursa unică pentru culoarea butoanelor de ștergere
 - **Rate limiting login:** in-memory Map per IP, 5 încercări eșuate / 15 minute → 429; reset la autentificare reușită
 
@@ -481,10 +482,15 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 
 ## 8. Ce este deschis / în lucru
 
+**~~Admin sidebar fixed + layout fix~~ ✓ ÎNCHIS 2026-05-21** (commit `d87e65b` direct pe `main`)
+- `styles/admin/layout.css.ts` — `sidebar`: `position: "relative"` → `position: "fixed"`, `top: 0`, `left: 0`, `zIndex: 100`, `height: "100vh"`, `overflowY: "auto"`; sidebar nu mai scrollează odată cu conținutul, rămâne fix pe tot ecranul
+- `styles/admin/layout.css.ts` — `main`: adăugat `marginLeft: "232px"` global + `marginLeft: 0` pe `@media max-width: 767px`; compensează spațiul ocupat de sidebar-ul fixed
+- `styles/admin/layout.css.ts` — mobil (`max-width: 767px`): `sidebar` păstrează `zIndex: 300` și `transform: translateX(-100%)` din media query; `overflow: visible` pentru tab-ul de deschidere
+
 **~~KonceptID — contract link în grid + sidebar maxHeight~~ ✓ ÎNCHIS 2026-05-21** (commit `ca71d91` direct pe `main`, #160)
 - `pages/admin/konceptid.tsx` — linkul „↓ Descarcă contract" mutat din afara `contractCard` în interiorul grid-ului, învelit în `contractDownloadRow` (ocupă toată lățimea via `gridColumn: 1/-1`)
 - `styles/admin/konceptid.css.ts` — export `contractDownloadRow` adăugat
-- `styles/admin/layout.css.ts` — `sidebar`: `height: "100vh"` → `maxHeight: "100vh"`
+- `styles/admin/layout.css.ts` — `sidebar`: `height: "100vh"` → `maxHeight: "100vh"` (ulterior revenit la `height: "100vh"` și `position: fixed` în `d87e65b`)
 
 **~~KonceptID polish — zile prima factură, contract PDF, test invoice~~ ✓ ÎNCHIS 2026-05-21** (PR #159, branch feat/konceptid-polish)
 - `pages/admin/konceptid.tsx` — logică `targetDate`: `startDate` dacă `invoices.length === 0`, `nextBillingDate` dacă există facturi; label dinamic „zile până la prima factură" / „zile rămase până la următoarea factură"; link „↓ Descarcă contract" adăugat (raw GitHub URL)
