@@ -38,6 +38,13 @@ const IconBlog = () => (
   </svg>
 );
 
+const IconKonceptID = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="2" y="5" width="20" height="14" rx="2"/>
+    <line x1="2" y1="10" x2="22" y2="10"/>
+  </svg>
+);
+
 import * as s from "../../styles/admin/layout.css";
 import ThemeSwitcher from "../ThemeSwitcher";
 import AdminInstallButton from "./AdminInstallButton";
@@ -59,6 +66,7 @@ const NAV = [
   { href: "/admin/reviews", label: "Recenzii", icon: <IconReviews /> },
   { href: "/admin/menus", label: "Meniuri", icon: <IconMenus /> },
   { href: "/admin/blog", label: "Blog", icon: <IconBlog /> },
+  { href: "/admin/konceptid", label: "KonceptID", icon: <IconKonceptID /> },
 ];
 
 // ──────────────────────────────────────────────────────────
