@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v20
+**Versiune:** v21
 **Data:** 2026-05-21
 **Status:** activ
 
@@ -457,6 +457,10 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=...
 ---
 
 ## 8. Ce este deschis / în lucru
+
+**~~Admin sidebar tab mobil — înlocuiește hamburger~~ ✓ ÎNCHIS 2026-05-21** (PR #154, branch feat/admin-sidebar-tab)
+- `components/admin/AdminLayout.tsx`: buton hamburger eliminat; `sidebarTab` adăugat la finalul `<aside>` — toggle open/close cu săgeată SVG direcțională (18×18, viewBox 12×12); `aria-label` dinamic
+- `styles/admin/layout.css.ts`: `hamburger` export șters; `sidebarTab` adăugat — `position: absolute`, `right: -28px`, `width: 28px`, `height: 56px`, `backgroundColor: vars.color.primary`, `borderRadius: 0 56px 56px 0`; `sidebar` — `position: sticky` → `position: relative` + `overflow: visible` pe mobil (tab-ul nu e clipped); `main` mobil — `padding-top: 68px` → `24px`
 
 **~~Admin dashboard — pagină de primire cu statistici live~~ ✓ ÎNCHIS 2026-05-21** (PR #153, branch feat/admin-dashboard)
 - `pages/admin/index.tsx` creat — dashboard SSR cu 4 carduri (Inbox / Recenzii / Meniuri / Blog); `getServerSideProps` cu `Promise.all` dublu-nivelat: `listFiles("data/messages")` + `listFiles("data/reviews")` în paralel (nivel 1), `getFile` per fișier în paralel per secțiune (nivel 2); meniuri + blog din fs local (zero GitHub API calls)
