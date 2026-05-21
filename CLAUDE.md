@@ -1,7 +1,7 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v18
-**Data:** 2026-05-20
+**Versiune:** v19
+**Data:** 2026-05-21
 **Status:** activ
 
 ---
@@ -456,6 +456,9 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=...
 ---
 
 ## 8. Ce este deschis / în lucru
+
+**~~Admin fieldRow responsive mobil~~ ✓ ÎNCHIS 2026-05-21** (PR #151, branch fix/admin-fieldrow-mobile)
+- `styles/admin/menus.css.ts` și `styles/admin/blog.css.ts`: `fieldRow` extins cu `@media (max-width: 540px) { gridTemplateColumns: "1fr" }` — câmpurile formularelor admin se stivuiesc vertical pe ecrane mici
 
 **~~Admin butoane Șterge uniformizare + iconițe nav~~ ✓ ÎNCHIS 2026-05-20** (PR #150, branch fix/admin-delete-buttons)
 - `vars.color.danger` token adăugat în `styles/theme.css.ts` (light: `#dc2626`, dark: `#f87171`)
