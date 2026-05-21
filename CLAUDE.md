@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v19
+**Versiune:** v20
 **Data:** 2026-05-21
 **Status:** activ
 
@@ -200,7 +200,8 @@ types/
 
 | Pagină                  | Fișier                           | Rol                                                            |
 | ----------------------- | -------------------------------- | -------------------------------------------------------------- |
-| `/admin/login`          | `pages/admin/login.tsx`          | Autentificare — email + parolă, setează cookie sesiune; înregistrează admin-sw.js |
+| `/admin`                | `pages/admin/index.tsx`          | Dashboard — 4 carduri statistici live (Inbox/Recenzii/Meniuri/Blog); SSR Promise.all dublu-nivelat |
+| `/admin/login`          | `pages/admin/login.tsx`          | Autentificare — email + parolă, setează cookie sesiune; redirect spre `/admin`; înregistrează admin-sw.js |
 | `/admin/inbox`          | `pages/admin/inbox/index.tsx`    | Lista mesaje (contact/ofertă din `data/messages/`) + soft delete + paginare       |
 | `/admin/inbox/[id]`     | `pages/admin/inbox/[id].tsx`     | Detaliu mesaj + buton mailto: pentru răspuns extern                                |
 | `/admin/reviews`        | `pages/admin/reviews.tsx`        | Moderare recenzii pending — approve / reject / delete (soft delete)                |
@@ -456,6 +457,13 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=...
 ---
 
 ## 8. Ce este deschis / în lucru
+
+**~~Admin dashboard — pagină de primire cu statistici live~~ ✓ ÎNCHIS 2026-05-21** (PR #153, branch feat/admin-dashboard)
+- `pages/admin/index.tsx` creat — dashboard SSR cu 4 carduri (Inbox / Recenzii / Meniuri / Blog); `getServerSideProps` cu `Promise.all` dublu-nivelat: `listFiles("data/messages")` + `listFiles("data/reviews")` în paralel (nivel 1), `getFile` per fișier în paralel per secțiune (nivel 2); meniuri + blog din fs local (zero GitHub API calls)
+- `styles/admin/dashboard.css.ts` creat — `grid` (2 col mobil → 4 col ≥640px, carduri aceeași înălțime), `card`, `cardLink`, `cardTitleRow`, `cardIcon`, `statNumber`, `statLabel`, `statSecondary`, `welcome`, `welcomeLogo`, `welcomeGreeting`, `welcomeName`
+- `pages/admin/login.tsx` — redirect după autentificare schimbat din `/admin/inbox` în `/admin`
+- `components/admin/AdminLayout.tsx` — brand `<div>` înlocuit cu `<Link href="/admin">` (click navighează spre dashboard, închide sidebar pe mobil)
+- `styles/admin/layout.css.ts` — `brand`: adăugat `textDecoration: "none"`, `cursor: "pointer"`
 
 **~~Admin fieldRow responsive mobil~~ ✓ ÎNCHIS 2026-05-21** (PR #151, branch fix/admin-fieldrow-mobile)
 - `styles/admin/menus.css.ts` și `styles/admin/blog.css.ts`: `fieldRow` extins cu `@media (max-width: 540px) { gridTemplateColumns: "1fr" }` — câmpurile formularelor admin se stivuiesc vertical pe ecrane mici
