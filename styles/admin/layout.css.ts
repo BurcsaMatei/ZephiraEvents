@@ -86,6 +86,8 @@ export const brand = style({
   display: "flex",
   flexDirection: "column",
   gap: "3px",
+  textDecoration: "none",
+  cursor: "pointer",
 });
 
 export const brandName = style({
