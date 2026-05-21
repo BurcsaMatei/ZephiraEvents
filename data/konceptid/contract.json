@@ -10,5 +10,9 @@
   "stripeProductId": "prod_test",
   "stripePriceId": "price_test",
   "paymentMethod": "card",
-  "status": "active"
+  "status": "active",
+  "billingCycle": "monthly",
+  "paymentLinkMonthly": "https://buy.stripe.com/5kQ5kC0Y96tD0BffaF97G00",
+  "paymentLinkBiannual": "https://buy.stripe.com/eVqeVcgX78BL6ZDgeJ97G01",
+  "paymentLinkAnnual": "https://buy.stripe.com/4gMdR86it8BLdo13rX97G02"
 }

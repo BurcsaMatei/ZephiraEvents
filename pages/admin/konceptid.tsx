@@ -110,6 +110,12 @@ export default function AdminKonceptIDPage({
             const daysLeft = Math.ceil(
               (new Date(contract.nextBillingDate).getTime() - Date.now()) / 86400000,
             );
+            const paymentLink =
+              contract.billingCycle === "annual"
+                ? contract.paymentLinkAnnual
+                : contract.billingCycle === "biannual"
+                  ? contract.paymentLinkBiannual
+                  : contract.paymentLinkMonthly;
             return (
               <div className={s.billingCard}>
                 <div className={s.billingDays}>{daysLeft}</div>
@@ -121,10 +127,73 @@ export default function AdminKonceptIDPage({
                   <p className={s.billingLabel}>
                     {daysLeft === 1 ? "zi rămasă" : "zile rămase"} până la următoarea factură
                   </p>
+                  <a
+                    href={paymentLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={s.payNowBtn}
+                  >
+                    Plătește acum
+                  </a>
                 </div>
               </div>
             );
           })()}
+
+          {/* Planuri disponibile */}
+          <div className={s.section}>
+            <p className={s.sectionTitle}>Planuri disponibile</p>
+            <div className={s.plansGrid}>
+              <div className={`${s.planCard}${contract.billingCycle === "monthly" ? ` ${s.planCardActive}` : ""}`}>
+                {contract.billingCycle === "monthly" && (
+                  <span className={s.planCurrentBadge}>Plan curent</span>
+                )}
+                <p className={s.planName}>Lunar</p>
+                <p className={s.planPrice}>200 RON<span className={s.planPer}>/lună</span></p>
+                <p className={s.planDiscount}>&nbsp;</p>
+                <a
+                  href={contract.paymentLinkMonthly}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${s.planBtn}${contract.billingCycle === "monthly" ? ` ${s.planBtnActive}` : ""}`}
+                >
+                  {contract.billingCycle === "monthly" ? "Plan curent" : "Alege"}
+                </a>
+              </div>
+              <div className={`${s.planCard}${contract.billingCycle === "biannual" ? ` ${s.planCardActive}` : ""}`}>
+                {contract.billingCycle === "biannual" && (
+                  <span className={s.planCurrentBadge}>Plan curent</span>
+                )}
+                <p className={s.planName}>Bianual</p>
+                <p className={s.planPrice}>183 RON<span className={s.planPer}>/lună</span></p>
+                <p className={s.planDiscount}>Economisești 8%</p>
+                <a
+                  href={contract.paymentLinkBiannual}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${s.planBtn}${contract.billingCycle === "biannual" ? ` ${s.planBtnActive}` : ""}`}
+                >
+                  {contract.billingCycle === "biannual" ? "Plan curent" : "Alege"}
+                </a>
+              </div>
+              <div className={`${s.planCard}${contract.billingCycle === "annual" ? ` ${s.planCardActive}` : ""}`}>
+                {contract.billingCycle === "annual" && (
+                  <span className={s.planCurrentBadge}>Plan curent</span>
+                )}
+                <p className={s.planName}>Anual</p>
+                <p className={s.planPrice}>166 RON<span className={s.planPer}>/lună</span></p>
+                <p className={s.planDiscount}>Economisești 17%</p>
+                <a
+                  href={contract.paymentLinkAnnual}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${s.planBtn}${contract.billingCycle === "annual" ? ` ${s.planBtnActive}` : ""}`}
+                >
+                  {contract.billingCycle === "annual" ? "Plan curent" : "Alege"}
+                </a>
+              </div>
+            </div>
+          </div>
 
           {/* Istoric facturi */}
           <div className={s.section}>
