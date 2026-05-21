@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v23
+**Versiune:** v24
 **Data:** 2026-05-21
 **Status:** activ
 
@@ -72,8 +72,8 @@ data/
   reviews.json         12 recenzii statice originale — sursă one-time pentru migrare; NU mai e sursa activă
   reviews/             directorul activ de persistență recenzii — fișiere JSON individuale (review-{ts}-{id}.json)
                        populate inițial prin scripts/migrate-reviews.ts; creat prin formular + moderare admin
-  konceptid/           billing KonceptID — contract.json (contract activ) + invoices/ (facturi per event invoice.paid)
-                       creat manual (contract.json) sau automat de webhook Stripe (invoices/)
+  konceptid/           billing KonceptID — contract.json (contract activ) + contract_ZE.pdf (PDF trackat în git) + invoices/ (facturi per event invoice.paid)
+                       contract.json creat/editat manual; contract_ZE.pdf trackat în git; invoices/ populat automat de webhook Stripe
 
 lib/
   admin/               auth.ts, response.ts, sanitize.ts, search.ts, login.ts, logout.ts
@@ -463,8 +463,9 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 - `data/konceptid/contract.json` — contract activ; creat/editat manual; câmpuri: `clientName`, `plan`, `priceMonthly`, `currency`, `startDate`, `nextBillingDate`, `stripeCustomerId`, `stripeSubscriptionId`, `stripeProductId`, `stripePriceId`, `paymentMethod`, `status`, `billingCycle` (`"monthly"|"biannual"|"annual"`), `paymentLinkMonthly`, `paymentLinkBiannual`, `paymentLinkAnnual`
 - `data/konceptid/invoices/` — fișiere JSON individuale (`invoice-{ts}.json`); create automat de webhook Stripe la `invoice.paid`; câmpuri: `id`, `stripeInvoiceId`, `amount`, `currency`, `status`, `dueDate`, `paidAt`, `invoicePdfUrl`, `hostedInvoiceUrl`, `createdAt`
 - `pages/api/konceptid/stripe-webhook.ts` — **PUBLIC** (fără `verifyAdminSession`); `bodyParser: false`; verificare semnătură via `stripe.webhooks.constructEvent(rawBody, sig, STRIPE_WEBHOOK_SECRET)`; handler `invoice.paid` → `createFile()` în `data/konceptid/invoices/`; răspunde `200 { received: true }` la orice alt event type
-- `pages/admin/konceptid.tsx` — SSR; `getFile("data/konceptid/contract.json")` + `listFiles("data/konceptid/invoices")` în `Promise.all`; empty state când `contract.json` lipsește; afișează contract, calcul zile până la `nextBillingDate`, buton „Plătește acum" (paymentLink derivat din `billingCycle`), secțiune „Planuri disponibile" (3 carduri cu badge plan curent + discount), tabel facturi cu link PDF
-- `styles/admin/konceptid.css.ts` — stiluri Vanilla Extract: `contractCard` (grid 2col → 1col sub 540px), `billingCard`, `payNowBtn`, `plansGrid` (3col → 1col sub 640px), `planCard`/`planCardActive`, `planCurrentBadge`, `planName`/`planPrice`/`planPer`/`planDiscount`/`planBtn`/`planBtnActive`, `invoiceRow` (grid 4col → 2col sub 540px), `statusBadge`, `invoicePaid`/`invoiceUnpaid`, `downloadLink`
+- `pages/admin/konceptid.tsx` — SSR; `getFile("data/konceptid/contract.json")` + `listFiles("data/konceptid/invoices")` în `Promise.all`; empty state când `contract.json` lipsește; afișează contract + link „↓ Descarcă contract" (`contractDownloadRow` în grid, `gridColumn: 1/-1`); calcul zile: countdown spre `startDate` dacă `invoices.length === 0`, spre `nextBillingDate` dacă există facturi; buton „Plătește acum" (paymentLink derivat din `billingCycle`); secțiune „Planuri disponibile" (3 carduri cu badge plan curent + discount); tabel facturi cu link PDF
+- `styles/admin/konceptid.css.ts` — stiluri Vanilla Extract: `contractCard` (grid 2col → 1col sub 540px), `contractDownloadRow` (`gridColumn: 1/-1`, `borderTop`), `downloadContractLink`, `billingCard`, `payNowBtn`, `plansGrid` (3col → 1col sub 640px), `planCard`/`planCardActive`, `planCurrentBadge`, `planName`/`planPrice`/`planPer`/`planDiscount`/`planBtn`/`planBtnActive`, `invoiceRow` (grid 4col → 2col sub 540px), `statusBadge`, `invoicePaid`/`invoiceUnpaid`, `downloadLink`
+- `data/konceptid/contract_ZE.pdf` — contract PDF trackat în git; accesibil via raw GitHub URL; link afișat în cardul contract din admin
 - **`data/konceptid/.gitkeep` și `data/konceptid/invoices/.gitkeep`** trebuie să existe în repo înainte de primul webhook — `createFile()` eșuează dacă directorul nu există în Git
 - **Webhook nu are sesiune admin** — securitatea e exclusiv prin semnătura Stripe (`STRIPE_WEBHOOK_SECRET`); nu apela `verifyAdminSession` pe această rută
 - **`contract.json` lipsă → empty state elegant** — `getServerSideProps` returnează `{ contract: null, invoices: [] }` la orice eroare GitHub API (inclusiv 404)
@@ -479,6 +480,17 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 ---
 
 ## 8. Ce este deschis / în lucru
+
+**~~KonceptID — contract link în grid + sidebar maxHeight~~ ✓ ÎNCHIS 2026-05-21** (commit `ca71d91` direct pe `main`, #160)
+- `pages/admin/konceptid.tsx` — linkul „↓ Descarcă contract" mutat din afara `contractCard` în interiorul grid-ului, învelit în `contractDownloadRow` (ocupă toată lățimea via `gridColumn: 1/-1`)
+- `styles/admin/konceptid.css.ts` — export `contractDownloadRow` adăugat
+- `styles/admin/layout.css.ts` — `sidebar`: `height: "100vh"` → `maxHeight: "100vh"`
+
+**~~KonceptID polish — zile prima factură, contract PDF, test invoice~~ ✓ ÎNCHIS 2026-05-21** (PR #159, branch feat/konceptid-polish)
+- `pages/admin/konceptid.tsx` — logică `targetDate`: `startDate` dacă `invoices.length === 0`, `nextBillingDate` dacă există facturi; label dinamic „zile până la prima factură" / „zile rămase până la următoarea factură"; link „↓ Descarcă contract" adăugat (raw GitHub URL)
+- `styles/admin/konceptid.css.ts` — export `downloadContractLink` adăugat
+- `data/konceptid/invoices/invoice-1779365778075.json` — șters (factură de test Stripe CLI, 20 USD)
+- `data/konceptid/contract_ZE.pdf` — trackat în git (`38b4f78`)
 
 **~~KonceptID — planuri multiple + Payment Links~~ ✓ ÎNCHIS 2026-05-21** (PR #158, branch feat/konceptid-payment-links)
 - `types/konceptid.ts` — `ContractJson` extins cu `billingCycle: "monthly"|"biannual"|"annual"` + `paymentLinkMonthly`, `paymentLinkBiannual`, `paymentLinkAnnual`
