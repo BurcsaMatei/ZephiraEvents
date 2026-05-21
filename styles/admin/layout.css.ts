@@ -22,7 +22,7 @@ export const sidebar = style({
   borderRight: `1px solid ${vars.color.border}`,
   display: "flex",
   flexDirection: "column",
-  position: "sticky",
+  position: "relative",
   top: 0,
   height: "100vh",
   overflowY: "auto",
@@ -34,6 +34,7 @@ export const sidebar = style({
       left: 0,
       zIndex: 300,
       transform: "translateX(-100%)",
+      overflow: "visible",
     },
   },
 });
@@ -54,27 +55,27 @@ export const overlay = style({
   zIndex: 200,
 });
 
-// ── Hamburger ────────────────────────────────────────────
-export const hamburger = style({
+export const sidebarTab = style({
   display: "none",
   "@media": {
     "screen and (max-width: 767px)": {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      position: "fixed",
-      top: "14px",
-      left: "14px",
-      zIndex: 200,
-      width: "38px",
-      height: "38px",
-      backgroundColor: vars.color.bg,    // era #12122a
-      color: vars.color.text,            // era #ffffff
+      position: "absolute",
+      top: "50%",
+      right: "-28px",
+      transform: "translateY(-50%)",
+      width: "28px",
+      height: "56px",
+      backgroundColor: vars.color.primary,
       border: "none",
-      borderRadius: vars.radius.sm,
-      fontSize: vars.typography.size.lg,
+      borderRadius: "0 56px 56px 0",
+      color: vars.color.primaryContrast,
       cursor: "pointer",
-      boxShadow: "0 2px 8px rgba(0,0,0,0.25)",
+      zIndex: 301,
+      padding: 0,
+      boxShadow: "3px 0 10px rgba(0,0,0,0.25)",
     },
   },
 });
@@ -256,7 +257,7 @@ export const main = style({
   },
   "@media": {
     "screen and (max-width: 767px)": {
-      padding: "68px 16px 24px",
+      padding: "24px 16px 24px",
     },
   },
 });
