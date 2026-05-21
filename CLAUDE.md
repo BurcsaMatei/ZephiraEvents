@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v22
+**Versiune:** v23
 **Data:** 2026-05-21
 **Status:** activ
 
@@ -177,7 +177,7 @@ styles/
 
 types/
   blog.ts, global.d.ts, menu.ts, etc.
-  konceptid.ts         ContractJson + InvoiceJson — tipuri pentru billing KonceptID
+  konceptid.ts         ContractJson (incl. billingCycle + 3 paymentLink*) + InvoiceJson — tipuri pentru billing KonceptID
   ~~admin.ts~~ — șters: SentKind/SentItem nu mai sunt necesare (sent/analytics eliminate)
 ```
 
@@ -459,12 +459,12 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 
 ### KonceptID Billing
 
-- `types/konceptid.ts` — `ContractJson` (plan, prețuri, status, IDs Stripe) + `InvoiceJson` (amount, status, PDF URL, timestamps)
-- `data/konceptid/contract.json` — contract activ; creat/editat manual; câmpuri: `clientName`, `plan`, `priceMonthly`, `currency`, `startDate`, `nextBillingDate`, `stripeCustomerId`, `stripeSubscriptionId`, `stripeProductId`, `stripePriceId`, `paymentMethod`, `status`
+- `types/konceptid.ts` — `ContractJson` (plan, prețuri, status, IDs Stripe, `billingCycle`, `paymentLink*`) + `InvoiceJson` (amount, status, PDF URL, timestamps)
+- `data/konceptid/contract.json` — contract activ; creat/editat manual; câmpuri: `clientName`, `plan`, `priceMonthly`, `currency`, `startDate`, `nextBillingDate`, `stripeCustomerId`, `stripeSubscriptionId`, `stripeProductId`, `stripePriceId`, `paymentMethod`, `status`, `billingCycle` (`"monthly"|"biannual"|"annual"`), `paymentLinkMonthly`, `paymentLinkBiannual`, `paymentLinkAnnual`
 - `data/konceptid/invoices/` — fișiere JSON individuale (`invoice-{ts}.json`); create automat de webhook Stripe la `invoice.paid`; câmpuri: `id`, `stripeInvoiceId`, `amount`, `currency`, `status`, `dueDate`, `paidAt`, `invoicePdfUrl`, `hostedInvoiceUrl`, `createdAt`
 - `pages/api/konceptid/stripe-webhook.ts` — **PUBLIC** (fără `verifyAdminSession`); `bodyParser: false`; verificare semnătură via `stripe.webhooks.constructEvent(rawBody, sig, STRIPE_WEBHOOK_SECRET)`; handler `invoice.paid` → `createFile()` în `data/konceptid/invoices/`; răspunde `200 { received: true }` la orice alt event type
-- `pages/admin/konceptid.tsx` — SSR; `getFile("data/konceptid/contract.json")` + `listFiles("data/konceptid/invoices")` în `Promise.all`; empty state când `contract.json` lipsește; afișează contract, calcul zile până la `nextBillingDate`, tabel facturi cu link PDF
-- `styles/admin/konceptid.css.ts` — stiluri Vanilla Extract: `contractCard` (grid 2col → 1col sub 540px), `billingCard`, `invoiceRow` (grid 4col → 2col sub 540px), `statusBadge`, `statusActive`/`statusCancelled`, `invoicePaid`/`invoiceUnpaid`, `downloadLink`
+- `pages/admin/konceptid.tsx` — SSR; `getFile("data/konceptid/contract.json")` + `listFiles("data/konceptid/invoices")` în `Promise.all`; empty state când `contract.json` lipsește; afișează contract, calcul zile până la `nextBillingDate`, buton „Plătește acum" (paymentLink derivat din `billingCycle`), secțiune „Planuri disponibile" (3 carduri cu badge plan curent + discount), tabel facturi cu link PDF
+- `styles/admin/konceptid.css.ts` — stiluri Vanilla Extract: `contractCard` (grid 2col → 1col sub 540px), `billingCard`, `payNowBtn`, `plansGrid` (3col → 1col sub 640px), `planCard`/`planCardActive`, `planCurrentBadge`, `planName`/`planPrice`/`planPer`/`planDiscount`/`planBtn`/`planBtnActive`, `invoiceRow` (grid 4col → 2col sub 540px), `statusBadge`, `invoicePaid`/`invoiceUnpaid`, `downloadLink`
 - **`data/konceptid/.gitkeep` și `data/konceptid/invoices/.gitkeep`** trebuie să existe în repo înainte de primul webhook — `createFile()` eșuează dacă directorul nu există în Git
 - **Webhook nu are sesiune admin** — securitatea e exclusiv prin semnătura Stripe (`STRIPE_WEBHOOK_SECRET`); nu apela `verifyAdminSession` pe această rută
 - **`contract.json` lipsă → empty state elegant** — `getServerSideProps` returnează `{ contract: null, invoices: [] }` la orice eroare GitHub API (inclusiv 404)
@@ -479,6 +479,12 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 ---
 
 ## 8. Ce este deschis / în lucru
+
+**~~KonceptID — planuri multiple + Payment Links~~ ✓ ÎNCHIS 2026-05-21** (PR #158, branch feat/konceptid-payment-links)
+- `types/konceptid.ts` — `ContractJson` extins cu `billingCycle: "monthly"|"biannual"|"annual"` + `paymentLinkMonthly`, `paymentLinkBiannual`, `paymentLinkAnnual`
+- `data/konceptid/contract.json` — câmpurile noi adăugate cu valori reale (Stripe Payment Links)
+- `pages/admin/konceptid.tsx` — buton „Plătește acum" în `billingCard` (paymentLink selectat din `billingCycle`); secțiune „Planuri disponibile" cu 3 carduri (Lunar 200 RON / Bianual 183 RON −8% / Anual 166 RON −17%); badge „Plan curent" pe planul activ; `planBtnActive` pe butonul planului curent
+- `styles/admin/konceptid.css.ts` — 11 exporturi noi: `payNowBtn`, `plansGrid`, `planCard`, `planCardActive`, `planCurrentBadge`, `planName`, `planPrice`, `planPer`, `planDiscount`, `planBtn`, `planBtnActive`
 
 **~~KonceptID Billing — Stripe webhook + dashboard~~ ✓ ÎNCHIS 2026-05-21** (PR #156, branch feat/konceptid-billing)
 - `types/konceptid.ts` creat — `ContractJson` + `InvoiceJson`
