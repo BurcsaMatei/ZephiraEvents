@@ -102,15 +102,17 @@ export default function AdminKonceptIDPage({
                   {statusLabel(contract.status)}
                 </span>
               </div>
+              <div className={s.contractDownloadRow}>
+                <a
+                  href="https://raw.githubusercontent.com/BurcsaMatei/ZephiraEvents/main/data/konceptid/contract_ZE.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={s.downloadContractLink}
+                >
+                  ↓ Descarcă contract
+                </a>
+              </div>
             </div>
-            <a
-              href="https://raw.githubusercontent.com/BurcsaMatei/ZephiraEvents/main/data/konceptid/contract_ZE.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={s.downloadContractLink}
-            >
-              ↓ Descarcă contract
-            </a>
           </div>
 
           {/* Următoarea factură */}

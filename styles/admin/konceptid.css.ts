@@ -277,6 +277,13 @@ export const planBtn = style({
   },
 });
 
+export const contractDownloadRow = style({
+  gridColumn: "1 / -1",
+  paddingTop: "8px",
+  borderTop: `1px solid ${vars.color.border}`,
+  marginTop: "4px",
+});
+
 export const downloadContractLink = style({
   display: "inline-flex",
   alignItems: "center",

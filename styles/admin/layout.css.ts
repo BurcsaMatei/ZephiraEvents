@@ -24,7 +24,7 @@ export const sidebar = style({
   flexDirection: "column",
   position: "relative",
   top: 0,
-  height: "100vh",
+  maxHeight: "100vh",
   overflowY: "auto",
   transition: "transform 300ms ease",
   "@media": {
