@@ -103,13 +103,20 @@ export default function AdminKonceptIDPage({
                 </span>
               </div>
             </div>
+            <a
+              href="https://raw.githubusercontent.com/BurcsaMatei/ZephiraEvents/main/data/konceptid/contract_ZE.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={s.downloadContractLink}
+            >
+              ↓ Descarcă contract
+            </a>
           </div>
 
           {/* Următoarea factură */}
           {(() => {
-            const daysLeft = Math.ceil(
-              (new Date(contract.nextBillingDate).getTime() - Date.now()) / 86400000,
-            );
+            const targetDate = invoices.length === 0 ? contract.startDate : contract.nextBillingDate;
+            const daysLeft = Math.ceil((new Date(targetDate).getTime() - Date.now()) / 86400000);
             const paymentLink =
               contract.billingCycle === "annual"
                 ? contract.paymentLinkAnnual
@@ -121,11 +128,13 @@ export default function AdminKonceptIDPage({
                 <div className={s.billingDays}>{daysLeft}</div>
                 <div>
                   <p className={s.contractValue}>
-                    {formatDate(contract.nextBillingDate)} — {contract.priceMonthly}{" "}
+                    {formatDate(targetDate)} — {contract.priceMonthly}{" "}
                     {contract.currency}
                   </p>
                   <p className={s.billingLabel}>
-                    {daysLeft === 1 ? "zi rămasă" : "zile rămase"} până la următoarea factură
+                    {invoices.length === 0
+                      ? "zile până la prima factură"
+                      : `${daysLeft === 1 ? "zi rămasă" : "zile rămase"} până la următoarea factură`}
                   </p>
                   <a
                     href={paymentLink}

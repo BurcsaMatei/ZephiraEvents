@@ -277,6 +277,20 @@ export const planBtn = style({
   },
 });
 
+export const downloadContractLink = style({
+  display: "inline-flex",
+  alignItems: "center",
+  gap: "6px",
+  fontSize: vars.typography.size.xs,
+  color: vars.color.primary,
+  textDecoration: "none",
+  fontWeight: vars.typography.weight.semibold,
+  marginTop: "16px",
+  selectors: {
+    "&:hover": { textDecoration: "underline" },
+  },
+});
+
 export const planBtnActive = style({
   backgroundColor: vars.color.primary,
   color: vars.color.primaryContrast,
