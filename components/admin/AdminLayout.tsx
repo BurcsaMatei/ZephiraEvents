@@ -94,16 +94,6 @@ export default function AdminLayout({ children, unreadCount = 0 }: Props) {
         <meta name="apple-mobile-web-app-title" content="ZE Admin" />
       </Head>
 
-      {/* Hamburger — vizibil doar pe mobil via CSS */}
-      <button
-        type="button"
-        className={s.hamburger}
-        onClick={() => setSidebarOpen(true)}
-        aria-label="Deschide meniu"
-      >
-        ☰
-      </button>
-
       {/* Overlay — apare doar când sidebar-ul e deschis pe mobil */}
       {sidebarOpen && (
         <div
@@ -149,6 +139,22 @@ export default function AdminLayout({ children, unreadCount = 0 }: Props) {
             </button>
             <ThemeSwitcher />
           </div>
+
+          <button
+            type="button"
+            className={s.sidebarTab}
+            onClick={() => setSidebarOpen((v) => !v)}
+            aria-label={sidebarOpen ? "Închide meniu" : "Deschide meniu"}
+          >
+            <svg width="18" height="18" viewBox="0 0 12 12" fill="none"
+              stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+              strokeLinejoin="round" aria-hidden="true">
+              {sidebarOpen
+                ? <><polyline points="8,2 4,6 8,10" /></>
+                : <><polyline points="4,2 8,6 4,10" /></>
+              }
+            </svg>
+          </button>
         </aside>
 
         <main className={s.main}>{children}</main>
