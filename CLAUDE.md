@@ -1,6 +1,6 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v21
+**Versiune:** v22
 **Data:** 2026-05-21
 **Status:** activ
 
@@ -24,6 +24,7 @@ ZephiraEvents este un website premium de prezentare și conversie pentru o sală
 - **PWA:** next-pwa (activ doar în producție cu `NEXT_PUBLIC_ENABLE_PWA=1`); `public/sw.js`, `public/workbox-*.js`, `public/fallback-*.js` sunt generate la build și sunt în `.gitignore`
 - **SEO:** metadata centralizată, JSON-LD, OG static pre-generat, sitemap/robots server-side
 - **Assets media:** imagini servite nativ ca **WebP** (conversie one-shot 2026-05-19, fără pipeline runtime); video-uri servite nativ ca **MP4 H.264** (deja optimizate CRF 28, mai eficiente decât VP9 pe conținut pre-comprimat); excepții: `og*.jpg` rămân JPG (compatibilitate OG social), `public/icons/*.png` + favicon + screenshots + `logo-dedicat.png` rămân PNG (PWA/JSON-LD)
+- **Billing:** `stripe ^22.1.1` — verificare semnătură webhook (`stripe.webhooks.constructEvent`), procesare `invoice.paid`
 - **devDependencies notabile:** `sharp` (optimizare imagini + procesare foto profil recenzii), `puppeteer` (generare OG screenshots), `gray-matter` + `marked` (parsare articole blog Markdown)
 
 ---
@@ -32,7 +33,7 @@ ZephiraEvents este un website premium de prezentare și conversie pentru o sală
 
 ```
 components/
-  admin/               AdminLayout.tsx — sidebar nav cu iconițe SVG inline (Inbox/Recenzii/Meniuri/Blog), logout, manifest PWA admin
+  admin/               AdminLayout.tsx — sidebar nav cu iconițe SVG inline (Inbox/Recenzii/Meniuri/Blog/KonceptID), logout, manifest PWA admin
                        AdminSearch.tsx — câmp de căutare global admin (mesaje + recenzii)
                        AdminInstallButton.tsx — buton PWA install (apare în sidebar)
   animations/          Appear, AppearGroup — animații pe scroll/viewport; ReducedMotionProvider — context global useReducedMotion()
@@ -71,6 +72,8 @@ data/
   reviews.json         12 recenzii statice originale — sursă one-time pentru migrare; NU mai e sursa activă
   reviews/             directorul activ de persistență recenzii — fișiere JSON individuale (review-{ts}-{id}.json)
                        populate inițial prin scripts/migrate-reviews.ts; creat prin formular + moderare admin
+  konceptid/           billing KonceptID — contract.json (contract activ) + invoices/ (facturi per event invoice.paid)
+                       creat manual (contract.json) sau automat de webhook Stripe (invoices/)
 
 lib/
   admin/               auth.ts, response.ts, sanitize.ts, search.ts, login.ts, logout.ts
@@ -124,6 +127,7 @@ pages/
     blog/index.tsx     Lista articole blog (SSR fs) + butoane Edit/Șterge/Restaurează
     blog/new.tsx       Formular creare articol nou — POST via GitHub API
     blog/[slug].tsx    Formular editare articol (SSR fs prefill) — PATCH via GitHub API
+    konceptid.tsx      Dashboard billing KonceptID — contract activ + zile până la factură + istoric facturi PDF
   api/                 (vezi secțiunea 4)
 
 public/
@@ -152,7 +156,7 @@ scripts/
   project-tree.ps1     utilitar explorare structură (PowerShell)
 
 styles/
-  admin/               blog.css.ts, compose.css.ts, inbox.css.ts, layout.css.ts,
+  admin/               blog.css.ts, compose.css.ts, inbox.css.ts, konceptid.css.ts, layout.css.ts,
                        login.css.ts, message.css.ts, menus.css.ts, reviews.css.ts, search.css.ts
                        `layout.css.ts` conține `deleteBtn` centralizat (folosit de toate paginile admin) și token `vars.color.danger`
                        ~~analytics.css.ts~~ — șters: GA4 eliminat
@@ -173,6 +177,7 @@ styles/
 
 types/
   blog.ts, global.d.ts, menu.ts, etc.
+  konceptid.ts         ContractJson + InvoiceJson — tipuri pentru billing KonceptID
   ~~admin.ts~~ — șters: SentKind/SentItem nu mai sunt necesare (sent/analytics eliminate)
 ```
 
@@ -211,6 +216,7 @@ types/
 | `/admin/blog`           | `pages/admin/blog/index.tsx`     | Lista articole blog (SSR fs, include deleted) + soft delete / restaurare           |
 | `/admin/blog/new`       | `pages/admin/blog/new.tsx`       | Formular creare articol nou — POST via GitHub API                                  |
 | `/admin/blog/[slug]`    | `pages/admin/blog/[slug].tsx`    | Formular editare articol (SSR fs prefill) — PATCH via GitHub API                  |
+| `/admin/konceptid`      | `pages/admin/konceptid.tsx`      | Dashboard billing — contract activ, zile până la factură, istoric facturi + PDF    |
 
 ### API Routes publice
 
@@ -221,6 +227,7 @@ types/
 | `POST /api/review-submit` | `pages/api/review-submit.ts` | Formular recenzie — procesează foto (sharp → WebP), salvează JSON în `data/reviews/` via GitHub API (status: pending) |
 | `GET /api/og`             | `pages/api/og.tsx`           | Unealtă internă pentru `npm run generate:og` — nu e apelat din pagini |
 | `POST /api/csp-report`    | `pages/api/csp-report.ts`    | Colectare rapoarte Content-Security-Policy                            |
+| `POST /api/konceptid/stripe-webhook` | `pages/api/konceptid/stripe-webhook.ts` | Webhook Stripe — verificare semnătură HMAC, handler `invoice.paid`, salvează `InvoiceJson` în `data/konceptid/invoices/` via GitHub API; `bodyParser: false` |
 
 ### API Routes admin (protejate — verifică sesiune la fiecare request)
 
@@ -326,7 +333,7 @@ types/
 - `lib/admin/response.ts` — `okResponse()` / `errorResponse()` — format uniform `{ ok: true [, data] }` / `{ ok: false, error }`
 - `lib/admin/sanitize.ts` — `sanitizeHtml()` — strip tags + escape entities; folosit cu `dangerouslySetInnerHTML` în toate paginile admin
 - `lib/admin/search.ts` — căutare globală în `data/messages/` + `data/reviews/` via GitHub API
-- `components/admin/AdminLayout.tsx` — sidebar cu iconițe SVG inline: Inbox / Recenzii / Meniuri / Blog + logout + ThemeSwitcher; manifest PWA admin
+- `components/admin/AdminLayout.tsx` — sidebar cu iconițe SVG inline: Inbox / Recenzii / Meniuri / Blog / KonceptID + logout + ThemeSwitcher; manifest PWA admin
 - `components/admin/AdminSearch.tsx` — componentă de căutare globală în sidebar
 - `components/admin/AdminInstallButton.tsx` — buton PWA install în sidebar
 - `public/admin-manifest.json` — PWA manifest dedicat, scope /admin/, start_url /admin/inbox
@@ -351,6 +358,9 @@ ADMIN_PASSWORD=...
 ADMIN_SESSION_SECRET=...            # secret HMAC-SHA256 pentru cookie sesiune
 RECAPTCHA_SECRET_KEY=...            # Google reCAPTCHA v3
 NEXT_PUBLIC_RECAPTCHA_SITE_KEY=...
+STRIPE_SECRET_KEY=...               # Stripe secret key (sk_live_*)
+STRIPE_WEBHOOK_SECRET=...           # Stripe webhook signing secret (whsec_*)
+STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția KonceptID
 ```
 
 **Complet eliminate din arhitectură:** Supabase (`SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`), SMTP (`SMTP_*`), Gmail (`GMAIL_*`), IMAP (`IMAP_*`, `SYNC_SECRET`), GA4 (`GOOGLE_APPLICATION_CREDENTIALS`, `GA4_PROPERTY_ID`).
@@ -447,6 +457,18 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=...
 - `public/llms.txt` — index AI crawlere; `public/llms-full.txt` — versiunea extinsă cu meniuri detaliate, blog, recenzii, FAQ (creat 2026-05-20 PR #141)
 - `public/logo-dedicat.png` — logo PNG dedicat JSON-LD `LocalBusiness`; trackat în git
 
+### KonceptID Billing
+
+- `types/konceptid.ts` — `ContractJson` (plan, prețuri, status, IDs Stripe) + `InvoiceJson` (amount, status, PDF URL, timestamps)
+- `data/konceptid/contract.json` — contract activ; creat/editat manual; câmpuri: `clientName`, `plan`, `priceMonthly`, `currency`, `startDate`, `nextBillingDate`, `stripeCustomerId`, `stripeSubscriptionId`, `stripeProductId`, `stripePriceId`, `paymentMethod`, `status`
+- `data/konceptid/invoices/` — fișiere JSON individuale (`invoice-{ts}.json`); create automat de webhook Stripe la `invoice.paid`; câmpuri: `id`, `stripeInvoiceId`, `amount`, `currency`, `status`, `dueDate`, `paidAt`, `invoicePdfUrl`, `hostedInvoiceUrl`, `createdAt`
+- `pages/api/konceptid/stripe-webhook.ts` — **PUBLIC** (fără `verifyAdminSession`); `bodyParser: false`; verificare semnătură via `stripe.webhooks.constructEvent(rawBody, sig, STRIPE_WEBHOOK_SECRET)`; handler `invoice.paid` → `createFile()` în `data/konceptid/invoices/`; răspunde `200 { received: true }` la orice alt event type
+- `pages/admin/konceptid.tsx` — SSR; `getFile("data/konceptid/contract.json")` + `listFiles("data/konceptid/invoices")` în `Promise.all`; empty state când `contract.json` lipsește; afișează contract, calcul zile până la `nextBillingDate`, tabel facturi cu link PDF
+- `styles/admin/konceptid.css.ts` — stiluri Vanilla Extract: `contractCard` (grid 2col → 1col sub 540px), `billingCard`, `invoiceRow` (grid 4col → 2col sub 540px), `statusBadge`, `statusActive`/`statusCancelled`, `invoicePaid`/`invoiceUnpaid`, `downloadLink`
+- **`data/konceptid/.gitkeep` și `data/konceptid/invoices/.gitkeep`** trebuie să existe în repo înainte de primul webhook — `createFile()` eșuează dacă directorul nu există în Git
+- **Webhook nu are sesiune admin** — securitatea e exclusiv prin semnătura Stripe (`STRIPE_WEBHOOK_SECRET`); nu apela `verifyAdminSession` pe această rută
+- **`contract.json` lipsă → empty state elegant** — `getServerSideProps` returnează `{ contract: null, invoices: [] }` la orice eroare GitHub API (inclusiv 404)
+
 ### Shell / Theme / Layout
 
 - `components/Layout.tsx`
@@ -457,6 +479,15 @@ NEXT_PUBLIC_RECAPTCHA_SITE_KEY=...
 ---
 
 ## 8. Ce este deschis / în lucru
+
+**~~KonceptID Billing — Stripe webhook + dashboard~~ ✓ ÎNCHIS 2026-05-21** (PR #156, branch feat/konceptid-billing)
+- `types/konceptid.ts` creat — `ContractJson` + `InvoiceJson`
+- `pages/api/konceptid/stripe-webhook.ts` creat — `bodyParser: false`, `getRawBody()` helper, verificare semnătură Stripe, handler `invoice.paid` → `createFile()` în `data/konceptid/invoices/invoice-{Date.now()}.json`
+- `pages/admin/konceptid.tsx` creat — SSR cu `getFile(contract.json)` + `listFiles(invoices/)` în `Promise.all`; empty state când contract lipsește; calcul `daysLeft` până la `nextBillingDate`; tabel facturi cu `invoicePdfUrl`
+- `styles/admin/konceptid.css.ts` creat — `contractCard`, `billingCard`, `billingDays`, `invoiceRow`, `statusBadge`, `invoicePaid`/`invoiceUnpaid`, `downloadLink`
+- `components/admin/AdminLayout.tsx` — `IconKonceptID` SVG + intrare `KonceptID` adăugată la finalul `NAV`
+- `package.json` — `stripe ^22.1.1` adăugat (era deja în `node_modules`)
+- **Fix aplicat:** `createFile()` din `lib/admin/github.ts` acceptă 2 argumente (path + content) — mesajul de commit e generat intern; al treilea argument a fost eliminat
 
 **~~Admin sidebar tab mobil — înlocuiește hamburger~~ ✓ ÎNCHIS 2026-05-21** (PR #154, branch feat/admin-sidebar-tab)
 - `components/admin/AdminLayout.tsx`: buton hamburger eliminat; `sidebarTab` adăugat la finalul `<aside>` — toggle open/close cu săgeată SVG direcțională (18×18, viewBox 12×12); `aria-label` dinamic
@@ -772,3 +803,7 @@ scripts/optimise-videos.mjs
 - Nu adăuga assets imagine în `public/images/` ca JPG sau PNG — folosește WebP; excepții: `og*.jpg` (OG social), `public/icons/*.png` (PWA), `favicon*.png`, `public/logo-dedicat.png` (JSON-LD)
 - Nu adăuga video-uri în `public/videos/` ca WebM VP9 — rămân MP4 H.264; VP9 re-encodat pe H.264 CRF 28 produce fișiere mai mari (testat și abandonat 2026-05-19)
 - Nu modifica `IMG_EXT` din `scripts/build-gallery.mjs` să accepte `.jpg`/`.jpeg`/`.png` — galeria e acum 100% WebP
+- Nu adăuga `verifyAdminSession` pe `/api/konceptid/stripe-webhook` — ruta e publică intenționat; securitatea e prin semnătura Stripe (`STRIPE_WEBHOOK_SECRET`)
+- Nu activa `bodyParser` pe `/api/konceptid/stripe-webhook` — Stripe necesită raw Buffer pentru `constructEvent()`; `export const config = { api: { bodyParser: false } }` trebuie să rămână
+- Nu crea `data/konceptid/contract.json` programatic din cod — se gestionează manual sau via un script dedicat; webhook-ul scrie doar în `data/konceptid/invoices/`
+- Nu șterge `data/konceptid/.gitkeep` sau `data/konceptid/invoices/.gitkeep` — `createFile()` din GitHub API eșuează dacă directorul nu există în repo
