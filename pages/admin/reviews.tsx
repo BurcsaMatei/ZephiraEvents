@@ -16,9 +16,17 @@ import type { ReviewJson, ReviewStatus } from "../api/admin/reviews/index";
 // ──────────────────────────────────────────────────────────
 // Types
 // ──────────────────────────────────────────────────────────
+type Counts = {
+  all: number;
+  pending: number;
+  approved: number;
+  rejected: number;
+};
+
 type Props = {
   reviews: ReviewJson[];
   activeStatus: ReviewStatus | "all";
+  counts: Counts;
 };
 
 // ──────────────────────────────────────────────────────────
@@ -58,6 +66,7 @@ function statusClass(status: ReviewStatus) {
 function AdminReviewsPage({
   reviews: initialReviews,
   activeStatus,
+  counts,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [reviews, setReviews] = useState<ReviewJson[]>(initialReviews);
   const [loadingId, setLoadingId] = useState<string | null>(null);
@@ -95,7 +104,7 @@ function AdminReviewsPage({
           const isActive = activeStatus === value;
           return (
             <Link key={value} href={href} className={`${s.tab}${isActive ? ` ${s.tabActive}` : ""}`}>
-              {label}
+              {`${label} (${counts[value]})`}
             </Link>
           );
         })}
@@ -199,13 +208,20 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ req, query
       }),
     );
 
+    const counts: Counts = {
+      all: all.filter((r) => !r.deleted).length,
+      pending: all.filter((r) => !r.deleted && r.status === "pending").length,
+      approved: all.filter((r) => !r.deleted && r.status === "approved").length,
+      rejected: all.filter((r) => !r.deleted && r.status === "rejected").length,
+    };
+
     const reviews = (activeStatus === "all" ? all : all.filter((r) => r.status === activeStatus))
       .filter((r) => !r.deleted)
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
-    return { props: { reviews, activeStatus } };
+    return { props: { reviews, activeStatus, counts } };
   } catch (err) {
     console.error("[admin/reviews] GitHub fetch error:", err);
-    return { props: { reviews: [], activeStatus } };
+    return { props: { reviews: [], activeStatus, counts: { all: 0, pending: 0, approved: 0, rejected: 0 } } };
   }
 };
