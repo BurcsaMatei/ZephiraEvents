@@ -40,7 +40,7 @@ function AdminLoginPage() {
       });
 
       if (res.ok) {
-        await router.replace("/admin/inbox");
+        await router.replace("/admin");
       } else {
         const data = (await res.json()) as { message?: string };
         setError(data.message ?? "Eroare la autentificare.");

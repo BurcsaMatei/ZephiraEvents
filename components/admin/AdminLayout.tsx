@@ -115,10 +115,10 @@ export default function AdminLayout({ children, unreadCount = 0 }: Props) {
 
       <div className={s.wrapper}>
         <aside className={`${s.sidebar}${sidebarOpen ? ` ${s.sidebarOpen}` : ""}`}>
-          <div className={s.brand}>
+          <Link href="/admin" className={s.brand} onClick={closeSidebar}>
             <span className={s.brandName}>ZephiraEvents</span>
             <span className={s.brandSub}>Admin</span>
-          </div>
+          </Link>
 
           <AdminSearch />
 
