@@ -22,16 +22,15 @@ export const sidebar = style({
   borderRight: `1px solid ${vars.color.border}`,
   display: "flex",
   flexDirection: "column",
-  position: "relative",
+  position: "fixed",
   top: 0,
-  maxHeight: "100vh",
+  left: 0,
+  zIndex: 100,
+  height: "100vh",
   overflowY: "auto",
   transition: "transform 300ms ease",
   "@media": {
     "screen and (max-width: 767px)": {
-      position: "fixed",
-      top: 0,
-      left: 0,
       zIndex: 300,
       transform: "translateX(-100%)",
       overflow: "visible",
@@ -250,6 +249,7 @@ export const deleteBtn = style({
 export const main = style({
   flex: 1,
   minWidth: 0,
+  marginLeft: "232px",
   padding: "32px 36px",
   backgroundColor: "#f2f3f7",
   selectors: {
@@ -257,6 +257,7 @@ export const main = style({
   },
   "@media": {
     "screen and (max-width: 767px)": {
+      marginLeft: 0,
       padding: "24px 16px 24px",
     },
   },
