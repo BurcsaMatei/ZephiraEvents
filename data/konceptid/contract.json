@@ -1,0 +1,14 @@
+{
+  "clientName": "ZephiraEvents",
+  "plan": "Mentenanță Website KonceptID",
+  "priceMonthly": 200,
+  "currency": "RON",
+  "startDate": "2026-06-01",
+  "nextBillingDate": "2026-07-01",
+  "stripeCustomerId": "cus_test",
+  "stripeSubscriptionId": "sub_test",
+  "stripeProductId": "prod_test",
+  "stripePriceId": "price_test",
+  "paymentMethod": "card",
+  "status": "active"
+}
