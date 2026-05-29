@@ -1,0 +1,12 @@
+{
+  "id": "in_1TcPvBCETXWN5MbTMq7FTMtO",
+  "stripeInvoiceId": "in_1TcPvBCETXWN5MbTMq7FTMtO",
+  "amount": 200,
+  "currency": "RON",
+  "status": "paid",
+  "dueDate": "2026-05-29T12:54:48.649Z",
+  "paidAt": "2026-05-29T12:54:25.000Z",
+  "invoicePdfUrl": "https://pay.stripe.com/invoice/acct_1SQyTnCETXWN5MbT/live_YWNjdF8xU1F5VG5DRVRYV041TWJULF9VYmRDRlNyQk9Qckloam5xWnprc2hrdU1pWHJ3dEplLDE3MDYwMDA4Nw0200GoDzvdEa/pdf?s=ap",
+  "hostedInvoiceUrl": "https://invoice.stripe.com/i/acct_1SQyTnCETXWN5MbT/live_YWNjdF8xU1F5VG5DRVRYV041TWJULF9VYmRDRlNyQk9Qckloam5xWnprc2hrdU1pWHJ3dEplLDE3MDYwMDA4Nw0200GoDzvdEa?s=ap",
+  "createdAt": "2026-05-29T12:54:48.649Z"
+}
