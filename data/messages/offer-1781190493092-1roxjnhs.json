@@ -1,0 +1,33 @@
+{
+  "id": "offer-1781190493092-1roxjnhs",
+  "type": "offer",
+  "name": "Andreea Denisa",
+  "email": "denisaparaipan4@gmail.com",
+  "phone": "+40720895135",
+  "eventType": "botez-cununie",
+  "eventDate": "2026-08-22",
+  "guests": 60,
+  "address": "Suraia",
+  "whatsapp": true,
+  "details": "Aș dori și o ofertă de tort și candy bar",
+  "lodging": {
+    "kind": "proprie",
+    "rooms": "",
+    "nights": "",
+    "notes": ""
+  },
+  "music": {
+    "kind": "am-eu",
+    "prefs": "",
+    "genre": "",
+    "interval": ""
+  },
+  "photoVideo": {
+    "kind": "oferta",
+    "package": "Foto + video",
+    "duration": "Toată ziua",
+    "deliverables": "Album"
+  },
+  "createdAt": "2026-06-11T15:08:13.091Z",
+  "read": false
+}
