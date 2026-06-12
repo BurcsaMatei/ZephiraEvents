@@ -1,7 +1,7 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v25
-**Data:** 2026-05-21
+**Versiune:** v26
+**Data:** 2026-06-13
 **Status:** activ
 
 ---
@@ -482,12 +482,19 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 
 ## 8. Ce este deschis / în lucru
 
+**~~Billing KonceptID — șterge factură CSS, IDs reale, filtru webhook~~ ✓ ÎNCHIS 2026-06-13** (PR #160, branch fix/ZE-160-billing-fix)
+- `data/konceptid/invoices/invoice-1781052797383.json` — șters din GitHub (factură FraternitaCSS 150 RON, ruxir24@gmail.com, apărută din cauza că ambele webhook-uri sunt pe același cont Stripe)
+- `data/konceptid/contract.json` — actualizat cu IDs Stripe reale: `stripeCustomerId: "cus_UbdBbGgJOEBBIW"`, `stripeSubscriptionId: "sub_1TcPvqCETXWN5MbT4RPLelMQ"`, `stripeProductId: "prod_UYbaRkUWgXiofo"`, `stripePriceId: "price_1TZUN7CETXWN5MbTK6iM6NWb"` (înlocuiesc placeholder-urile `*_test`)
+- `pages/api/konceptid/stripe-webhook.ts` — filtru adăugat după `constructEvent()`: dacă `invoice.customer !== STRIPE_CUSTOMER_ID` (env var), returnează `200 { received: true }` fără a salva; previne poluarea cross-client când mai multe site-uri sunt pe același cont Stripe
+- `.env.local` — adăugat `STRIPE_CUSTOMER_ID=cus_UbdBbGgJOEBBIW` (de adăugat și în Vercel env vars)
+- **Cauza root:** Stripe trimite `invoice.paid` la TOATE endpoint-urile înregistrate pe cont; fără filtru, ZephiraEvents salva și facturile CSS
+
 **~~Admin sidebar fixed + layout fix~~ ✓ ÎNCHIS 2026-05-21** (commit `d87e65b` direct pe `main`)
 - `styles/admin/layout.css.ts` — `sidebar`: `position: "relative"` → `position: "fixed"`, `top: 0`, `left: 0`, `zIndex: 100`, `height: "100vh"`, `overflowY: "auto"`; sidebar nu mai scrollează odată cu conținutul, rămâne fix pe tot ecranul
 - `styles/admin/layout.css.ts` — `main`: adăugat `marginLeft: "232px"` global + `marginLeft: 0` pe `@media max-width: 767px`; compensează spațiul ocupat de sidebar-ul fixed
 - `styles/admin/layout.css.ts` — mobil (`max-width: 767px`): `sidebar` păstrează `zIndex: 300` și `transform: translateX(-100%)` din media query; `overflow: visible` pentru tab-ul de deschidere
 
-**~~KonceptID — contract link în grid + sidebar maxHeight~~ ✓ ÎNCHIS 2026-05-21** (commit `ca71d91` direct pe `main`, #160)
+**~~KonceptID — contract link în grid + sidebar maxHeight~~ ✓ ÎNCHIS 2026-05-21** (commit `ca71d91` direct pe `main`)
 - `pages/admin/konceptid.tsx` — linkul „↓ Descarcă contract" mutat din afara `contractCard` în interiorul grid-ului, învelit în `contractDownloadRow` (ocupă toată lățimea via `gridColumn: 1/-1`)
 - `styles/admin/konceptid.css.ts` — export `contractDownloadRow` adăugat
 - `styles/admin/layout.css.ts` — `sidebar`: `height: "100vh"` → `maxHeight: "100vh"` (ulterior revenit la `height: "100vh"` și `position: fixed` în `d87e65b`)
