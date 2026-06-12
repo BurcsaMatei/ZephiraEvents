@@ -55,6 +55,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (event.type === "invoice.paid") {
       const invoice = event.data.object as Stripe.Invoice;
 
+      const allowedCustomerId = process.env.STRIPE_CUSTOMER_ID;
+      if (allowedCustomerId && invoice.customer !== allowedCustomerId) {
+        return res.status(200).json({ received: true });
+      }
+
       const invoiceJson: InvoiceJson = {
         id: invoice.id,
         stripeInvoiceId: invoice.id,
