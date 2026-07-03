@@ -159,9 +159,6 @@ export default function Seo({
       <title>{fullTitle}</title>
       {description && <meta name="description" content={description} />}
 
-      {/* Google Search Console */}
-      <meta name="google-site-verification" content="QmP6c2oqhJO2Gjg7p_depwbuu6pyBJ_L42BdCVU_fWk" />
-
       {/* Indexare */}
       {noindex && <meta name="robots" content="noindex,nofollow" />}
 

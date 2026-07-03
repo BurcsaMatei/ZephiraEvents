@@ -92,6 +92,9 @@ export default class MyDocument extends Document<ExtraProps> {
           {/* Hints: suportăm light & dark */}
           <meta name="color-scheme" content="light dark" />
 
+          {/* Google Search Console */}
+          <meta name="google-site-verification" content="QmP6c2oqhJO2Gjg7p_depwbuu6pyBJ_L42BdCVU_fWk" />
+
           {/* Manifest PWA (basePath-aware) — randat DOAR dacă PWA este activ în producție */}
           {ENABLE_PWA ? <link rel="manifest" href={withBase("/site.webmanifest")} /> : null}
 
