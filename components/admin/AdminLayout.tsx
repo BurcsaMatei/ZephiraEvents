@@ -38,6 +38,12 @@ const IconBlog = () => (
   </svg>
 );
 
+const IconGoogleReviews = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M12 11v2.4h5.6c-.23 1.44-1.7 4.22-5.6 4.22-3.37 0-6.12-2.79-6.12-6.24S8.63 5.14 12 5.14c1.92 0 3.2.82 3.94 1.52l2.68-2.58C16.9 2.47 14.67 1.5 12 1.5 6.42 1.5 1.9 6.02 1.9 11.6S6.42 21.7 12 21.7c5.83 0 9.7-4.1 9.7-9.87 0-.66-.07-1.17-.16-1.68z"/>
+  </svg>
+);
+
 const IconKonceptID = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <rect x="2" y="5" width="20" height="14" rx="2"/>
@@ -64,6 +70,7 @@ type Props = {
 const NAV = [
   { href: "/admin/inbox", label: "Inbox", icon: <IconInbox /> },
   { href: "/admin/reviews", label: "Recenzii", icon: <IconReviews /> },
+  { href: "/admin/google-reviews", label: "Google Reviews", icon: <IconGoogleReviews /> },
   { href: "/admin/menus", label: "Meniuri", icon: <IconMenus /> },
   { href: "/admin/blog", label: "Blog", icon: <IconBlog /> },
   { href: "/admin/konceptid", label: "KonceptID", icon: <IconKonceptID /> },

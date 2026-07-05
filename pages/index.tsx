@@ -23,7 +23,12 @@ import Separator from "../components/Separator";
 import type { Json } from "../interfaces";
 import { getAllPosts } from "../lib/blog.server";
 import { absoluteOgImage, absoluteUrl, CONTACT, SITE, SOCIAL_URLS } from "../lib/config";
-import { getLatestReviews, type Review } from "../lib/reviews";
+import {
+  getGoogleReviews,
+  getGoogleReviewsStats,
+  type GoogleReview,
+  type GoogleReviewsStats,
+} from "../lib/googleReviews";
 import * as ti from "../styles/sections/tent/tentIntro.css";
 
 const ArcGallery = dynamic(() => import("../components/sections/homepage/ArcGallery.lazy"), {
@@ -34,7 +39,7 @@ const TentAtLocationBanner = dynamic(
   () => import("../components/sections/tent/TentAtLocationBanner"),
   { ssr: false, loading: () => null },
 );
-const Reviews = dynamic(() => import("../components/sections/reviews/Reviews"), {
+const GoogleReviews = dynamic(() => import("../components/sections/GoogleReviews"), {
   ssr: false,
   loading: () => null,
 });
@@ -43,7 +48,11 @@ const Reviews = dynamic(() => import("../components/sections/reviews/Reviews"), 
 // Types
 // ==============================
 type BlogPostItem = ReturnType<typeof getAllPosts>[number];
-type HomeProps = { postsPreview: BlogPostItem[]; reviewItems: Review[] };
+type HomeProps = {
+  postsPreview: BlogPostItem[];
+  googleReviews: GoogleReview[];
+  googleStats: GoogleReviewsStats;
+};
 
 // ==============================
 // Constante
@@ -55,7 +64,7 @@ const breadcrumbList = {
 } as const satisfies Json;
 
 // Colectăm sameAs doar din URL-urile non-goale (Facebook lipsește momentan)
-const sameAsLinks = [SOCIAL_URLS.instagram, SOCIAL_URLS.tiktok].filter(
+const sameAsLinks = [SOCIAL_URLS.instagram, SOCIAL_URLS.tiktok, SOCIAL_URLS.googleMaps].filter(
   (u): u is string => typeof u === "string" && u.length > 0,
 );
 
@@ -115,7 +124,7 @@ const webSiteLd = {
 // ==============================
 // Component
 // ==============================
-const Home: NextPage<HomeProps> = ({ postsPreview, reviewItems }) => {
+const Home: NextPage<HomeProps> = ({ postsPreview, googleReviews, googleStats }) => {
   const router = useRouter();
 
   // Prefetch /galerie când browserul e idle
@@ -243,8 +252,8 @@ const Home: NextPage<HomeProps> = ({ postsPreview, reviewItems }) => {
 
       <Separator />
 
-      {/* REVIEWS FULL-BLEED — ÎN AFARA oricărui .container / .section / AppearGroup */}
-      <Reviews fullBleed mode="home" showForm={false} limit={12} initialItems={reviewItems} />
+      {/* GOOGLE REVIEWS FULL-BLEED — ÎN AFARA oricărui .container / .section / AppearGroup */}
+      <GoogleReviews fullBleed mode="home" items={googleReviews} stats={googleStats} />
 
       <Separator />
 
@@ -344,8 +353,9 @@ const Home: NextPage<HomeProps> = ({ postsPreview, reviewItems }) => {
 // ==============================
 export const getStaticProps: GetStaticProps<HomeProps> = () => {
   const postsPreview = getAllPosts().slice(0, 4);
-  const reviewItems = getLatestReviews(12);
-  return { props: { postsPreview, reviewItems } };
+  const googleReviews = getGoogleReviews();
+  const googleStats = getGoogleReviewsStats(googleReviews);
+  return { props: { postsPreview, googleReviews, googleStats } };
 };
 
 // ==============================

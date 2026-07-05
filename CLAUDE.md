@@ -1,7 +1,7 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v26
-**Data:** 2026-06-13
+**Versiune:** v27
+**Data:** 2026-07-05
 **Status:** activ
 
 ---
@@ -48,7 +48,8 @@ components/
                        ContactSlaCard — componentă orfană (neutilizată în prezent)
     homepage/          ArcGallery, HeroIndex, LogoBeforeIntro
     menus/             ArcMenuGallery — galerie carduri meniuri cu autoplay
-    reviews/           Reviews, ReviewsForm
+    reviews/           Reviews, ReviewsForm — sistemul VECHI de recenzii locale; rămâne în cod, dar NU mai e folosit public (înlocuit de GoogleReviews, 2026-07-05)
+    GoogleReviews.tsx  recenzii Google Business Profile — props { items, stats, mode: "home"|"page", fullBleed? }; marquee pe home, grid pe /reviews, badge Google SVG
     servicii/          CateringSection, MenusIntro, ServiciiComplete, WaiterBarSection
     tent/              TentAtLocationBanner, TentGallery, TentVideos
     Hero.tsx           Hero full-bleed cu mască arc SVG (pagini secundare)
@@ -59,6 +60,8 @@ components/
   ~~JsonLd.tsx~~ — șters (2026-03-21): era client-side only; folosește prop `structuredData` pe `<Seo>`
 
 data/
+  google-reviews.json  recenzii Google Business Profile — fișier UNIC (array JSON); creat gol ([]) 2026-07-05;
+                       recenziile se adaugă manual din /admin/google-reviews (WRITE via GitHub API); public citit din fs la build (SSG)
   gallery.json         catalog imagini galerie (generat de scripts/build-gallery.mjs)
   galleryCaptions.json capțiuni galerie
   blog/                articole blog — fișiere Markdown cu front-matter gray-matter (`*.md`); citite via `lib/blog.server.ts`
@@ -89,9 +92,13 @@ lib/
                        ~~imap.ts~~ — șters (2026-03-23)
                        ~~gmail.ts~~ — șters (2026-03-24)
   gallery/             schema.ts — validare și tipuri galerie
+  googleReviews.ts     server-only (fs + GitHub API): getGoogleReviews, getGoogleReviewsStats (fs, SSG),
+                       getGoogleReviewsFromGit (GitHub API, admin), createGoogleReview, deleteGoogleReview (GitHub API);
+                       tipuri GoogleReview, GoogleRating, GoogleReviewsStats — NU importa din client (doar `import type`)
   mail/                offerRequestEmail.ts — template email ofertă
   seo/                 menuJsonLd.ts — structured data meniuri
-  validation/          offerRequest.ts — validare Zod pentru ofertă
+  validation/          offerRequest.ts — validare Zod pentru ofertă; googleReview.ts — Zod schema recenzii Google
+                       (reviewUrl validat prefix https://www.google.com/maps sau https://maps.app.goo.gl)
   blog.server.ts       server-only — citire articole blog din `data/blog/*.md` (fs + gray-matter + marked); exportă `getAllPosts`, `getPostBySlug`, `getAllPostsAdmin`, `getRelatedByTags`, `buildMarkdownFile`, `titleToSlug`
                        ~~blogData.ts~~ — înlocuit cu `lib/blog.server.ts`
   config.ts            centrul de adevăr: SITE, CONTACT, THEME, SOCIAL_URLS, BASE_PATH, helpers URL
@@ -110,7 +117,7 @@ pages/
   galerie.tsx          Galerie foto
   contact.tsx          Contact + ofertă
   cort-evenimente-la-locatia-ta.tsx   Landing cort extern
-  reviews.tsx          Pagina recenzii (SSR — GitHub API data/reviews/*.json, status: approved, !deleted)
+  reviews.tsx          Pagina recenzii (SSG — data/google-reviews.json via fs, GoogleReviews mode="page", aggregateRating din stats, fără formular)
   blog/index.tsx       Blog — lista articole
   blog/[slug].tsx      Articol individual
   meniuri/[slug].tsx   Pagina dinamică meniu
@@ -120,7 +127,8 @@ pages/
     login.tsx          Login admin (cookie httpOnly, bypass Layout public, înregistrare admin-sw.js)
     inbox/index.tsx    Lista mesaje (contact + ofertă din data/messages/) + soft delete + paginare
     inbox/[id].tsx     Detaliu mesaj + buton mailto: pentru răspuns extern
-    reviews.tsx        Moderare recenzii — approve / reject / delete (soft delete via `deleted: true`)
+    reviews.tsx        Moderare recenzii — approve / reject / delete (soft delete via `deleted: true`) — sistemul VECHI, neutilizat public
+    google-reviews.tsx Recenzii Google — listă + formular adăugare + delete (data/google-reviews.json via GitHub API)
     menus/index.tsx    Lista meniuri (SSR fs) + butoane Edit/Șterge/Restaurează (soft delete)
     menus/new.tsx      Formular creare meniu nou — POST via GitHub API
     menus/[slug].tsx   Formular editare meniu (SSR fs prefill) — PATCH via GitHub API; upload imagine separat
@@ -194,7 +202,7 @@ types/
 | `/galerie`                       | `pages/galerie.tsx`                       | Galerie foto cu lightbox YARL + Zoom                                              |
 | `/contact`                       | `pages/contact.tsx`                       | Contact (tel/email/adresă), hartă cu consent, formular contact, formular ofertă   |
 | `/cort-evenimente-la-locatia-ta` | `pages/cort-evenimente-la-locatia-ta.tsx` | Landing serviciu cort extern — video, galerie, motivație                          |
-| `/reviews`                       | `pages/reviews.tsx`                       | Recenzii clienți (SSR — GitHub API `data/reviews/*.json`, status approved, !deleted) |
+| `/reviews`                       | `pages/reviews.tsx`                       | Recenzii Google (SSG — `data/google-reviews.json` via fs, fără formular)          |
 | `/blog`                          | `pages/blog/index.tsx`                    | Lista articole blog (SEO)                                                         |
 | `/blog/[slug]`                   | `pages/blog/[slug].tsx`                   | Articol individual cu Hero full-bleed                                             |
 | `/meniuri/[slug]`                | `pages/meniuri/[slug].tsx`                | Pagina dinamică meniu — detalii, prețuri, galerie                                 |
@@ -209,7 +217,8 @@ types/
 | `/admin/login`          | `pages/admin/login.tsx`          | Autentificare — email + parolă, setează cookie sesiune; redirect spre `/admin`; înregistrează admin-sw.js |
 | `/admin/inbox`          | `pages/admin/inbox/index.tsx`    | Lista mesaje (contact/ofertă din `data/messages/`) + soft delete + paginare       |
 | `/admin/inbox/[id]`     | `pages/admin/inbox/[id].tsx`     | Detaliu mesaj + buton mailto: pentru răspuns extern                                |
-| `/admin/reviews`        | `pages/admin/reviews.tsx`        | Moderare recenzii pending — approve / reject / delete (soft delete)                |
+| `/admin/reviews`        | `pages/admin/reviews.tsx`        | Moderare recenzii pending — approve / reject / delete (soft delete) — sistem vechi |
+| `/admin/google-reviews` | `pages/admin/google-reviews.tsx` | Recenzii Google — listă + formular adăugare + delete (GitHub API)                  |
 | `/admin/menus`          | `pages/admin/menus/index.tsx`    | Lista meniuri (SSR fs, include deleted) + soft delete / restaurare                 |
 | `/admin/menus/new`      | `pages/admin/menus/new.tsx`      | Formular creare meniu nou — POST via GitHub API                                    |
 | `/admin/menus/[slug]`   | `pages/admin/menus/[slug].tsx`   | Formular editare (SSR fs prefill) — PATCH câmpuri + upload imagine via GitHub API  |
@@ -241,6 +250,9 @@ types/
 | `/api/admin/messages/[id]`             | PATCH  | `{ action: "delete" }` soft delete — `deleted: true` în JSON via GitHub API |
 | `/api/admin/reviews`                   | GET    | Listează recenzii (GitHub API `data/reviews/`) cu filtru opțional `?status=` |
 | `/api/admin/reviews/[id]`              | PATCH  | Moderare: `{ action: "approve" \| "reject" \| "delete" }` — scrie JSON via GitHub API |
+| `/api/admin/google-reviews`            | GET    | Listează recenziile Google (GitHub API `data/google-reviews.json`, fresh)          |
+| `/api/admin/google-reviews/create`     | POST   | Adaugă recenzie Google — Zod (`lib/validation/googleReview.ts`) + `getFile`/`updateFile` |
+| `/api/admin/google-reviews/[id]/delete`| DELETE | Ștergere atomică — `getFile` → filtrare array → `updateFile` cu sha                |
 | `/api/admin/menus`                     | GET    | Listează toate meniurile (fs local, include deleted), sortate slug |
 | `/api/admin/menus`                     | POST   | Creează meniu nou — `createFile` via GitHub API                    |
 | `/api/admin/menus/[slug]`              | GET    | Detaliu meniu (fs local, include deleted)                          |
@@ -427,10 +439,24 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 - `styles/admin/blog.css.ts` — stiluri pagini admin blog
 - **Principiu READ/WRITE blog:** GET citește din fs local (`lib/blog.server.ts`) — rapid; WRITE merge via GitHub API → persistă în `data/blog/` pe `main`
 
-### Recenzii
+### Google Reviews (GBP) — sistemul ACTIV (2026-07-05, PR ZE-162)
 
+- `data/google-reviews.json` — fișier unic (array JSON); creat gol; recenziile se adaugă manual din admin după deploy
+- `lib/googleReviews.ts` — server-only: `getGoogleReviews()` + `getGoogleReviewsStats()` (fs, build-time SSG); `getGoogleReviewsFromGit()` (GitHub API, admin SSR); `createGoogleReview()` + `deleteGoogleReview()` (GitHub API, `getFile` → mutație array → `updateFile` cu sha)
+- `lib/validation/googleReview.ts` — Zod: `authorName` (2–80), `rating` (union literal 1–5), `text` (5–3000), `date` (YYYY-MM-DD), `reviewUrl` opțional cu prefix `https://www.google.com/maps` sau `https://maps.app.goo.gl`
+- `components/sections/GoogleReviews.tsx` — props `{ items, stats, mode: "home"|"page", fullBleed? }`; marquee 2 benzi pe home (conținut dublat x2, minim 8 carduri/bandă), grid 1/2/4 pe page; badge logo Google SVG (culori brand — excepție legitimă de la tokens); link „Vezi pe Google →" cu `rel="noopener noreferrer"` (fallback `SOCIAL_URLS.googleMaps`); randează `null` când `items` e gol
+- `styles/sections/googleReviews.css.ts` — Vanilla Extract, doar tokens `vars`
+- `pages/admin/google-reviews.tsx` — SSR (`verifyAdminSession` + `getGoogleReviewsFromGit`); formular adăugare + listă cu delete (`lay.deleteBtn`); refolosește stiluri din `styles/admin/reviews.css.ts` + `styles/admin/menus.css.ts`
+- `pages/api/admin/google-reviews/` — `index.ts` (GET), `create.ts` (POST + Zod), `[id]/delete.ts` (DELETE atomic); toate cu `verifyAdminSession` + `errorResponse()`
+- `SOCIAL_URLS.googleMaps` în `lib/config.ts` — URL GBP fix (`https://www.google.com/maps/place/ChIJqe6HRAIjtEARUT73PVztMnA`); inclus în `sameAs` JSON-LD pe homepage și `/reviews`
+- **Public = SSG:** homepage și `/reviews` citesc din fs la build — o recenzie adăugată/ștearsă din admin apare public abia la următorul deploy (commit-ul GitHub API declanșează redeploy Vercel automat)
+- `aggregateRating` pe `/reviews` din `getGoogleReviewsStats()`; omis din JSON-LD când `ratingCount === 0`
+
+### Recenzii (sistem VECHI — local, neutilizat public din 2026-07-05)
+
+- Rămâne intact în cod (out of scope ZE-162): `lib/reviews.ts`, `Reviews.tsx`, `ReviewsForm.tsx`, `pages/api/review-submit.ts`, `pages/api/admin/reviews/*`, `pages/admin/reviews.tsx`, `data/reviews.json`, `data/reviews/*.json`
 - `components/sections/reviews/Reviews.tsx`, `ReviewsForm.tsx`
-- `pages/reviews.tsx` — **SSR** — citește din `data/reviews/` via GitHub API (`listFiles` + `getFile`), filtrează `status='approved' && !deleted`
+- ~~`pages/reviews.tsx` citea din `data/reviews/` via GitHub API~~ — rescris 2026-07-05: acum SSG pe `data/google-reviews.json` (vezi secțiunea Google Reviews)
 - `pages/api/review-submit.ts` — primește recenzia + opțional foto (base64); procesează cu `sharp` → WebP 400×400 q85; uploadează foto via `uploadImage()` în `public/images/profiles/`; salvează JSON în `data/reviews/review-{ts}-{id}.json` via `createFile()` (status: pending)
 - `pages/api/admin/reviews/index.ts` — GET: citește toate recenziile din `data/reviews/` via GitHub API; filtru `?status=`; exclude `deleted`
 - `pages/api/admin/reviews/[id].ts` — PATCH: `approve` / `reject` → scrie `publishedAt` + status; `delete` → setează `deleted: true`; toate prin `getFile` + `updateFile`
@@ -481,6 +507,17 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 ---
 
 ## 8. Ce este deschis / în lucru
+
+**~~Google Reviews GBP — înlocuire sistem recenzii locale~~ ✓ ÎNCHIS 2026-07-05** (issue #162, branch feat/ZE-162-google-reviews)
+- `data/google-reviews.json` creat gol (`[]`) — recenziile se adaugă manual din `/admin/google-reviews` după deploy
+- `lib/googleReviews.ts` + `lib/validation/googleReview.ts` create — vezi secțiunea „Google Reviews (GBP)" din §7
+- `components/sections/GoogleReviews.tsx` + `styles/sections/googleReviews.css.ts` create — marquee home / grid page
+- `pages/index.tsx` — swap `Reviews` → `GoogleReviews` (dynamic ssr:false), `getStaticProps` din `getGoogleReviews()`, `sameAs` include GBP
+- `pages/reviews.tsx` — rescris: SSG (`getStaticProps`), `GoogleReviews mode="page"`, `aggregateRating` din stats, fără formular public
+- `pages/admin/google-reviews.tsx` + `pages/api/admin/google-reviews/` (index GET / create POST / [id]/delete DELETE) create
+- `components/admin/AdminLayout.tsx` — `IconGoogleReviews` + intrare NAV „Google Reviews"
+- `lib/config.ts` — `SOCIAL_URLS.googleMaps` (URL GBP fix)
+- Sistemul vechi de recenzii rămâne intact în cod, neutilizat public
 
 **~~Billing KonceptID — șterge factură CSS, IDs reale, filtru webhook~~ ✓ ÎNCHIS 2026-06-13** (PR #160, branch fix/ZE-160-billing-fix)
 - `data/konceptid/invoices/invoice-1781052797383.json` — șters din GitHub (factură FraternitaCSS 150 RON, ruxir24@gmail.com, apărută din cauza că ambele webhook-uri sunt pe același cont Stripe)
@@ -820,6 +857,8 @@ scripts/optimise-videos.mjs
 - Nu returna erori cu `{ ok: false, message }` în API routes admin — folosește `errorResponse()` din `lib/admin/response.ts` care produce `{ ok: false, error }`
 - Nu randa conținut din Git/DB în admin fără `sanitizeHtml()` — orice `dangerouslySetInnerHTML` trebuie trecut prin `sanitizeHtml()`
 - Nu rula `scripts/migrate-reviews.ts` din nou — a fost rulat 2026-05-19 și `data/reviews/` e deja populat; o a doua rulare ar crea duplicate
+- Nu importa `lib/googleReviews.ts` din componente client cu import de valori — conține `import fs`; în componente folosește doar `import type`
+- Nu re-conecta sistemul vechi de recenzii (`Reviews.tsx`, `ReviewsForm.tsx`, `data/reviews/`) în paginile publice — a fost înlocuit cu `GoogleReviews` (ZE-162); rămâne în cod dar neutilizat
 - Nu rula `scripts/migrate-menus.mjs` din nou — a fost rulat 2026-05-20 și `data/menus/` e deja populat; o a doua rulare ar suprascrie modificările admin
 - Nu importa `lib/menus.server.ts` din componente client sau pagini fără `getStaticProps`/`getServerSideProps` — conține `import fs` la nivel de modul și va cauza `Module not found: Can't resolve 'fs'` în bundle-ul client
 - Nu folosi GitHub API pentru READ în paginile admin de meniuri — GET citește din fs local (`lib/menus.server.ts`); GitHub API exclusiv pentru WRITE (createFile, updateFile, uploadImage)
