@@ -95,7 +95,7 @@ const trackClass = style({
   display: "flex",
   gap: vars.space.md,
   alignItems: "stretch",
-  animationDuration: "45s",
+  animationDuration: "12.5s",
   animationTimingFunction: "linear",
   animationIterationCount: "infinite",
   willChange: "transform",
