@@ -101,7 +101,7 @@ lib/
                        (reviewUrl validat prefix https://www.google.com/maps sau https://maps.app.goo.gl)
   blog.server.ts       server-only — citire articole blog din `data/blog/*.md` (fs + gray-matter + marked); exportă `getAllPosts`, `getPostBySlug`, `getAllPostsAdmin`, `getRelatedByTags`, `buildMarkdownFile`, `titleToSlug`
                        ~~blogData.ts~~ — înlocuit cu `lib/blog.server.ts`
-  config.ts            centrul de adevăr: SITE, CONTACT, THEME, SOCIAL_URLS, BASE_PATH, helpers URL
+  config.ts            centrul de adevăr: SITE, CONTACT, COMPANY (date legale firmă), THEME, SOCIAL_URLS, BASE_PATH, helpers URL
   gallery.ts / gallery.data.ts / gallery.store.ts   parsing, mapare, store galerie
   menus.ts             logică domeniu meniuri — pur, client-safe (doar getEventTypeAnchorHref)
   menus.server.ts      server-only (fs la build-time + GitHub API la runtime): getAllMenus, getAllMenusAdmin, getMenuBySlug, getAllMenusFromGit, getMenuBySlugFromGit
@@ -507,6 +507,12 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 ---
 
 ## 8. Ce este deschis / în lucru
+
+**~~Footer — date legale firmă BRILIANTS EVENTS SRL~~ ✓ ÎNCHIS 2026-07-05** (issue #165, PR #166, squash-merged pe main, commit `c6e5dc1`)
+- `lib/config.ts` — obiect `COMPANY` exportat (`name`, `cui`, `regCom`, `euid`, `founded`, `address`) — sursă unică date legale firmă, consistent cu `SITE`/`CONTACT`/`SOCIAL_URLS`
+- `styles/footer.css.ts` — export `footerLegalClass` (flex column, gap 2px, `vars.space.sm`, `vars.typography.size.xs`, `vars.color.muted`, centrat)
+- `components/Footer.tsx` — bloc legal cu 3 linii DUPĂ linia de copyright, ÎNAINTE de linia „marcă în curs de înregistrare": `{siteName} este proprietate a:` / date firmă (CUI, Reg. Com., EUID, data înființării) / adresă sediu; consumă exclusiv `COMPANY` din config, zero hardcodări
+- Firma operatoare: **BRILIANTS EVENTS SRL**, CUI 42683588, J39/405/2020, EUID ROONRC.J39/405/2020, înființată 2020-06-25, sediu Bdul. Independenței 3, Focșani
 
 **~~Google Reviews GBP — înlocuire sistem recenzii locale~~ ✓ ÎNCHIS 2026-07-05** (issue #162, PR #164 squash-merged pe main, commit `58ffc71`)
 - `data/google-reviews.json` creat și seeded cu cele 3 recenzii reale GBP (Cosmin Instyle, Vasilica Sofronie, Burcsa Matei — toate 5★); câmpurile snake_case din sursa GBP mapate la schema camelCase din `lib/googleReviews.ts`
