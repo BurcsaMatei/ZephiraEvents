@@ -170,6 +170,8 @@ export const SOCIAL_URLS = {
   facebook: normalizeUrl(process.env.NEXT_PUBLIC_FB_URL, { requireProtocol: true }),
   instagram: normalizeUrl(process.env.NEXT_PUBLIC_IG_URL, { requireProtocol: true }),
   tiktok: normalizeUrl(process.env.NEXT_PUBLIC_TT_URL, { requireProtocol: true }),
+  /** Google Business Profile — sursă unică pentru sameAs (JSON-LD) și link-urile „Vezi pe Google" */
+  googleMaps: "https://www.google.com/maps/place/ChIJqe6HRAIjtEARUT73PVztMnA",
 } as const;
 
 // ==============================
