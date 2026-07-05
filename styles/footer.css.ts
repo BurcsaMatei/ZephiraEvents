@@ -142,6 +142,17 @@ export const iconTiktok = style({
   maskImage: "url('/icons/tiktok.svg')",
 });
 
+// Date legale firmă
+export const footerLegalClass = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: "2px",
+  marginTop: vars.space.sm,
+  fontSize: vars.typography.size.xs,
+  color: vars.color.muted,
+  textAlign: "center",
+});
+
 // Copy
 export const footerCopyClass = style({
   display: "block",

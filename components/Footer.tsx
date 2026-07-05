@@ -7,13 +7,14 @@
 // ==============================
 import Link from "next/link";
 
-import { SITE, withBase } from "../lib/config";
+import { COMPANY, SITE, withBase } from "../lib/config";
 import { SOCIAL as SOCIAL_DATA, type SocialKind } from "../lib/nav";
 import {
   footerClass,
   footerCopyClass,
   footerDividerClass,
   footerInnerClass,
+  footerLegalClass,
   footerLinksRowClass,
   footerLogoBoxClass,
   footerLogoImg,
@@ -72,6 +73,15 @@ export default function Footer(): JSX.Element {
               <span className={s.iconClass} aria-hidden />
             </ExternalLink>
           ))}
+        </div>
+
+        {/* Date legale firmă */}
+        <div className={footerLegalClass}>
+          <span>
+            {COMPANY.name} · CUI {COMPANY.cui} · {COMPANY.regCom} · EUID {COMPANY.euid} ·
+            Înființată {COMPANY.founded}
+          </span>
+          <span>{COMPANY.address}</span>
         </div>
 
         {/* Text copyright */}

@@ -164,6 +164,18 @@ export const CONTACT = {
 } as const;
 
 // ==============================
+// Company (date legale firmă)
+// ==============================
+export const COMPANY = {
+  name: "BRILIANTS EVENTS SRL",
+  cui: "42683588",
+  regCom: "J39/405/2020",
+  euid: "ROONRC.J39/405/2020",
+  founded: "2020-06-25",
+  address: "Bdul. Independenței 3, Bl. 3, Sc. 1, Et. 7, Ap. 28, Focșani, Vrancea, 620015",
+} as const;
+
+// ==============================
 // Social
 // ==============================
 export const SOCIAL_URLS = {
