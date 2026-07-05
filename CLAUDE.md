@@ -60,8 +60,8 @@ components/
   ~~JsonLd.tsx~~ — șters (2026-03-21): era client-side only; folosește prop `structuredData` pe `<Seo>`
 
 data/
-  google-reviews.json  recenzii Google Business Profile — fișier UNIC (array JSON); creat gol ([]) 2026-07-05;
-                       recenziile se adaugă manual din /admin/google-reviews (WRITE via GitHub API); public citit din fs la build (SSG)
+  google-reviews.json  recenzii Google Business Profile — fișier UNIC (array JSON); seeded 2026-07-05 cu cele 3 recenzii reale GBP;
+                       recenziile se adaugă/șterg din /admin/google-reviews (WRITE via GitHub API); public citit din fs la build (SSG)
   gallery.json         catalog imagini galerie (generat de scripts/build-gallery.mjs)
   galleryCaptions.json capțiuni galerie
   blog/                articole blog — fișiere Markdown cu front-matter gray-matter (`*.md`); citite via `lib/blog.server.ts`
@@ -441,10 +441,10 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 
 ### Google Reviews (GBP) — sistemul ACTIV (2026-07-05, PR ZE-162)
 
-- `data/google-reviews.json` — fișier unic (array JSON); creat gol; recenziile se adaugă manual din admin după deploy
+- `data/google-reviews.json` — fișier unic (array JSON); seeded cu cele 3 recenzii reale GBP (5.0/5); format camelCase: `{ id, authorName, rating, text, date (YYYY-MM-DD), reviewUrl?, createdAt }` — NU snake_case (`author_name`/`body`/`review_url` din exporturi GBP se mapează la scheme camelCase)
 - `lib/googleReviews.ts` — server-only: `getGoogleReviews()` + `getGoogleReviewsStats()` (fs, build-time SSG); `getGoogleReviewsFromGit()` (GitHub API, admin SSR); `createGoogleReview()` + `deleteGoogleReview()` (GitHub API, `getFile` → mutație array → `updateFile` cu sha)
 - `lib/validation/googleReview.ts` — Zod: `authorName` (2–80), `rating` (union literal 1–5), `text` (5–3000), `date` (YYYY-MM-DD), `reviewUrl` opțional cu prefix `https://www.google.com/maps` sau `https://maps.app.goo.gl`
-- `components/sections/GoogleReviews.tsx` — props `{ items, stats, mode: "home"|"page", fullBleed? }`; marquee 2 benzi pe home (conținut dublat x2, minim 8 carduri/bandă), grid 1/2/4 pe page; badge logo Google SVG (culori brand — excepție legitimă de la tokens); link „Vezi pe Google →" cu `rel="noopener noreferrer"` (fallback `SOCIAL_URLS.googleMaps`); randează `null` când `items` e gol
+- `components/sections/GoogleReviews.tsx` — props `{ items, stats, mode: "home"|"page", fullBleed? }`; marquee 2 benzi pe home (conținut dublat x2, minim 8 carduri/bandă, `animationDuration: 12.5s`), grid 1/2/4 pe page; badge logo Google SVG (culori brand — excepție legitimă de la tokens); link „Vezi pe Google →" cu `rel="noopener noreferrer"` (fallback `SOCIAL_URLS.googleMaps`); randează `null` când `items` e gol
 - `styles/sections/googleReviews.css.ts` — Vanilla Extract, doar tokens `vars`
 - `pages/admin/google-reviews.tsx` — SSR (`verifyAdminSession` + `getGoogleReviewsFromGit`); formular adăugare + listă cu delete (`lay.deleteBtn`); refolosește stiluri din `styles/admin/reviews.css.ts` + `styles/admin/menus.css.ts`
 - `pages/api/admin/google-reviews/` — `index.ts` (GET), `create.ts` (POST + Zod), `[id]/delete.ts` (DELETE atomic); toate cu `verifyAdminSession` + `errorResponse()`
@@ -508,8 +508,8 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 
 ## 8. Ce este deschis / în lucru
 
-**~~Google Reviews GBP — înlocuire sistem recenzii locale~~ ✓ ÎNCHIS 2026-07-05** (issue #162, branch feat/ZE-162-google-reviews)
-- `data/google-reviews.json` creat gol (`[]`) — recenziile se adaugă manual din `/admin/google-reviews` după deploy
+**~~Google Reviews GBP — înlocuire sistem recenzii locale~~ ✓ ÎNCHIS 2026-07-05** (issue #162, PR #164 squash-merged pe main, commit `58ffc71`)
+- `data/google-reviews.json` creat și seeded cu cele 3 recenzii reale GBP (Cosmin Instyle, Vasilica Sofronie, Burcsa Matei — toate 5★); câmpurile snake_case din sursa GBP mapate la schema camelCase din `lib/googleReviews.ts`
 - `lib/googleReviews.ts` + `lib/validation/googleReview.ts` create — vezi secțiunea „Google Reviews (GBP)" din §7
 - `components/sections/GoogleReviews.tsx` + `styles/sections/googleReviews.css.ts` create — marquee home / grid page
 - `pages/index.tsx` — swap `Reviews` → `GoogleReviews` (dynamic ssr:false), `getStaticProps` din `getGoogleReviews()`, `sameAs` include GBP
@@ -517,6 +517,8 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 - `pages/admin/google-reviews.tsx` + `pages/api/admin/google-reviews/` (index GET / create POST / [id]/delete DELETE) create
 - `components/admin/AdminLayout.tsx` — `IconGoogleReviews` + intrare NAV „Google Reviews"
 - `lib/config.ts` — `SOCIAL_URLS.googleMaps` (URL GBP fix)
+- Marquee accelerat la `12.5s` (inițial 45s) — `animationDuration` pe `trackClass` în `styles/sections/googleReviews.css.ts`
+- `public/llms.txt` + `public/llms-full.txt` actualizate post-merge — recenziile vechi statice înlocuite cu cele 3 recenzii Google reale
 - Sistemul vechi de recenzii rămâne intact în cod, neutilizat public
 
 **~~Billing KonceptID — șterge factură CSS, IDs reale, filtru webhook~~ ✓ ÎNCHIS 2026-06-13** (PR #160, branch fix/ZE-160-billing-fix)
