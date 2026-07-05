@@ -75,19 +75,20 @@ export default function Footer(): JSX.Element {
           ))}
         </div>
 
+        {/* Text copyright */}
+        <span className={footerCopyClass}>
+          © {new Date().getFullYear()} {siteName} — All rights reserved.
+        </span>
+
         {/* Date legale firmă */}
         <div className={footerLegalClass}>
+          <span>{siteName} este proprietate a:</span>
           <span>
             {COMPANY.name} · CUI {COMPANY.cui} · {COMPANY.regCom} · EUID {COMPANY.euid} ·
             Înființată {COMPANY.founded}
           </span>
           <span>{COMPANY.address}</span>
         </div>
-
-        {/* Text copyright */}
-        <span className={footerCopyClass}>
-          © {new Date().getFullYear()} {siteName} — All rights reserved.
-        </span>
         <span className={footerCopyClass}>
           ZephiraEvents™ — marcă în curs de înregistrare.{" "}
           <Link href={withBase("/marca")}>Detalii marcă</Link>
