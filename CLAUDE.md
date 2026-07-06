@@ -145,8 +145,8 @@ public/
   icons/, masks/, screenshots/
   admin-manifest.json  PWA manifest dedicat admin (name: ZephiraEvents Admin, scope: /admin/)
   admin-sw.js          Service worker admin izolat — cache minimal /admin/*, network-first
-  llms.txt             Index pentru crawlere AI (llms.txt standard) — actualizat manual la schimbări majore de conținut
-  llms-full.txt        Versiunea extinsă cu conținut complet — include meniuri detaliate, articole blog, recenzii, FAQ (creat 2026-05-20)
+  llms.txt             Index pentru crawlere AI (llms.txt standard) — GENERAT la postbuild de scripts/build-llms.ts; gitignored
+  llms-full.txt        Versiunea extinsă (meniuri detaliate, blog, recenzii, FAQ) — GENERAT la postbuild; gitignored (NU edita manual)
   ~~sw.js~~            generat de next-pwa la build — în .gitignore
   ~~workbox-*.js~~     generat de next-pwa la build — în .gitignore
   ~~fallback-*.js~~    generat de next-pwa la build — în .gitignore
@@ -155,6 +155,7 @@ scripts/
   build-gallery.mjs    generează lib/gallery.data.ts + data/gallery.json (rulat la prebuild)
   build-menus-index.mjs generează data/menus-index.json din data/menus/*.json (rulat la prebuild, filtru deleted)
   build-rss.ts         generează public/rss.xml + public/feed.xml (rulat la postbuild)
+  build-llms.ts        generează public/llms.txt + public/llms-full.txt din surse live (rulat la postbuild); gitignored
   generate-og.mjs      generează OG images statice pentru cele 8 pagini fixe (Puppeteer)
   ~~gmail-auth.mjs~~   șters (2026-03-24): nu mai e necesar — sync via IMAP Edge Function
   migrate-menus.mjs    one-time: migrează data/menus.json → data/menus/*.json (RULAT 2026-05-20)
@@ -311,7 +312,7 @@ types/
 - `twitter:creator` se transmite via prop pe `<Seo>` (ex: din `post.author` în `/blog/[slug]`)
 - `trailingSlash: false` explicit în `next.config.mjs` — `canonical()` și `absoluteUrl()` sunt aliniate
 - `canonical` este omis automat de `<Seo>` când `noindex={true}` — nu adăuga `noindex` și `canonical` simultan
-- `public/llms.txt` — actualizează-l la fiecare schimbare majoră de conținut (meniuri noi, pagini noi, prețuri modificate); `public/llms-full.txt` conține meniuri detaliate, blog, recenzii și FAQ — actualizează simultan
+- `public/llms.txt` + `public/llms-full.txt` — GENERATE automat la postbuild de `scripts/build-llms.ts` din surse live (meniuri, blog, recenzii, config, FAQ din `lib/faq.ts`); gitignored — **NU le edita manual** (modificările se pierd la build). Conținutul se schimbă editând sursa (date sau `lib/faq.ts` / proza-șablon din generator)
 
 ---
 
@@ -511,6 +512,18 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 ---
 
 ## 8. Ce este deschis / în lucru
+
+**AEO/GEO — Faza 3: automatizare llms.txt ✓ IMPLEMENTATĂ 2026-07-07** (issue #168, branch `feat/ZE-168-faza3-automatizare-llms`)
+- `scripts/build-llms.ts` creat — generator hibrid (tsx, model `build-rss.ts`): proză editorială fixă (constante) + secțiuni auto din date live (meniuri via `getAllMenus`, blog via `getAllPosts` cu `excerpt`, recenzii via `getGoogleReviews`, FAQ via `lib/faq.ts`); încarcă `.env.local` dacă există (dev), altfel env real (Vercel); import DINAMIC al modulelor după `loadEnvLocal()` (config citește `process.env` la evaluare)
+- `lib/faq.ts` creat — `FAQ_ITEMS` + `MAX_CAPACITY` mutate din `pages/faq.tsx`; sursă UNICĂ partajată de `/faq` (vizibil + `FAQPage` JSON-LD) ȘI de generatorul llms; client-safe (fără fs)
+- `pages/faq.tsx` — importă `FAQ_ITEMS` din `lib/faq.ts` (pagina + JSON-LD identice)
+- `package.json` — script `llms:build`; `postbuild` = `rss:build && llms:build`
+- `.gitignore` — `/public/llms.txt` + `/public/llms-full.txt` adăugate; scoase din tracking (`git rm --cached`) — regenerate la build ca `rss.xml`
+- Model HIBRID: automatizează exact partea volatilă (prețuri, liste feluri, articole, recenzii); țara „RO" (cod ISO env) → „România" în proză; rating `toFixed(1)` → „5.0"; meniuri sortate `pricePerPers` apoi slug, grupate pe eventType în ordine fixă
+- **Regula manuală „actualizează llms.txt la schimbări majore" a devenit OBSOLETĂ** — ștearsă din CLAUDE.md (§5 + §9); conținutul se schimbă acum editând sursa
+- **De semnalat (config/date reale, out of scope #168):** `NEXT_PUBLIC_TT_URL` din env = `@zephiraevents` (lipsește `.ro` — posibil bug ce afectează și linkul TikTok din footer live); câteva titluri de meniu din `data/menus/*.json` au probleme de calitate (ex. „Meniu: petreceri Petreceri Private…") — generatorul le reflectă fidel; cleanup separat recomandat
+- typecheck + lint + build verde; `llms:build` confirmat că rulează în postbuild; paritate de conținut cu fișierele vechi (verificat prin diff)
+- **Issue #168 COMPLET** — toate cele 3 faze închise (2a, 2b, 3 + Faza 1 FAQ/EventVenue)
 
 **AEO/GEO — Faza 2b: schema HowTo pe blog ✓ IMPLEMENTATĂ 2026-07-07** (issue #168, branch `feat/ZE-168-faza2b-blog-schema`)
 - `data/blog-schema.json` creat — mapare slug → `{ howTo: { name, steps: [{name, text}] } }` pentru cele 4 ghiduri reale; sursă DECUPLATĂ de fluxul admin (`buildMarkdownFile` rescrie doar câmpuri flat → front-matter-ul de schema s-ar fi șters la primul edit; de aceea NU e în `.md`)
@@ -757,6 +770,14 @@ scripts/build-menus-index.mjs
   Filtru: exclude deleted. Output: [{slug, title, eventType}] — 17 intrări.
   Rulat automat la prebuild (npm run build).
 
+scripts/build-llms.ts
+  Generează public/llms.txt + public/llms-full.txt din surse LIVE (model hibrid).
+  Surse: getAllMenus (prețuri/feluri), getAllPosts (blog, excerpt), getGoogleReviews (recenzii),
+  lib/faq.ts (FAQ partajat), lib/config + env (contact/operator).
+  Rulat automat la postbuild (npm run build → rss:build && llms:build). Fișierele sunt gitignored.
+  Încarcă .env.local dacă există (dev); pe Vercel folosește env-ul real. Import dinamic după loadEnvLocal.
+  Conținutul se schimbă editând SURSA (date sau lib/faq.ts / proza-șablon din script), NU output-ul.
+
 scripts/migrate-menus.mjs
   One-time migration: data/menus.json → data/menus/*.json.
   RULAT 2026-05-20 — 17 meniuri migrate. NU rula din nou.
@@ -911,7 +932,8 @@ scripts/optimise-videos.mjs
 - Nu adăuga `export { SITE_URL }` sau alte alias-uri moarte în `lib/config.ts` — `SITE.url` este sursa canonică
 - Nu adăuga `og:image:type` manual în pagini — se derivă automat în `components/Seo.tsx`
 - Nu pune `canonical` și `noindex` simultan — `<Seo>` omite canonical automat când `noindex=true`
-- Nu lăsa `public/llms.txt` desincronizat la schimbări majore (meniuri noi, pagini noi, prețuri modificate)
+- Nu edita manual `public/llms.txt` / `public/llms-full.txt` — sunt generate la postbuild de `scripts/build-llms.ts` și gitignored; editează sursa (date sau `lib/faq.ts`), nu output-ul
+- Nu commita `public/llms.txt` / `public/llms-full.txt` — sunt în `.gitignore` (generate la build, ca `rss.xml`)
 - Nu scrie recenzii în Supabase — Supabase a fost eliminat complet; persistența e exclusiv în Git (`data/reviews/*.json` via GitHub API)
 - Nu committa `public/sw.js`, `public/workbox-*.js`, `public/fallback-*.js` — sunt generate de next-pwa la build și sunt în `.gitignore`
 - Nu adăuga assets imagine în `public/images/` ca JPG sau PNG — folosește WebP; excepții: `og*.jpg` (OG social), `public/icons/*.png` (PWA), `favicon*.png`, `public/logo-dedicat.png` (JSON-LD)
