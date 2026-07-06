@@ -9,8 +9,9 @@ readingTime: 5 min
 deleted: false
 ---
 
+<p><strong>Pe scurt:</strong> stabilește bugetul și lista de invitați, semnează din timp contractele-cheie (locație, catering, foto-video, muzică, decor), aliniază meniul cu stilul vizual printr-o degustare și fixează un timeline clar pentru ziua evenimentului.</p>
 <p>Succesul începe cu planificarea: definește bugetul, listează prioritățile (muzică, decor, foto-video) și stabilește un calendar realist. Vizitează cel puțin două locații în <strong>Focsani</strong> și cere simulări de setup. O <strong>sală de evenimente glamour</strong> oferă infrastructură pentru scenă, lumini și backstage, reducând improvizațiile de ultim moment.</p>
-<h3>Etape recomandate</h3>
+<h3>Care sunt pașii pentru o nuntă reușită?</h3>
 <ol>
   <li><strong>Data și lista de invitați</strong>: estimează capacitatea necesară și verifică disponibilitatea furnizorilor.</li>
   <li><strong>Contracte-cheie</strong>: locație, catering (sondează opțiuni de <strong>restaurante focsani</strong>), foto-video, formație/DJ, decor.</li>

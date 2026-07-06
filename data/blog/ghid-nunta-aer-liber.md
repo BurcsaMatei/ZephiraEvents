@@ -9,8 +9,9 @@ readingTime: 4 min
 deleted: false
 ---
 
+<p><strong>Pe scurt:</strong> o nuntă în aer liber reușită cere un plan B pentru vreme, iluminat ambiental cald și o logistică solidă — scenografie stabilă, generatoare și prelate, plus un catering cu experiență outdoor.</p>
 <p>O nuntă în aer liber creează amintiri spectaculoase, dar cere rigoare. Alege un spațiu cu grădină în <strong>Focsani</strong> care oferă acces rapid la o <strong>sală de evenimente glamour</strong> pentru planul B. Verifică permisele de zgomot, sursele de curent, amplasarea cortului și posibilele trasee pe timp de ploaie.</p>
-<h2>Checklist outdoor</h2>
+<h2>Ce trebuie pregătit pentru o nuntă în aer liber?</h2>
 <ul>
   <li><strong>Scenografie</strong>: altar, alee, seating; asigură pavaj sau platforme stabile.</li>
   <li><strong>Iluminat</strong>: ghirlande calde, baloți de lumină pentru ring, lămpi pe baterie pentru mese.</li>

@@ -9,8 +9,9 @@ readingTime: 3 min
 deleted: false
 ---
 
+<p><strong>Pe scurt:</strong> cu 7 zile înainte, reconfirmă locația și setup-ul, finalizează meniul și alergenii cu cateringul, briefuiește echipa foto-video și muzică, și pregătește un kit de urgență.</p>
 <p>Ultima săptămână înseamnă detalii fine și confirmări. Reia contractele, verifică orele de montaj și demontaj, alocă responsabilități în familie. Imprimă timeline-ul și distribuie-l furnizorilor. În <strong>Focsani</strong>, verifică traseele și parcările, mai ales dacă folosiți shuttle.</p>
-<h3>Task-uri critice</h3>
+<h3>Ce verifici în ultima săptămână înainte de eveniment?</h3>
 <ul>
   <li><strong>Locație</strong>: reconfirmă setup-ul cu managerul unei <strong>săli de evenimente glamour</strong> (aranjament, lumini, AC).</li>
   <li><strong>Catering</strong>: meniu final, alergeni, orele de servire împreună cu <strong>restaurante focsani</strong>.</li>

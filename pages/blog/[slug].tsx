@@ -12,6 +12,7 @@ import Hero from "../../components/sections/Hero";
 import Seo from "../../components/Seo";
 import Separator from "../../components/Separator";
 import { getAllPosts, getPostBySlug, getRelatedByTags } from "../../lib/blog.server";
+import { type BlogHowTo, getBlogHowTo } from "../../lib/blogSchema";
 import { absoluteOgImage, absoluteUrl, SEO_DEFAULTS } from "../../lib/config";
 import { formatDateISOtoRo } from "../../lib/dates";
 import { proseClass } from "../../styles/prose.css";
@@ -23,6 +24,7 @@ type BasePost = NonNullable<ReturnType<typeof getPostBySlug>>;
 type Props = {
   post: BasePost;
   related: { slug: string; title: string }[];
+  howTo: BlogHowTo | null;
 };
 
 // ==============================
@@ -60,6 +62,21 @@ function buildBlogPosting(post: BasePost, canonical: string) {
   } as const;
 }
 
+function buildHowTo(howTo: BlogHowTo, canonical: string, postTitle: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name: howTo.name || postTitle,
+    mainEntityOfPage: canonical,
+    step: howTo.steps.map((s, i) => ({
+      "@type": "HowToStep",
+      position: i + 1,
+      name: s.name,
+      text: s.text,
+    })),
+  } as const;
+}
+
 function formatReadingTime(rt?: string | number): string {
   if (rt == null) return "";
   if (typeof rt === "number" && Number.isFinite(rt) && rt > 0) return `${rt} min`;
@@ -75,10 +92,13 @@ function formatReadingTime(rt?: string | number): string {
 // ==============================
 // Page
 // ==============================
-const BlogPostPage: NextPage<Props> = ({ post, related }) => {
+const BlogPostPage: NextPage<Props> = ({ post, related, howTo }) => {
   const canonical = absoluteUrl(`/blog/${post.slug}`);
   const breadcrumbList = buildBreadcrumbList(canonical, post.title);
   const blogPosting = buildBlogPosting(post, canonical);
+  const structuredData = howTo
+    ? [breadcrumbList, blogPosting, buildHowTo(howTo, canonical, post.title)]
+    : [breadcrumbList, blogPosting];
 
   const reading = formatReadingTime(post.readingTime as unknown as string | number | undefined);
   const lede = `${formatDateISOtoRo(post.date)}${reading ? ` · ${reading}` : ""}`;
@@ -100,7 +120,7 @@ const BlogPostPage: NextPage<Props> = ({ post, related }) => {
         url={canonical}
         image={absoluteOgImage(post.coverImage)}
         {...(post.author ? { twitterCreator: post.author } : {})}
-        structuredData={[breadcrumbList, blogPosting]}
+        structuredData={structuredData}
       />
 
       <section data-full-bleed="true">
@@ -157,8 +177,9 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
   if (!post) return { notFound: true };
 
   const related = getRelatedByTags(slug, 6).map((p) => ({ slug: p.slug, title: p.title }));
+  const howTo = getBlogHowTo(slug);
 
-  return { props: { post, related } };
+  return { props: { post, related, howTo } };
 };
 
 export default BlogPostPage;
