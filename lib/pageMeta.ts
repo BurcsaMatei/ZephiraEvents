@@ -10,7 +10,8 @@ export type PageRoute =
   | "/contact"
   | "/blog"
   | "/cort-evenimente-la-locatia-ta"
-  | "/reviews";
+  | "/reviews"
+  | "/faq";
 
 export interface PageMeta {
   route: PageRoute;
@@ -33,6 +34,7 @@ function normalizeRoute(path: string): PageRoute {
     case "/blog":
     case "/cort-evenimente-la-locatia-ta":
     case "/reviews":
+    case "/faq":
       return clean;
     default:
       return "/";
@@ -102,6 +104,14 @@ const PAGE_META: Record<PageRoute, PageMeta> = {
     description:
       "Descoperă ce spun clienții ZephiraEvents despre nunțile, botezurile, majoratele și evenimentele corporate organizate la sala noastră din Focșani, județul Vrancea. Recenzii reale de la cupluri și firme.",
     subtitle: "Ce spun clienții noștri",
+    heroSrc: "/images/current/hero.webp",
+  },
+  "/faq": {
+    route: "/faq",
+    title: "Întrebări frecvente — sală de evenimente ZephiraEvents, Focșani",
+    description:
+      "Răspunsuri clare despre ZephiraEvents din Focșani, Vrancea — prețuri per persoană, capacitatea sălii (până la 250 de persoane), cort exterior, rezervare, program, personalizare meniu și operatorul legal.",
+    subtitle: "Răspunsuri la cele mai frecvente întrebări despre sală, meniuri și servicii",
     heroSrc: "/images/current/hero.webp",
   },
 };

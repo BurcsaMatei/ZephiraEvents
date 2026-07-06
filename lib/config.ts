@@ -311,6 +311,7 @@ export const STATIC_ROUTES = [
   "/contact",
   "/blog",
   "/reviews",
+  "/faq",
   "/marca",
   "/cookie-policy",
 ] as const;

@@ -70,7 +70,7 @@ const sameAsLinks = [SOCIAL_URLS.instagram, SOCIAL_URLS.tiktok, SOCIAL_URLS.goog
 
 const localBusinessLd = {
   "@context": "https://schema.org",
-  "@type": "LocalBusiness",
+  "@type": ["LocalBusiness", "EventVenue"],
   "@id": `${SITE.url}/#business`,
   name: SITE.name,
   url: absoluteUrl("/"),
@@ -79,6 +79,7 @@ const localBusinessLd = {
     url: absoluteUrl("/logo-dedicat.png"),
   },
   image: absoluteOgImage(SITE.ogImage) || absoluteUrl("/images/og.jpg"),
+  maximumAttendeeCapacity: 250,
   telephone: CONTACT.phone,
   email: CONTACT.email,
   address: {
