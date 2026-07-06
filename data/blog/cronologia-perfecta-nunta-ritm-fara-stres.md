@@ -9,8 +9,9 @@ readingTime: 4 min
 deleted: false
 ---
 
+<p><strong>Pe scurt:</strong> un flux relaxat împarte ziua în patru etape — pregătiri, ceremonie (20–40 min), cină cu momente artistice, apoi party de 2–4 ore — cu pauze de 10–15 minute între ele.</p>
 <p>O cronologie realistă înseamnă pauze mici între momente, timp pentru foto și zero aglomerație. Începe dimineața cu pregătirea ținutelor și detaliilor, rezervă minimum 45 de minute pentru first look și portrete, apoi planifică sosirea invitaților cu 30–45 de minute înainte de ceremonie. O locație centrală în <strong>Focsani</strong> te ajută să reduci deplasările și să respecți orarul.</p>
-<h2>Structura pe scurt</h2>
+<h2>Cum arată cronologia perfectă a zilei de nuntă?</h2>
 <ul>
   <li><strong>Pregătiri</strong>: hair & make-up, detalii (inele, buchet, invitații), foto de atmosferă.</li>
   <li><strong>Ceremonie</strong>: 20–40 min, urmată de felicitări și o sesiune scurtă de grup.</li>

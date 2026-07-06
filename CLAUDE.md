@@ -439,6 +439,9 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 - `pages/api/admin/blog/index.ts` (GET fs / POST GitHub API), `[slug].ts` (GET fs / PATCH GitHub API)
 - `styles/admin/blog.css.ts` — stiluri pagini admin blog
 - **Principiu READ/WRITE blog:** GET citește din fs local (`lib/blog.server.ts`) — rapid; WRITE merge via GitHub API → persistă în `data/blog/` pe `main`
+- `data/blog-schema.json` — mapare slug → date `HowTo` (JSON-LD) pentru ghidurile pas-cu-pas; sursă DECUPLATĂ de `.md` (fluxul admin `buildMarkdownFile` ar șterge front-matter-ul de schema la edit)
+- `lib/blogSchema.ts` — server-only; `getBlogHowTo(slug)` → `BlogHowTo | null`; importat DOAR din `getStaticProps` (conține `import fs`, NU importa din client)
+- **Schema blog:** `HowTo` injectat SSR din `pages/blog/[slug].tsx` doar pentru slug-urile din `data/blog-schema.json`; `FAQPage` pe blog NU se folosește (FAQ-ul e pe `/faq`)
 
 ### Google Reviews (GBP) — sistemul ACTIV (2026-07-05, PR ZE-162)
 
@@ -508,6 +511,17 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 ---
 
 ## 8. Ce este deschis / în lucru
+
+**AEO/GEO — Faza 2b: schema HowTo pe blog ✓ IMPLEMENTATĂ 2026-07-07** (issue #168, branch `feat/ZE-168-faza2b-blog-schema`)
+- `data/blog-schema.json` creat — mapare slug → `{ howTo: { name, steps: [{name, text}] } }` pentru cele 4 ghiduri reale; sursă DECUPLATĂ de fluxul admin (`buildMarkdownFile` rescrie doar câmpuri flat → front-matter-ul de schema s-ar fi șters la primul edit; de aceea NU e în `.md`)
+- `lib/blogSchema.ts` creat — server-only (`import fs`); `getBlogHowTo(slug)` citește `data/blog-schema.json`, validează pași, returnează `BlogHowTo | null`; importat DOAR în `getStaticProps`
+- `pages/blog/[slug].tsx` — prop `howTo`; `buildHowTo()` (schema.org `HowTo` + `HowToStep` cu position); intră în `structuredData` DOAR când slug-ul are date (celelalte articole rămân `[breadcrumb, blogPosting]`)
+- `data/blog/*.md` (4 ghiduri) — titlu secțiune reformulat ca întrebare + paragraf answer-first `<p><strong>Pe scurt:</strong> …</p>` la început: `ghid-nunta-reusita-pasi-esentiali-2025`, `checklist-final-7-zile-pana-la-petrecere`, `cronologia-perfecta-nunta-ritm-fara-stres`, `ghid-nunta-aer-liber`
+- `lib/blog.server.ts` + fluxul admin blog — NEATINSE (evită riscul admin round-trip)
+- **Notă realitate SEO:** Google a scos rich results pentru `HowTo` (2023) și a restrâns `FAQPage` la site-uri gov/health (2023) — markup-ul rămâne valid și util pentru answer engines (GEO), dar NU produce rich snippet Google; acceptance criterion „Rich Results Test verde pe HowTo/FAQ" din issue e obsolet (funcția a fost eliminată de Google, nu de noi)
+- `FAQPage` pe blog: SKIP intenționat (niciun articol nu e Q&A real; FAQ-ul trăiește pe `/faq`)
+- typecheck + lint + build verde; `HowTo`/`HowToStep` confirmate în HTML SSR pe cele 4 ghiduri, absente pe articolul editorial (control)
+- **Rămâne:** Faza 3 (automatizare llms.txt la prebuild)
 
 **AEO/GEO — Faza 2a: răspunsuri answer-first ✓ IMPLEMENTATĂ 2026-07-07** (issue #168, branch `feat/ZE-168-faza2a-answer-first`)
 - `pages/servicii.tsx` — secțiune nouă cu 2 blocuri Q&A: „Cât costă un eveniment?" (prețuri de pornire) + „Câte persoane încap?" (250)

@@ -1,0 +1,94 @@
+{
+  "ghid-nunta-reusita-pasi-esentiali-2025": {
+    "howTo": {
+      "name": "Pașii esențiali pentru o nuntă reușită",
+      "steps": [
+        {
+          "name": "Data și lista de invitați",
+          "text": "Estimează capacitatea necesară și verifică disponibilitatea furnizorilor."
+        },
+        {
+          "name": "Contracte-cheie",
+          "text": "Semnează din timp locația, cateringul, foto-video, formația/DJ și decorul."
+        },
+        {
+          "name": "Degustare și moodboard",
+          "text": "Aliniază gustul meniului cu stilul vizual al evenimentului."
+        },
+        {
+          "name": "Timeline",
+          "text": "Stabilește orele de sosire, ceremonie, cină, tort, momente artistice și after-party."
+        }
+      ]
+    }
+  },
+  "checklist-final-7-zile-pana-la-petrecere": {
+    "howTo": {
+      "name": "Checklist pentru ultima săptămână înainte de eveniment",
+      "steps": [
+        {
+          "name": "Reconfirmă locația",
+          "text": "Verifică setup-ul cu managerul sălii: aranjament, lumini și aer condiționat."
+        },
+        {
+          "name": "Finalizează cateringul",
+          "text": "Confirmă meniul final, alergenii și orele de servire."
+        },
+        {
+          "name": "Briefuiește foto-video și muzică",
+          "text": "Stabilește lista momentelor, brieful pentru anunțuri și testul de sunet și lumină."
+        },
+        {
+          "name": "Pregătește kitul de urgență",
+          "text": "Ac, ață, plasturi, pastile de bază și încărcătoare."
+        }
+      ]
+    }
+  },
+  "cronologia-perfecta-nunta-ritm-fara-stres": {
+    "howTo": {
+      "name": "Cronologia perfectă a zilei de nuntă",
+      "steps": [
+        {
+          "name": "Pregătiri",
+          "text": "Hair & make-up, detalii (inele, buchet, invitații) și foto de atmosferă."
+        },
+        {
+          "name": "Ceremonie",
+          "text": "20–40 de minute, urmată de felicitări și o sesiune scurtă de grup."
+        },
+        {
+          "name": "Cină și momente",
+          "text": "Intrarea mirilor, toasturi, dansul mirilor, tort și surprize."
+        },
+        {
+          "name": "Party",
+          "text": "2–4 ore, cu pauze pentru hidratare și snack bar."
+        }
+      ]
+    }
+  },
+  "ghid-nunta-aer-liber": {
+    "howTo": {
+      "name": "Ce trebuie pregătit pentru o nuntă în aer liber",
+      "steps": [
+        {
+          "name": "Scenografie",
+          "text": "Altar, alee și seating; asigură pavaj sau platforme stabile."
+        },
+        {
+          "name": "Iluminat",
+          "text": "Ghirlande calde, lumini pentru ring și lămpi pe baterie pentru mese."
+        },
+        {
+          "name": "Logistică",
+          "text": "Generatoare, prelate laterale, încălzitoare sau ventilatoare după sezon."
+        },
+        {
+          "name": "Catering",
+          "text": "Coloană dedicată pentru servire, cu echipă experimentată în evenimente outdoor."
+        }
+      ]
+    }
+  }
+}
