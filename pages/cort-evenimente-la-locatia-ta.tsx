@@ -136,6 +136,25 @@ const TentAtLocationPage: NextPage = () => {
 
         <Separator />
 
+        {/* Răspuns answer-first — „unde amplasăm cortul" */}
+        <section className="section">
+          <div className="container">
+            <Appear>
+              <div className={ti.wrap}>
+                <p className={ti.eyebrow}>Întrebări frecvente</p>
+                <h2 className={ti.heading}>Unde puteți amplasa cortul de evenimente?</h2>
+                <p className={ti.lede}>
+                  Amplasăm cortul la locația aleasă de tine — grădini, curți, ferme sau proprietăți
+                  private — oriunde în județul Vrancea și zonele limitrofe, cu organizare completă
+                  A–Z inclusă.
+                </p>
+              </div>
+            </Appear>
+          </div>
+        </section>
+
+        <Separator />
+
         <section className="section">
           <div className="container">
             <TentVideos />
