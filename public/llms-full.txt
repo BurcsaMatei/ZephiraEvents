@@ -19,7 +19,7 @@ Profilul locației: sală de evenimente cu organizare completă A–Z, dedicată
 - Evenimente corporate și team building
 
 **Servicii incluse în pachetul complet:**
-- Locație sală (cu capacitate pentru evenimente private de dimensiuni variate)
+- Locație sală (capacitate de până la 250 de persoane, cu configurații de așezare adaptate evenimentului)
 - Catering & meniuri personalizate (17 variante, 4 categorii)
 - Decor tematic (aranjamente florale, iluminat, semnalistică)
 - Foto-video (echipă proprie sau coordonare cu furnizori externi)
@@ -693,6 +693,9 @@ Data: iunie 2026
 
 **Ce tipuri de evenimente organizați?**
 Nunți, botezuri, cununii civile, majorate, petreceri private, banchete, events corporate și team building. Oferim organizare completă A–Z sau doar locație + catering, în funcție de nevoile clientului.
+
+**Câte persoane încap în sală?**
+Sala găzduiește evenimente private de până la 250 de persoane, cu configurații de așezare adaptate tipului de eveniment (banchet, mese rotunde, ring central de dans). Pagina dedicată: https://zephiraevents.ro/faq
 
 **Care este prețul minim per persoană?**
 Cel mai accesibil meniu de botez pornește de la EUR 46/persoană (Botez Basic). Pentru nunți, prețul de pornire este EUR 56/persoană (Basic). Pentru corporate și petreceri private, prețul de pornire este RON 180/persoană (~EUR 36).

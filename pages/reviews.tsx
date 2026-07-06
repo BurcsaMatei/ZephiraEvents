@@ -48,11 +48,12 @@ export default function ReviewsPage({ items, stats }: Props) {
 
   const localBusinessLd: Json = {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": ["LocalBusiness", "EventVenue"],
     "@id": `${SITE.url}/#business`,
     name: SITE.name,
     url: absoluteUrl("/"),
     telephone: CONTACT.phone,
+    maximumAttendeeCapacity: 250,
     image: absoluteOgImage(SITE.ogImage) || absoluteUrl("/images/og.jpg"),
     address: {
       "@type": "PostalAddress",

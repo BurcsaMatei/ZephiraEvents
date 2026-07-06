@@ -96,6 +96,7 @@ export default function Footer(): JSX.Element {
 
         {/* Link-uri */}
         <div className={footerLinksRowClass}>
+          <Link href={withBase("/faq")}>Întrebări frecvente</Link> ·{" "}
           <Button variant="link" onClick={openSettings} aria-label="Deschide setările de cookie">
             Setări cookie
           </Button>{" "}

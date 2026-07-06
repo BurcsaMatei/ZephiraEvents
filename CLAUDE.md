@@ -1,7 +1,7 @@
 # ZephiraEvents — CLAUDE.md
 
-**Versiune:** v27
-**Data:** 2026-07-05
+**Versiune:** v28
+**Data:** 2026-07-07
 **Status:** activ
 
 ---
@@ -155,7 +155,7 @@ scripts/
   build-gallery.mjs    generează lib/gallery.data.ts + data/gallery.json (rulat la prebuild)
   build-menus-index.mjs generează data/menus-index.json din data/menus/*.json (rulat la prebuild, filtru deleted)
   build-rss.ts         generează public/rss.xml + public/feed.xml (rulat la postbuild)
-  generate-og.mjs      generează OG images statice pentru cele 7 pagini fixe (Puppeteer)
+  generate-og.mjs      generează OG images statice pentru cele 8 pagini fixe (Puppeteer)
   ~~gmail-auth.mjs~~   șters (2026-03-24): nu mai e necesar — sync via IMAP Edge Function
   migrate-menus.mjs    one-time: migrează data/menus.json → data/menus/*.json (RULAT 2026-05-20)
   migrate-reviews.ts   one-time: migrează data/reviews.json → data/reviews/*.json via GitHub API (RULAT 2026-05-19)
@@ -203,6 +203,7 @@ types/
 | `/contact`                       | `pages/contact.tsx`                       | Contact (tel/email/adresă), hartă cu consent, formular contact, formular ofertă   |
 | `/cort-evenimente-la-locatia-ta` | `pages/cort-evenimente-la-locatia-ta.tsx` | Landing serviciu cort extern — video, galerie, motivație                          |
 | `/reviews`                       | `pages/reviews.tsx`                       | Recenzii Google (SSG — `data/google-reviews.json` via fs, fără formular)          |
+| `/faq`                           | `pages/faq.tsx`                           | Întrebări frecvente (SSG static) — `FAQPage` JSON-LD SSR; sursă unică Q&A (vizibil + JSON-LD) |
 | `/blog`                          | `pages/blog/index.tsx`                    | Lista articole blog (SEO)                                                         |
 | `/blog/[slug]`                   | `pages/blog/[slug].tsx`                   | Articol individual cu Hero full-bleed                                             |
 | `/meniuri/[slug]`                | `pages/meniuri/[slug].tsx`                | Pagina dinamică meniu — detalii, prețuri, galerie                                 |
@@ -473,14 +474,14 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 ### SEO / Metadata
 
 - `components/Seo.tsx` — prop `structuredData` pentru JSON-LD SSR; `og:image:type` auto-derivat; prop `twitterCreator`; canonical omis când `noindex=true`; `max-image-preview:large` pe paginile indexate; `og:image:secure_url` emis alături de `og:image`
-- `lib/pageMeta.ts` — metadata + description per pagină (7 rute inclusiv `/reviews`)
+- `lib/pageMeta.ts` — metadata + description per pagină (8 rute inclusiv `/reviews` și `/faq`)
 - `lib/url.ts`
 - `lib/seo/menuJsonLd.ts` — apelat doar din `pages/meniuri/[slug].tsx`; parametri opționali: `pageUrl` (URL absolut pagină) și `toAbsoluteImage` (callback absolutizare imagine)
 - `lib/config.ts` — `CONTACT.geo` cu `lat`/`lng` GPS; `absoluteUrl()` aliniată trailing slash cu `canonical()`; `THEME.pwaThemeColor` marcat `@deprecated`; `IS_DEV` constant module-level
 - `pages/robots.txt.ts`, `pages/sitemap*.ts`
 - `pages/api/og.tsx` — unealtă internă, nu apelată din pagini
 - OG images statice pre-generate: `public/images/og.jpg`, `og-servicii.jpg`, `og-galerie.jpg`, `og-contact.jpg`, `og-blog.jpg`, `og-cort.jpg`, `og-reviews.jpg`
-- Pentru regenerare OG: `npm run generate:og` (necesită `npm run dev` pe `:3000`) — 7 pagini înregistrate (inclusiv `/reviews`)
+- Pentru regenerare OG: `npm run generate:og` (necesită `npm run dev` pe `:3000`) — 8 pagini înregistrate (inclusiv `/reviews` și `/faq`; `og-faq.jpg` de generat la prima rulare)
 - `public/llms.txt` — index AI crawlere; `public/llms-full.txt` — versiunea extinsă cu meniuri detaliate, blog, recenzii, FAQ (creat 2026-05-20 PR #141)
 - `public/logo-dedicat.png` — logo PNG dedicat JSON-LD `LocalBusiness`; trackat în git
 
@@ -507,6 +508,18 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 ---
 
 ## 8. Ce este deschis / în lucru
+
+**AEO/GEO — Faza 1: FAQ + EventVenue ✓ Faza 1 IMPLEMENTATĂ 2026-07-07** (issue #168, branch `feat/ZE-168-faq-eventvenue`)
+- `pages/faq.tsx` creat — pagină SSG statică; `FAQ_ITEMS` = sursă unică (12 Q&A), mapat la lista vizibilă ȘI la `FAQPage` JSON-LD; valori dinamice din config (`CONTACT.phone`, `CONTACT.address`, `COMPANY`, `SITE.name`); capacitate `MAX_CAPACITY = 250`
+- `lib/pageMeta.ts` — `/faq` adăugat (type `PageRoute` + `normalizeRoute` switch + `PAGE_META`); `heroSrc` refolosește `/images/current/hero.webp`
+- `lib/config.ts` — `/faq` adăugat în `STATIC_ROUTES` → intră automat în `sitemap-pages.xml` (fallback priority 0.7 / monthly)
+- `pages/index.tsx` + `pages/reviews.tsx` — `localBusinessLd`: `"@type": ["LocalBusiness","EventVenue"]` (tip multiplu — păstrează semantica LocalBusiness ȘI câștigă `maximumAttendeeCapacity`, proprietate validă pe `Place`/`EventVenue`) + `maximumAttendeeCapacity: 250`
+- `components/Footer.tsx` — link „Întrebări frecvente" → `/faq` în `footerLinksRowClass` (decizie: doar footer, nu nav principal)
+- `scripts/generate-og.mjs` — `/faq` → `og-faq.jpg` (de generat la prima rulare `npm run generate:og`)
+- `public/llms.txt` + `public/llms-full.txt` — link `/faq` + întrebare „câte persoane încap" (250) sincronizate
+- Decizii aplicate: capacitate reală 250 (de la client); `aggregateRating` rămâne DOAR pe `/reviews` (homepage NU-l are — status quo corect per guidelines Google); `EventVenue` prin tip multiplu, NU swap direct (ar fi pierdut `openingHours`/`telephone`/`aggregateRating`)
+- typecheck + lint + build verde; `FAQPage`/`EventVenue`/`maximumAttendeeCapacity` confirmate în HTML SSR
+- **Rămâne:** Faza 2 (answer-first pe pagini comerciale + schema blog) și Faza 3 (automatizare llms.txt) — cicluri separate Prompt 1 → 2
 
 **~~Footer — date legale firmă BRILIANTS EVENTS SRL~~ ✓ ÎNCHIS 2026-07-05** (issue #165, PR #166, squash-merged pe main, commit `c6e5dc1`)
 - `lib/config.ts` — obiect `COMPANY` exportat (`name`, `cui`, `regCom`, `euid`, `founded`, `address`) — sursă unică date legale firmă, consistent cu `SITE`/`CONTACT`/`SOCIAL_URLS`
