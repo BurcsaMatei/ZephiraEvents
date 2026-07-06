@@ -509,6 +509,15 @@ STRIPE_PRICE_ID=...                 # Stripe Price ID pentru subscripția Koncep
 
 ## 8. Ce este deschis / în lucru
 
+**AEO/GEO — Faza 2a: răspunsuri answer-first ✓ IMPLEMENTATĂ 2026-07-07** (issue #168, branch `feat/ZE-168-faza2a-answer-first`)
+- `pages/servicii.tsx` — secțiune nouă cu 2 blocuri Q&A: „Cât costă un eveniment?" (prețuri de pornire) + „Câte persoane încap?" (250)
+- `pages/contact.tsx` — bloc „Cum rezerv o dată?" lângă secțiunea ofertă (telefon din `CONTACT.phone`)
+- `pages/cort-evenimente-la-locatia-ta.tsx` — bloc „Unde puteți amplasa cortul?" (Vrancea + limitrofe)
+- Toate refolosesc `ti.wrap`/`ti.eyebrow`/`ti.heading`/`ti.lede` din `tentIntro.css` — zero stil nou, `<h2>` formulat ca întrebare + răspuns concis citabil
+- FĂRĂ JSON-LD nou pe aceste pagini (evită dublarea `FAQPage` de pe `/faq`) — conținut semantic pur; valori din config (o singură sursă de adevăr, coerent cu `/faq` și `maximumAttendeeCapacity`)
+- typecheck + lint + build verde; cele 4 titluri-întrebări confirmate în HTML SSR
+- **Rămâne:** Faza 2b (schema `HowTo`/`FAQPage` pe blog via front-matter `schemaType` + `howToSteps`/`faqItems`; reformulare titluri secțiuni ca întrebări) și Faza 3 (automatizare llms.txt)
+
 **AEO/GEO — Faza 1: FAQ + EventVenue ✓ Faza 1 IMPLEMENTATĂ 2026-07-07** (issue #168, branch `feat/ZE-168-faq-eventvenue`)
 - `pages/faq.tsx` creat — pagină SSG statică; `FAQ_ITEMS` = sursă unică (12 Q&A), mapat la lista vizibilă ȘI la `FAQPage` JSON-LD; valori dinamice din config (`CONTACT.phone`, `CONTACT.address`, `COMPANY`, `SITE.name`); capacitate `MAX_CAPACITY = 250`
 - `lib/pageMeta.ts` — `/faq` adăugat (type `PageRoute` + `normalizeRoute` switch + `PAGE_META`); `heroSrc` refolosește `/images/current/hero.webp`

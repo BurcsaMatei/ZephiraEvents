@@ -157,6 +157,36 @@ const ServicesPage: NextPage<ServicesPageProps> = ({
 
         <Separator />
 
+        {/* Răspunsuri answer-first — query-uri comerciale directe */}
+        <section className="section">
+          <div className="container">
+            <Appear>
+              <div className={ti.wrap}>
+                <p className={ti.eyebrow}>Întrebări frecvente</p>
+                <h2 className={ti.heading}>Cât costă un eveniment la ZephiraEvents?</h2>
+                <p className={ti.lede}>
+                  Prețurile pornesc de la 46 EUR/persoană pentru botez și 56 EUR/persoană pentru
+                  nuntă; pentru corporate și petreceri private, de la 180 RON/persoană (~36 EUR).
+                  Fiecare ofertă e personalizată în funcție de meniu, numărul de invitați și
+                  serviciile alese.
+                </p>
+              </div>
+            </Appear>
+            <Separator />
+            <Appear>
+              <div className={ti.wrap}>
+                <h2 className={ti.heading}>Câte persoane încap în sală?</h2>
+                <p className={ti.lede}>
+                  Sala găzduiește evenimente de până la 250 de persoane, cu așezare adaptată tipului
+                  de eveniment — banchet, mese rotunde sau ring central de dans.
+                </p>
+              </div>
+            </Appear>
+          </div>
+        </section>
+
+        <Separator />
+
         {/* Lista completă de servicii */}
         <section className="section">
           <div className="container">

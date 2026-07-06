@@ -208,6 +208,25 @@ const ContactPage: NextPage = () => (
       </section>
       <Separator />
 
+      {/* Răspuns answer-first — „cum rezerv" */}
+      <section className="section">
+        <div className="container">
+          <Appear>
+            <div className={ti.wrap}>
+              <p className={ti.eyebrow}>Întrebări frecvente</p>
+              <h2 className={ti.heading}>Cum rezerv o dată la ZephiraEvents?</h2>
+              <p className={ti.lede}>
+                Ne contactezi la {contactData.phone || "telefon"} (telefon/WhatsApp) sau completezi
+                formularul de ofertă de mai sus. Rezervarea se confirmă după semnarea contractului
+                și achitarea avansului.
+              </p>
+            </div>
+          </Appear>
+        </div>
+      </section>
+
+      <Separator />
+
       {/* Hartă */}
       {CONTACT.enabled && contactData.mapEmbedUrl ? (
         <section className="section" aria-label="Hartă locație">
