@@ -11,7 +11,7 @@
   },
   {
     "slug": "botez-traditional-i",
-    "title": "Meniu Botez & Cununie — TRADITIONAL I",
+    "title": "Meniu Botez & Cununie — TRADIȚIONAL I",
     "eventType": "Botez & Cununie"
   },
   {
@@ -71,17 +71,17 @@
   },
   {
     "slug": "private-glamour",
-    "title": "Meniu: petreceri Petreceri Private & Majorate — ZEPHIRA / GLAMOUR",
+    "title": "Meniu: Petreceri Private & Majorate — ZEPHIRA / GLAMOUR",
     "eventType": "Petreceri Private & Majorate"
   },
   {
     "slug": "private-traditional",
-    "title": "Meniu: petreceri private / banchete / majorate — TRADIȚIONAL",
+    "title": "Meniu: Petreceri Private & Majorate — TRADIȚIONAL",
     "eventType": "Petreceri Private & Majorate"
   },
   {
     "slug": "traditional",
-    "title": "Oferta Meniu Traditional",
+    "title": "Oferta Meniu Tradițional",
     "eventType": "Nunta"
   }
 ]
